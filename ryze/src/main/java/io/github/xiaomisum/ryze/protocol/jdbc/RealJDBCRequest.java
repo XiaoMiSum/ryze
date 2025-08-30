@@ -28,7 +28,7 @@
 
 package io.github.xiaomisum.ryze.protocol.jdbc;
 
-import io.github.xiaomisum.ryze.core.testelement.sampler.SampleResult;
+import io.github.xiaomisum.ryze.testelement.sampler.SampleResult;
 import org.apache.commons.lang3.StringUtils;
 
 /**

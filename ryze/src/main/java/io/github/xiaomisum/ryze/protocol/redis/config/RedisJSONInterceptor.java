@@ -29,7 +29,7 @@
 package io.github.xiaomisum.ryze.protocol.redis.config;
 
 import com.alibaba.fastjson2.JSON;
-import io.github.xiaomisum.ryze.core.config.ConfigureItem;
+import io.github.xiaomisum.ryze.config.ConfigureItem;
 import io.github.xiaomisum.ryze.protocol.redis.RedisConstantsInterface;
 import io.github.xiaomisum.ryze.protocol.redis.processor.RedisPostprocessor;
 import io.github.xiaomisum.ryze.protocol.redis.processor.RedisPreprocessor;

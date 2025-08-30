@@ -25,7 +25,7 @@
 
 package io.github.xiaomisum.ryze.protocol.kafka;
 
-import io.github.xiaomisum.ryze.core.testelement.TestElementConstantsInterface;
+import io.github.xiaomisum.ryze.testelement.TestElementConstantsInterface;
 import org.apache.kafka.clients.producer.ProducerConfig;
 
 /**

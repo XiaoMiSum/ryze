@@ -1,8 +1,8 @@
 package io.github.xiaomisum.ryze.http.example.yaml;
 
 import io.github.xiaomisum.ryze.Ryze;
-import io.github.xiaomisum.ryze.core.testelement.TestElement;
-import io.github.xiaomisum.ryze.core.testelement.TestSuite;
+import io.github.xiaomisum.ryze.testelement.TestElement;
+import io.github.xiaomisum.ryze.testelement.TestSuite;
 import io.github.xiaomisum.ryze.support.testng.annotation.RyzeTest;
 import org.testng.annotations.Test;
 

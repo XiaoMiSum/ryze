@@ -25,7 +25,7 @@
 
 package io.github.xiaomisum.ryze.protocol.redis;
 
-import io.github.xiaomisum.ryze.core.testelement.sampler.DefaultSampleResult;
+import io.github.xiaomisum.ryze.testelement.sampler.DefaultSampleResult;
 import io.github.xiaomisum.ryze.protocol.redis.config.RedisDatasource;
 import redis.clients.jedis.Protocol;
 

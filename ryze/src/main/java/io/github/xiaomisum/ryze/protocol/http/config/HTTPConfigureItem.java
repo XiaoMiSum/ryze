@@ -31,9 +31,9 @@ package io.github.xiaomisum.ryze.protocol.http.config;
 import com.alibaba.fastjson2.annotation.JSONField;
 import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
-import io.github.xiaomisum.ryze.core.config.ConfigureItem;
-import io.github.xiaomisum.ryze.core.context.ContextWrapper;
-import io.github.xiaomisum.ryze.core.testelement.AbstractTestElement;
+import io.github.xiaomisum.ryze.config.ConfigureItem;
+import io.github.xiaomisum.ryze.context.ContextWrapper;
+import io.github.xiaomisum.ryze.testelement.AbstractTestElement;
 import io.github.xiaomisum.ryze.protocol.http.HTTPConstantsInterface;
 import io.github.xiaomisum.ryze.support.Collections;
 import io.github.xiaomisum.ryze.support.Customizer;
@@ -44,7 +44,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.Consumer;
 
-import static io.github.xiaomisum.ryze.core.testelement.TestElementConstantsInterface.REF;
+import static io.github.xiaomisum.ryze.testelement.TestElementConstantsInterface.REF;
 import static io.github.xiaomisum.ryze.support.groovy.Groovy.call;
 
 /**

@@ -30,14 +30,11 @@ package io.github.xiaomisum.ryze;
 
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
-import io.github.xiaomisum.ryze.core.ApplicationConfig;
-import io.github.xiaomisum.ryze.core.Result;
-import io.github.xiaomisum.ryze.core.SessionRunner;
 import io.github.xiaomisum.ryze.support.TestDataLoader;
 
 import java.util.Map;
 
-import static io.github.xiaomisum.ryze.core.testelement.TestElementConstantsInterface.TEST_CLASS;
+import static io.github.xiaomisum.ryze.testelement.TestElementConstantsInterface.TEST_CLASS;
 
 /**
  * Ryze测试框架入口类

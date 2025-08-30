@@ -1,6 +1,6 @@
 package io.github.xiaomisum.ryze.support;
 
-import io.github.xiaomisum.ryze.core.context.ContextWrapper;
+import io.github.xiaomisum.ryze.context.ContextWrapper;
 
 public interface Computable<T> {
 

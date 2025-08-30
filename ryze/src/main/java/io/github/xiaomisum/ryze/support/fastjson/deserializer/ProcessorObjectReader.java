@@ -33,9 +33,9 @@ import com.alibaba.fastjson2.JSONException;
 import com.alibaba.fastjson2.JSONObject;
 import com.alibaba.fastjson2.JSONReader;
 import com.alibaba.fastjson2.reader.ObjectReader;
-import io.github.xiaomisum.ryze.core.ApplicationConfig;
-import io.github.xiaomisum.ryze.core.testelement.TestElementConstantsInterface;
-import io.github.xiaomisum.ryze.core.testelement.processor.Processor;
+import io.github.xiaomisum.ryze.ApplicationConfig;
+import io.github.xiaomisum.ryze.testelement.TestElementConstantsInterface;
+import io.github.xiaomisum.ryze.testelement.processor.Processor;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.lang.reflect.Type;

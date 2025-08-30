@@ -27,10 +27,10 @@ package io.github.xiaomisum.ryze.protocol.jdbc.config;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.fastjson2.annotation.JSONField;
-import io.github.xiaomisum.ryze.core.context.ContextWrapper;
-import io.github.xiaomisum.ryze.core.testelement.KW;
-import io.github.xiaomisum.ryze.core.testelement.TestSuiteResult;
-import io.github.xiaomisum.ryze.core.testelement.configure.AbstractConfigureElement;
+import io.github.xiaomisum.ryze.context.ContextWrapper;
+import io.github.xiaomisum.ryze.testelement.KW;
+import io.github.xiaomisum.ryze.testelement.TestSuiteResult;
+import io.github.xiaomisum.ryze.testelement.configure.AbstractConfigureElement;
 import io.github.xiaomisum.ryze.protocol.jdbc.JDBCConstantsInterface;
 import io.github.xiaomisum.ryze.support.Closeable;
 import io.github.xiaomisum.ryze.support.ValidateResult;

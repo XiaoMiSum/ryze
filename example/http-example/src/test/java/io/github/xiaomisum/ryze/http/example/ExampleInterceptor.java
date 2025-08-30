@@ -28,8 +28,8 @@
 
 package io.github.xiaomisum.ryze.http.example;
 
-import io.github.xiaomisum.ryze.core.context.ContextWrapper;
-import io.github.xiaomisum.ryze.core.interceptor.RyzeInterceptor;
+import io.github.xiaomisum.ryze.context.ContextWrapper;
+import io.github.xiaomisum.ryze.interceptor.RyzeInterceptor;
 import io.github.xiaomisum.ryze.protocol.http.sampler.HTTPSampler;
 
 /**

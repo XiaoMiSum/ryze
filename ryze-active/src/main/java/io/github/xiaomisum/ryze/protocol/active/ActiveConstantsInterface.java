@@ -25,7 +25,7 @@
 
 package io.github.xiaomisum.ryze.protocol.active;
 
-import io.github.xiaomisum.ryze.core.testelement.TestElementConstantsInterface;
+import io.github.xiaomisum.ryze.testelement.TestElementConstantsInterface;
 
 /**
  * ActiveMQ协议相关常量接口

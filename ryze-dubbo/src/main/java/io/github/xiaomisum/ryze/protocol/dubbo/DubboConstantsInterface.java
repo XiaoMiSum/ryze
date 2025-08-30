@@ -28,7 +28,7 @@
 
 package io.github.xiaomisum.ryze.protocol.dubbo;
 
-import io.github.xiaomisum.ryze.core.testelement.TestElementConstantsInterface;
+import io.github.xiaomisum.ryze.testelement.TestElementConstantsInterface;
 
 /**
  * Dubbo协议相关常量接口

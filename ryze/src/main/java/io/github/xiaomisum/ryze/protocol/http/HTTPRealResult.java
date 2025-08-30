@@ -25,7 +25,7 @@
 
 package io.github.xiaomisum.ryze.protocol.http;
 
-import io.github.xiaomisum.ryze.core.testelement.sampler.SampleResult;
+import io.github.xiaomisum.ryze.testelement.sampler.SampleResult;
 import org.apache.hc.core5.http.Header;
 
 import java.util.List;

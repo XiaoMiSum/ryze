@@ -25,7 +25,7 @@
 
 package io.github.xiaomisum.ryze.protocol.dubbo;
 
-import io.github.xiaomisum.ryze.core.testelement.sampler.DefaultSampleResult;
+import io.github.xiaomisum.ryze.testelement.sampler.DefaultSampleResult;
 import io.github.xiaomisum.ryze.protocol.dubbo.config.DubboConfigureItem;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.dubbo.config.ApplicationConfig;

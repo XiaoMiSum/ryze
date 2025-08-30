@@ -2,3 +2,4 @@ testclass: json # json 验证器，用于验证json内容
 field: '$.status'  # json path
 expected: 200  # 期望值
 rule: ==   # 验证规则
+strict: false # 是否严格验证，默认否：忽略大小写验证

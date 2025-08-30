@@ -32,9 +32,9 @@ import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONException;
 import com.alibaba.fastjson2.JSONReader;
 import com.alibaba.fastjson2.reader.ObjectReader;
-import io.github.xiaomisum.ryze.component.assertion.JSONAssertion;
-import io.github.xiaomisum.ryze.core.ApplicationConfig;
-import io.github.xiaomisum.ryze.core.assertion.Assertion;
+import io.github.xiaomisum.ryze.ApplicationConfig;
+import io.github.xiaomisum.ryze.assertion.Assertion;
+import io.github.xiaomisum.ryze.assertion.builtin.JSONAssertion;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -43,8 +43,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
-import static io.github.xiaomisum.ryze.core.assertion.AssertionConstantsInterface.RULE;
-import static io.github.xiaomisum.ryze.core.testelement.TestElementConstantsInterface.TEST_CLASS;
+import static io.github.xiaomisum.ryze.assertion.AssertionConstantsInterface.RULE;
+import static io.github.xiaomisum.ryze.testelement.TestElementConstantsInterface.TEST_CLASS;
 
 /**
  * 断言对象反序列化器

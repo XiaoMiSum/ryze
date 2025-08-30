@@ -28,7 +28,7 @@ package io.github.xiaomisum.ryze.protocol.dubbo;
 import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
 import io.github.xiaomisum.ryze.MagicBox;
-import io.github.xiaomisum.ryze.core.Result;
+import io.github.xiaomisum.ryze.Result;
 import io.github.xiaomisum.ryze.protocol.dubbo.sampler.DubboSampler;
 import io.github.xiaomisum.ryze.support.Customizer;
 import io.github.xiaomisum.ryze.support.groovy.Groovy;

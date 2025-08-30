@@ -29,7 +29,7 @@
 package io.github.xiaomisum.ryze.protocol.jdbc.config;
 
 import com.alibaba.fastjson2.JSON;
-import io.github.xiaomisum.ryze.core.config.ConfigureItem;
+import io.github.xiaomisum.ryze.config.ConfigureItem;
 import io.github.xiaomisum.ryze.protocol.jdbc.JDBCConstantsInterface;
 import io.github.xiaomisum.ryze.protocol.jdbc.processor.JDBCPostprocessor;
 import io.github.xiaomisum.ryze.protocol.jdbc.processor.JDBCPreprocessor;

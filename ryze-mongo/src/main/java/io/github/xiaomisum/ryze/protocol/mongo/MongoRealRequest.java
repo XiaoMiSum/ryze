@@ -26,7 +26,7 @@
 package io.github.xiaomisum.ryze.protocol.mongo;
 
 import com.alibaba.fastjson2.JSON;
-import io.github.xiaomisum.ryze.core.testelement.sampler.SampleResult;
+import io.github.xiaomisum.ryze.testelement.sampler.SampleResult;
 import io.github.xiaomisum.ryze.protocol.mongo.config.MongoConfigItem;
 import org.apache.commons.lang3.StringUtils;
 

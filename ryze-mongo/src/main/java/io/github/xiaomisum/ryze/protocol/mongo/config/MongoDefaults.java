@@ -25,10 +25,10 @@
 
 package io.github.xiaomisum.ryze.protocol.mongo.config;
 
-import io.github.xiaomisum.ryze.core.context.ContextWrapper;
-import io.github.xiaomisum.ryze.core.testelement.KW;
-import io.github.xiaomisum.ryze.core.testelement.TestSuiteResult;
-import io.github.xiaomisum.ryze.core.testelement.configure.AbstractConfigureElement;
+import io.github.xiaomisum.ryze.context.ContextWrapper;
+import io.github.xiaomisum.ryze.testelement.KW;
+import io.github.xiaomisum.ryze.testelement.TestSuiteResult;
+import io.github.xiaomisum.ryze.testelement.configure.AbstractConfigureElement;
 import io.github.xiaomisum.ryze.protocol.mongo.MongoConstantsInterface;
 import org.apache.commons.lang3.StringUtils;
 

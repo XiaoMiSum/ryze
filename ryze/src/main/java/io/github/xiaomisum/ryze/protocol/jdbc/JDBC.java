@@ -31,7 +31,7 @@ package io.github.xiaomisum.ryze.protocol.jdbc;
 import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
-import io.github.xiaomisum.ryze.core.testelement.sampler.DefaultSampleResult;
+import io.github.xiaomisum.ryze.testelement.sampler.DefaultSampleResult;
 
 import java.sql.SQLException;
 import java.sql.Statement;

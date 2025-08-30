@@ -30,13 +30,11 @@ package io.github.xiaomisum.ryze;
 
 import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
-import io.github.xiaomisum.ryze.core.Result;
-import io.github.xiaomisum.ryze.core.SessionRunner;
-import io.github.xiaomisum.ryze.core.builder.DefaultChildrenBuilder;
-import io.github.xiaomisum.ryze.core.testelement.AbstractTestElement;
-import io.github.xiaomisum.ryze.core.testelement.TestElement;
-import io.github.xiaomisum.ryze.core.testelement.TestSuite;
-import io.github.xiaomisum.ryze.core.testelement.TestSuiteResult;
+import io.github.xiaomisum.ryze.builder.DefaultChildrenBuilder;
+import io.github.xiaomisum.ryze.testelement.AbstractTestElement;
+import io.github.xiaomisum.ryze.testelement.TestElement;
+import io.github.xiaomisum.ryze.testelement.TestSuite;
+import io.github.xiaomisum.ryze.testelement.TestSuiteResult;
 import io.github.xiaomisum.ryze.protocol.debug.sampler.DebugSampler;
 import io.github.xiaomisum.ryze.protocol.http.sampler.HTTPSampler;
 import io.github.xiaomisum.ryze.protocol.jdbc.sampler.JDBCSampler;

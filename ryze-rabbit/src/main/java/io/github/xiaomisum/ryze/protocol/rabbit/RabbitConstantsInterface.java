@@ -26,7 +26,7 @@
 package io.github.xiaomisum.ryze.protocol.rabbit;
 
 
-import io.github.xiaomisum.ryze.core.testelement.TestElementConstantsInterface;
+import io.github.xiaomisum.ryze.testelement.TestElementConstantsInterface;
 
 /**
  * RabbitMQ 相关常量接口

@@ -1,9 +1,9 @@
 package io.github.xiaomisum.ryze.support.fastjson.interceptor;
 
-import io.github.xiaomisum.ryze.core.config.ConfigureItem;
-import io.github.xiaomisum.ryze.core.testelement.TestElement;
-import io.github.xiaomisum.ryze.core.testelement.processor.Postprocessor;
-import io.github.xiaomisum.ryze.core.testelement.processor.Preprocessor;
+import io.github.xiaomisum.ryze.config.ConfigureItem;
+import io.github.xiaomisum.ryze.testelement.TestElement;
+import io.github.xiaomisum.ryze.testelement.processor.Postprocessor;
+import io.github.xiaomisum.ryze.testelement.processor.Preprocessor;
 
 import java.util.List;
 import java.util.Map;

@@ -31,9 +31,9 @@ package io.github.xiaomisum.ryze.protocol.mongo.config;
 
 import com.alibaba.fastjson2.annotation.JSONField;
 import groovy.lang.Closure;
-import io.github.xiaomisum.ryze.core.config.ConfigureItem;
-import io.github.xiaomisum.ryze.core.context.ContextWrapper;
-import io.github.xiaomisum.ryze.core.testelement.AbstractTestElement;
+import io.github.xiaomisum.ryze.config.ConfigureItem;
+import io.github.xiaomisum.ryze.context.ContextWrapper;
+import io.github.xiaomisum.ryze.testelement.AbstractTestElement;
 import io.github.xiaomisum.ryze.protocol.mongo.MongoConstantsInterface;
 import io.github.xiaomisum.ryze.support.Collections;
 import io.github.xiaomisum.ryze.support.Customizer;

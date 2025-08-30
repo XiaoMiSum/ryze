@@ -25,7 +25,7 @@
 
 package io.github.xiaomisum.ryze.protocol.kafka;
 
-import io.github.xiaomisum.ryze.core.testelement.sampler.DefaultSampleResult;
+import io.github.xiaomisum.ryze.testelement.sampler.DefaultSampleResult;
 import io.github.xiaomisum.ryze.protocol.kafka.config.KafkaConfigureItem;
 import io.github.xiaomisum.ryze.support.Collections;
 import org.apache.kafka.clients.producer.KafkaProducer;

@@ -25,7 +25,7 @@
 
 package io.github.xiaomisum.ryze.protocol.jdbc;
 
-import io.github.xiaomisum.ryze.core.testelement.TestElementConstantsInterface;
+import io.github.xiaomisum.ryze.testelement.TestElementConstantsInterface;
 
 /**
  * JDBC协议常量接口

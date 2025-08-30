@@ -25,7 +25,7 @@
 
 package io.github.xiaomisum.ryze.protocol.mongo;
 
-import io.github.xiaomisum.ryze.core.testelement.TestElementConstantsInterface;
+import io.github.xiaomisum.ryze.testelement.TestElementConstantsInterface;
 
 /**
  * MongoDB 协议常量接口

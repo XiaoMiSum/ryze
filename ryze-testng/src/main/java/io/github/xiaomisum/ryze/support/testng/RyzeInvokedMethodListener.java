@@ -28,8 +28,8 @@
 
 package io.github.xiaomisum.ryze.support.testng;
 
-import io.github.xiaomisum.ryze.core.Configure;
-import io.github.xiaomisum.ryze.core.SessionRunner;
+import io.github.xiaomisum.ryze.Configure;
+import io.github.xiaomisum.ryze.SessionRunner;
 import io.github.xiaomisum.ryze.support.testng.annotation.AnnotationUtils;
 import org.testng.IInvokedMethod;
 import org.testng.IInvokedMethodListener;

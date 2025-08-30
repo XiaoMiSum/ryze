@@ -164,4 +164,15 @@ public class Collections {
         }
     }
 
+    public static <T> List<T> singletonList(T o) {
+        return java.util.Collections.singletonList(o);
+    }
+
+    public static <T> Set<T> unmodifiableSet(Set<? extends T> s) {
+        return java.util.Collections.unmodifiableSet(s);
+    }
+
+    public static <T> Set<T> emptySet() {
+        return java.util.Collections.emptySet();
+    }
 }

@@ -29,13 +29,13 @@
 package io.github.xiaomisum.ryze.protocol.debug.processer;
 
 import com.alibaba.fastjson2.JSON;
-import io.github.xiaomisum.ryze.core.builder.DefaultExtractorsBuilder;
-import io.github.xiaomisum.ryze.core.context.ContextWrapper;
-import io.github.xiaomisum.ryze.core.testelement.KW;
-import io.github.xiaomisum.ryze.core.testelement.processor.AbstractProcessor;
-import io.github.xiaomisum.ryze.core.testelement.processor.Postprocessor;
-import io.github.xiaomisum.ryze.core.testelement.sampler.DefaultSampleResult;
-import io.github.xiaomisum.ryze.core.testelement.sampler.SampleResult;
+import io.github.xiaomisum.ryze.builder.DefaultExtractorsBuilder;
+import io.github.xiaomisum.ryze.context.ContextWrapper;
+import io.github.xiaomisum.ryze.testelement.KW;
+import io.github.xiaomisum.ryze.testelement.processor.AbstractProcessor;
+import io.github.xiaomisum.ryze.testelement.processor.Postprocessor;
+import io.github.xiaomisum.ryze.testelement.sampler.DefaultSampleResult;
+import io.github.xiaomisum.ryze.testelement.sampler.SampleResult;
 import io.github.xiaomisum.ryze.protocol.debug.config.DebugConfigureItem;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;

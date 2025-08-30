@@ -27,8 +27,8 @@ package io.github.xiaomisum.ryze.protocol.rabbit.builder;
 
 import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
-import io.github.xiaomisum.ryze.core.builder.DefaultExtractorsBuilder;
-import io.github.xiaomisum.ryze.core.builder.ExtensiblePostprocessorsBuilder;
+import io.github.xiaomisum.ryze.builder.DefaultExtractorsBuilder;
+import io.github.xiaomisum.ryze.builder.ExtensiblePostprocessorsBuilder;
 import io.github.xiaomisum.ryze.protocol.rabbit.processor.RabbitPostprocessor;
 import io.github.xiaomisum.ryze.support.Customizer;
 

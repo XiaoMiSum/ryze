@@ -29,7 +29,7 @@
 package io.github.xiaomisum.ryze.protocol.dubbo;
 
 import com.alibaba.fastjson2.JSON;
-import io.github.xiaomisum.ryze.core.testelement.sampler.SampleResult;
+import io.github.xiaomisum.ryze.testelement.sampler.SampleResult;
 import org.apache.commons.lang3.StringUtils;
 import io.github.xiaomisum.ryze.protocol.dubbo.config.DubboConfigureItem;
 

@@ -1,6 +1,6 @@
 package io.github.xiaomisum.ryze.support;
 
-import io.github.xiaomisum.ryze.core.testelement.KW;
+import io.github.xiaomisum.ryze.testelement.KW;
 
 import java.util.*;
 

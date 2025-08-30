@@ -32,7 +32,7 @@ import com.alibaba.fastjson2.JSON;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
-import io.github.xiaomisum.ryze.core.testelement.sampler.DefaultSampleResult;
+import io.github.xiaomisum.ryze.testelement.sampler.DefaultSampleResult;
 import io.github.xiaomisum.ryze.protocol.mongo.config.MongoConfigItem;
 import io.github.xiaomisum.ryze.support.Collections;
 import org.bson.Document;

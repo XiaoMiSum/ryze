@@ -29,7 +29,7 @@
 package io.github.xiaomisum.ryze.protocol.rabbit;
 
 import com.alibaba.fastjson2.JSON;
-import io.github.xiaomisum.ryze.core.testelement.sampler.SampleResult;
+import io.github.xiaomisum.ryze.testelement.sampler.SampleResult;
 import io.github.xiaomisum.ryze.protocol.rabbit.config.RabbitConfigureItem;
 import org.apache.commons.lang3.StringUtils;
 

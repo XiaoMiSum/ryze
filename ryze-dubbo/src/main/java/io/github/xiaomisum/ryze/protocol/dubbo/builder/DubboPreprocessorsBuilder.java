@@ -27,8 +27,8 @@ package io.github.xiaomisum.ryze.protocol.dubbo.builder;
 
 import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
-import io.github.xiaomisum.ryze.core.builder.DefaultExtractorsBuilder;
-import io.github.xiaomisum.ryze.core.builder.ExtensiblePreprocessorsBuilder;
+import io.github.xiaomisum.ryze.builder.DefaultExtractorsBuilder;
+import io.github.xiaomisum.ryze.builder.ExtensiblePreprocessorsBuilder;
 import io.github.xiaomisum.ryze.protocol.dubbo.processor.DubboPreprocessor;
 import io.github.xiaomisum.ryze.support.Customizer;
 

@@ -25,7 +25,7 @@
 
 package io.github.xiaomisum.ryze.protocol.active;
 
-import io.github.xiaomisum.ryze.core.testelement.sampler.DefaultSampleResult;
+import io.github.xiaomisum.ryze.testelement.sampler.DefaultSampleResult;
 import io.github.xiaomisum.ryze.protocol.active.config.ActiveConfigureItem;
 import jakarta.jms.ConnectionFactory;
 import jakarta.jms.MessageProducer;

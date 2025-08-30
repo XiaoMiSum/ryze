@@ -27,7 +27,7 @@ package io.github.xiaomisum.ryze.protocol.kafka.builder;
 
 import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
-import io.github.xiaomisum.ryze.core.builder.ExtensibleConfigureElementsBuilder;
+import io.github.xiaomisum.ryze.builder.ExtensibleConfigureElementsBuilder;
 import io.github.xiaomisum.ryze.protocol.kafka.config.KafkaDefaults;
 import io.github.xiaomisum.ryze.support.Customizer;
 

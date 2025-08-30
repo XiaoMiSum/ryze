@@ -28,8 +28,8 @@
 
 package io.github.xiaomisum.ryze.support.testng;
 
-import io.github.xiaomisum.ryze.core.SessionRunner;
-import io.github.xiaomisum.ryze.core.testelement.TestElement;
+import io.github.xiaomisum.ryze.SessionRunner;
+import io.github.xiaomisum.ryze.testelement.TestElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.IHookCallBack;

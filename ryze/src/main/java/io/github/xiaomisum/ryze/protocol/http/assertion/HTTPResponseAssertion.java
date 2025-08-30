@@ -27,11 +27,10 @@ package io.github.xiaomisum.ryze.protocol.http.assertion;
 
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONPath;
-import io.github.xiaomisum.ryze.core.assertion.AbstractAssertion;
-import io.github.xiaomisum.ryze.core.assertion.AssertionResult;
-import io.github.xiaomisum.ryze.core.testelement.KW;
-import io.github.xiaomisum.ryze.core.testelement.sampler.SampleResult;
+import io.github.xiaomisum.ryze.assertion.AbstractAssertion;
 import io.github.xiaomisum.ryze.protocol.http.RealHTTPRealResultResponse;
+import io.github.xiaomisum.ryze.testelement.KW;
+import io.github.xiaomisum.ryze.testelement.sampler.SampleResult;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
@@ -108,7 +107,7 @@ public class HTTPResponseAssertion extends AbstractAssertion {
     }
 
     /**
-     * 初始化断言结果，根据字段名提取相应的HTTP响应数据
+     * 根据字段名提取相应的HTTP响应数据
      *
      * <p>该方法根据field字段的值决定提取HTTP响应的哪部分数据：
      * <ul>
@@ -119,21 +118,20 @@ public class HTTPResponseAssertion extends AbstractAssertion {
      * </p>
      *
      * @param result 取样结果对象
-     * @return 断言结果对象
+     * @return 期望值对象
      */
     @Override
-    protected AssertionResult initialized(SampleResult result) {
-        var res = new AssertionResult("HTTP响应断言: ");
+    protected Object extractActualValue(SampleResult result) {
         var response = (RealHTTPRealResultResponse) result.getResponse();
         field = StringUtils.isBlank(field) ? BODY : field;
         var matcher = PATTERN.matcher(field);
         if (matcher.find()) {
             var path = "$" + (matcher.group(1) == null ? "[0]" : matcher.group(1)) + matcher.group(2);
-            actualValue = JSONPath.extract(JSON.toJSONString(response.headers()), path);
+            return JSONPath.extract(JSON.toJSONString(response.headers()), path);
         } else {
-            actualValue = STATUS.contains(field.toLowerCase()) ? response.statusCode() : response.bytesAsString();
+            return STATUS.contains(field.toLowerCase()) ? response.statusCode() : response.bytesAsString();
         }
-        return res;
+
     }
 
 

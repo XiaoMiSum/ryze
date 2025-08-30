@@ -30,14 +30,14 @@ package io.github.xiaomisum.ryze;
 
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
-import io.github.xiaomisum.ryze.core.config.RyzeVariables;
+import io.github.xiaomisum.ryze.config.RyzeVariables;
 
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 
-import static io.github.xiaomisum.ryze.core.testelement.TestElementConstantsInterface.*;
+import static io.github.xiaomisum.ryze.testelement.TestElementConstantsInterface.*;
 
 /**
  * JSON测试用例树结构解析器

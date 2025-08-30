@@ -63,7 +63,6 @@
 
     <properties>
         <!-- 单元测试框架 -->
-        <junit.version>5.11.4</junit.version>
         <testng.version>7.9.0</testng.version>
 
         <!-- 协议或工具基础依赖 -->
@@ -78,6 +77,7 @@
         <simplehttp.version>2.2.3</simplehttp.version>
 
         <!-- 工具包 -->
+        <hamcrest.version>3.0</hamcrest.version>
         <geantyref.version>2.0.1</geantyref.version>
         <groovy.version>4.0.28</groovy.version>
         <yaml.version>2.3</yaml.version>
@@ -268,12 +268,6 @@
             </dependency>
 
             <dependency>
-                <groupId>org.junit.jupiter</groupId>
-                <artifactId>junit-jupiter-engine</artifactId>
-                <version>${junit.version}</version>
-            </dependency>
-
-            <dependency>
                 <groupId>info.picocli</groupId>
                 <artifactId>picocli</artifactId>
                 <version>${picocli.version}</version>
@@ -343,6 +337,12 @@
                 <groupId>com.github.ben-manes.caffeine</groupId>
                 <artifactId>caffeine</artifactId>
                 <version>${caffeine.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.hamcrest</groupId>
+                <artifactId>hamcrest</artifactId>
+                <version>${hamcrest.version}</version>
             </dependency>
         </dependencies>
 

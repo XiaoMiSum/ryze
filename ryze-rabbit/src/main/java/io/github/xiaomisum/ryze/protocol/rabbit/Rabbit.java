@@ -31,7 +31,7 @@ package io.github.xiaomisum.ryze.protocol.rabbit;
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.BuiltinExchangeType;
 import com.rabbitmq.client.ConnectionFactory;
-import io.github.xiaomisum.ryze.core.testelement.sampler.DefaultSampleResult;
+import io.github.xiaomisum.ryze.testelement.sampler.DefaultSampleResult;
 import io.github.xiaomisum.ryze.protocol.rabbit.config.RabbitConfigureItem;
 
 import java.nio.charset.StandardCharsets;

@@ -27,7 +27,7 @@ package io.github.xiaomisum.ryze.protocol.rabbit.builder;
 
 import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
-import io.github.xiaomisum.ryze.core.builder.ExtensibleChildrenBuilder;
+import io.github.xiaomisum.ryze.builder.ExtensibleChildrenBuilder;
 import io.github.xiaomisum.ryze.protocol.rabbit.sampler.RabbitSampler;
 import io.github.xiaomisum.ryze.support.Customizer;
 

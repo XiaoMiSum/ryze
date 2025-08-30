@@ -32,7 +32,7 @@ import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import com.alibaba.fastjson2.JSONReader;
 import com.alibaba.fastjson2.reader.ObjectReader;
-import io.github.xiaomisum.ryze.core.testelement.TestElementConfigureGroup;
+import io.github.xiaomisum.ryze.testelement.TestElementConfigureGroup;
 
 import java.lang.reflect.Type;
 

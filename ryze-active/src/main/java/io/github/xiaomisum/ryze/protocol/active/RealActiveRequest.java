@@ -28,7 +28,7 @@
 
 package io.github.xiaomisum.ryze.protocol.active;
 
-import io.github.xiaomisum.ryze.core.testelement.sampler.SampleResult;
+import io.github.xiaomisum.ryze.testelement.sampler.SampleResult;
 import io.github.xiaomisum.ryze.protocol.active.config.ActiveConfigureItem;
 import org.apache.commons.lang3.StringUtils;
 
