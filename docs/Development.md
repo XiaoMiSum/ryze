@@ -89,17 +89,17 @@ mvn clean install
 2. 选择 "Open" 并选择项目根目录
 3. 等待 Maven 导入完成
 4. 配置项目 SDK：
-   - File → Project Structure → Project
-   - 设置 Project SDK 为 Java 21
-   - 设置 Language Level 为 21
+    - File → Project Structure → Project
+    - 设置 Project SDK 为 Java 21
+    - 设置 Language Level 为 21
 
 **代码风格配置**：
 
 1. 导入代码风格配置（如果有）
 2. 配置格式化规则：
-   - Settings → Editor → Code Style → Java
-   - 设置缩进为 4 个空格
-   - 设置行长度为 120 字符
+    - Settings → Editor → Code Style → Java
+    - 设置缩进为 4 个空格
+    - 设置行长度为 120 字符
 
 ## 📁 项目结构
 
@@ -136,21 +136,21 @@ ryze/
 #### ryze (核心模块)
 
 - **`core/`**: 框架核心实现
-  - `ApplicationConfig`: 组件配置管理
-  - `SessionRunner`: 测试执行引擎
-  - `testelement/`: 测试元件接口定义
-  - `assertion/`: 断言框架
-  - `extractor/`: 数据提取框架
+    - `ApplicationConfig`: 组件配置管理
+    - `SessionRunner`: 测试执行引擎
+    - `testelement/`: 测试元件接口定义
+    - `assertion/`: 断言框架
+    - `extractor/`: 数据提取框架
 
 - **`component/`**: 内置组件实现
-  - `assertion/`: 断言实现（JSON、HTTP、Result 等）
-  - `extractor/`: 提取器实现
+    - `assertion/`: 断言实现（JSON、HTTP、Result 等）
+    - `extractor/`: 提取器实现
 
 - **`protocol/`**: 内置协议实现
-  - `http/`: HTTP 协议支持
-  - `jdbc/`: 数据库支持
-  - `redis/`: Redis 支持
-  - `debug/`: 调试工具
+    - `http/`: HTTP 协议支持
+    - `jdbc/`: 数据库支持
+    - `redis/`: Redis 支持
+    - `debug/`: 调试工具
 
 #### 协议模块
 
@@ -212,12 +212,15 @@ git push origin feature/your-feature-name
 #### Java 代码风格
 
 1. **命名规范**：
+
 ```java
 // 类名：PascalCase
-public class HTTPSampler {}
+public class HTTPSampler {
+}
 
 // 方法名：camelCase
-public void executeRequest() {}
+public void executeRequest() {
+}
 
 // 常量：UPPER_SNAKE_CASE
 public static final String DEFAULT_TIMEOUT = "30000";
@@ -227,13 +230,14 @@ private String baseUrl;
 ```
 
 2. **注释规范**：
+
 ```java
 /**
  * HTTP 取样器实现类
- * 
+ *
  * <p>该类用于执行 HTTP 请求并收集响应结果。支持所有标准 HTTP 方法，
  * 包括 GET、POST、PUT、DELETE 等。</p>
- * 
+ *
  * <p>主要功能：
  * <ul>
  *   <li>发送 HTTP 请求</li>
@@ -247,10 +251,10 @@ private String baseUrl;
  * @since 6.0.0
  */
 public class HTTPSampler implements Sampler<DefaultSampleResult> {
-    
+
     /**
      * 执行 HTTP 请求
-     * 
+     *
      * @param session 会话运行器，提供执行上下文
      * @return 请求执行结果
      * @throws RuntimeException 当请求执行失败时抛出
@@ -263,6 +267,7 @@ public class HTTPSampler implements Sampler<DefaultSampleResult> {
 ```
 
 3. **错误处理**：
+
 ```java
 // 使用运行时异常
 public void executeRequest() {
@@ -277,34 +282,35 @@ public void executeRequest() {
 #### 测试编写
 
 1. **单元测试**：
+
 ```java
 class HTTPSamplerTest {
-    
+
     @Test
     void shouldExecuteGetRequest() {
         // Given
         HTTPSampler sampler = HTTPSampler.builder()
-            .method("GET")
-            .url("https://httpbin.org/get")
-            .build();
-        
+                .method("GET")
+                .url("https://httpbin.org/get")
+                .build();
+
         // When
         DefaultSampleResult result = sampler.run(SessionRunner.getSessionIfNoneCreateNew());
-        
+
         // Then
         assertTrue(result.isSuccess());
         assertThat(result.getResponse().bytesAsString()).contains("httpbin.org");
     }
-    
+
     @Test
     void shouldHandleTimeout() {
         // Given
         HTTPSampler sampler = HTTPSampler.builder()
-            .method("GET")
-            .url("https://httpbin.org/delay/10")
-            .timeout(1000)  // 1 秒超时
-            .build();
-        
+                .method("GET")
+                .url("https://httpbin.org/delay/10")
+                .timeout(1000)  // 1 秒超时
+                .build();
+
         // When & Then
         assertThrows(RuntimeException.class, () -> {
             sampler.run(SessionRunner.getSessionIfNoneCreateNew());
@@ -314,22 +320,24 @@ class HTTPSamplerTest {
 ```
 
 2. **集成测试**：
+
 ```java
+
 @TestMethodOrder(OrderAnnotation.class)
 class HTTPIntegrationTest {
-    
+
     @Test
     @Order(1)
     void shouldCreateUser() {
         // 测试创建用户
     }
-    
+
     @Test
     @Order(2)
     void shouldGetUser() {
         // 测试获取用户
     }
-    
+
     @Test
     @Order(3)
     void shouldDeleteUser() {
@@ -362,23 +370,23 @@ mkdir -p src/test/java
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
          http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    
+
     <parent>
         <groupId>io.github.xiaomisum</groupId>
         <artifactId>ryze-parent</artifactId>
         <version>6.0.1</version>
     </parent>
-    
+
     <artifactId>ryze-myprotocol</artifactId>
     <name>Ryze MyProtocol Support</name>
     <description>MyProtocol support for Ryze testing framework</description>
-    
+
     <dependencies>
         <dependency>
             <groupId>io.github.xiaomisum</groupId>
             <artifactId>ryze</artifactId>
         </dependency>
-        
+
         <!-- 协议特定依赖 -->
         <dependency>
             <groupId>com.example</groupId>
@@ -392,50 +400,55 @@ mkdir -p src/test/java
 #### 3. 实现核心组件
 
 **取样器实现**：
+
 ```java
+
 @KW("myprotocol")
-public class MyProtocolSampler extends AbstractSampler<MyProtocolSampler, MyProtocolConfigureItem, DefaultSampleResult> 
-    implements Sampler<DefaultSampleResult> {
-    
+public class MyProtocolSampler extends AbstractSampler<MyProtocolSampler, MyProtocolConfigureItem, DefaultSampleResult>
+        implements Sampler<DefaultSampleResult> {
+
     @Override
     protected DefaultSampleResult getTestResult() {
         return new DefaultSampleResult(runtime.id, runtime.title);
     }
-    
+
     @Override
     protected void sample(ContextWrapper context, DefaultSampleResult result) {
         // 实现协议特定的逻辑
     }
-    
+
     public static Builder builder() {
         return new Builder();
     }
-    
-    public static class Builder extends AbstractSampler.Builder<...> {
+
+    public static class Builder extends AbstractSampler.Builder<...>
+
+    {
         @Override
-        public MyProtocolSampler build() {
-            return new MyProtocolSampler(this);
-        }
-        
+        public MyProtocolSampler build () {
+        return new MyProtocolSampler(this);
+    }
+
         // 协议特定的构建方法
-        public Builder host(String host) {
-            // 实现逻辑
-            return self;
-        }
+        public Builder host (String host){
+        // 实现逻辑
+        return self;
+    }
     }
 }
 ```
 
 **配置类实现**：
+
 ```java
 public class MyProtocolConfigureItem implements ConfigureItem<MyProtocolConfigureItem> {
     private String host;
     private int port;
     private String username;
     private String password;
-    
+
     // getter/setter 方法
-    
+
     @Override
     public ValidateResult validate() {
         ValidateResult result = new ValidateResult();
@@ -447,11 +460,11 @@ public class MyProtocolConfigureItem implements ConfigureItem<MyProtocolConfigur
         }
         return result;
     }
-    
+
     @Override
     public MyProtocolConfigureItem merge(MyProtocolConfigureItem other) {
         if (other == null) return this;
-        
+
         MyProtocolConfigureItem merged = this.copy();
         if (StringUtils.isNotBlank(other.host)) {
             merged.host = other.host;
@@ -462,7 +475,7 @@ public class MyProtocolConfigureItem implements ConfigureItem<MyProtocolConfigur
         // 其他字段合并逻辑
         return merged;
     }
-    
+
     @Override
     public MyProtocolConfigureItem evaluate(ContextWrapper context) {
         MyProtocolConfigureItem evaluated = this.copy();
@@ -476,7 +489,7 @@ public class MyProtocolConfigureItem implements ConfigureItem<MyProtocolConfigur
 
 #### 4. 注册 SPI 服务
 
-创建文件 `src/main/resources/META-INF/services/io.github.xiaomisum.ryze.core.testelement.TestElement`：
+创建文件 `src/main/resources/META-INF/services/io.github.xiaomisum.ryze.testelement.TestElement`：
 
 ```
 io.github.xiaomisum.ryze.protocol.myprotocol.sampler.MyProtocolSampler
@@ -487,6 +500,7 @@ io.github.xiaomisum.ryze.protocol.myprotocol.sampler.MyProtocolSampler
 在根目录的 `pom.xml` 中添加新模块：
 
 ```xml
+
 <modules>
     <module>ryze</module>
     <module>ryze-dubbo</module>
@@ -501,13 +515,13 @@ Ryze 框架支持开发多种类型的扩展组件来增强测试能力。所有
 
 ### 组件类型概览
 
-| 组件类型 | 用途 | 开发难度 | 文档链接 |
-|----------|------|----------|----------|
-| **函数** | 生成动态数据（时间、随机数、计算等） | ⭐⭐ | [函数开发指南](development/Functions.md) |
-| **验证器** | 验证测试结果（断言和验证规则） | ⭐⭐⭐ | [验证器开发指南](development/Validators.md) |
-| **拦截器** | 横切关注点处理（日志、监控、安全等） | ⭐⭐⭐⭐ | [拦截器开发指南](development/Interceptors.md) |
-| **提取器** | 从结果中提取数据到变量 | ⭐⭐⭐ | [提取器开发指南](development/Extractors.md) |
-| **协议模块** | 支持新的测试协议 | ⭐⭐⭐⭐⭐ | [新协议开发指南](development/NewProtocol.md) |
+| 组件类型     | 用途                 | 开发难度  | 文档链接                                   |
+|----------|--------------------|-------|----------------------------------------|
+| **函数**   | 生成动态数据（时间、随机数、计算等） | ⭐⭐    | [函数开发指南](development/Functions.md)     |
+| **验证器**  | 验证测试结果（断言和验证规则）    | ⭐⭐⭐   | [验证器开发指南](development/Validators.md)   |
+| **拦截器**  | 横切关注点处理（日志、监控、安全等） | ⭐⭐⭐⭐  | [拦截器开发指南](development/Interceptors.md) |
+| **提取器**  | 从结果中提取数据到变量        | ⭐⭐⭐   | [提取器开发指南](development/Extractors.md)   |
+| **协议模块** | 支持新的测试协议           | ⭐⭐⭐⭐⭐ | [新协议开发指南](development/NewProtocol.md)  |
 
 ### 快速开始
 
@@ -562,6 +576,7 @@ Ryze 框架支持开发多种类型的扩展组件来增强测试能力。所有
 ## 示例
 
 提供完整的使用示例。
+
 ```
 
 ## 🧪 测试
@@ -591,36 +606,52 @@ mvn install -DskipTests
 ### 测试最佳实践
 
 1. **测试命名**：
+
 ```java
 // 格式：should + 预期行为 + when + 条件
 @Test
-void shouldReturnSuccessResult_whenValidRequestIsExecuted() {}
+void shouldReturnSuccessResult_whenValidRequestIsExecuted() {
+}
 
 @Test
-void shouldThrowException_whenTimeoutOccurs() {}
+void shouldThrowException_whenTimeoutOccurs() {
+}
 ```
 
 2. **测试结构**：
+
 ```java
+
 @Test
 void testMethod() {
     // Given - 准备测试数据
-    
+
     // When - 执行被测试的方法
-    
+
     // Then - 验证结果
 }
 ```
 
 3. **使用断言库**：
+
 ```java
 // 推荐使用 AssertJ
-import static org.assertj.core.api.Assertions.*;
 
-assertThat(result.isSuccess()).isTrue();
-assertThat(result.getResponse().bytesAsString())
-    .contains("expected text")
-    .doesNotContain("error");
+import static org.assertj.api.Assertions.*;
+
+assertThat(result.isSuccess()).
+
+isTrue();
+
+assertThat(result.getResponse().
+
+bytesAsString())
+        .
+
+contains("expected text")
+    .
+
+doesNotContain("error");
 ```
 
 ## 🚀 发布流程

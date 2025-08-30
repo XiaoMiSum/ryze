@@ -28,23 +28,23 @@ mkdir -p src/test/java
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
          http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    
+
     <parent>
         <groupId>io.github.xiaomisum</groupId>
         <artifactId>ryze-parent</artifactId>
         <version>6.0.1</version>
     </parent>
-    
+
     <artifactId>ryze-myprotocol</artifactId>
     <name>Ryze MyProtocol Support</name>
     <description>MyProtocol support for Ryze testing framework</description>
-    
+
     <dependencies>
         <dependency>
             <groupId>io.github.xiaomisum</groupId>
             <artifactId>ryze</artifactId>
         </dependency>
-        
+
         <!-- 协议特定依赖 -->
         <dependency>
             <groupId>com.example</groupId>
@@ -60,90 +60,91 @@ mkdir -p src/test/java
 #### 取样器实现
 
 ```java
+
 @KW("myprotocol")
-public class MyProtocolSampler extends AbstractSampler<MyProtocolSampler, MyProtocolConfigureItem, DefaultSampleResult> 
-    implements Sampler<DefaultSampleResult> {
-    
+public class MyProtocolSampler extends AbstractSampler<MyProtocolSampler, MyProtocolConfigureItem, DefaultSampleResult>
+        implements Sampler<DefaultSampleResult> {
+
     @Override
     protected DefaultSampleResult getTestResult() {
         return new DefaultSampleResult(runtime.id, runtime.title);
     }
-    
+
     @Override
     protected void sample(ContextWrapper context, DefaultSampleResult result) {
         // 实现协议特定的逻辑
         try {
             // 1. 获取配置
             MyProtocolConfigureItem config = getConfiguration(context);
-            
+
             // 2. 建立连接
             MyProtocolClient client = createClient(config);
-            
+
             // 3. 执行请求
             MyProtocolResponse response = client.execute(createRequest(config));
-            
+
             // 4. 处理响应
             result.setResponse(new MyProtocolResultResponse(response));
             result.setStatus(TestStatus.passed);
-            
+
         } catch (Exception e) {
             result.setStatus(TestStatus.failed);
             result.setMessage("协议执行失败: " + e.getMessage());
             result.setThrowable(e);
         }
     }
-    
+
     private MyProtocolClient createClient(MyProtocolConfigureItem config) {
         return MyProtocolClient.builder()
-            .host(config.getHost())
-            .port(config.getPort())
-            .timeout(config.getTimeout())
-            .build();
+                .host(config.getHost())
+                .port(config.getPort())
+                .timeout(config.getTimeout())
+                .build();
     }
-    
+
     private MyProtocolRequest createRequest(MyProtocolConfigureItem config) {
         return MyProtocolRequest.builder()
-            .command(config.getCommand())
-            .parameters(config.getParameters())
-            .build();
+                .command(config.getCommand())
+                .parameters(config.getParameters())
+                .build();
     }
-    
+
     public static Builder builder() {
         return new Builder();
     }
-    
+
     public static class Builder extends AbstractSampler.Builder<Builder, MyProtocolSampler, MyProtocolConfigureItem, DefaultSampleResult> {
-        
+
         public Builder() {
             super(new MyProtocolSampler());
         }
-        
+
         @Override
         public MyProtocolSampler build() {
             return new MyProtocolSampler(this);
         }
-        
+
         // 协议特定的构建方法
         public Builder host(String host) {
             getOrCreateConfig().setHost(host);
             return self;
         }
-        
+
         public Builder port(int port) {
             getOrCreateConfig().setPort(port);
             return self;
         }
-        
+
         public Builder command(String command) {
             getOrCreateConfig().setCommand(command);
             return self;
         }
-        
+
         public Builder timeout(int timeout) {
             getOrCreateConfig().setTimeout(timeout);
             return self;
         }
-        
+
         private MyProtocolConfigureItem getOrCreateConfig() {
             if (config == null) {
                 config = new MyProtocolConfigureItem();
@@ -165,36 +166,36 @@ public class MyProtocolConfigureItem implements ConfigureItem<MyProtocolConfigur
     private int timeout = 30000;
     private String command;
     private Map<String, Object> parameters = new HashMap<>();
-    
+
     @Override
     public ValidateResult validate() {
         ValidateResult result = new ValidateResult();
-        
+
         if (StringUtils.isBlank(host)) {
             result.append("Host 不能为空");
         }
-        
+
         if (port <= 0 || port > 65535) {
             result.append("端口号必须在 1-65535 之间");
         }
-        
+
         if (timeout <= 0) {
             result.append("超时时间必须大于 0");
         }
-        
+
         if (StringUtils.isBlank(command)) {
             result.append("命令不能为空");
         }
-        
+
         return result;
     }
-    
+
     @Override
     public MyProtocolConfigureItem merge(MyProtocolConfigureItem other) {
         if (other == null) return this;
-        
+
         MyProtocolConfigureItem merged = this.copy();
-        
+
         if (StringUtils.isNotBlank(other.host)) {
             merged.host = other.host;
         }
@@ -216,10 +217,10 @@ public class MyProtocolConfigureItem implements ConfigureItem<MyProtocolConfigur
         if (other.parameters != null && !other.parameters.isEmpty()) {
             merged.parameters.putAll(other.parameters);
         }
-        
+
         return merged;
     }
-    
+
     @Override
     public MyProtocolConfigureItem copy() {
         MyProtocolConfigureItem copy = new MyProtocolConfigureItem();
@@ -232,7 +233,7 @@ public class MyProtocolConfigureItem implements ConfigureItem<MyProtocolConfigur
         copy.parameters = new HashMap<>(this.parameters);
         return copy;
     }
-    
+
     @Override
     public MyProtocolConfigureItem evaluate(ContextWrapper context) {
         MyProtocolConfigureItem evaluated = this.copy();
@@ -240,38 +241,73 @@ public class MyProtocolConfigureItem implements ConfigureItem<MyProtocolConfigur
         evaluated.username = context.eval(this.username);
         evaluated.password = context.eval(this.password);
         evaluated.command = context.eval(this.command);
-        
+
         // 评估参数中的表达式
         Map<String, Object> evaluatedParams = new HashMap<>();
         for (Map.Entry<String, Object> entry : this.parameters.entrySet()) {
             evaluatedParams.put(entry.getKey(), context.eval(entry.getValue()));
         }
         evaluated.parameters = evaluatedParams;
-        
+
         return evaluated;
     }
-    
+
     // Getter/Setter 方法
-    public String getHost() { return host; }
-    public void setHost(String host) { this.host = host; }
-    
-    public int getPort() { return port; }
-    public void setPort(int port) { this.port = port; }
-    
-    public String getUsername() { return username; }
-    public void setUsername(String username) { this.username = username; }
-    
-    public String getPassword() { return password; }
-    public void setPassword(String password) { this.password = password; }
-    
-    public int getTimeout() { return timeout; }
-    public void setTimeout(int timeout) { this.timeout = timeout; }
-    
-    public String getCommand() { return command; }
-    public void setCommand(String command) { this.command = command; }
-    
-    public Map<String, Object> getParameters() { return parameters; }
-    public void setParameters(Map<String, Object> parameters) { this.parameters = parameters; }
+    public String getHost() {
+        return host;
+    }
+
+    public void setHost(String host) {
+        this.host = host;
+    }
+
+    public int getPort() {
+        return port;
+    }
+
+    public void setPort(int port) {
+        this.port = port;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public int getTimeout() {
+        return timeout;
+    }
+
+    public void setTimeout(int timeout) {
+        this.timeout = timeout;
+    }
+
+    public String getCommand() {
+        return command;
+    }
+
+    public void setCommand(String command) {
+        this.command = command;
+    }
+
+    public Map<String, Object> getParameters() {
+        return parameters;
+    }
+
+    public void setParameters(Map<String, Object> parameters) {
+        this.parameters = parameters;
+    }
 }
 ```
 
@@ -282,33 +318,33 @@ public class MyProtocolResultResponse implements ResultResponse {
     private final MyProtocolResponse originalResponse;
     private final byte[] responseBytes;
     private final Map<String, String> headers;
-    
+
     public MyProtocolResultResponse(MyProtocolResponse response) {
         this.originalResponse = response;
         this.responseBytes = response.getData();
         this.headers = new HashMap<>();
-        
+
         // 构建响应头信息
         headers.put("status", String.valueOf(response.getStatusCode()));
         headers.put("message", response.getStatusMessage());
         headers.put("timestamp", String.valueOf(System.currentTimeMillis()));
     }
-    
+
     @Override
     public byte[] bytes() {
         return responseBytes;
     }
-    
+
     @Override
     public String bytesAsString() {
         return new String(responseBytes, StandardCharsets.UTF_8);
     }
-    
+
     @Override
     public Map<String, String> getHeaders() {
         return headers;
     }
-    
+
     @Override
     public String format() {
         StringBuilder sb = new StringBuilder();
@@ -318,7 +354,7 @@ public class MyProtocolResultResponse implements ResultResponse {
         sb.append("Data: ").append(bytesAsString()).append("\n");
         return sb.toString();
     }
-    
+
     public MyProtocolResponse getOriginalResponse() {
         return originalResponse;
     }
@@ -327,7 +363,7 @@ public class MyProtocolResultResponse implements ResultResponse {
 
 ### 4. 注册 SPI 服务
 
-创建文件 `src/main/resources/META-INF/services/io.github.xiaomisum.ryze.core.testelement.TestElement`：
+创建文件 `src/main/resources/META-INF/services/io.github.xiaomisum.ryze.testelement.TestElement`：
 
 ```
 io.github.xiaomisum.ryze.protocol.myprotocol.sampler.MyProtocolSampler
@@ -338,6 +374,7 @@ io.github.xiaomisum.ryze.protocol.myprotocol.sampler.MyProtocolSampler
 在根目录的 `pom.xml` 中添加新模块：
 
 ```xml
+
 <modules>
     <module>ryze</module>
     <module>ryze-dubbo</module>
@@ -350,7 +387,7 @@ io.github.xiaomisum.ryze.protocol.myprotocol.sampler.MyProtocolSampler
 
 ```java
 public class MyProtocolMagicBox {
-    
+
     /**
      * 创建 MyProtocol 测试
      */
@@ -359,14 +396,14 @@ public class MyProtocolMagicBox {
         customizer.accept(builder);
         MagicBox.addTestElement(builder.build());
     }
-    
+
     /**
      * 创建 MyProtocol 测试（无标题）
      */
     public static void myprotocol(Consumer<MyProtocolSampler.Builder> customizer) {
         myprotocol("MyProtocol 测试", customizer);
     }
-    
+
     /**
      * 创建 MyProtocol 前置处理器
      */
@@ -375,7 +412,7 @@ public class MyProtocolMagicBox {
         customizer.accept(builder);
         MagicBox.addPreprocessor(builder.build());
     }
-    
+
     /**
      * 创建 MyProtocol 后置处理器
      */
@@ -391,38 +428,38 @@ public class MyProtocolMagicBox {
 
 ```java
 class MyProtocolSamplerTest {
-    
+
     @Test
     void shouldExecuteCommand() {
         // Given
         MyProtocolSampler sampler = MyProtocolSampler.builder()
-            .host("localhost")
-            .port(8080)
-            .command("test")
-            .timeout(5000)
-            .build();
-        
+                .host("localhost")
+                .port(8080)
+                .command("test")
+                .timeout(5000)
+                .build();
+
         // When
         DefaultSampleResult result = sampler.run(SessionRunner.getSessionIfNoneCreateNew());
-        
+
         // Then
         assertTrue(result.isSuccess());
         assertNotNull(result.getResponse());
     }
-    
+
     @Test
     void shouldHandleConnectionFailure() {
         // Given
         MyProtocolSampler sampler = MyProtocolSampler.builder()
-            .host("invalid-host")
-            .port(9999)
-            .command("test")
-            .timeout(1000)
-            .build();
-        
+                .host("invalid-host")
+                .port(9999)
+                .command("test")
+                .timeout(1000)
+                .build();
+
         // When
         DefaultSampleResult result = sampler.run(SessionRunner.getSessionIfNoneCreateNew());
-        
+
         // Then
         assertFalse(result.isSuccess());
         assertNotNull(result.getThrowable());
@@ -493,6 +530,7 @@ ryze-protocol/
 ### 在主模块中使用
 
 ```java
+
 @Test
 @RyzeTest
 public void testMyProtocol() {
@@ -508,22 +546,23 @@ public void testMyProtocol() {
 ### 在测试套件中使用
 
 ```java
+
 @Test
 @RyzeTest
 public void testProtocolSuite() {
     MagicBox.suite("协议测试套件", suite -> {
         suite.children(children -> {
             children.myprotocolPreprocessor("初始化连接", init -> init
-                .host("localhost")
-                .command("init")
+                    .host("localhost")
+                    .command("init")
             );
-            
+
             children.myprotocol("执行测试命令", test -> test
-                .command("test_data")
+                    .command("test_data")
             );
-            
+
             children.myprotocolPostprocessor("清理资源", cleanup -> cleanup
-                .command("cleanup")
+                    .command("cleanup")
             );
         });
     });

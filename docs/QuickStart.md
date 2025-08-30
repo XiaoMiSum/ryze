@@ -30,18 +30,18 @@ cd ryze-demo
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
          http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    
+
     <groupId>com.example</groupId>
     <artifactId>ryze-demo</artifactId>
     <version>1.0-SNAPSHOT</version>
-    
+
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <ryze.version>6.0.1</ryze.version>
     </properties>
-    
+
     <dependencies>
         <!-- Ryze 核心模块 -->
         <dependency>
@@ -49,21 +49,21 @@ cd ryze-demo
             <artifactId>ryze</artifactId>
             <version>${ryze.version}</version>
         </dependency>
-        
+
         <!-- 如果需要 Dubbo 支持 -->
         <dependency>
             <groupId>io.github.xiaomisum</groupId>
             <artifactId>ryze-dubbo</artifactId>
             <version>${ryze.version}</version>
         </dependency>
-        
+
         <!-- 如果需要 TestNG 集成 -->
         <dependency>
             <groupId>io.github.xiaomisum</groupId>
             <artifactId>ryze-testng</artifactId>
             <version>${ryze.version}</version>
         </dependency>
-        
+
         <!-- JUnit 5 (可选) -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -72,7 +72,7 @@ cd ryze-demo
             <scope>test</scope>
         </dependency>
     </dependencies>
-    
+
     <build>
         <plugins>
             <plugin>
@@ -174,15 +174,15 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class JsonTestDemo {
-    
+
     @Test
     public void testUserApi() {
         // 通过 JSON 文件执行测试
         var result = Ryze.start("api-test.json");
-        
+
         // 验证测试结果
         assertTrue(result.isSuccess(), "API 测试应该成功");
-        
+
         // 打印测试结果
         System.out.println("测试执行状态: " + result.getStatus());
         System.out.println("测试时长: " + result.getElapsedTime() + "ms");
@@ -198,7 +198,7 @@ public class JsonTestDemo {
 ```java
 package com.example;
 
-import io.github.xiaomisum.ryze.core.testelement.TestSuiteResult;
+import io.github.xiaomisum.ryze.testelement.TestSuiteResult;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;
@@ -207,50 +207,50 @@ import static io.github.xiaomisum.ryze.MagicBox.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class MagicBoxDemo {
-    
+
     @Test
     public void testWithMagicBox() {
         // 使用 MagicBox 的函数式 API
         TestSuiteResult result = suite("用户API测试", builder -> {
             // 设置全局变量
             builder.variables(Map.of(
-                "baseUrl", "https://jsonplaceholder.typicode.com",
-                "userId", "1"
+                    "baseUrl", "https://jsonplaceholder.typicode.com",
+                    "userId", "1"
             ));
-            
+
             // 添加测试用例
             builder.children(children -> {
                 // HTTP 请求测试
                 children.http(http -> http
-                    .title("获取用户信息")
-                    .method("GET")
-                    .url("${baseUrl}/users/${userId}")
-                    .header("Accept", "application/json")
-                    // 添加断言
-                    .assertion(assertion -> assertion
-                        .json("$.id", 1, "==")
-                        .json("$.name", "Leanne Graham", "==")
-                        .json("$.email", "@", "contains")
-                    )
-                    // 添加提取器
-                    .extractor(extractor -> extractor
-                        .json("$.email", "userEmail")
-                    )
+                        .title("获取用户信息")
+                        .method("GET")
+                        .url("${baseUrl}/users/${userId}")
+                        .header("Accept", "application/json")
+                        // 添加断言
+                        .assertion(assertion -> assertion
+                                .json("$.id", 1, "==")
+                                .json("$.name", "Leanne Graham", "==")
+                                .json("$.email", "@", "contains")
+                        )
+                        // 添加提取器
+                        .extractor(extractor -> extractor
+                                .json("$.email", "userEmail")
+                        )
                 );
-                
+
                 // 第二个测试用例
                 children.http(http -> http
-                    .title("获取用户文章")
-                    .method("GET")
-                    .url("${baseUrl}/users/${userId}/posts")
-                    .assertion(assertion -> assertion
-                        .json("$", "", "isNotEmpty")
-                        .json("$[0].userId", 1, "==")
-                    )
+                        .title("获取用户文章")
+                        .method("GET")
+                        .url("${baseUrl}/users/${userId}/posts")
+                        .assertion(assertion -> assertion
+                                .json("$", "", "isNotEmpty")
+                                .json("$[0].userId", 1, "==")
+                        )
                 );
             });
         });
-        
+
         // 验证结果
         assertTrue(result.isSuccess(), "API 测试应该成功");
         System.out.println("测试结果: " + result.getStatus());
@@ -267,33 +267,33 @@ import static io.github.xiaomisum.ryze.MagicBox.*
 
 def result = suite("用户API测试") {
     variables([
-        baseUrl: "https://jsonplaceholder.typicode.com",
-        userId: "1"
+            baseUrl: "https://jsonplaceholder.typicode.com",
+            userId : "1"
     ])
-    
+
     children {
         http {
             title "获取用户信息"
             method "GET"
             url '${baseUrl}/users/${userId}'
             header "Accept", "application/json"
-            
+
             assertion {
                 json '$.id', 1, "=="
                 json '$.name', "Leanne Graham", "=="
                 json '$.email', "@", "contains"
             }
-            
+
             extractor {
                 json '$.email', "userEmail"
             }
         }
-        
+
         http {
             title "获取用户文章"
             method "GET"
             url '${baseUrl}/users/${userId}/posts'
-            
+
             assertion {
                 json '$', "", "isNotEmpty"
                 json '$[0].userId', 1, "=="
@@ -338,6 +338,7 @@ Ryze 内置支持 Allure 测试报告。
 在 `pom.xml` 中添加：
 
 ```xml
+
 <plugin>
     <groupId>io.qameta.allure</groupId>
     <artifactId>allure-maven</artifactId>
@@ -392,38 +393,38 @@ public class ProcessorDemo {
         var result = suite("处理器测试", builder -> {
             builder.children(children -> {
                 children.http(http -> http
-                    .title("需要认证的接口")
-                    .method("GET")
-                    .url("https://api.example.com/protected")
-                    // 前置处理器：获取认证令牌
-                    .preprocessor(pre -> pre
-                        .http(auth -> auth
-                            .title("获取访问令牌")
-                            .method("POST")
-                            .url("https://api.example.com/auth/token")
-                            .bodyAsJson(Map.of(
-                                "username", "testuser",
-                                "password", "testpass"
-                            ))
-                            .extractor(ext -> ext
-                                .json("$.token", "accessToken")
-                            )
+                        .title("需要认证的接口")
+                        .method("GET")
+                        .url("https://api.example.com/protected")
+                        // 前置处理器：获取认证令牌
+                        .preprocessor(pre -> pre
+                                .http(auth -> auth
+                                        .title("获取访问令牌")
+                                        .method("POST")
+                                        .url("https://api.example.com/auth/token")
+                                        .bodyAsJson(Map.of(
+                                                "username", "testuser",
+                                                "password", "testpass"
+                                        ))
+                                        .extractor(ext -> ext
+                                                .json("$.token", "accessToken")
+                                        )
+                                )
                         )
-                    )
-                    // 使用提取的令牌
-                    .header("Authorization", "Bearer ${accessToken}")
-                    // 后置处理器：清理数据
-                    .postprocessor(post -> post
-                        .http(cleanup -> cleanup
-                            .title("清理测试数据")
-                            .method("DELETE")
-                            .url("https://api.example.com/cleanup")
+                        // 使用提取的令牌
+                        .header("Authorization", "Bearer ${accessToken}")
+                        // 后置处理器：清理数据
+                        .postprocessor(post -> post
+                                .http(cleanup -> cleanup
+                                        .title("清理测试数据")
+                                        .method("DELETE")
+                                        .url("https://api.example.com/cleanup")
+                                )
                         )
-                    )
                 );
             });
         });
-        
+
         assertTrue(result.isSuccess());
     }
 }
@@ -440,17 +441,25 @@ public class ProcessorDemo {
 ### 调试技巧
 
 1. **启用详细日志**：
+
 ```properties
 # logback.xml 或 application.properties
 logging.level.io.github.xiaomisum.ryze=DEBUG
 ```
 
 2. **输出请求响应**：
+
 ```java
-result.getSubResults().forEach(subResult -> {
-    System.out.println("请求: " + subResult.getRequest());
-    System.out.println("响应: " + subResult.getResponse());
-});
+result.getSubResults().
+
+forEach(subResult ->{
+        System.out.
+
+println("请求: "+subResult.getRequest());
+        System.out.
+
+println("响应: "+subResult.getResponse());
+        });
 ```
 
 ## 🎉 下一步

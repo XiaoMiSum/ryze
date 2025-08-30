@@ -2,7 +2,8 @@
 
 ## 📖 概述
 
-Ryze 是一个基于 Java 21 的现代化多协议测试框架，采用模块化架构设计，通过 SPI (Service Provider Interface) 机制实现了高度的可扩展性。本文档详细描述了框架的整体架构、核心组件、设计模式以及扩展机制。
+Ryze 是一个基于 Java 21 的现代化多协议测试框架，采用模块化架构设计，通过 SPI (Service Provider Interface)
+机制实现了高度的可扩展性。本文档详细描述了框架的整体架构、核心组件、设计模式以及扩展机制。
 
 ## 🎯 设计目标
 
@@ -205,14 +206,17 @@ public interface TestElement<T extends Result> extends Validatable, Cloneable<Te
 
 ```java
 // 统一接口
-public interface Sampler<T extends Result> extends TestElement<T> {}
+public interface Sampler<T extends Result> extends TestElement<T> {
+}
 
 // 具体策略实现
 @KW("http")
-public class HTTPSampler implements Sampler<DefaultSampleResult> {}
+public class HTTPSampler implements Sampler<DefaultSampleResult> {
+}
 
 @KW("dubbo")
-public class DubboSampler implements Sampler<DefaultSampleResult> {}
+public class DubboSampler implements Sampler<DefaultSampleResult> {
+}
 ```
 
 **优势**:
@@ -343,10 +347,10 @@ Ryze 使用 Java SPI 机制实现组件的自动发现和注册：
 ```text
 
 META-INF/services/
-├── io.github.xiaomisum.ryze.core.testelement.TestElement
-├── io.github.xiaomisum.ryze.core.assertion.Rule
-├── io.github.xiaomisum.ryze.core.extractor.Extractor
-└── io.github.xiaomisum.ryze.core.testelement.processor.Preprocessor
+├── io.github.xiaomisum.ryze.testelement.TestElement
+├── io.github.xiaomisum.ryze.assertion.Rule
+├── io.github.xiaomisum.ryze.extractor.Extractor
+└── io.github.xiaomisum.ryze.testelement.processor.Preprocessor
 ```
 
 ### 自定义组件开发
@@ -366,7 +370,7 @@ public class CustomSampler implements Sampler<DefaultSampleResult> {
 2. **注册 SPI 服务**:
 
 ```java
-# META-INF/services/io.github.xiaomisum.ryze.core.testelement.TestElement
+#META-INF/services/io.github.xiaomisum.ryze.testelement.TestElement
 com.example.CustomSampler
 ```
 

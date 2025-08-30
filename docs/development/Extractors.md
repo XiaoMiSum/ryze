@@ -2,7 +2,8 @@
 
 ## 概述
 
-提取器用于从测试结果中提取数据并保存到上下文变量中，供后续测试步骤使用。通过继承 `AbstractExtractor` 类，您可以创建自定义提取器来处理各种数据格式。
+提取器用于从测试结果中提取数据并保存到上下文变量中，供后续测试步骤使用。通过继承 `AbstractExtractor`
+类，您可以创建自定义提取器来处理各种数据格式。
 
 ## 提取器接口
 
@@ -22,12 +23,12 @@ public interface Extractor extends Validatable {
 
 ```java
 public abstract class AbstractExtractor implements Extractor, ExtractorConstantsInterface {
-    
+
     protected String field;        // 提取表达式
     protected String refName;      // 变量名称
     protected Object defaultValue; // 默认值
     protected int matchNum = 0;    // 匹配序号
-    
+
     /**
      * 执行具体的提取逻辑，由子类实现
      */
@@ -42,47 +43,48 @@ public abstract class AbstractExtractor implements Extractor, ExtractorConstants
 #### CSV 提取器
 
 ```java
+
 @KW({"csv_extractor", "csv"})
 public class CSVExtractor extends AbstractExtractor {
-    
+
     private int columnIndex = 0;
     private int rowIndex = 0;
-    private String delimiter = ",";
-    
+    private final String delimiter = ",";
+
     @Override
     protected ExtractResult extract(SampleResult result) {
         var extractResult = new ExtractResult("CSV 提取: 列" + columnIndex + " 行" + rowIndex);
-        
+
         try {
             String csvContent = result.getResponse().bytesAsString();
             String[] lines = csvContent.split("\n");
-            
+
             if (rowIndex >= lines.length) {
                 extractResult.setStatus(TestStatus.failed);
                 extractResult.setMessage("行索引超出范围: " + rowIndex);
                 return extractResult;
             }
-            
+
             String targetLine = lines[rowIndex + 1]; // 跳过标题行
             String[] columns = targetLine.split(delimiter);
-            
+
             if (columnIndex >= columns.length) {
                 extractResult.setStatus(TestStatus.failed);
                 extractResult.setMessage("列索引超出范围: " + columnIndex);
                 return extractResult;
             }
-            
+
             String value = columns[columnIndex].trim();
             extractResult.setValue(value);
-            
+
         } catch (Exception e) {
             extractResult.setStatus(TestStatus.failed);
             extractResult.setMessage("CSV 解析失败: " + e.getMessage());
         }
-        
+
         return extractResult;
     }
-    
+
     @Override
     public ValidateResult validate() {
         ValidateResult result = new ValidateResult();
@@ -98,37 +100,38 @@ public class CSVExtractor extends AbstractExtractor {
 #### XPath 提取器
 
 ```java
+
 @KW({"xpath_extractor", "xpath", "xml_extractor"})
 public class XPathExtractor extends AbstractExtractor {
-    
+
     @Override
     protected ExtractResult extract(SampleResult result) {
         var extractResult = new ExtractResult("XPath 提取: " + field);
-        
+
         try {
             String xmlContent = result.getResponse().bytesAsString();
-            
+
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
             Document document = builder.parse(new ByteArrayInputStream(xmlContent.getBytes()));
-            
+
             XPathFactory xPathFactory = XPathFactory.newInstance();
             XPath xpath = xPathFactory.newXPath();
             XPathExpression expression = xpath.compile(field);
-            
+
             String value = expression.evaluate(document);
             extractResult.setValue(value);
-            
+
             if (StringUtils.isBlank(value)) {
                 extractResult.setStatus(TestStatus.failed);
                 extractResult.setMessage("XPath 表达式未匹配到数据: " + field);
             }
-            
+
         } catch (Exception e) {
             extractResult.setStatus(TestStatus.failed);
             extractResult.setMessage("XML 解析失败: " + e.getMessage());
         }
-        
+
         return extractResult;
     }
 }
@@ -139,15 +142,16 @@ public class XPathExtractor extends AbstractExtractor {
 #### 多格式提取器
 
 ```java
+
 @KW({"multi_format_extractor", "multi"})
 public class MultiFormatExtractor extends AbstractExtractor {
-    
-    private String format = "json"; // json, xml, yaml, csv, regex
-    
+
+    private final String format = "json"; // json, xml, yaml, csv, regex
+
     @Override
     protected ExtractResult extract(SampleResult result) {
         var extractResult = new ExtractResult("多格式提取: " + format + " - " + field);
-        
+
         try {
             String content = result.getResponse().bytesAsString();
             Object value = switch (format.toLowerCase()) {
@@ -158,41 +162,41 @@ public class MultiFormatExtractor extends AbstractExtractor {
                 case "regex" -> extractFromRegex(content, field);
                 default -> throw new IllegalArgumentException("不支持的格式: " + format);
             };
-            
+
             extractResult.setValue(value);
-            
+
         } catch (Exception e) {
             extractResult.setStatus(TestStatus.failed);
             extractResult.setMessage(format + " 提取失败: " + e.getMessage());
         }
-        
+
         return extractResult;
     }
-    
+
     private Object extractFromJson(String content, String path) {
         return JSONPath.extract(content, path);
     }
-    
+
     private Object extractFromXml(String content, String xpath) throws Exception {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
         Document document = builder.parse(new ByteArrayInputStream(content.getBytes()));
-        
+
         XPathFactory xPathFactory = XPathFactory.newInstance();
         XPath xpathObj = xPathFactory.newXPath();
         return xpathObj.compile(xpath).evaluate(document);
     }
-    
+
     private Object extractFromYaml(String content, String path) {
         Yaml yaml = new Yaml();
         Object data = yaml.load(content);
         return JSONPath.extract(JSON.toJSONString(data), path);
     }
-    
+
     private Object extractFromCsv(String content, String columnName) {
         String[] lines = content.split("\n");
         if (lines.length < 2) return null;
-        
+
         String[] headers = lines[0].split(",");
         int columnIndex = -1;
         for (int i = 0; i < headers.length; i++) {
@@ -201,9 +205,9 @@ public class MultiFormatExtractor extends AbstractExtractor {
                 break;
             }
         }
-        
+
         if (columnIndex == -1) return null;
-        
+
         List<String> values = new ArrayList<>();
         for (int i = 1; i < lines.length; i++) {
             String[] columns = lines[i].split(",");
@@ -211,14 +215,14 @@ public class MultiFormatExtractor extends AbstractExtractor {
                 values.add(columns[columnIndex].trim());
             }
         }
-        
+
         return values.size() == 1 ? values.get(0) : values;
     }
-    
+
     private Object extractFromRegex(String content, String pattern) {
         Pattern regex = Pattern.compile(pattern);
         Matcher matcher = regex.matcher(content);
-        
+
         List<String> matches = new ArrayList<>();
         while (matcher.find()) {
             if (matcher.groupCount() > 0) {
@@ -227,7 +231,7 @@ public class MultiFormatExtractor extends AbstractExtractor {
                 matches.add(matcher.group()); // 返回整个匹配
             }
         }
-        
+
         return matches.size() == 1 ? matches.get(0) : matches;
     }
 }
@@ -237,7 +241,7 @@ public class MultiFormatExtractor extends AbstractExtractor {
 
 ### SPI 注册
 
-创建文件 `src/main/resources/META-INF/services/io.github.xiaomisum.ryze.core.extractor.Extractor`：
+创建文件 `src/main/resources/META-INF/services/io.github.xiaomisum.ryze.extractor.Extractor`：
 
 ```
 com.example.CSVExtractor
@@ -250,25 +254,26 @@ com.example.MultiFormatExtractor
 ### 在 Java API 中使用
 
 ```java
+
 @Test
 @RyzeTest
 public void testWithExtractors() {
     MagicBox.http("提取器测试", http -> {
         http.config(config -> config
-            .method("GET")
-            .url("https://api.example.com/data")
+                .method("GET")
+                .url("https://api.example.com/data")
         );
-        
+
         http.extractors(extractors ->
-            extractors.csv(csv -> csv
-                        .columnIndex(0)
-                        .rowIndex(0)
-                        .refName("csvValue")
-                    )
-                     .xpath(xpath -> xpath
-                        .field("//data/id")
-                        .refName("xmlId")
-                    )
+                extractors.csv(csv -> csv
+                                .columnIndex(0)
+                                .rowIndex(0)
+                                .refName("csvValue")
+                        )
+                        .xpath(xpath -> xpath
+                                .field("//data/id")
+                                .refName("xmlId")
+                        )
         );
     });
 }
@@ -282,7 +287,7 @@ testclass: http
 config:
   method: GET
   url: "https://api.example.com/data"
-  
+
 extractors:
   - testclass: csv
     column_index: 0

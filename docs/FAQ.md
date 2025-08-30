@@ -5,6 +5,7 @@
 ### Q1: 支持哪些 Java 版本？
 
 **A**: Ryze 6.0+ 要求 **Java 21 或更高版本**。早期版本支持情况：
+
 - Ryze 6.0+: Java 21+
 - Ryze 5.x: Java 17+
 - Ryze 4.x: Java 11+
@@ -16,6 +17,7 @@
 **A**: 主要注意以下几点：
 
 1. **核心模块包含 HTTP 支持**：
+
 ```xml
 <!-- 只需引入核心模块即可使用 HTTP -->
 <dependency>
@@ -26,6 +28,7 @@
 ```
 
 2. **协议模块按需引入**：
+
 ```xml
 <!-- 只有需要时才引入 -->
 <dependency>
@@ -36,6 +39,7 @@
 ```
 
 3. **数据库驱动需要额外添加**：
+
 ```xml
 <!-- JDBC 需要数据库驱动 -->
 <dependency>
@@ -50,11 +54,13 @@
 **A**: 常见解决方案：
 
 1. **查看依赖树**：
+
 ```bash
 mvn dependency:tree
 ```
 
 2. **排除冲突依赖**：
+
 ```xml
 <dependency>
     <groupId>io.github.xiaomisum</groupId>
@@ -70,6 +76,7 @@ mvn dependency:tree
 ```
 
 3. **强制指定版本**：
+
 ```xml
 <dependencyManagement>
     <dependencies>
@@ -91,6 +98,7 @@ mvn dependency:tree
 **A**: 检查以下几点：
 
 1. **文件路径是否正确**：
+
 ```java
 // 相对路径（相对于 classpath）
 Result result = Ryze.start("test-cases/api-test.json");
@@ -100,6 +108,7 @@ Result result = Ryze.start("/absolute/path/to/test.json");
 ```
 
 2. **JSON 格式是否正确**：
+
 ```json
 {
   "title": "测试标题",
@@ -114,11 +123,15 @@ Result result = Ryze.start("/absolute/path/to/test.json");
 ```
 
 3. **检查控制台错误信息**：
+
 ```java
-try {
-    Result result = Ryze.start("test.json");
-} catch (Exception e) {
-    e.printStackTrace();
+try{
+Result result = Ryze.start("test.json");
+}catch(
+Exception e){
+        e.
+
+printStackTrace();
 }
 ```
 
@@ -127,6 +140,7 @@ try {
 **A**: 常见原因和解决方案：
 
 1. **变量语法错误**：
+
 ```json
 // ❌ 错误
 "url": "{baseUrl}/users"
@@ -136,6 +150,7 @@ try {
 ```
 
 2. **变量未定义**：
+
 ```json
 {
   "variables": {
@@ -155,6 +170,7 @@ try {
 ```
 
 3. **函数调用格式**：
+
 ```json
 {
   "variables": {
@@ -170,16 +186,22 @@ try {
 **A**: 调试步骤：
 
 1. **打印实际响应**：
+
 ```java
 Result result = http(builder -> builder
-    .method("GET")
-    .url("https://api.example.com/users/1")
+        .method("GET")
+        .url("https://api.example.com/users/1")
 );
 
-System.out.println("响应内容: " + result.getResponse().bytesAsString());
+System.out.
+
+println("响应内容: "+result.getResponse().
+
+bytesAsString());
 ```
 
 2. **使用正确的 JSONPath**：
+
 ```json
 // 检查 JSONPath 表达式是否正确
 {
@@ -191,13 +213,22 @@ System.out.println("响应内容: " + result.getResponse().bytesAsString());
 ```
 
 3. **分步验证**：
+
 ```java
 // 先验证基础结构
-.assertion(assertion -> assertion
-    .json("$", "", "isNotEmpty")          // 响应非空
-    .json("$.code", 200, "==")            // 状态码
-    .json("$.data", "", "isNotEmpty")     // 数据存在
-    .json("$.data.name", "张三", "==")    // 具体值
+.assertion(assertion ->assertion
+        .
+
+json("$","","isNotEmpty")          // 响应非空
+    .
+
+json("$.code",200,"==")            // 状态码
+    .
+
+json("$.data","","isNotEmpty")     // 数据存在
+    .
+
+json("$.data.name","张三","==")    // 具体值
 )
 ```
 
@@ -206,6 +237,7 @@ System.out.println("响应内容: " + result.getResponse().bytesAsString());
 **A**: 检查和解决：
 
 1. **确认提取表达式**：
+
 ```json
 {
   "testclass": "json",
@@ -216,17 +248,21 @@ System.out.println("响应内容: " + result.getResponse().bytesAsString());
 ```
 
 2. **验证变量是否可用**：
+
 ```java
 // 在后续步骤中使用
-.header("Authorization", "Bearer ${authToken}")
+.header("Authorization","Bearer ${authToken}")
 
 // 调试输出
 SessionRunner session = SessionRunner.getSessionIfNoneCreateNew();
 Object token = session.getContext().getLocalVariablesWrapper().get("authToken");
-System.out.println("提取的 token: " + token);
+System.out.
+
+println("提取的 token: "+token);
 ```
 
 3. **使用 Result 提取器作为后备**：
+
 ```json
 {
   "testclass": "result",
@@ -243,6 +279,7 @@ System.out.println("提取的 token: " + token);
 **A**: 根据项目实际支持的配置：
 
 1. **YAML 配置方式**：
+
 ```yaml
 testclass: http
 config:
@@ -254,6 +291,7 @@ config:
 ```
 
 2. **JSON 配置方式**：
+
 ```json
 {
   "testclass": "http",
@@ -266,19 +304,22 @@ config:
 }
 ```
 
-**注意**：当前版本的HTTP协议支持的主要配置参数包括：`method`、`protocol`、`host`、`port`、`path`、`headers`、`query`、`data`、`body`、`http/2` 等。
+**注意**：当前版本的HTTP协议支持的主要配置参数包括：`method`、`protocol`、`host`、`port`、`path`、`headers`、`query`、`data`、
+`body`、`http/2` 等。
 
 ### Q9: Dubbo 连接失败怎么解决？
 
 **A**: 常见问题排查：
 
 1. **检查注册中心连接**：
+
 ```bash
 # 确认 Zookeeper 运行状态
 telnet localhost 2181
 ```
 
 2. **验证服务提供者**：
+
 ```bash
 # 检查服务是否注册
 zkCli.sh -server localhost:2181
@@ -286,6 +327,7 @@ ls /dubbo/com.example.service.UserService/providers
 ```
 
 3. **配置检查**：
+
 ```yaml
 # Dubbo 配置
 testclass: dubbo
@@ -373,6 +415,7 @@ config:
 **A**: 性能优化建议：
 
 1. **合理使用连接池**：
+
 ```yaml
 # 复用数据库连接
 testclass: jdbc
@@ -382,35 +425,65 @@ config:
 ```
 
 2. **避免不必要的断言**：
+
 ```java
 // ❌ 过多断言影响性能
-.assertion(assertion -> assertion
-    .json("$.field1", "value1", "==")
-    .json("$.field2", "value2", "==")
-    .json("$.field3", "value3", "==")
-    // ... 10+ 个断言
+.assertion(assertion ->assertion
+        .
+
+json("$.field1","value1","==")
+    .
+
+json("$.field2","value2","==")
+    .
+
+json("$.field3","value3","==")
+// ... 10+ 个断言
 )
 
 // ✅ 关键断言即可
-.assertion(assertion -> assertion
-    .json("$.code", 200, "==")
-    .json("$.data", "", "isNotEmpty")
+        .
+
+assertion(assertion ->assertion
+        .
+
+json("$.code",200,"==")
+    .
+
+json("$.data","","isNotEmpty")
 )
 ```
 
 3. **优化测试结构**：
+
 ```java
 // 使用测试套件组织相关测试
-MagicBox.suite("用户测试套件", suite -> {
-    // 配置共享资源
-    suite.configureElements(ele -> ele.http(http -> http
-        .config(config -> config.host("api.example.com"))
-    ));
-    
-    // 多个相关测试
-    suite.children(child -> child.http(...));
-    suite.children(child -> child.http(...));
-});
+MagicBox.suite("用户测试套件",suite ->{
+        // 配置共享资源
+        suite.
+
+configureElements(ele ->ele.
+
+http(http ->http
+        .
+
+config(config ->config.
+
+host("api.example.com"))
+        ));
+
+        // 多个相关测试
+        suite.
+
+children(child ->child.
+
+http(...));
+        suite.
+
+children(child ->child.
+
+http(...));
+        });
 ```
 
 ### Q12: 内存使用过高怎么优化？
@@ -418,25 +491,36 @@ MagicBox.suite("用户测试套件", suite -> {
 **A**: 内存优化方案：
 
 1. **及时清理会话**：
+
 ```java
-try {
-    Result result = Ryze.start("test.json");
-    // 处理结果...
-} finally {
-    SessionRunner.removeSession();  // 清理 ThreadLocal
+try{
+Result result = Ryze.start("test.json");
+// 处理结果...
+}finally{
+        SessionRunner.
+
+removeSession();  // 清理 ThreadLocal
 }
 ```
 
 2. **控制测试数据量**：
+
 ```java
 // 避免一次性加载大量数据
 List<TestData> data = loadTestData();
-data.stream()
-    .limit(100)  // 限制数据量
-    .forEach(this::runTest);
+data.
+
+stream()
+    .
+
+limit(100)  // 限制数据量
+    .
+
+forEach(this::runTest);
 ```
 
 3. **JVM 参数调整**：
+
 ```bash
 java -Xmx2g -Xms1g -XX:+UseG1GC -jar test-app.jar
 ```
@@ -446,6 +530,7 @@ java -Xmx2g -Xms1g -XX:+UseG1GC -jar test-app.jar
 **A**: 数据驱动最佳实践：
 
 1. **使用变量配置**：
+
 ```java
 @Test
 public void testWithVariables() {
@@ -471,6 +556,7 @@ public void testWithVariables() {
 ```
 
 2. **外部JSON数据文件**：
+
 ```json
 {
   "title": "用户测试套件",
@@ -504,6 +590,7 @@ public void testWithVariables() {
 **A**: 日志配置方法：
 
 1. **Logback 配置** (`logback.xml`)：
+
 ```xml
 <configuration>
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
@@ -522,9 +609,12 @@ public void testWithVariables() {
 ```
 
 2. **代码中启用调试**：
+
 ```java
-System.setProperty("ryze.debug", "true");
-System.setProperty("org.slf4j.simpleLogger.defaultLogLevel", "debug");
+System.setProperty("ryze.debug","true");
+System.
+
+setProperty("org.slf4j.simpleLogger.defaultLogLevel","debug");
 ```
 
 ### Q15: 测试报告生成失败怎么办？
@@ -532,6 +622,7 @@ System.setProperty("org.slf4j.simpleLogger.defaultLogLevel", "debug");
 **A**: 报告问题解决：
 
 1. **检查 Allure 配置**：
+
 ```xml
 <plugin>
     <groupId>io.qameta.allure</groupId>
@@ -541,12 +632,16 @@ System.setProperty("org.slf4j.simpleLogger.defaultLogLevel", "debug");
 ```
 
 2. **禁用报告（调试时）**：
+
 ```java
 Configure configure = new Configure(false);  // 禁用 Allure
-SessionRunner.newSession(configure);
+SessionRunner.
+
+newSession(configure);
 ```
 
 3. **清理报告目录**：
+
 ```bash
 rm -rf allure-results/
 mvn clean test
@@ -558,6 +653,7 @@ mvn allure:report
 **A**: 基于项目实际支持的功能：
 
 1. **基础HTTP配置**：
+
 ```json
 {
   "testclass": "http",
@@ -576,6 +672,7 @@ mvn allure:report
 ```
 
 2. **HTTPS 支持**：
+
 ```yaml
 testclass: http
 config:
@@ -596,6 +693,7 @@ config:
 **A**: 自定义断言实现：
 
 1. **实现 Rule 接口**：
+
 ```java
 @KW("customEquals")
 public class CustomEqualsRule implements Rule {
@@ -618,12 +716,14 @@ public class CustomEqualsRule implements Rule {
 ```
 
 2. **注册 SPI 服务**：
+
 ```
-# META-INF/services/io.github.xiaomisum.ryze.core.assertion.Rule
+# META-INF/services/io.github.xiaomisum.ryze.assertion.Rule
 com.example.CustomEqualsRule
 ```
 
 2. **在测试中使用**：
+
 ```json
 {
   "testclass": "json",
@@ -638,6 +738,7 @@ com.example.CustomEqualsRule
 **A**: 协议扩展步骤：
 
 1. **实现核心接口**：
+
 ```java
 @KW("myprotocol")
 public class MyProtocolSampler implements Sampler<DefaultSampleResult> {
@@ -650,6 +751,7 @@ public class MyProtocolSampler implements Sampler<DefaultSampleResult> {
 ```
 
 2. **实现配置类**：
+
 ```java
 public class MyProtocolConfigureItem implements ConfigureItem<MyProtocolConfigureItem> {
     // 协议特定的配置参数
@@ -657,15 +759,17 @@ public class MyProtocolConfigureItem implements ConfigureItem<MyProtocolConfigur
 ```
 
 3. **实现构建器**：
+
 ```java
-public static class Builder extends AbstractSampler.Builder<...> {
-    // 构建器实现
-}
+public static class Builder extends AbstractSampler.Builder<...>{
+        // 构建器实现
+        }
 ```
 
 4. **注册服务**：
+
 ```
-# META-INF/services/io.github.xiaomisum.ryze.core.testelement.TestElement
+# META-INF/services/io.github.xiaomisum.ryze.testelement.TestElement
 com.example.MyProtocolSampler
 ```
 
@@ -678,19 +782,41 @@ com.example.MyProtocolSampler
 **A**: 避免这些常见问题：
 
 1. **线程安全问题**：
+
 ```java
 // ❌ 多线程共享 TestElement
 TestElement element = HTTPSampler.builder().build();
-executor.submit(() -> element.run(session1));
-executor.submit(() -> element.run(session2));
+executor.
+
+submit(() ->element.
+
+run(session1));
+        executor.
+
+submit(() ->element.
+
+run(session2));
 
 // ✅ 使用副本
 TestElement template = HTTPSampler.builder().build();
-executor.submit(() -> template.copy().run(session1));
-executor.submit(() -> template.copy().run(session2));
+executor.
+
+submit(() ->template.
+
+copy().
+
+run(session1));
+        executor.
+
+submit(() ->template.
+
+copy().
+
+run(session2));
 ```
 
 2. **资源泄露**：
+
 ```java
 // ❌ 忘记清理会话
 public void test() {
@@ -709,6 +835,7 @@ public void test() {
 ```
 
 3. **变量作用域混淆**：
+
 ```java
 // 理解变量的作用域层次：
 // 全局变量 -> 测试套件变量 -> 测试用例变量 -> 提取器变量
@@ -719,21 +846,22 @@ public void test() {
 **A**: 版本升级指南：
 
 1. **检查兼容性**：
-   - 查看 [Release Notes](https://github.com/XiaoMiSum/ryze/releases)
-   - 注意破坏性变更
+    - 查看 [Release Notes](https://github.com/XiaoMiSum/ryze/releases)
+    - 注意破坏性变更
 
 2. **渐进式升级**：
+
 ```xml
 <!-- 先升级到中间版本测试 -->
 <ryze.version>5.9.9</ryze.version>
-<!-- 确认无问题后再升级到目标版本 -->
+        <!-- 确认无问题后再升级到目标版本 -->
 <ryze.version>6.0.1</ryze.version>
 ```
 
 3. **测试验证**：
-   - 运行现有测试套件
-   - 检查已知问题
-   - 验证关键功能
+    - 运行现有测试套件
+    - 检查已知问题
+    - 验证关键功能
 
 ---
 
@@ -742,22 +870,22 @@ public void test() {
 ### 还有其他问题？
 
 1. **查看文档**：
-   - [快速开始指南](./QuickStart.md)
-   - [API 文档](./API.md)
-   - [架构设计](./Architecture.md)
+    - [快速开始指南](./QuickStart.md)
+    - [API 文档](./API.md)
+    - [架构设计](./Architecture.md)
 
 2. **社区支持**：
-   - [GitHub Issues](https://github.com/XiaoMiSum/ryze/issues)
-   - [GitHub Discussions](https://github.com/XiaoMiSum/ryze/discussions)
+    - [GitHub Issues](https://github.com/XiaoMiSum/ryze/issues)
+    - [GitHub Discussions](https://github.com/XiaoMiSum/ryze/discussions)
 
 3. **报告问题**：
-   - 提供完整的错误信息
-   - 包含可重现的示例代码
-   - 说明环境信息（Java 版本、操作系统等）
+    - 提供完整的错误信息
+    - 包含可重现的示例代码
+    - 说明环境信息（Java 版本、操作系统等）
 
 4. **贡献代码**：
-   - Fork 项目并提交 Pull Request
-   - 参考[贡献指南](../README.md#🤝-贡献指南)
+    - Fork 项目并提交 Pull Request
+    - 参考[贡献指南](../README.md#🤝-贡献指南)
 
 ---
 
