@@ -32,6 +32,7 @@ import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import io.github.xiaomisum.ryze.protocol.http.config.HTTPConfigureItem;
+import io.github.xiaomisum.ryze.support.PrimitiveTypeChecker;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Strings;
 import org.apache.hc.client5.http.impl.cookie.BasicClientCookie;
@@ -143,8 +144,9 @@ public class HTTPClient extends Request implements HTTPConstantsInterface {
      * <p>
      * 根据请求体对象的类型自动选择合适的格式：
      * <ul>
-     *   <li>Map或List类型：转换为JSON格式</li>
-     *   <li>其他类型：转换为文本格式</li>
+     *   <li>文本类型且是json：转换为JSON格式</li>
+     *   <li>基本数据类型：转换为文本格式</li>
+     *   <li>其他类型：转换为JSON格式</li>
      * </ul>
      * </p>
      *
@@ -152,10 +154,12 @@ public class HTTPClient extends Request implements HTTPConstantsInterface {
      * @return HTTP客户端实例
      */
     public HTTPClient body(Object body) {
-        if (body instanceof Map<?, ?> || body instanceof List<?>) {
-            super.body(RequestEntity.json(JSON.toJSONString(body)));
-        } else if (Objects.nonNull(body)) {
+        if (body instanceof String stringBody && JSON.isValid(stringBody)) {
+            super.body(RequestEntity.json(stringBody));
+        } else if (PrimitiveTypeChecker.isPrimitiveOrWrapper(body)) {
             super.body(RequestEntity.text(body.toString()));
+        } else {
+            super.body(RequestEntity.json(JSON.toJSONString(body)));
         }
         return this;
     }
@@ -178,22 +182,22 @@ public class HTTPClient extends Request implements HTTPConstantsInterface {
         if (Objects.nonNull(binary)) {
             var files = new ArrayList<NameValuePair>();
             if (binary instanceof List<?> objects) {
-                var jsonArray = new JSONArray(objects);
-                for (int i = 0; i < jsonArray.size(); i++) {
-                    JSONObject item = jsonArray.getJSONObject(i);
-                    for (String key : item.keySet()) {
+                var binaryWrapper = new JSONArray(objects);
+                for (var i = 0; i < binaryWrapper.size(); i++) {
+                    var item = binaryWrapper.getJSONObject(i);
+                    for (var key : item.keySet()) {
                         files.add(new BasicNameValuePair(key, item.getString(key)));
                     }
                 }
             }
             if (binary instanceof Map<?, ?> map) {
-                var json = new JSONObject(map);
-                for (Map.Entry<String, Object> en : json.entrySet()) {
-                    Object value = en.getValue();
+                var binaryWrapper = new JSONObject(map);
+                for (var entry : binaryWrapper.entrySet()) {
+                    var value = entry.getValue();
                     if (value instanceof String path) {
-                        files.add(new BasicNameValuePair(en.getKey(), path));
+                        files.add(new BasicNameValuePair(entry.getKey(), path));
                     } else if (value instanceof List<?> paths) {
-                        paths.forEach(path -> files.add(new BasicNameValuePair(en.getKey(), (String) path)));
+                        paths.forEach(path -> files.add(new BasicNameValuePair(entry.getKey(), (String) path)));
                     }
                 }
             }
