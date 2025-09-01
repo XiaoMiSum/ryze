@@ -17,3 +17,6 @@
 /allure-results
 /*/allure-results
 /*/*/allure-results
+/node_modules
+/docs/.vuepress/dist
+/docs/.vuepress/cache

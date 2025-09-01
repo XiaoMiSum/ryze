@@ -1,145 +1,154 @@
-# 📚 Ryze 文档索引
+---
+# https://vitepress.dev/reference/default-theme-home-page
+layout: home
 
-本目录包含 Ryze 测试框架的完整文档体系。
+title: Ryze - 多协议测试框架
+titleTemplate: 强大而优雅的测试解决方案
 
-## 📖 文档结构
+hero:
+  name: "Ryze"
+  text: "多协议测试框架"
+  tagline: 强大而优雅的测试解决方案，让测试变得简单
+  image:
+    src: /logo.png
+    alt: Ryze Logo
+  actions:
+    - theme: brand
+      text: 快速开始
+      link: /guide/quick-start
+    - theme: alt
+      text: 了解框架
+      link: /guide/introduction
+    - theme: alt
+      text: 查看示例
+      link: /examples/
 
-### 🚀 入门文档
+features:
+  - icon: 🚀
+    title: 多协议支持
+    details: 支持 HTTP(S)、Dubbo、JDBC、Redis、MongoDB、Kafka、ActiveMQ、RabbitMQ 等多种协议测试
+  - icon: 🧩
+    title: 模块化架构
+    details: 采用模块化设计，核心模块提供基础能力，协议模块提供扩展支持
+  - icon: 📝
+    title: 配置分离
+    details: 测试用例与代码分离，通过 JSON/YAML 描述测试场景，提升可维护性
+  - icon: 🔧
+    title: 灵活验证
+    details: 提供丰富的验证机制和动态参数支持，满足各种测试需求
+  - icon: 📊
+    title: 详细报告
+    details: 集成 Allure 和 ExtentReports，生成简洁美观的测试报告
+  - icon: 🔌
+    title: 易于扩展
+    details: 支持自定义插件和组件，满足个性化需求
+---
 
-| 文档 | 描述 | 目标读者 |
-|------|------|----------|
-| [README.md](../README.md) | 项目主页，包含项目简介和快速开始 | 所有用户 |
-| [快速开始指南](./QuickStart.md) | 5分钟快速上手教程，包含完整示例 | 新用户 |
+# Ryze - 多协议测试框架
 
-### 📘 核心文档
+Ryze 是一个基于 Java 的测试框架，旨在支持多种协议的测试，提供统一的测试用例描述方式和丰富的测试功能，提升测试的可维护性和扩展性。
 
-| 文档 | 描述 | 目标读者 |
-|------|------|----------|
-| [API 文档](./API.md) | 详细的 API 接口文档和使用方法 | 开发者 |
-| [架构设计](./Architecture.md) | 框架整体架构和设计模式说明 | 架构师、开发者 |
-| [协议指南](./Protocols.md) | 各协议模块的综合概览和快速索引 | 测试工程师 |
+## 核心特性
 
-### 🔌 协议专项指南
+### 🌐 多协议支持
+Ryze 支持多种协议测试，包括：
+- **Web 测试**：HTTP/HTTPS 协议
+- **微服务测试**：Dubbo RPC 框架
+- **数据库测试**：JDBC 关系型数据库
+- **缓存测试**：Redis 内存数据库
+- **消息队列测试**：Kafka、RabbitMQ、ActiveMQ
+- **文档数据库测试**：MongoDB
 
-| 协议 | 文档 | 描述 |
-|------|------|------|
-| HTTP(S) | [HTTP 协议](./protocols/HTTP.md) | Web 服务和 RESTful API 测试 |
-| JDBC | [JDBC 数据库](./protocols/JDBC.md) | 关系型数据库操作和测试 |
-| Redis | [Redis 协议](./protocols/Redis.md) | 内存缓存数据库测试 |
-| Dubbo | [Dubbo 协议](./protocols/Dubbo.md) | 微服务和 RPC 调用测试 |
-| ActiveMQ | [ActiveMQ 协议](./protocols/ActiveMQ.md) | 消息队列和异步通信测试 |
-| Kafka | [Kafka 协议](./protocols/Kafka.md) | 事件流和大数据处理测试 |
-| RabbitMQ | [RabbitMQ 协议](./protocols/RabbitMQ.md) | 消息路由和分发测试 |
-| MongoDB | [MongoDB 协议](./protocols/MongoDB.md) | NoSQL 文档数据库测试 |
+### 🏗️ 模块化架构
+Ryze 采用模块化架构设计：
+- **核心模块**：提供基础组件、断言、执行引擎
+- **协议模块**：各协议独立模块，便于维护和扩展
+- **集成模块**：TestNG 集成支持
 
-### 🛠️ 扩展文档
+### 📋 配置驱动
+通过 JSON/YAML 描述测试场景：
+- 测试用例与代码分离，提升可维护性
+- 统一的测试流程，降低学习成本
+- 支持动态参数和变量替换
 
-| 文档 | 描述 | 目标读者 |
-|------|------|----------|
-| [开发指南](./Development.md) | 贡献代码、开发新功能的指南 | 贡献者、开发者 |
-| [FAQ](./FAQ.md) | 常见问题解答和故障排除 | 所有用户 |
+### 🧪 灵活验证
+提供丰富的验证机制：
+- 多种断言规则和比较方式
+- 动态参数支持和数据提取
+- 可扩展的验证器和提取器
 
-### 📝 详细帮助
+## 快速开始
 
-位于 `help/` 目录下的详细功能使用指南：
+### 环境要求
+- JDK 21 或更高版本
+- Maven 3.8+ 或 Gradle 7+
 
-| 文档 | 描述 | 目标读者 |
-|------|------|----------|
-| [测试集合管理](./help/测试集合.md) | 测试用例组织与层级管理，包含项目、模块、用例三级结构 | 测试工程师 |
-| [变量与函数](./help/变量与函数.md) | 动态数据生成和变量管理，包含内置函数和自定义开发 | 测试工程师 |
-| [提取器使用](./help/提取器.md) | 数据提取和变量设置，支持 JSON、正则、HTTP 头等多种方式 | 测试工程师 |
-| [验证器配置](./help/验证器.md) | 结果验证和断言规则，包含多种比较规则和自定义验证 | 测试工程师 |
-| [拦截器机制](./help/拦截器.md) | 请求响应拦截处理，实现参数加密、日志记录等高级功能 | 高级用户 |
-| [配置元件](./help/配置元件.md) | 测试组件基础配置管理，支持配置继承和复用 | 测试工程师 |
-| [前置处理器](./help/前置处理器.md) | 测试执行前的预处理逻辑，如数据准备、环境初始化 | 测试工程师 |
-| [后置处理器](./help/后置处理器.md) | 测试执行后的后处理逻辑，如数据清理、结果验证 | 测试工程师 |
-| [取样器](./help/取样器.md) | 执行具体测试操作的核心组件，支持多种协议 | 测试工程师 |
+### Maven 依赖
+```xml
+<dependency>
+    <groupId>io.github.xiaomisum</groupId>
+    <artifactId>ryze</artifactId>
+    <version>6.0.1</version>
+</dependency>
+```
 
-### 📋 模板示例
+### 第一个测试用例
+```json
+{
+  "title": "用户API测试套件",
+  "variables": {
+    "baseUrl": "https://jsonplaceholder.typicode.com",
+    "userId": "1"
+  },
+  "children": [
+    {
+      "testclass": "http",
+      "title": "获取用户信息",
+      "method": "GET",
+      "url": "${baseUrl}/users/${userId}",
+      "headers": {
+        "Accept": "application/json"
+      },
+      "assertions": [
+        {
+          "testclass": "json",
+          "field": "$.id",
+          "expected": 1,
+          "rule": "=="
+        }
+      ]
+    }
+  ]
+}
+```
 
-位于 `template/` 目录下的配置模板和示例：
+## 文档导航
 
-| 目录 | 描述 |
-|------|------|
-| `template/测试集合/` | 测试集合配置模板 |
-| 其他模板文件 | 各种使用场景的配置模板 |
+### 📚 用户文档
+- [入门指南](/guide/introduction) - 框架介绍和核心概念
+- [快速开始](/guide/quick-start) - 5分钟快速上手教程
+- [安装配置](/guide/installation) - 环境搭建和配置说明
 
-## 🗺️ 学习路径
+### 🔧 技术文档
+- [核心概念](/guide/concepts/) - 测试集合、取样器、处理器等核心组件
+- [配置语法](/guide/configuration/) - JSON/YAML 配置文件结构和语法
+- [协议支持](/guide/protocols/) - 各协议模块的详细使用说明
+- [高级功能](/guide/advanced/) - 动态变量、配置元件、拦截器等高级特性
 
-### 新手用户
+### 👨‍💻 开发者文档
+- [开发者指南](/developer/) - 架构设计、编码规范和扩展机制
+- [API 参考](/developer/api/) - 核心 API 和组件接口文档
 
-1. 📖 阅读 [README.md](../README.md) 了解项目概况
-2. 🚀 跟随 [快速开始指南](./QuickStart.md) 运行第一个测试
-3. 📚 查看具体协议的使用指南（如 [HTTP.md](./help/HTTP.md)）
-4. 💡 参考示例项目中的完整用例
+### 📋 使用示例
+- [示例代码](/examples/) - 各协议的完整使用示例
+- [模板文档](/tester/template/) - 测试配置模板和最佳实践
 
-### 开发者
+## 📞 获取帮助
 
-1. 📖 理解 [架构设计](./Architecture.md) 和核心概念
-2. 📘 深入学习 [API 文档](./API.md)
-3. 🔧 查看 [协议指南](./Protocols.md) 了解扩展机制
-4. 🛠️ 参考 [开发指南](./Development.md) 贡献代码
-
-### 测试工程师
-
-1. 📖 掌握 [快速开始指南](./QuickStart.md) 的基本用法
-2. 📋 **掌握** [模板系统](./template/) 进行测试配置管理
-   - 学习使用 `template/取样器/` 目录下的协议模板（HTTP、JDBC、Redis、Dubbo等）
-   - 掌握 `template/处理器/` 中的前后置处理器模板配置
-   - 熟练运用 `template/配置元件/` 中的基础配置模板
-   - 理解 `template/验证器/` 和 `template/提取器/` 的验证和数据提取模板
-   - 掌握 YAML 模板的 `!include` 机制实现配置复用和模块化管理
-3. 📁 深入学习 [测试集合管理](./help/测试集合.md) 的层级结构和组织方法
-4. 🔍 了解 [变量与函数](./help/变量与函数.md) 进行动态数据驱动测试
-5. ✅ 掌握 [验证器配置](./help/验证器.md) 和 [提取器使用](./help/提取器.md) 实现数据处理
-6. 🔗 学习 [拦截器机制](./help/拦截器.md) 实现高级测试功能
-7. ⚙️ 掌握 [配置元件](./help/配置元件.md)、[前置处理器](./help/前置处理器.md)、[后置处理器](./help/后置处理器.md) 和 [取样器](./help/取样器.md) 的使用方法和最佳实践
-
-## 🆘 获取帮助
-
-### 遇到问题？
-
-1. **首先查看** [FAQ](./FAQ.md) 常见问题解答
-2. **搜索现有** [Issues](https://github.com/XiaoMiSum/ryze/issues)
-3. **提交新的** Issue 描述您的问题
-4. **参与讨论** [GitHub Discussions](https://github.com/XiaoMiSum/ryze/discussions)
-
-### 文档反馈
-
-如果您发现文档中的错误或有改进建议：
-
-1. 在 [Issues](https://github.com/XiaoMiSum/ryze/issues) 中提交文档问题
-2. 直接提交 Pull Request 修正文档
-3. 在相应文档页面下方留言
-
-## 🚀 版本信息
-
-当前文档对应 Ryze 版本：**6.0.1**
-
-文档最后更新：**2024年8月**
+- [常见问题](/faq/) - 常见问题解答和故障排除
+- [GitHub Issues](https://github.com/XiaoMiSum/ryze/issues) - 问题反馈和功能建议
+- [GitHub Discussions](https://github.com/XiaoMiSum/ryze/discussions) - 社区讨论和交流
 
 ---
 
-## 🎯 快速导航
-
-| 需求 | 推荐文档 |
-|------|----------|
-| 我想快速体验 Ryze | [快速开始指南](./QuickStart.md) |
-| 我想了解如何编写 HTTP 测试 | [HTTP 协议指南](./protocols/HTTP.md) |
-| 我想了解如何编写 Dubbo 测试 | [Dubbo 协议指南](./protocols/Dubbo.md) |
-| 我想了解如何使用变量和函数 | [变量与函数](./help/变量与函数.md) |
-| 我想了解如何验证测试结果 | [验证器文档](./help/验证器.md) |
-| 我想了解如何提取测试数据 | [提取器使用](./help/提取器.md) |
-| 我想了解如何处理测试请求 | [拦截器机制](./help/拦截器.md) |
-| 我想了解测试组件配置 | [配置元件](./help/配置元件.md) |
-| 我想了解测试预处理 | [前置处理器](./help/前置处理器.md) |
-| 我想了解测试后处理 | [后置处理器](./help/后置处理器.md) |
-| 我想了解测试执行组件 | [取样器](./help/取样器.md) |
-| 我想为项目贡献代码 | [开发指南](./Development.md) |
-| 我遇到了问题需要解决 | [FAQ 常见问题](./FAQ.md) |
-| 我想了解框架设计原理 | [架构设计文档](./Architecture.md) |
-| 我想查看完整的 API 参考 | [API 文档](./API.md) |
-
----
-
-**📢 提示**: 本文档持续更新中，欢迎贡献内容和反馈问题！
+**📢 提示**: Ryze 文档持续更新中，欢迎贡献内容和反馈问题！

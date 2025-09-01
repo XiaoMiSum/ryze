@@ -1,5 +1,0 @@
-title: 标准jdbc取样器
-testclass: jdbc  # 取样器类型
-config: # 取样器配置
-  datasource: JDBCDataSource_var  # 数据源，必须先定义数据源
-  sql: 'select * from sys_user where id = 1;'  # sql语句

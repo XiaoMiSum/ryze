@@ -1,0 +1,27 @@
+{
+  "name": "ryze-docs",
+  "version": "1.0.0",
+  "description": "Ryze - 多协议测试框架文档",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs"
+  },
+  "keywords": [
+    "ryze",
+    "testing",
+    "framework",
+    "multi-protocol",
+    "http",
+    "dubbo",
+    "jdbc",
+    "redis"
+  ],
+  "author": "XiaoMiSum",
+  "license": "MIT",
+  "devDependencies": {
+    "vitepress": "^1.0.0"
+  }
+}

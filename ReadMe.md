@@ -72,7 +72,7 @@ Ryze 是一个基于 Java 21 开发的现代化测试框架，专为多协议测
 <a name="system-architecture"></a>
 Ryze 采用模块化架构设计，核心模块提供基础能力，协议模块提供扩展能力：
 
-```mermaid
+``mermaid
 graph TB
     A[Ryze Core] --> B[HTTP Module]
     A --> C[Dubbo Module]
@@ -117,7 +117,7 @@ graph TB
 
 在您的 `pom.xml` 中添加以下依赖：
 
-```xml
+```
 <!-- 核心模块 -->
 <dependency>
     <groupId>io.github.xiaomisum</groupId>
@@ -155,7 +155,7 @@ implementation 'io.github.xiaomisum:ryze-dubbo:6.0.1'
 
 创建测试用例文件 `test-case.yaml`：
 
-```yaml
+```
 title: "用户登录测试"
 children:
   - testclass: http
@@ -185,7 +185,7 @@ children:
 
 执行测试：
 
-```java
+```
 import io.github.xiaomisum.ryze.Ryze;
 
 public class LoginTest {
@@ -201,7 +201,7 @@ public class LoginTest {
 
 创建测试用例文件 `test-case.json`：
 
-```json
+```
 {
   "title": "用户登录测试",
   "children": [
@@ -247,7 +247,7 @@ public class LoginTest {
 
 执行测试：
 
-```java
+```
 import io.github.xiaomisum.ryze.Ryze;
 
 public class LoginTest {
@@ -261,7 +261,7 @@ public class LoginTest {
 
 ### 3. MagicBox 函数式编程
 
-```java
+```
 import static io.github.xiaomisum.ryze.MagicBox.*;
 
 public class FluentTest {
@@ -297,7 +297,7 @@ public class FluentTest {
 
 ### 4. Groovy 闭包方式
 
-```groovy
+```
 import static io.github.xiaomisum.ryze.MagicBox.*
 
 // 使用 Groovy 闭包语法
@@ -343,7 +343,7 @@ println "测试结果: ${result.success}"
 
 ### 5. 使用提取的变量
 
-```json
+```
 {
   "title": "用户信息查询",
   "children": [
@@ -418,6 +418,14 @@ println "测试结果: ${result.success}"
 <a name="documentation-center"></a>
 框架提供了完整的文档体系，帮助您更好地使用和扩展 Ryze：
 
+### 🌐 在线文档
+
+我们提供了基于 VitePress 的在线文档站点，您可以通过以下链接访问：
+
+- [https://xiaomisum.github.io/ryze](https://xiaomisum.github.io/ryze)
+
+在线文档包含了框架的所有功能介绍、使用指南和 API 参考，是学习和使用 Ryze 的最佳资源。
+
 ### 📚 核心文档
 
 | 文档                                      | 描述            |
@@ -478,7 +486,7 @@ Ryze 框架内置了强大的 FreeMarker 模板引擎，支持动态变量替换
 
 #### 变量引用
 
-```yaml
+```
 variables:
   username: "testuser"
   config:
@@ -496,7 +504,7 @@ config:
 
 #### 函数调用
 
-```yaml
+```
 variables:
   # 生成随机数据
   random_id: "${uuid()}"
@@ -512,7 +520,7 @@ config:
 
 #### 复杂表达式
 
-```yaml
+```
 variables:
   base_url: "https://api.example.com"
   version: "v1"
@@ -534,7 +542,7 @@ config:
 | `ctx` / `context` | ContextWrapper   | 当前测试上下文对象 |
 | `vars`            | VariablesWrapper | 变量包装器对象   |
 
-```yaml
+```
 # 使用内置变量
 config:
   headers:
@@ -545,7 +553,7 @@ config:
 
 框架提供了丰富的内置函数，详细说明请参考 [变量与函数文档](./docs/help/变量与函数.md)：
 
-```yaml
+```
 variables:
   # 时间函数
   current_time: "${timestamp()}"
@@ -568,7 +576,7 @@ variables:
 
 YAML 配置支持模板包含，实现配置复用：
 
-```yaml
+```
 title: "完整测试用例"
 configelements:
   # 包含HTTP默认配置
@@ -588,7 +596,7 @@ children:
 
 #### 动态配置生成
 
-```yaml
+```
 variables:
   environments:
     dev:
@@ -608,7 +616,7 @@ config:
 
 #### 条件处理
 
-```yaml
+```
 variables:
   user_type: "admin"
 
@@ -630,7 +638,7 @@ config:
 4. **错误处理**: 在模板中添加必要的默认值和错误处理
 5. **性能优化**: 避免在循环中进行复杂的模板计算
 
-```yaml
+```
 variables:
   # 良好的变量组织
   api_config:
@@ -687,6 +695,7 @@ variables:
 - JDK 21+
 - Maven 3.8+
 - Git
+- Node.js 14+ (用于文档站点开发)
 
 ### 本地开发
 
@@ -709,13 +718,26 @@ mvn clean install
 mvn test
 ```
 
-4. **导入 IDE**
+4. **文档站点开发**
+
+```bash
+# 安装依赖
+npm install
+
+# 启动开发服务器
+npm run docs:dev
+
+# 构建文档站点
+npm run docs:build
+```
+
+5. **导入 IDE**
 
 推荐使用 IntelliJ IDEA 或 Eclipse，直接导入 Maven 项目。
 
 ### 项目结构
 
-```mermaid
+```
 ryze/
 ├── ryze/                     # 核心模块
 │   ├── src/main/java/          # 核心源代码
@@ -731,6 +753,11 @@ ryze/
 │   ├── dubbo-example/
 │   └── ……
 ├── docs/                     # 文档目录
+│   ├── .vitepress/             # VitePress 配置
+│   ├── guide/                  # 用户指南
+│   ├── api/                    # API 文档
+│   ├── examples/               # 使用示例
+│   └── index.md                # 文档首页
 └── README.md                 # 项目说明
 ```
 
@@ -776,7 +803,7 @@ ryze/
 
 <a name="license"></a>
 
-```text
+```
 The MIT License (MIT)
 
 Copyright (c) 2018. Lorem XiaoMiSum (mi_xiao@qq.com)

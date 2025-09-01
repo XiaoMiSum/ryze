@@ -1,7 +1,0 @@
-testclass: mongo  # 后置处理器类型
-config: # 处理器器配置
-  url: 'mongodb://root:123456@127.0.0.1:27017/?authSource=admin' # 可空，空值时，使用默认配置中的 url
-  database: 'demo' # 数据库名称，可空，空值时，使用默认配置中的 database
-  collection: 'demo' # 表名，可空，空值时，使用默认配置中的 collection
-  action: find  # 操作类型：find、insert、update、delete
-  condition: { } # 条件，非空

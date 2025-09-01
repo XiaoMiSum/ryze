@@ -1,9 +1,0 @@
-# redis取样器、处理器必须引用一个redis数据源
-testclass: Redis # 配置元件类型
-ref_name: RedisDataSource_var  # 数据源名称
-config: # 可简化填写，无需config关键字，直接将配置内容至于首层
-  url: 'redis://127.0.0.1:6379/0'
-  time_out: 5000 # 连接超时时间，默认 10000ms
-  max_total: 10 # 可空 默认 10
-  max_idle: 5 # 可空 默认 5
-  min_idle: 1 # 可空，默认 1

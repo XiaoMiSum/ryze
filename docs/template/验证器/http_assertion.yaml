@@ -1,5 +1,0 @@
-testclass: http # http 验证器，用于验证http响应（状态码、header、响应消息内容）
-field: status  # http响应的哪个部位 status、header[0].xxx、body
-expected: 200  # 期望值
-rule: ==   # 验证规则
-strict: false # 是否严格验证，默认否：忽略大小写验证

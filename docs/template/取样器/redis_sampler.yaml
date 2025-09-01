@@ -1,6 +1,0 @@
-title: 标准redis取样器
-testclass: redis # 取样器类型
-config: # 取样器配置
-  datasource: RedisDataSource_var # 数据源名称，必须先配置redis数据源
-  command: hset    # redis 命令
-  args: syshash,key2,value2 # 参数，本示例为 向 syshash 这个类型为 hash的key中设置 key2的值为 value2

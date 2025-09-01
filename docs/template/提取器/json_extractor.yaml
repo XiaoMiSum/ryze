@@ -1,3 +1,0 @@
-testclass: json  # json 提取器类型
-field: '$.status'  # 提取的 json path
-ref_name: status # 变量名称
