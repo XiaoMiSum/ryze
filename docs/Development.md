@@ -397,7 +397,7 @@ class HTTPSamplerTest {
                 .build();
 
         // When & Then
-        assertThrows(RuntimeException.class, () -> {
+        Assert.assertThrows(RuntimeException.class, () -> {
             sampler.run(SessionRunner.getSessionIfNoneCreateNew());
         });
     }
@@ -408,23 +408,20 @@ class HTTPSamplerTest {
 
 ```java
 
-@TestMethodOrder(OrderAnnotation.class)
+@Test(singleThreaded = true)
 class HTTPIntegrationTest {
 
-    @Test
-    @Order(1)
+    @Test(dependsOnMethods = {}, priority = 1)
     void shouldCreateUser() {
         // 测试创建用户
     }
 
-    @Test
-    @Order(2)
+    @Test(dependsOnMethods = {"shouldCreateUser"}, priority = 2)
     void shouldGetUser() {
         // 测试获取用户
     }
 
-    @Test
-    @Order(3)
+    @Test(dependsOnMethods = {"shouldGetUser"}, priority = 3)
     void shouldDeleteUser() {
         // 测试删除用户
     }

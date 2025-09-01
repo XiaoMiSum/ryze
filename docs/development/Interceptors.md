@@ -774,7 +774,7 @@ class LoggingInterceptorTest {
     private ContextWrapper context;
     private TestElement testElement;
 
-    @BeforeEach
+    @BeforeMethod
     void setUp() {
         interceptor = new LoggingInterceptor();
         context = mock(ContextWrapper.class);
@@ -787,7 +787,7 @@ class LoggingInterceptorTest {
     @Test
     void shouldSupportAllTestElements() {
         // When & Then
-        assertTrue(interceptor.supports(context));
+        Assert.assertTrue(interceptor.supports(context));
     }
 
     @Test
@@ -796,8 +796,8 @@ class LoggingInterceptorTest {
         boolean result = interceptor.preHandle(context, testElement);
 
         // Then
-        assertTrue(result);
-        assertNotNull(context.getTestResult().getMetadata().get("start_time"));
+        Assert.assertTrue(result);
+        Assert.assertNotNull(context.getTestResult().getMetadata().get("start_time"));
     }
 
     @Test
@@ -810,8 +810,8 @@ class LoggingInterceptorTest {
 
         // Then
         Long duration = (Long) context.getTestResult().getMetadata().get("duration");
-        assertNotNull(duration);
-        assertTrue(duration >= 1000);
+        Assert.assertNotNull(duration);
+        Assert.assertTrue(duration >= 1000);
     }
 }
 ```

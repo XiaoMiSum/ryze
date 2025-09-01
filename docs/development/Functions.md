@@ -550,7 +550,7 @@ class CustomFunctionTest {
     private CustomRandomFunction function;
     private ContextWrapper context;
 
-    @BeforeEach
+    @BeforeMethod
     void setUp() {
         function = new CustomRandomFunction();
         context = mock(ContextWrapper.class);
@@ -587,7 +587,7 @@ class CustomFunctionTest {
         Args args = new Args(Arrays.asList("10", "chars", "upper", "extra"));
 
         // When & Then
-        assertThrows(RuntimeException.class, () -> {
+        Assert.assertThrows(RuntimeException.class, () -> {
             function.execute(context, args);
         });
     }

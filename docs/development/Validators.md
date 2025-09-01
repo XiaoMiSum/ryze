@@ -298,24 +298,24 @@ public static Matcher<Object> createMatcher(String rule, Object expected, boolea
 ### 在 Java API 中使用
 
 ```java
-@Test
-@RyzeTest
-public void testWithValidators() {
-    MagicBox.http("验证器测试", http -> {
-        http.config(config -> config
-                .method("POST")
-                .url("https://api.example.com/users")
-        );
+    @Test
+    @RyzeTest
+    public void testWithValidators() {
+        MagicBox.http("验证器测试", http -> {
+            http.config(config -> config
+                    .method("POST")
+                    .url("https://api.example.com/users")
+            );
 
-        http.assertions(assertions ->
-                assertions.json("$.user.id", 123, "equals")
-                        .json("$.user.name", "John", "contains")
-                        .json("$.user.email", "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", "regex")
-                        .json("$.user.age", 18, ">")
-                        .json("$.user.tags", new String[]{"vip", "premium"}, "any_contains")
-        );
-    });
-}
+            http.assertions(assertions ->
+                    assertions.json("$.user.id", 123, "equals")
+                            .json("$.user.name", "John", "contains")
+                            .json("$.user.email", "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", "regex")
+                            .json("$.user.age", 18, ">")
+                            .json("$.user.tags", new String[]{"vip", "premium"}, "any_contains")
+            );
+        });
+    }
 ```
 
 ### 在 YAML 中使用

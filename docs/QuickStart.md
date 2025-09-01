@@ -64,11 +64,11 @@ cd ryze-demo
             <version>${ryze.version}</version>
         </dependency>
 
-        <!-- JUnit 5 (可选) -->
+        <!-- TestNG (可选) -->
         <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <version>5.10.0</version>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>7.8.0</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -169,9 +169,9 @@ cd ryze-demo
 package com.example;
 
 import io.github.xiaomisum.ryze.Ryze;
-import org.junit.jupiter.api.Test;
+import org.testng.annotations.Test;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.testng.Assert.assertTrue;
 
 public class JsonTestDemo {
 
@@ -199,12 +199,12 @@ public class JsonTestDemo {
 package com.example;
 
 import io.github.xiaomisum.ryze.testelement.TestSuiteResult;
-import org.junit.jupiter.api.Test;
+import org.testng.annotations.Test;
 
 import java.util.Map;
 
 import static io.github.xiaomisum.ryze.MagicBox.*;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.testng.Assert.assertTrue;
 
 public class MagicBoxDemo {
 

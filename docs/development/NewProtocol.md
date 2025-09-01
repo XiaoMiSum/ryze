@@ -427,6 +427,9 @@ public class MyProtocolMagicBox {
 ### 7. 编写测试
 
 ```java
+import org.testng.annotations.Test;
+import static org.testng.Assert.*;
+
 class MyProtocolSamplerTest {
 
     @Test
