@@ -18,5 +18,5 @@
 /*/allure-results
 /*/*/allure-results
 /node_modules
-/docs/.vuepress/dist
-/docs/.vuepress/cache
+docs/.vitepress/dist
+docs/.vitepress/cache
