@@ -10,10 +10,10 @@
 
 <p align="center">
   <a href="https://github.com/XiaoMiSum/ryze/blob/master/LICENSE">
-    <img src="http://img.shields.io/badge/license-MIT-blue.svg" alt="License">
+    <img src="http://img.shields.io/badge/License-MIT-blue.svg" alt="License">
   </a>
-  <a href="https://maven-badges.herokuapp.com/maven-central/io.github.xiaomisum/ryze">
-    <img src="https://maven-badges.herokuapp.com/maven-central/io.github.xiaomisum/ryze/badge.svg" alt="Maven Central">
+  <a href="https://central.sonatype.com/artifact/io.github.xiaomisum/ryze">
+    <img src="https:///maven-badges.sml.io/sonatype-central/io.github.xiaomisum/ryze/badge.svg" alt="Maven Central">
   </a>
   <a href="https://github.com/XiaoMiSum">
     <img src="https://img.shields.io/badge/Author-xiaomi-yellow.svg" alt="Author">
