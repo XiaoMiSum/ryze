@@ -106,14 +106,42 @@ mvn clean install
 ```
 ryze/
 ├── ryze/                          # 核心模块
-│   ├── src/main/java/            # 核心源代码
-│   │   └── io/github/xiaomisum/ryze/
-│   │       ├── component/         # 内置组件（断言、提取器等）
-│   │       ├── core/             # 核心框架代码
-│   │       ├── function/         # 内置函数
-│   │       ├── protocol/         # 内置协议（HTTP、JDBC、Redis）
-│   │       └── support/          # 支持工具类
-│   └── src/test/java/           # 核心模块测试
+│   ├── src/main/java/io/github/xiaomisum/ryze/
+│   │   ├── assertion/             # 断言框架
+│   │   │   ├── builtin/           # 内置断言实现
+│   │   │   └── ...                # 断言接口和抽象类
+│   │   ├── builder/               # 构建器模式实现
+│   │   ├── config/                # 配置管理
+│   │   ├── context/               # 上下文管理
+│   │   │   └── variables/         # 变量管理
+│   │   ├── extractor/             # 数据提取框架
+│   │   │   ├── builtin/           # 内置提取器实现
+│   │   │   └── ...                # 提取器接口和抽象类
+│   │   ├── function/              # 函数框架
+│   │   │   ├── builtin/           # 内置函数实现
+│   │   │   └── ...                # 函数接口
+│   │   ├── interceptor/           # 拦截器框架
+│   │   │   └── report/            # 报告拦截器
+│   │   ├── protocol/              # 内置协议实现
+│   │   │   ├── debug/             # 调试协议
+│   │   │   ├── http/              # HTTP协议
+│   │   │   ├── jdbc/              # JDBC协议
+│   │   │   └── redis/             # Redis协议
+│   │   ├── support/               # 支持工具类
+│   │   │   ├── fastjson/          # FastJSON支持
+│   │   │   ├── groovy/            # Groovy支持
+│   │   │   └── yaml/              # YAML支持
+│   │   ├── template/              # 模板引擎
+│   │   │   └── freemarker/        # FreeMarker实现
+│   │   ├── testelement/           # 测试元件框架
+│   │   │   ├── configure/         # 配置元件
+│   │   │   ├── processor/         # 处理器
+│   │   │   └── sampler/           # 取样器
+│   │   └── ...                    # 核心类（ApplicationConfig、Ryze等）
+│   └── src/test/java/io/github/xiaomisum/ryze/
+│       ├── assertion/             # 断言测试
+│       ├── function/              # 函数测试
+│       └── ...                    # 其他测试
 ├── ryze-dubbo/                   # Dubbo 协议模块
 ├── ryze-kafka/                   # Kafka 协议模块
 ├── ryze-mongo/                   # MongoDB 协议模块
@@ -135,22 +163,79 @@ ryze/
 
 #### ryze (核心模块)
 
-- **`core/`**: 框架核心实现
-    - `ApplicationConfig`: 组件配置管理
-    - `SessionRunner`: 测试执行引擎
-    - `testelement/`: 测试元件接口定义
-    - `assertion/`: 断言框架
-    - `extractor/`: 数据提取框架
+- **`assertion/`**: 断言框架
+    - `builtin/`: 内置断言实现（JSON、HTTP、Result 等）
+    - `AbstractAssertion`: 断言抽象类
+    - `Assertion`: 断言接口
+    - `AssertionResult`: 断言结果
+    - `Matchers`: 匹配器
+    - `ProxyMatcher`: 代理匹配器
+    - `Rule`: 规则接口
 
-- **`component/`**: 内置组件实现
-    - `assertion/`: 断言实现（JSON、HTTP、Result 等）
-    - `extractor/`: 提取器实现
+- **`builder/`**: 构建器模式实现
+    - `DefaultChildrenBuilder`: 默认子元素构建器
+    - `ExtensibleChildrenBuilder`: 可扩展子元素构建器
+    - 各种默认和可扩展的构建器实现
+
+- **`config/`**: 配置管理
+    - `ConfigureGroup`: 配置组
+    - `ConfigureItem`: 配置项接口
+    - `GlobalConfigure`: 全局配置
+    - `RyzeVariables`: 变量管理
+
+- **`context/`**: 上下文管理
+    - `variables/`: 变量包装器
+    - `Context`: 上下文接口
+    - `ContextWrapper`: 上下文包装器
+    - `GlobalContext`: 全局上下文
+    - `TestSuiteContext`: 测试套件上下文
+
+- **`extractor/`**: 数据提取框架
+    - `builtin/`: 内置提取器实现
+    - `AbstractExtractor`: 提取器抽象类
+    - `Extractor`: 提取器接口
+    - `ExtractResult`: 提取结果
+
+- **`function/`**: 函数框架
+    - `builtin/`: 内置函数实现
+    - `Function`: 函数接口
+    - `Args`: 函数参数
+
+- **`interceptor/`**: 拦截器框架
+    - `report/`: 报告拦截器
+    - `RyzeInterceptor`: 拦截器接口
+    - `HandlerExecutionChain`: 拦截器执行链
 
 - **`protocol/`**: 内置协议实现
+    - `debug/`: 调试协议支持
     - `http/`: HTTP 协议支持
     - `jdbc/`: 数据库支持
     - `redis/`: Redis 支持
-    - `debug/`: 调试工具
+
+- **`support/`**: 支持工具类
+    - `fastjson/`: FastJSON支持
+    - `groovy/`: Groovy支持
+    - `yaml/`: YAML支持
+    - 工具类（集合操作、克隆、比较等）
+
+- **`template/`**: 模板引擎
+    - `freemarker/`: FreeMarker实现
+    - `TemplateEngine`: 模板引擎接口
+
+- **`testelement/`**: 测试元件框架
+    - `configure/`: 配置元件
+    - `processor/`: 处理器（前置/后置）
+    - `sampler/`: 取样器
+    - `AbstractTestElement`: 测试元件抽象类
+    - `TestElement`: 测试元件接口
+    - `TestSuite`: 测试套件
+
+- **核心类**:
+    - `ApplicationConfig`: 应用配置管理
+    - `Ryze`: 框架入口类
+    - `SessionRunner`: 测试执行引擎
+    - `JsonTree`: JSON测试用例解析
+    - `MagicBox`: 函数式API入口
 
 #### 协议模块
 
@@ -430,7 +515,7 @@ public class MyProtocolSampler extends AbstractSampler<MyProtocolSampler, MyProt
     }
 
         // 协议特定的构建方法
-        public Builder host (String host){
+        public Builder host(String host){
         // 实现逻辑
         return self;
     }
@@ -577,7 +662,7 @@ Ryze 框架支持开发多种类型的扩展组件来增强测试能力。所有
 
 提供完整的使用示例。
 
-```
+```markdown
 
 ## 🧪 测试
 
