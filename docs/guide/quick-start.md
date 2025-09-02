@@ -64,13 +64,6 @@ cd ryze-demo
             <version>${ryze.version}</version>
         </dependency>
 
-        <!-- TestNG (可选) -->
-        <dependency>
-            <groupId>org.testng</groupId>
-            <artifactId>testng</artifactId>
-            <version>7.8.0</version>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
 
     <build>
@@ -99,19 +92,23 @@ cd ryze-demo
 {
   "title": "用户API测试套件",
   "variables": {
-    "baseUrl": "https://jsonplaceholder.typicode.com",
+    "host": "jsonplaceholder.typicode.com",
     "userId": "1"
   },
   "children": [
     {
       "testclass": "http",
       "title": "获取用户信息",
-      "method": "GET",
-      "url": "${baseUrl}/users/${userId}",
-      "headers": {
-        "Accept": "application/json"
+      "config": {
+        "method": "GET",
+        "protocol": "https",
+        "host": "${host}",
+        "api": "/users/${userId}",
+        "headers": {
+          "Accept": "application/json"
+        }
       },
-      "assertions": [
+      "validators": [
         {
           "testclass": "json",
           "field": "$.id",
@@ -135,16 +132,23 @@ cd ryze-demo
         {
           "testclass": "json",
           "field": "$.email",
-          "refName": "userEmail"
+          "ref_name": "userEmail"
         }
       ]
     },
     {
       "testclass": "http",
       "title": "获取用户文章",
-      "method": "GET",
-      "url": "${baseUrl}/users/${userId}/posts",
-      "assertions": [
+      "config": {
+        "method": "GET",
+        "protocol": "https",
+        "host": "${host}",
+        "api": "/users/${userId}/posts",
+        "headers": {
+          "Accept": "application/json"
+        }
+      },
+      "validators": [
         {
           "testclass": "json",
           "field": "$",
@@ -214,7 +218,7 @@ public class MagicBoxDemo {
         TestSuiteResult result = suite("用户API测试", builder -> {
             // 设置全局变量
             builder.variables(Map.of(
-                    "baseUrl", "https://jsonplaceholder.typicode.com",
+                    "host", "jsonplaceholder.typicode.com",
                     "userId", "1"
             ));
 
@@ -224,16 +228,18 @@ public class MagicBoxDemo {
                 children.http(http -> http
                         .title("获取用户信息")
                         .method("GET")
-                        .url("${baseUrl}/users/${userId}")
+                        .protocol("https")
+                        .host("${host}")
+                        .api("/users/${userId}")
                         .header("Accept", "application/json")
                         // 添加断言
-                        .assertion(assertion -> assertion
+                        .validators(assertion -> assertion
                                 .json("$.id", 1, "==")
                                 .json("$.name", "Leanne Graham", "==")
                                 .json("$.email", "@", "contains")
                         )
                         // 添加提取器
-                        .extractor(extractor -> extractor
+                        .extractors(extractor -> extractor
                                 .json("$.email", "userEmail")
                         )
                 );
@@ -242,7 +248,9 @@ public class MagicBoxDemo {
                 children.http(http -> http
                         .title("获取用户文章")
                         .method("GET")
-                        .url("${baseUrl}/users/${userId}/posts")
+                        .protocol("https")
+                        .host("${host}")
+                        .api("$/users/${userId}/posts")
                         .assertion(assertion -> assertion
                                 .json("$", "", "isNotEmpty")
                                 .json("$[0].userId", 1, "==")
@@ -267,15 +275,16 @@ import static io.github.xiaomisum.ryze.MagicBox.*
 
 def result = suite("用户API测试") {
     variables([
-            baseUrl: "https://jsonplaceholder.typicode.com",
-            userId : "1"
+            host  : "jsonplaceholder.typicode.com",
+            userId: "1"
     ])
 
     children {
         http {
             title "获取用户信息"
             method "GET"
-            url '${baseUrl}/users/${userId}'
+            protocol "https"
+            api '/users/${userId}'
             header "Accept", "application/json"
 
             assertion {
@@ -292,7 +301,8 @@ def result = suite("用户API测试") {
         http {
             title "获取用户文章"
             method "GET"
-            url '${baseUrl}/users/${userId}/posts'
+            procotol "https"
+            api '/users/${userId}/posts'
 
             assertion {
                 json '$', "", "isNotEmpty"
@@ -372,61 +382,19 @@ mvn allure:serve
     {
       "testclass": "http",
       "title": "创建用户",
-      "method": "POST",
-      "url": "https://api.example.com/users",
-      "body": {
-        "id": "${randomId}",
-        "name": "testuser_${timestamp}",
-        "email": "test_${randomString}@example.com"
+      "config": {
+        "method": "POST",
+        "protocol": "https",
+        "host": "api.example.com",
+        "api": "/users",
+        "body": {
+          "id": "${randomId}",
+          "name": "testuser_${timestamp}",
+          "email": "test_${randomString}@example.com"
+        }
       }
     }
   ]
-}
-```
-
-### 前置和后置处理器
-
-```java
-public class ProcessorDemo {
-    @Test
-    public void testWithProcessors() {
-        var result = suite("处理器测试", builder -> {
-            builder.children(children -> {
-                children.http(http -> http
-                        .title("需要认证的接口")
-                        .method("GET")
-                        .url("https://api.example.com/protected")
-                        // 前置处理器：获取认证令牌
-                        .preprocessor(pre -> pre
-                                .http(auth -> auth
-                                        .title("获取访问令牌")
-                                        .method("POST")
-                                        .url("https://api.example.com/auth/token")
-                                        .bodyAsJson(Map.of(
-                                                "username", "testuser",
-                                                "password", "testpass"
-                                        ))
-                                        .extractor(ext -> ext
-                                                .json("$.token", "accessToken")
-                                        )
-                                )
-                        )
-                        // 使用提取的令牌
-                        .header("Authorization", "Bearer ${accessToken}")
-                        // 后置处理器：清理数据
-                        .postprocessor(post -> post
-                                .http(cleanup -> cleanup
-                                        .title("清理测试数据")
-                                        .method("DELETE")
-                                        .url("https://api.example.com/cleanup")
-                                )
-                        )
-                );
-            });
-        });
-
-        assertTrue(result.isSuccess());
-    }
 }
 ```
 
@@ -437,30 +405,6 @@ public class ProcessorDemo {
 1. **编译错误**：确保 Java 版本为 21+
 2. **依赖冲突**：检查 Maven 依赖树 (`mvn dependency:tree`)
 3. **测试失败**：检查网络连接和 API 地址
-
-### 调试技巧
-
-1. **启用详细日志**：
-
-```properties
-# logback.xml 或 application.properties
-logging.level.io.github.xiaomisum.ryze=DEBUG
-```
-
-2. **输出请求响应**：
-
-```java
-result.getSubResults().
-
-forEach(subResult ->{
-        System.out.
-
-println("请求: "+subResult.getRequest());
-        System.out.
-
-println("响应: "+subResult.getResponse());
-        });
-```
 
 ## 🎉 下一步
 
