@@ -13,9 +13,9 @@ export default defineConfig({
     nav: [
       { text: '首页', link: '/' },
       { text: '文档', link: '/guide/introduction' },
-      { text: '测试人员', link: '/tester/' },
-      { text: '开发者', link: '/developer/' },
-      { text: 'FAQ', link: '/faq/' },
+      { text: '测试人员', link: '/tester/template/test-suite' },
+      { text: '开发者', link: '/developer' },
+      { text: 'FAQ', link: '/faq' },
       { text: 'GitHub', link: 'https://github.com/XiaoMiSum/ryze' }
     ],
     
@@ -85,34 +85,26 @@ export default defineConfig({
         {
           text: '测试工程师指南',
           items: [
-            { text: '首页', link: '/tester/' },
-            { text: '入门指南', link: '/tester/getting-started' },
-            { text: '测试用例设计', link: '/tester/test-case-design' },
-            { text: '协议测试指南', link: '/tester/protocol-testing' },
-            { text: '断言与验证', link: '/tester/assertions' },
-            { text: '测试报告分析', link: '/tester/reports' },
-            { text: '最佳实践', link: '/tester/best-practices' },
-            { text: '常见问题', link: '/tester/faq' },
-            { 
-              text: '协议指南', items: [
-                { text: 'HTTP 指南', link: '../guide/protocols/http' },
-                { text: 'JDBC 指南', link: '../guide/protocols/jdbc' },
-                { text: 'Redis 指南', link: '../guide/protocols/redis' },
-                { text: 'Dubbo 指南', link: '../guide/protocols/dubbo' },
-                { text: 'Kafka 指南', link: '../guide/protocols/kafka' },
-                { text: 'RabbitMQ 指南', link: '../guide/protocols/rabbitmq' },
-                { text: 'ActiveMQ 指南', link: '../guide/protocols/activemq' },
-                { text: 'MongoDB 指南', link: '../guide/protocols/mongodb' }
-              ]
-            },
-            { 
+            {
               text: '模板文档', items: [
-                { text: '首页', link: '/tester/template/' },
-                { text: '提取器', link: '/tester/template/extractor/' },
                 { text: '测试集合', link: '/tester/template/test-suite/' },
+                { text: '提取器', link: '/tester/template/extractor/' },
                 { text: '验证器', link: '/tester/template/validator/' }
               ]
-            }
+            },
+            {
+              text: '协议指南', items: [
+                { text: 'HTTP 指南', link: '/tester/protocols/http' },
+                { text: 'JDBC 指南', link: '/tester/protocols/jdbc' },
+                { text: 'Redis 指南', link: '/tester/protocols/redis' },
+                { text: 'Dubbo 指南', link: '/tester/protocols/dubbo' },
+                { text: 'Kafka 指南', link: '/tester/protocols/kafka' },
+                { text: 'RabbitMQ 指南', link: '/tester/protocols/rabbitmq' },
+                { text: 'ActiveMQ 指南', link: '/tester/protocols/activemq' },
+                { text: 'MongoDB 指南', link: '/tester/protocols/mongodb' }
+              ]
+            },
+            { text: '常见问题', link: '/faq' }
           ]
         }
       ],
