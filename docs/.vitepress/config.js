@@ -13,7 +13,7 @@ export default defineConfig({
     nav: [
       { text: '首页', link: '/' },
       { text: '文档', link: '/guide/introduction' },
-      { text: '测试人员', link: '/tester/template/test-suite' },
+      { text: '测试人员', link: '/tester/test-suite/test-suite-project' },
       { text: '开发者', link: '/developer' },
       { text: 'FAQ', link: '/faq' },
       { text: 'GitHub', link: 'https://github.com/XiaoMiSum/ryze' }
@@ -86,10 +86,25 @@ export default defineConfig({
           text: '测试工程师指南',
           items: [
             {
-              text: '模板文档', items: [
-                { text: '测试集合', link: '/tester/template/test-suite/' },
-                { text: '提取器', link: '/tester/template/extractor/' },
-                { text: '验证器', link: '/tester/template/validator/' }
+              text: '测试集合', items: [
+                { text: '测试集合（项目）', link: '/tester/test-suite/test-suite-project' },
+                { text: '测试集合（模块）', link: '/tester/test-suite/test-suite-module' },
+                { text: '测试集合（用例）', link: '/tester/test-suite/test-case' }
+              ]
+            },
+            {
+              text: '验证器（断言）', items: [
+                { text: 'HTTP 验证器', link: '/tester/validator/http_assertion' },
+                { text: 'JSON 验证器', link: '/tester/validator/json_assertion' },
+                { text: '响应结果验证器', link: '/tester/validator/result_assertion' }
+              ]
+            },
+            {
+              text: '提取器', items: [
+                { text: 'HTTP响应头提取器', link: '/tester/template/extractor/http_header_extractor' },
+                { text: 'JSON 提取器', link: '/tester/template/extractor/json_extractor' },
+                { text: '正则表达式提取器', link: '/tester/template/extractor/regex_extractor' },
+                { text: '响应结果提取器', link: '/tester/template/extractor/result_extractor' }
               ]
             },
             {
