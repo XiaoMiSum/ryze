@@ -20,9 +20,9 @@ preprocessors: # 前置处理器
       query_type: select
       sql: 'select * from sys_user;'
     extractors:
-      - { testclass: json, field: '$.user_name', variable_name: user_name }
-      - { testclass: result, variable_name: result }
-      - { testclass: regex, field: '"id":"([0-9]+)","create_', variable_name: r_total, match_num: 0 }
+      - { testclass: json, field: '$.user_name', ref_name: user_name }
+      - { testclass: result, ref_name: result }
+      - { testclass: regex, field: '"id":"([0-9]+)","create_', ref_name: r_total, match_num: 0 }
 postprocessors: # 后置处理器
   - testclass: jdbc
     config: # 可简化填写，无需config关键字，直接将配置内容至于上层
@@ -36,13 +36,13 @@ children: # 测试集合 或 测试用例列表，为了方便查看，可通过
 
 ## 参数说明
 
-| 参数 | 必填 | 说明 |
-|------|------|------|
-| title | 是 | 测试集合的标题 |
-| configelements | 否 | 配置元件列表，为整个项目中的所有取样器提供默认配置 |
-| preprocessors | 否 | 前置处理器列表，在执行项目测试之前运行 |
-| postprocessors | 否 | 后置处理器列表，在执行项目测试之后运行 |
-| children | 是 | 模块级测试集合列表 |
+| 参数             | 必填 | 说明                        |
+|----------------|----|---------------------------|
+| title          | 是  | 测试集合的标题                   |
+| configelements | 否  | 配置元件列表，为整个项目中的所有取样器提供默认配置 |
+| preprocessors  | 否  | 前置处理器列表，在执行项目测试之前运行       |
+| postprocessors | 否  | 后置处理器列表，在执行项目测试之后运行       |
+| children       | 是  | 模块级测试集合列表                 |
 
 ## 使用示例
 

@@ -18,9 +18,9 @@ preprocessors: # 前置处理器
       query_type: select
       sql: 'select * from sys_user;'
     extractors:
-      - { testclass: json, field: '$.user_name', variable_name: user_name }
-      - { testclass: result, variable_name: result }
-      - { testclass: regex, field: '"id":"([0-9]+)","create_', variable_name: r_total, match_num: 0 }
+      - { testclass: json, field: '$.user_name', ref_name: user_name }
+      - { testclass: result, ref_name: result }
+      - { testclass: regex, field: '"id":"([0-9]+)","create_', ref_name: r_total, match_num: 0 }
 postprocessors: # 后置处理器
   - testclass: jdbc
     config: # 可简化填写，无需config关键字，直接将配置内容至于上层
@@ -37,8 +37,8 @@ children: # 执行步骤
       path: /api/login
       body: { userName: '${username}', password: '123456qq', sign: '__digest(${username}123456qq)' }
     extractors: ## 提取器
-      - { testclass: json, field: '$.status', variable_name: status }
-      - { testclass: json, field: '$.data', variable_name: message }
+      - { testclass: json, field: '$.status', ref_name: status }
+      - { testclass: json, field: '$.data', ref_name: message }
     validators: ## 验证器
       - { testclass: http, field: status, expected: 200, rule: == }
       - { testclass: json, field: '$.status', expected: 200, rule: '==' }
@@ -51,8 +51,8 @@ children: # 执行步骤
       path: /api/login
       body: { userName: '${username}', password: '123456qq', sign: '__digest(${username}123456qq)' }
     extractors: ## 提取器
-      - { testclass: json, field: '$.status', variable_name: status }
-      - { testclass: json, field: '$.data', variable_name: message }
+      - { testclass: json, field: '$.status', ref_name: status }
+      - { testclass: json, field: '$.data', ref_name: message }
     validators: ## 验证器
       - { testclass: http, field: status, expected: 200, rule: == }
       - { testclass: json, field: '$.status', expected: 200, rule: '==' }
@@ -60,13 +60,13 @@ children: # 执行步骤
 
 ## 参数说明
 
-| 参数 | 必填 | 说明 |
-|------|------|------|
-| title | 是 | 测试用例的标题 |
-| configelements | 否 | 配置元件列表，为该测试用例中的取样器提供默认配置 |
-| preprocessors | 否 | 前置处理器列表，在执行测试步骤之前运行 |
-| postprocessors | 否 | 后置处理器列表，在执行测试步骤之后运行 |
-| children | 是 | 测试步骤列表，包含具体的取样器 |
+| 参数             | 必填 | 说明                       |
+|----------------|----|--------------------------|
+| title          | 是  | 测试用例的标题                  |
+| configelements | 否  | 配置元件列表，为该测试用例中的取样器提供默认配置 |
+| preprocessors  | 否  | 前置处理器列表，在执行测试步骤之前运行      |
+| postprocessors | 否  | 后置处理器列表，在执行测试步骤之后运行      |
+| children       | 是  | 测试步骤列表，包含具体的取样器          |
 
 ## 使用示例
 
@@ -146,6 +146,7 @@ children: # 执行步骤
 ```
 
 在上述示例中，我们定义了一个包含两个步骤的测试用例：
+
 1. 用户登录并提取认证令牌
 2. 使用认证令牌获取用户信息
 

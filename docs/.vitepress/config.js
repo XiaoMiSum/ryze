@@ -15,8 +15,7 @@ export default defineConfig({
       { text: '文档', link: '/guide/introduction' },
       { text: '测试人员', link: '/tester/test-suite/test-suite-project' },
       { text: '开发者', link: '/developer' },
-      { text: 'FAQ', link: '/faq' },
-      { text: 'GitHub', link: 'https://github.com/XiaoMiSum/ryze' }
+      { text: 'FAQ', link: '/faq' }
     ],
     
     sidebar: {

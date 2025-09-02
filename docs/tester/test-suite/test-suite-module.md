@@ -20,9 +20,9 @@ preprocessors: # 前置处理器
       query_type: select
       sql: 'select * from sys_user;'
     extractors:
-      - { testclass: json, field: '$.user_name', variable_name: user_name }
-      - { testclass: result, variable_name: result }
-      - { testclass: regex, field: '"id":"([0-9]+)","create_', variable_name: r_total, match_num: 0 }
+      - { testclass: json, field: '$.user_name', ref_name: user_name }
+      - { testclass: result, ref_name: result }
+      - { testclass: regex, field: '"id":"([0-9]+)","create_', ref_name: r_total, match_num: 0 }
 postprocessors: # 后置处理器
   - testclass: jdbc
     config: # 可简化填写，无需config关键字，直接将配置内容至于上层
@@ -36,13 +36,13 @@ children: # 测试集合 或 测试用例列表，为了方便查看，可通过
 
 ## 参数说明
 
-| 参数 | 必填 | 说明 |
-|------|------|------|
-| title | 是 | 测试集合的标题 |
-| configelements | 否 | 配置元件列表，为该测试集合中的所有取样器提供默认配置 |
-| preprocessors | 否 | 前置处理器列表，在执行子测试之前运行 |
-| postprocessors | 否 | 后置处理器列表，在执行子测试之后运行 |
-| children | 是 | 子测试集合或测试用例列表 |
+| 参数             | 必填 | 说明                         |
+|----------------|----|----------------------------|
+| title          | 是  | 测试集合的标题                    |
+| configelements | 否  | 配置元件列表，为该测试集合中的所有取样器提供默认配置 |
+| preprocessors  | 否  | 前置处理器列表，在执行子测试之前运行         |
+| postprocessors | 否  | 后置处理器列表，在执行子测试之后运行         |
+| children       | 是  | 子测试集合或测试用例列表               |
 
 ## 使用示例
 
@@ -85,6 +85,7 @@ children: # 测试集合 或 测试用例列表，为了方便查看，可通过
 在上述示例中，我们定义了一个用户管理模块的测试集合，它包含了创建用户、获取用户、更新用户和删除用户四个测试用例。通过引用外部文件的方式组织测试用例，使测试结构更加清晰。
 
 模块级测试集合可以包含：
+
 - 共享的配置元件（如HTTP配置、数据库连接等）
 - 模块级别的前置和后置处理器
 - 多个子测试用例或子测试集合

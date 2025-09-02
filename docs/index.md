@@ -8,10 +8,7 @@ titleTemplate: 强大而优雅的测试解决方案
 hero:
   name: "Ryze"
   text: "多协议测试框架"
-  tagline: 强大而优雅的测试解决方案，让测试变得简单
-  image:
-    src: /logo.png
-    alt: Ryze Logo
+  tagline: 🚀 强大的多协议测试框架，让测试变得简单而优雅
   actions:
     - theme: brand
       text: 快速开始
@@ -19,71 +16,38 @@ hero:
     - theme: alt
       text: 了解框架
       link: /guide/introduction
-    - theme: alt
-      text: 查看示例
-      link: /examples/
 
 features:
-  - icon: 🚀
-    title: 多协议支持
-    details: 支持 HTTP(S)、Dubbo、JDBC、Redis、MongoDB、Kafka、ActiveMQ、RabbitMQ 等多种协议测试
-  - icon: 🧩
-    title: 模块化架构
-    details: 采用模块化设计，核心模块提供基础能力，协议模块提供扩展支持
-  - icon: 📝
-    title: 配置分离
-    details: 测试用例与代码分离，通过 JSON/YAML 描述测试场景，提升可维护性
+  - icon: 🎯
+    title: 测试用例与代码分离
+    details: 采用 JSON/YAML 描述测试场景，保障测试用例的统一性和可维护性
   - icon: 🔧
-    title: 灵活验证
+    title: 多协议支持
+    details: 原生支持 HTTP(S)、Dubbo、JDBC、Redis、MongoDB、Kafka、ActiveMQ、RabbitMQ 等多种协议测试
+  - icon: ⚡
+    title: 丰富的测试组件
+    details: 内置前置/后置处理器、断言验证器、数据提取器等，轻松实现复杂测试场景
+  - icon: 🎨
+    title: 灵活的校验机制
     details: 提供丰富的验证机制和动态参数支持，满足各种测试需求
+  - icon: 🚀
+    title: 极强的可扩展性
+    details: 基于 SPI 机制，支持自定义协议、处理器、断言规则等组件
   - icon: 📊
-    title: 详细报告
-    details: 集成 Allure 和 ExtentReports，生成简洁美观的测试报告
-  - icon: 🔌
-    title: 易于扩展
-    details: 支持自定义插件和组件，满足个性化需求
+    title: 美观的测试报告
+    details: 集成 Allure，生成简洁美观的测试报告
+  - icon: 🎪
+    title: 函数式编程支持
+    details: 提供 MagicBox 魔法盒子，支持 Groovy 闭包和 Java 函数式接口
+  - icon: 🌐
+    title: 模板引擎支持
+    details: 基于 FreeMarker 模板引擎，支持动态参数和变量替换
 ---
 
 # Ryze - 多协议测试框架
 
-Ryze 是一个基于 Java 的测试框架，旨在支持多种协议的测试，提供统一的测试用例描述方式和丰富的测试功能，提升测试的可维护性和扩展性。
-
-## 核心特性
-
-### 🌐 多协议支持
-
-Ryze 支持多种协议测试，包括：
-
-- **Web 测试**：HTTP/HTTPS 协议
-- **微服务测试**：Dubbo RPC 框架
-- **数据库测试**：JDBC 关系型数据库
-- **缓存测试**：Redis 内存数据库
-- **消息队列测试**：Kafka、RabbitMQ、ActiveMQ
-- **文档数据库测试**：MongoDB
-
-### 🏗️ 模块化架构
-
-Ryze 采用模块化架构设计：
-
-- **核心模块**：提供基础组件、断言、执行引擎
-- **协议模块**：各协议独立模块，便于维护和扩展
-- **集成模块**：TestNG 集成支持
-
-### 📋 配置驱动
-
-通过 JSON/YAML 描述测试场景：
-
-- 测试用例与代码分离，提升可维护性
-- 统一的测试流程，降低学习成本
-- 支持动态参数和变量替换
-
-### 🧪 灵活验证
-
-提供丰富的验证机制：
-
-- 多种断言规则和比较方式
-- 动态参数支持和数据提取
-- 可扩展的验证器和提取器
+Ryze 是一个基于 Java 21 开发的现代化测试框架，专为多协议测试而设计。它通过 JSON
+描述测试场景，实现了测试用例与代码的完全分离，提供了统一的测试执行方式和丰富的扩展能力。
 
 ## 快速开始
 
@@ -144,20 +108,20 @@ Ryze 采用模块化架构设计：
 
 ### 🔧 技术文档
 
-- [核心概念](/guide/concepts/) - 测试集合、取样器、处理器等核心组件
-- [配置语法](/guide/configuration/) - JSON/YAML 配置文件结构和语法
-- [协议支持](/guide/protocols/) - 各协议模块的详细使用说明
-- [高级功能](/guide/advanced/) - 动态变量、配置元件、拦截器等高级特性
+- [核心概念](/guide/concepts/test-suite) - 测试集合、取样器、处理器等核心组件
+- [配置语法](/guide/configuration/structure) - JSON/YAML 配置文件结构和语法
+- [协议支持](/guide/protocols/http) - 各协议模块的详细使用说明
+- [高级功能](/guide/advanced/variables-and-functions) - 动态变量、配置元件、拦截器等高级特性
 
 ### 👨‍💻 开发者文档
 
 - [开发者指南](/developer/) - 架构设计、编码规范和扩展机制
 - [API 参考](/developer/api/) - 核心 API 和组件接口文档
 
-### 📋 使用示例
+### 📋 测试工程师文档
 
-- [示例代码](/examples/) - 各协议的完整使用示例
-- [模板文档](/tester/template/) - 测试配置模板和最佳实践
+- [测试套件](/tester/test-suite/test-suite-project) - 测试套件使用指南
+- [协议指南](/tester/protocols/http) - 协议配置指南
 
 ## 📞 获取帮助
 
