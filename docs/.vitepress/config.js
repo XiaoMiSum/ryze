@@ -167,10 +167,10 @@ export default defineConfig({
     },
     
     editLink: {
-      pattern: 'https://github.com/XiaoMiSum/ryze/edit/main/docs/:path',
+      pattern: 'https://github.com/XiaoMiSum/ryze/edit/master/docs/:path',
       text: '在 GitHub 上编辑此页面'
     },
-    
+    lastUpdated: true,
     lastUpdatedText: '最后更新时间',
     
     outline: {
