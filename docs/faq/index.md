@@ -62,6 +62,7 @@ mvn dependency:tree
 2. **排除冲突依赖**：
 
 ```xml
+
 <dependency>
     <groupId>io.github.xiaomisum</groupId>
     <artifactId>ryze-dubbo</artifactId>
@@ -78,6 +79,7 @@ mvn dependency:tree
 3. **强制指定版本**：
 
 ```xml
+
 <dependencyManagement>
     <dependencies>
         <dependency>
@@ -206,7 +208,8 @@ bytesAsString());
 // 检查 JSONPath 表达式是否正确
 {
   "testclass": "json",
-  "field": "$.data.users[0].name",  // 确保路径正确
+  "field": "$.data.users[0].name",
+  // 确保路径正确
   "expected": "张三",
   "rule": "=="
 }
@@ -243,7 +246,8 @@ json("$.data.name","张三","==")    // 具体值
   "testclass": "json",
   "field": "$.data.token",
   "refName": "authToken",
-  "defaultValue": ""  // 设置默认值
+  "defaultValue": ""
+  // 设置默认值
 }
 ```
 
@@ -366,8 +370,12 @@ config:
     },
     "interface": "com.example.service.UserService",
     "method": "getUserById",
-    "parameter_types": ["java.lang.Long"],
-    "parameters": [123]
+    "parameter_types": [
+      "java.lang.Long"
+    ],
+    "parameters": [
+      123
+    ]
   }
 }
 ```
@@ -532,24 +540,25 @@ java -Xmx2g -Xms1g -XX:+UseG1GC -jar test-app.jar
 1. **使用变量配置**：
 
 ```java
+
 @Test
 public void testWithVariables() {
     MagicBox.suite("数据驱动测试", suite -> {
         suite.variables("name", "testuser");
         suite.variables("email", "test@example.com");
         suite.variables("age", 25);
-        
+
         suite.children(child -> child.http(http -> http
-            .config(config -> config
-                .method("POST")
-                .host("api.example.com")
-                .path("/users")
-                .body(body -> {
-                    body.put("name", "${name}");
-                    body.put("email", "${email}");
-                    body.put("age", "${age}");
-                })
-            )
+                .config(config -> config
+                        .method("POST")
+                        .host("api.example.com")
+                        .path("/users")
+                        .body(body -> {
+                            body.put("name", "${name}");
+                            body.put("email", "${email}");
+                            body.put("age", "${age}");
+                        })
+                )
         ));
     });
 }
@@ -592,16 +601,17 @@ public void testWithVariables() {
 1. **Logback 配置** (`logback.xml`)：
 
 ```xml
+
 <configuration>
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
         </encoder>
     </appender>
-    
+
     <logger name="io.github.xiaomisum.ryze" level="DEBUG"/>
     <logger name="org.apache.http" level="DEBUG"/>
-    
+
     <root level="INFO">
         <appender-ref ref="CONSOLE"/>
     </root>
@@ -624,6 +634,7 @@ setProperty("org.slf4j.simpleLogger.defaultLogLevel","debug");
 1. **检查 Allure 配置**：
 
 ```xml
+
 <plugin>
     <groupId>io.qameta.allure</groupId>
     <artifactId>allure-maven</artifactId>
@@ -695,6 +706,7 @@ config:
 1. **实现 Rule 接口**：
 
 ```java
+
 @KW("customEquals")
 public class CustomEqualsRule implements Rule {
     @Override
@@ -702,12 +714,12 @@ public class CustomEqualsRule implements Rule {
         // 自定义比较逻辑
         return customCompare(actual, expected);
     }
-    
+
     private boolean customCompare(Object actual, Object expected) {
         // 实现自定义比较逻辑
         return Objects.equals(normalize(actual), normalize(expected));
     }
-    
+
     private Object normalize(Object value) {
         // 标准化逻辑，如去除空格、转换大小写等
         return value;
@@ -740,6 +752,7 @@ com.example.CustomEqualsRule
 1. **实现核心接口**：
 
 ```java
+
 @KW("myprotocol")
 public class MyProtocolSampler implements Sampler<DefaultSampleResult> {
     @Override
@@ -876,7 +889,6 @@ public void test() {
 
 2. **社区支持**：
     - [GitHub Issues](https://github.com/XiaoMiSum/ryze/issues)
-    - [GitHub Discussions](https://github.com/XiaoMiSum/ryze/discussions)
 
 3. **报告问题**：
     - 提供完整的错误信息

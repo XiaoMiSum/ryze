@@ -13,7 +13,7 @@
 - 📚 **文档改进** - 完善使用文档、API 文档、示例代码
 - 🧪 **测试增强** - 增加单元测试、集成测试
 - 🎨 **代码优化** - 性能优化、代码重构
-- 💡 **想法分享** - 在 Issues 或 Discussions 中分享创意
+- 💡 **想法分享** - 在 Issues 中分享创意
 
 ## 🚀 快速开始
 
@@ -512,7 +512,7 @@ public class MyProtocolSampler extends AbstractSampler<MyProtocolSampler, MyProt
     }
 
         // 协议特定的构建方法
-        public Builder host(String host){
+        public Builder host (String host){
         // 实现逻辑
         return self;
     }
@@ -771,7 +771,6 @@ doesNotContain("error");
 ### 沟通渠道
 
 - **GitHub Issues**：Bug 报告和功能请求
-- **GitHub Discussions**：一般讨论和问题求助
 - **Pull Requests**：代码贡献和审查
 
 ### 成为维护者
