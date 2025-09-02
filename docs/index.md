@@ -2,11 +2,11 @@
 # https://vitepress.dev/reference/default-theme-home-page
 layout: home
 
-title: Ryze - 多协议测试框架
+title: RYZE - 多协议测试框架
 titleTemplate: 强大而优雅的测试解决方案
 
 hero:
-  name: "Ryze"
+  name: "RYZE"
   text: "多协议测试框架"
   tagline: 🚀 强大的多协议测试框架，让测试变得简单而优雅
   actions:
@@ -44,6 +44,7 @@ features:
     details: 基于 FreeMarker 模板引擎，支持动态参数和变量替换
 ---
 
+
 # Ryze - 多协议测试框架
 
 Ryze 是一个基于 Java 21 开发的现代化测试框架，专为多协议测试而设计。它通过 JSON
@@ -73,7 +74,7 @@ Ryze 是一个基于 Java 21 开发的现代化测试框架，专为多协议测
 {
   "title": "用户API测试套件",
   "variables": {
-    "baseUrl": "https://jsonplaceholder.typicode.com",
+    "host": "jsonplaceholder.typicode.com",
     "userId": "1"
   },
   "children": [
@@ -82,7 +83,9 @@ Ryze 是一个基于 Java 21 开发的现代化测试框架，专为多协议测
       "title": "获取用户信息",
       "config": {
         "method": "GET",
-        "url": "${baseUrl}/users/${userId}",
+        "protocol": "https",
+        "host": "${host}",
+        "api": "/users/${userId}",
         "headers": {
           "Accept": "application/json"
         }
