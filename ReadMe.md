@@ -72,7 +72,7 @@ Ryze 是一个基于 Java 21 开发的现代化测试框架，专为多协议测
 <a name="system-architecture"></a>
 Ryze 采用模块化架构设计，核心模块提供基础能力，协议模块提供扩展能力：
 
-``mermaid
+```mermaid
 graph TB
     A[Ryze Core] --> B[HTTP Module]
     A --> C[Dubbo Module]
@@ -840,7 +840,6 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 - **[TestNG](https://testng.org)**  - 测试框架
 - **[Allure](https://docs.qameta.io/allure/)** - 测试报告框架
 - **[Dubbo](https://dubbo.apache.org)** - RPC 框架
-- **[SimpleHTTP](https://github.com/Migoolee/SimpleHttp)** - HTTP 客户端库
 
 ---
 
