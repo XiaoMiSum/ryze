@@ -90,7 +90,7 @@ Ryze 是一个基于 Java 21 开发的现代化测试框架，专为多协议测
           "Accept": "application/json"
         }
       },
-      "assertions": [
+      "validators": [
         {
           "testclass": "json",
           "field": "$.id",
