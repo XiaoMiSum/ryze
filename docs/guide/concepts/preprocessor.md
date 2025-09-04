@@ -118,7 +118,7 @@ children:
 
 用于执行 HTTP 请求作为前置处理逻辑。
 
-**配置模板**：[http_preprocessor.yaml](../template/处理器/http_preprocessor.yaml)
+**配置模板**
 
 ```yaml
 - testclass: http
@@ -136,13 +136,13 @@ children:
     body: { userName: 'ryze', password: '123456qq' }
 ```
 
-**相关文档**：[HTTP 协议文档](../protocols/HTTP.md#前置处理器)
+**相关文档**：[HTTP 协议文档](/guide/protocols/http)
 
 ### 🗄️ JDBC 前置处理器
 
 用于执行数据库操作作为前置处理逻辑。
 
-**配置模板**：[jdbc_preprocessor.yaml](../template/处理器/jdbc_preprocessor.yaml)
+**配置模板**
 
 ```yaml
 - testclass: jdbc
@@ -150,13 +150,13 @@ children:
     sql: "INSERT INTO users (name, email) VALUES ('testuser', 'test@example.com')"
 ```
 
-**相关文档**：[JDBC 协议文档](../protocols/JDBC.md#处理器)
+**相关文档**：[JDBC 协议文档](/guide/protocols/jdbc)
 
 ### 🗃️ Redis 前置处理器
 
 用于执行 Redis 操作作为前置处理逻辑。
 
-**配置模板**：[redis_preprocessor.yaml](../template/处理器/redis_preprocessor.yaml)
+**配置模板**
 
 ```yaml
 - testclass: redis
@@ -166,13 +166,13 @@ children:
     value: test_value
 ```
 
-**相关文档**：[Redis 协议文档](../protocols/Redis.md#处理器)
+**相关文档**：[Redis 协议文档](/guide/protocols/redis)
 
 ### 🔌 Dubbo 前置处理器
 
 用于执行 Dubbo 服务调用作为前置处理逻辑。
 
-**配置模板**：[dubbo_preprocessor.yaml](../template/处理器/dubbo_preprocessor.yaml)
+**配置模板**
 
 ```yaml
 - testclass: dubbo
@@ -184,13 +184,13 @@ children:
       - "test@example.com"
 ```
 
-**相关文档**：[Dubbo 协议文档](../protocols/Dubbo.md#处理器)
+**相关文档**：[Dubbo 协议文档](/guide/protocols/dubbo)
 
 ### 🚀 Kafka 前置处理器
 
 用于发送 Kafka 消息作为前置处理逻辑。
 
-**配置模板**：[kafka_preprocessor.yaml](../template/处理器/kafka_preprocessor.yaml)
+**配置模板**
 
 ```yaml
 - testclass: kafka
@@ -200,13 +200,13 @@ children:
     value: '{"userId": 12345, "action": "create"}'
 ```
 
-**相关文档**：[Kafka 协议文档](../protocols/Kafka.md#处理器)
+**相关文档**：[Kafka 协议文档](/guide/protocols/kafka)
 
 ### 🐰 RabbitMQ 前置处理器
 
 用于发送 RabbitMQ 消息作为前置处理逻辑。
 
-**配置模板**：[rabbit_preprocessor.yaml](../template/处理器/rabbit_preprocessor.yaml)
+**配置模板**
 
 ```yaml
 - testclass: rabbit
@@ -216,13 +216,13 @@ children:
     message: '{"userId": 12345, "timestamp": "${timestamp()}"}'
 ```
 
-**相关文档**：[RabbitMQ 协议文档](../protocols/RabbitMQ.md#处理器)
+**相关文档**：[RabbitMQ 协议文档](/guide/protocols/rabbitmq)
 
 ### 🎯 ActiveMQ 前置处理器
 
 用于发送 ActiveMQ 消息作为前置处理逻辑。
 
-**配置模板**：[active_preprocessor.yaml](../template/处理器/active_preprocessor.yaml)
+**配置模板**
 
 ```yaml
 - testclass: active
@@ -231,13 +231,13 @@ children:
     message: '{"userId": 12345, "action": "create"}'
 ```
 
-**相关文档**：[ActiveMQ 协议文档](../protocols/ActiveMQ.md#处理器)
+**相关文档**：[ActiveMQ 协议文档](/guide/protocols/activemq)
 
 ### 🍃 MongoDB 前置处理器
 
 用于执行 MongoDB 操作作为前置处理逻辑。
 
-**配置模板**：[mongo_preprocessor.yaml](../template/处理器/mongo_preprocessor.yaml)
+**配置模板**
 
 ```yaml
 - testclass: mongo
@@ -247,7 +247,7 @@ children:
     document: '{"name": "testuser", "email": "test@example.com"}'
 ```
 
-**相关文档**：[MongoDB 协议文档](../protocols/MongoDB.md#处理器)
+**相关文档**：[MongoDB 协议文档](/guide/protocols/mongodb)
 
 ## 🔧 使用场景
 
@@ -498,27 +498,5 @@ preprocessors:
   # 订单模块初始化
   - !include 'processors/order_module_init.yaml'
 ```
-
----
-
-## 📚 相关文档
-
-- [测试集合管理](./测试集合.md) - 了解测试集合的组织和管理
-- [配置元件](./配置元件.md) - 学习基础配置管理
-- [后置处理器](./后置处理器.md) - 掌握测试后的后处理机制
-- [取样器](./取样器.md) - 了解各种协议的取样器使用
-
-### 协议文档
-
-- [HTTP 协议](../protocols/HTTP.md#处理器) - HTTP 处理器详细说明
-- [JDBC 协议](../protocols/JDBC.md#处理器) - 数据库处理器详细说明
-- [Redis 协议](../protocols/Redis.md#处理器) - Redis 处理器详细说明
-- [Dubbo 协议](../protocols/Dubbo.md#处理器) - Dubbo 处理器详细说明
-- [Kafka 协议](../protocols/Kafka.md#处理器) - Kafka 处理器详细说明
-- [RabbitMQ 协议](../protocols/RabbitMQ.md#处理器) - RabbitMQ 处理器详细说明
-- [ActiveMQ 协议](../protocols/ActiveMQ.md#处理器) - ActiveMQ 处理器详细说明
-- [MongoDB 协议](../protocols/MongoDB.md#处理器) - MongoDB 处理器详细说明
-
----
 
 **💡 提示**：前置处理器是实现测试自动化的重要工具，合理使用可以显著提高测试效率和可靠性！

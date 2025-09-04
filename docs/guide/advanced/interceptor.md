@@ -32,12 +32,12 @@ testclass: http  # 目标组件类型
 interceptors:
   # 方式1：简单引用（无参数）
   - 'LogInterceptor'
-  
+
   # 方式2：带参数引用
   - EncryptInterceptor:
       algorithm: 'AES'
       key: 'mySecretKey'
-  
+
   # 方式3：完整配置形式
   - testclass: 'PerformanceInterceptor'
     timeout_threshold: 5000
@@ -71,7 +71,7 @@ config:
 testclass: http
 interceptors:
   - RequestEncryptInterceptor:
-      fields: ['password', 'email']
+      fields: [ 'password', 'email' ]
       algorithm: 'md5'
 config:
   method: POST
@@ -88,7 +88,7 @@ config:
 testclass: http
 interceptors:
   - ResponseDecryptInterceptor:
-      encrypted_fields: ['data.user_info']
+      encrypted_fields: [ 'data.user_info' ]
       decryption_key: ${decrypt_key}
 config:
   method: GET
@@ -130,7 +130,7 @@ interceptors:
 ```yaml
 interceptors:
   - CacheInterceptor:
-      cache_key_fields: ['url', 'method']
+      cache_key_fields: [ 'url', 'method' ]
       cache_duration: 300  # 5分钟
       enable_cache: true
 ```
@@ -144,26 +144,15 @@ interceptors:
   - RetryInterceptor:
       max_attempts: 3
       retry_delay: 1000  # 毫秒
-      retry_on_status: [500, 502, 503, 504]
+      retry_on_status: [ 500, 502, 503, 504 ]
 ```
 
 ## 💡 扩展功能
 
 当内置拦截器无法满足特定需求时，Ryze 框架支持自定义拦截器扩展。详细的开发指南请参考：
 
-- **开发文档**：[Development.md](../Development.md) - 完整的开发指南和最佳实践
+- **开发文档**：[拦截器](/developer/interceptor) - 完整的开发指南和最佳实践
 - **代码示例**
-  ：查看框架源码中的[内置拦截器实现](../../example/http-example/src/test/resources/META-INF/services/io.github.xiaomisum.ryze.interceptor.RyzeInterceptor)
-
----
-
-## 📚 相关文档
-
-- [变量与函数](./变量与函数.md) - 了解动态数据生成和处理
-- [提取器使用](./提取器.md) - 学习数据提取技巧
-- [验证器配置](./验证器.md) - 掌握结果验证方法
-- [测试集合管理](./测试集合.md) - 组织和管理测试用例
-
----
+  ：查看框架源码中的[内置拦截器实现](https://github.com/XiaoMiSum/ryze/tree/master/ryze/src/main/java/io/github/xiaomisum/ryze/interceptor)
 
 **💡 提示**：拦截器是实现复杂测试逻辑的强大工具，合理使用可以大大提高测试的灵活性和扩展性！

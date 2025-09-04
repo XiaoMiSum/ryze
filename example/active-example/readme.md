@@ -37,6 +37,7 @@
 ### 验证环境
 
 通过以下命令验证 ActiveMQ 服务是否正常运行：
+
 ```bash
 docker ps | grep activemq
 ```
@@ -57,6 +58,7 @@ docker ps | grep activemq
 ### 测试内容
 
 测试用例包含以下场景：
+
 - ActiveMQ 消息发送测试
 - 队列消息验证测试
 - 消息持久化测试
@@ -109,9 +111,3 @@ active-example/
 │   └── active_consumer.png               # ActiveMQ 消费者截图
 └── pom.xml                               # Maven 配置文件
 ```
-
-## 🤝 相关文档
-
-- [ActiveMQ 协议文档](../../docs/protocols/ActiveMQ.md)
-- [测试集合管理](../../docs/help/测试集合.md)
-- [变量与函数](../../docs/help/变量与函数.md)

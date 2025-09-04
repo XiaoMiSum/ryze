@@ -118,6 +118,12 @@ export default defineConfig({
                 { text: 'MongoDB 指南', link: '/tester/protocols/mongodb' }
               ]
             },
+            {
+            text: '变量与函数', items: [
+                { text: '变量', link: '/tester/variable/variables' },
+                { text: '函数', link: '/tester/variable/functions' }
+                ]
+            },
             { text: '常见问题', link: '/faq' }
           ]
         }

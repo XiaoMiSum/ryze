@@ -51,7 +51,10 @@
     "user": {
       "id": 123,
       "name": "张三",
-      "roles": ["admin", "user"]
+      "roles": [
+        "admin",
+        "user"
+      ]
     },
     "pagination": {
       "total": 100,
@@ -92,13 +95,13 @@ extractors:
     match_num: 0
     ref_name: first_link
 
-# 提取数字
+  # 提取数字
   - testclass: regex
     field: '\\d+'
     match_num: 1  # 第二个匹配的数字
     ref_name: second_number
 
-# 简化配置
+  # 简化配置
   - { testclass: regex, field: 'error_code:(\\d+)', match_num: 0, ref_name: error_code }
 ```
 
@@ -127,7 +130,7 @@ extractors:
   # 保存完整响应
   - testclass: result
     ref_name: full_response
-    
+
   # 简化配置
   - { testclass: result, ref_name: api_response }
 ```
@@ -154,12 +157,12 @@ extractors:
     field: 'Content-Type'
     match_num: 0
     ref_name: content_type
-    
+
   # 提取自定义头
   - testclass: http_header
     field: 'X-Request-ID'
     ref_name: request_id
-    
+
   # 简化配置
   - { testclass: http, field: 'Set-Cookie', match_num: 0, ref_name: session_cookie }
 ```
@@ -269,19 +272,8 @@ extractors:
 
 当内置提取器无法满足特定需求时，Ryze 框架支持自定义提取器扩展。详细的开发指南请参考：
 
-- **开发文档**：[Development.md](../Development.md) - 完整的开发指南和最佳实践
+- **开发文档**：[提取器](/developer/extractor) - 完整的开发指南和最佳实践
 - **代码示例**
-  ：查看框架源码中的[内置提取器实现](../../ryze/src/main/resources/META-INF/services/io.github.xiaomisum.ryze.extractor.Extractor)
-
----
-
-## 📚 相关文档
-
-- [变量与函数](./变量与函数.md) - 了解动态数据生成和处理
-- [验证器配置](./验证器.md) - 学习结果验证技巧
-- [拦截器机制](./拦截器.md) - 掌握请求响应拦截处理
-- [测试集合管理](./测试集合.md) - 组织和管理测试用例
-
----
+  ：查看框架源码中的[内置提取器实现](https://github.com/XiaoMiSum/ryze/tree/master/ryze/src/main/java/io/github/xiaomisum/ryze/extractor)
 
 **💡 提示**：提取器是实现数据驱动测试的核心工具，熟练掌握各种提取器的使用可以大大提高测试的灵活性和可维护性！

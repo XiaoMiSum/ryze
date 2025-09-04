@@ -18,6 +18,7 @@
 ### 验证服务启动
 
 访问以下 URL 验证服务是否正常运行：
+
 - 用户接口: http://localhost:8080/user
 - 健康检查: http://localhost:8080/actuator/health
 
@@ -35,6 +36,7 @@
 ### 测试内容
 
 测试用例包含以下场景：
+
 - GET 请求测试
 - POST 请求测试
 - 请求参数验证
@@ -81,9 +83,3 @@ http-example/
 │           └── 配置元件/                  # HTTP 配置元件模板
 └── pom.xml                               # Maven 配置文件
 ```
-
-## 🤝 相关文档
-
-- [HTTP 协议文档](../../docs/protocols/HTTP.md)
-- [测试集合管理](../../docs/help/测试集合.md)
-- [变量与函数](../../docs/help/变量与函数.md)

@@ -40,6 +40,7 @@
 ### 验证环境
 
 通过以下命令验证 MongoDB 服务是否正常运行：
+
 ```bash
 docker ps | grep mongo
 ```
@@ -58,6 +59,7 @@ docker ps | grep mongo
 ### 测试内容
 
 测试用例包含以下场景：
+
 - MongoDB 连接测试
 - 文档插入测试
 - 文档查询测试
@@ -99,9 +101,3 @@ mongo-example/
 │           └── 配置元件/                  # MongoDB 配置元件模板
 └── pom.xml                               # Maven 配置文件
 ```
-
-## 🤝 相关文档
-
-- [MongoDB 协议文档](../../docs/protocols/MongoDB.md)
-- [测试集合管理](../../docs/help/测试集合.md)
-- [变量与函数](../../docs/help/变量与函数.md)

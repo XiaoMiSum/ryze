@@ -50,6 +50,7 @@
 ### 验证环境
 
 通过以下命令验证 MySQL 服务是否正常运行：
+
 ```bash
 docker ps | grep mysql
 ```
@@ -73,6 +74,7 @@ docker ps | grep mysql
 ### 测试内容
 
 测试用例包含以下场景：
+
 - 数据库连接测试
 - SQL 查询测试
 - SQL 更新测试
@@ -113,9 +115,3 @@ jdbc-example/
 │           └── 配置元件/                  # JDBC 配置元件模板
 └── pom.xml                               # Maven 配置文件
 ```
-
-## 🤝 相关文档
-
-- [JDBC 协议文档](../../docs/protocols/JDBC.md)
-- [测试集合管理](../../docs/help/测试集合.md)
-- [变量与函数](../../docs/help/变量与函数.md)

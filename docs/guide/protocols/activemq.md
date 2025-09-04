@@ -7,6 +7,7 @@ ActiveMQ 协议支持为 Ryze 测试框架提供了与 Apache ActiveMQ 消息中
 ## 依赖引入
 
 ```xml
+
 <dependency>
     <groupId>io.github.xiaomisum</groupId>
     <artifactId>ryze-active</artifactId>
@@ -141,55 +142,55 @@ config: # 取样器配置
 import static io.github.xiaomisum.ryze.protocol.activemq.ActiveMQMagicBox.*;
 
 public class ActiveMQApiExample {
-    
+
     public void testQueueMessage() {
         // 发送队列消息
         Result result = activemq("发送用户通知", builder -> builder
-            .brokerUrl("tcp://localhost:61616")
-            .username("admin")
-            .password("admin")
-            .queue("user.notifications")
-            .message(Map.of(
-                "userId", 12345,
-                "type", "welcome",
-                "content", "欢迎使用我们的服务",
-                "timestamp", System.currentTimeMillis()
-            ))
+                .brokerUrl("tcp://localhost:61616")
+                .username("admin")
+                .password("admin")
+                .queue("user.notifications")
+                .message(Map.of(
+                        "userId", 12345,
+                        "type", "welcome",
+                        "content", "欢迎使用我们的服务",
+                        "timestamp", System.currentTimeMillis()
+                ))
         );
-        
+
         assertThat(result.isSuccess()).isTrue();
     }
-    
+
     public void testTopicMessage() {
         // 发送主题消息
         activemq("发布系统公告", builder -> builder
-            .brokerUrl("tcp://localhost:61616")
-            .username("admin")
-            .password("admin")
-            .topic("system.announcements")
-            .message("系统将在2024年1月1日进行维护")
+                .brokerUrl("tcp://localhost:61616")
+                .username("admin")
+                .password("admin")
+                .topic("system.announcements")
+                .message("系统将在2024年1月1日进行维护")
         );
     }
-    
+
     public void testComplexMessage() {
         // 发送复杂对象消息
         Map<String, Object> orderInfo = Map.of(
-            "orderId", "ORDER-001",
-            "customerId", 12345,
-            "items", List.of(
-                Map.of("productId", "P001", "quantity", 2, "price", 99.99),
-                Map.of("productId", "P002", "quantity", 1, "price", 199.99)
-            ),
-            "totalAmount", 399.97,
-            "status", "pending"
+                "orderId", "ORDER-001",
+                "customerId", 12345,
+                "items", List.of(
+                        Map.of("productId", "P001", "quantity", 2, "price", 99.99),
+                        Map.of("productId", "P002", "quantity", 1, "price", 199.99)
+                ),
+                "totalAmount", 399.97,
+                "status", "pending"
         );
-        
+
         activemq("发送订单消息", builder -> builder
-            .brokerUrl("tcp://localhost:61616")
-            .username("admin")
-            .password("admin")
-            .queue("order.processing")
-            .message(orderInfo)
+                .brokerUrl("tcp://localhost:61616")
+                .username("admin")
+                .password("admin")
+                .queue("order.processing")
+                .message(orderInfo)
         );
     }
 }
@@ -201,69 +202,69 @@ public class ActiveMQApiExample {
 import static io.github.xiaomisum.ryze.protocol.activemq.ActiveMQMagicBox.*;
 
 public class ActiveMQTestSuite {
-    
+
     public void messagingTestSuite() {
         suite("ActiveMQ消息测试套件", builder -> {
             // 配置 ActiveMQ 默认设置
             builder.configure(configure -> configure
-                .activemq(activemq -> activemq
-                    .brokerUrl("tcp://localhost:61616")
-                    .username("admin")
-                    .password("admin")
-                )
+                    .activemq(activemq -> activemq
+                            .brokerUrl("tcp://localhost:61616")
+                            .username("admin")
+                            .password("admin")
+                    )
             );
-            
+
             builder.children(children -> {
                 // 前置处理：发送初始化消息
                 children.activemqPreprocessor("发送初始化消息", preprocessor -> preprocessor
-                    .queue("test.init")
-                    .message(Map.of(
-                        "action", "initialize",
-                        "testId", "SUITE-001",
-                        "startTime", System.currentTimeMillis()
-                    ))
+                        .queue("test.init")
+                        .message(Map.of(
+                                "action", "initialize",
+                                "testId", "SUITE-001",
+                                "startTime", System.currentTimeMillis()
+                        ))
                 );
-                
+
                 // 测试1：发送用户注册消息
                 children.activemq("发送用户注册消息", activemq -> activemq
-                    .queue("user.registration")
-                    .message(Map.of(
-                        "userId", "USER-001",
-                        "email", "test@example.com",
-                        "name", "测试用户",
-                        "registrationTime", System.currentTimeMillis()
-                    ))
+                        .queue("user.registration")
+                        .message(Map.of(
+                                "userId", "USER-001",
+                                "email", "test@example.com",
+                                "name", "测试用户",
+                                "registrationTime", System.currentTimeMillis()
+                        ))
                 );
-                
+
                 // 测试2：发送订单消息
                 children.activemq("发送订单处理消息", activemq -> activemq
-                    .queue("order.processing")
-                    .message(Map.of(
-                        "orderId", "ORDER-001",
-                        "userId", "USER-001",
-                        "amount", 299.99,
-                        "status", "pending"
-                    ))
+                        .queue("order.processing")
+                        .message(Map.of(
+                                "orderId", "ORDER-001",
+                                "userId", "USER-001",
+                                "amount", 299.99,
+                                "status", "pending"
+                        ))
                 );
-                
+
                 // 测试3：发送系统广播
                 children.activemq("发送系统广播", activemq -> activemq
-                    .topic("system.broadcast")
-                    .message(Map.of(
-                        "type", "maintenance",
-                        "message", "系统维护通知",
-                        "scheduledTime", "2024-01-01T02:00:00Z"
-                    ))
+                        .topic("system.broadcast")
+                        .message(Map.of(
+                                "type", "maintenance",
+                                "message", "系统维护通知",
+                                "scheduledTime", "2024-01-01T02:00:00Z"
+                        ))
                 );
-                
+
                 // 后置处理：发送完成消息
                 children.activemqPostprocessor("发送完成消息", postprocessor -> postprocessor
-                    .queue("test.complete")
-                    .message(Map.of(
-                        "action", "complete",
-                        "testId", "SUITE-001",
-                        "endTime", System.currentTimeMillis()
-                    ))
+                        .queue("test.complete")
+                        .message(Map.of(
+                                "action", "complete",
+                                "testId", "SUITE-001",
+                                "endTime", System.currentTimeMillis()
+                        ))
                 );
             });
         });
@@ -282,16 +283,16 @@ import static io.github.xiaomisum.ryze.protocol.activemq.ActiveMQMagicBox.*
 def sendNotification() {
     activemq("发送通知消息") { builder ->
         builder.brokerUrl("tcp://localhost:61616")
-               .username("admin")
-               .password("admin")
-               .queue("notifications")
-               .message([
-                   id: UUID.randomUUID().toString(),
-                   title: "新消息通知",
-                   content: "您有一条新的消息",
-                   priority: "high",
-                   createdAt: new Date().toString()
-               ])
+                .username("admin")
+                .password("admin")
+                .queue("notifications")
+                .message([
+                        id       : UUID.randomUUID().toString(),
+                        title    : "新消息通知",
+                        content  : "您有一条新的消息",
+                        priority : "high",
+                        createdAt: new Date().toString()
+                ])
     }
 }
 
@@ -300,42 +301,42 @@ def sendVariousMessages() {
     // 字符串消息
     activemq("发送文本消息") { builder ->
         builder.brokerUrl("tcp://localhost:61616")
-               .queue("text.messages")
-               .message("这是一条简单的文本消息")
+                .queue("text.messages")
+                .message("这是一条简单的文本消息")
     }
-    
+
     // 数字消息
     activemq("发送数字消息") { builder ->
         builder.brokerUrl("tcp://localhost:61616")
-               .queue("number.messages")
-               .message(12345)
+                .queue("number.messages")
+                .message(12345)
     }
-    
+
     // 列表消息
     activemq("发送列表消息") { builder ->
         builder.brokerUrl("tcp://localhost:61616")
-               .queue("list.messages")
-               .message(["项目1", "项目2", "项目3"])
+                .queue("list.messages")
+                .message(["项目1", "项目2", "项目3"])
     }
 }
 
 // 主题消息发送
 def publishToTopic() {
     def announcement = [
-        id: UUID.randomUUID().toString(),
-        type: "system_update",
-        title: "系统更新通知",
-        content: "系统将在今晚进行更新，预计耗时2小时",
-        publishTime: new Date(),
-        severity: "info"
+            id         : UUID.randomUUID().toString(),
+            type       : "system_update",
+            title      : "系统更新通知",
+            content    : "系统将在今晚进行更新，预计耗时2小时",
+            publishTime: new Date(),
+            severity   : "info"
     ]
-    
+
     activemq("发布系统公告") { builder ->
         builder.brokerUrl("tcp://localhost:61616")
-               .username("admin")
-               .password("admin")
-               .topic("system.announcements")
-               .message(announcement)
+                .username("admin")
+                .password("admin")
+                .topic("system.announcements")
+                .message(announcement)
     }
 }
 ```
@@ -355,153 +356,153 @@ suite("ActiveMQ消息功能测试") { builder ->
                     .password("admin")
         }
     }
-    
+
     builder.children { children ->
         // 1. 前置处理：发送测试开始通知
         children.activemqPreprocessor("测试开始通知") { preprocessor ->
             preprocessor.topic("test.lifecycle")
-                        .message([
-                            event: "test_started",
-                            suiteId: "groovy-test-suite",
-                            startTime: new Date(),
+                    .message([
+                            event      : "test_started",
+                            suiteId    : "groovy-test-suite",
+                            startTime  : new Date(),
                             environment: "testing"
-                        ])
+                    ])
         }
-        
+
         // 2. 用户相关消息测试
         children.activemq("发送用户注册消息") { activemq ->
             activemq.queue("user.registration")
                     .message([
-                        userId: "GROOVY-USER-001",
-                        email: "groovy@test.com",
-                        name: "Groovy测试用户",
-                        profile: [
-                            age: 30,
-                            location: "北京",
-                            interests: ["编程", "测试", "自动化"]
-                        ],
-                        registrationTime: new Date()
+                            userId          : "GROOVY-USER-001",
+                            email           : "groovy@test.com",
+                            name            : "Groovy测试用户",
+                            profile         : [
+                                    age      : 30,
+                                    location : "北京",
+                                    interests: ["编程", "测试", "自动化"]
+                            ],
+                            registrationTime: new Date()
                     ])
         }
-        
+
         // 3. 订单处理消息测试
         children.activemq("发送订单创建消息") { activemq ->
             activemq.queue("order.created")
                     .message([
-                        orderId: "ORDER-GROOVY-001",
-                        customerId: "GROOVY-USER-001",
-                        items: [
-                            [productId: "PROD-001", name: "商品1", quantity: 2, price: 99.99],
-                            [productId: "PROD-002", name: "商品2", quantity: 1, price: 199.99]
-                        ],
-                        totalAmount: 399.97,
-                        currency: "CNY",
-                        orderTime: new Date(),
-                        status: "pending"
+                            orderId    : "ORDER-GROOVY-001",
+                            customerId : "GROOVY-USER-001",
+                            items      : [
+                                    [productId: "PROD-001", name: "商品1", quantity: 2, price: 99.99],
+                                    [productId: "PROD-002", name: "商品2", quantity: 1, price: 199.99]
+                            ],
+                            totalAmount: 399.97,
+                            currency   : "CNY",
+                            orderTime  : new Date(),
+                            status     : "pending"
                     ])
         }
-        
+
         // 4. 库存更新消息测试
         children.activemq("发送库存更新消息") { activemq ->
             activemq.queue("inventory.update")
                     .message([
-                        productId: "PROD-001",
-                        operation: "decrease",
-                        quantity: 2,
-                        remainingStock: 98,
-                        updateTime: new Date(),
-                        operator: "system"
+                            productId     : "PROD-001",
+                            operation     : "decrease",
+                            quantity      : 2,
+                            remainingStock: 98,
+                            updateTime    : new Date(),
+                            operator      : "system"
                     ])
         }
-        
+
         // 5. 支付通知消息测试
         children.activemq("发送支付成功通知") { activemq ->
             activemq.queue("payment.notifications")
                     .message([
-                        paymentId: "PAY-GROOVY-001",
-                        orderId: "ORDER-GROOVY-001",
-                        amount: 399.97,
-                        currency: "CNY",
-                        method: "alipay",
-                        status: "success",
-                        transactionTime: new Date()
+                            paymentId      : "PAY-GROOVY-001",
+                            orderId        : "ORDER-GROOVY-001",
+                            amount         : 399.97,
+                            currency       : "CNY",
+                            method         : "alipay",
+                            status         : "success",
+                            transactionTime: new Date()
                     ])
         }
-        
+
         // 6. 系统监控消息测试
         children.activemq("发送系统监控数据") { activemq ->
             activemq.topic("system.monitoring")
                     .message([
-                        timestamp: new Date(),
-                        metrics: [
-                            cpu: [usage: 75.5, cores: 8],
-                            memory: [used: "4.2GB", total: "8GB", percentage: 52.5],
-                            disk: [used: "120GB", total: "500GB", percentage: 24.0]
-                        ],
-                        alerts: [],
-                        status: "healthy"
+                            timestamp: new Date(),
+                            metrics  : [
+                                    cpu   : [usage: 75.5, cores: 8],
+                                    memory: [used: "4.2GB", total: "8GB", percentage: 52.5],
+                                    disk  : [used: "120GB", total: "500GB", percentage: 24.0]
+                            ],
+                            alerts   : [],
+                            status   : "healthy"
                     ])
         }
-        
+
         // 7. 日志消息测试
         ["INFO", "WARN", "ERROR"].each { level ->
             children.activemq("发送${level}级别日志") { activemq ->
                 activemq.queue("logs.${level.toLowerCase()}")
                         .message([
-                            level: level,
-                            timestamp: new Date(),
-                            source: "groovy-test",
-                            message: "这是一条${level}级别的日志消息",
-                            context: [
-                                thread: Thread.currentThread().getName(),
-                                method: "testActiveMQSuite",
-                                lineNumber: 42
-                            ]
+                                level    : level,
+                                timestamp: new Date(),
+                                source   : "groovy-test",
+                                message  : "这是一条${level}级别的日志消息",
+                                context  : [
+                                        thread    : Thread.currentThread().getName(),
+                                        method    : "testActiveMQSuite",
+                                        lineNumber: 42
+                                ]
                         ])
             }
         }
-        
+
         // 8. 批量消息测试
         (1..5).each { i ->
             children.activemq("批量消息${i}") { activemq ->
                 activemq.queue("batch.processing")
                         .message([
-                            batchId: "BATCH-001",
-                            itemId: "ITEM-${String.format('%03d', i)}",
-                            data: "批量处理数据${i}",
-                            sequence: i,
-                            timestamp: new Date()
+                                batchId  : "BATCH-001",
+                                itemId   : "ITEM-${String.format('%03d', i)}",
+                                data     : "批量处理数据${i}",
+                                sequence : i,
+                                timestamp: new Date()
                         ])
             }
         }
-        
+
         // 9. 错误处理消息测试
         children.activemq("发送错误处理消息") { activemq ->
             activemq.queue("error.handling")
                     .message([
-                        errorId: UUID.randomUUID().toString(),
-                        type: "business_error",
-                        description: "业务逻辑错误示例",
-                        stackTrace: "模拟的错误堆栈信息",
-                        context: [
-                            userId: "GROOVY-USER-001",
-                            action: "create_order",
-                            timestamp: new Date()
-                        ],
-                        severity: "medium"
+                            errorId    : UUID.randomUUID().toString(),
+                            type       : "business_error",
+                            description: "业务逻辑错误示例",
+                            stackTrace : "模拟的错误堆栈信息",
+                            context    : [
+                                    userId   : "GROOVY-USER-001",
+                                    action   : "create_order",
+                                    timestamp: new Date()
+                            ],
+                            severity   : "medium"
                     ])
         }
-        
+
         // 10. 后置处理：发送测试完成通知
         children.activemqPostprocessor("测试完成通知") { postprocessor ->
             postprocessor.topic("test.lifecycle")
-                         .message([
-                             event: "test_completed",
-                             suiteId: "groovy-test-suite",
-                             endTime: new Date(),
-                             status: "success",
-                             totalMessages: 15
-                         ])
+                    .message([
+                            event        : "test_completed",
+                            suiteId      : "groovy-test-suite",
+                            endTime      : new Date(),
+                            status       : "success",
+                            totalMessages: 15
+                    ])
         }
     }
 }
@@ -509,7 +510,7 @@ suite("ActiveMQ消息功能测试") { builder ->
 // 性能测试示例
 def performanceTest() {
     def messageCount = 100
-    
+
     suite("ActiveMQ性能测试") { builder ->
         builder.children { children ->
             // 大量消息发送测试
@@ -517,9 +518,9 @@ def performanceTest() {
                 children.activemq("性能测试消息${i}") { activemq ->
                     activemq.queue("performance.test")
                             .message([
-                                messageId: i,
-                                timestamp: new Date(),
-                                payload: "性能测试数据" * 10 // 增加消息大小
+                                    messageId: i,
+                                    timestamp: new Date(),
+                                    payload  : "性能测试数据" * 10 // 增加消息大小
                             ])
                 }
             }
@@ -530,6 +531,4 @@ def performanceTest() {
 
 ## 相关文档
 
-- [配置元件示例](../template/配置元件/active_defaults.yaml)
-- [取样器示例](../template/取样器/active_sampler.yaml)
 - [ActiveMQ 官方文档](https://activemq.apache.org/)

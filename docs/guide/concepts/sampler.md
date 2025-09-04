@@ -36,19 +36,19 @@
 - title: 取样器描述
   testclass: 协议类型
   config:
-    # 协议特定配置项
+  # 协议特定配置项
   variables:
-    # 取样器级变量
+  # 取样器级变量
   extractors:
-    # 数据提取器
+  # 数据提取器
   assertions:
-    # 结果断言
+  # 结果断言
   interceptors:
-    # 拦截器
+  # 拦截器
   preprocessors:
-    # 前置处理器
+  # 前置处理器
   postprocessors:
-    # 后置处理器
+  # 后置处理器
 ```
 
 ## ⚙️ 执行机制
@@ -104,7 +104,7 @@ children:
     assertions:
       # 验证创建成功
       - { testclass: http, field: 'status', expected: 201, rule: '==' }
-  
+
   # 查询用户取样器
   - title: "查询用户"
     testclass: http
@@ -114,7 +114,7 @@ children:
     assertions:
       # 验证用户信息正确
       - { testclass: json, field: '$.data.name', expected: 'Test User', rule: '==' }
-  
+
   # 更新用户取样器
   - title: "更新用户"
     testclass: http
@@ -126,7 +126,7 @@ children:
     assertions:
       # 验证更新成功
       - { testclass: http, field: 'status', expected: 200, rule: '==' }
-  
+
   # 删除用户取样器
   - title: "删除用户"
     testclass: http
@@ -144,7 +144,7 @@ children:
 
 用于执行 HTTP/HTTPS 请求。
 
-**配置模板**：[http_sampler.yaml](../template/取样器/http_sampler.yaml)
+**配置模板**
 
 ```yaml
 title: 标准HTTP取样器
@@ -163,13 +163,13 @@ config:
   body: { userName: 'ryze', password: '123456qq' }
 ```
 
-**相关文档**：[HTTP 协议文档](../protocols/HTTP.md#取样器)
+**相关文档**：[HTTP 协议文档](/guide/protocols/http)
 
 ### 🗄️ JDBC 取样器
 
 用于执行数据库 SQL 操作。
 
-**配置模板**：[jdbc_sampler.yaml](../template/取样器/jdbc_sampler.yaml)
+**配置模板**
 
 ```yaml
 title: 数据库查询取样器
@@ -180,13 +180,13 @@ config:
     - 12345
 ```
 
-**相关文档**：[JDBC 协议文档](../protocols/JDBC.md#取样器)
+**相关文档**：[JDBC 协议文档](/guide/protocols/jdbc)
 
 ### 🗃️ Redis 取样器
 
 用于执行 Redis 命令。
 
-**配置模板**：[redis_sampler.yaml](../template/取样器/redis_sampler.yaml)
+**配置模板**
 
 ```yaml
 title: Redis操作取样器
@@ -196,13 +196,13 @@ config:
   key: test_key
 ```
 
-**相关文档**：[Redis 协议文档](../protocols/Redis.md#取样器)
+**相关文档**：[Redis 协议文档](/guide/protocols/redis)
 
 ### 🔌 Dubbo 取样器
 
 用于执行 Dubbo 服务调用。
 
-**配置模板**：[dubbo_sampler.yaml](../template/取样器/dubbo_sampler.yaml)
+**配置模板**
 
 ```yaml
 title: Dubbo服务调用取样器
@@ -214,13 +214,13 @@ config:
     - 12345
 ```
 
-**相关文档**：[Dubbo 协议文档](../protocols/Dubbo.md#取样器)
+**相关文档**：[Dubbo 协议文档](/guide/protocols/dubbo)
 
 ### 🚀 Kafka 取样器
 
 用于发送 Kafka 消息。
 
-**配置模板**：[kafka_sampler.yaml](../template/取样器/kafka_sampler.yaml)
+**配置模板**
 
 ```yaml
 title: Kafka消息发送取样器
@@ -231,13 +231,13 @@ config:
   value: '{"userId": 12345, "action": "create"}'
 ```
 
-**相关文档**：[Kafka 协议文档](../protocols/Kafka.md#取样器)
+**相关文档**：[Kafka 协议文档](/guide/protocols/kafka)
 
 ### 🐰 RabbitMQ 取样器
 
 用于发送 RabbitMQ 消息。
 
-**配置模板**：[rabbit_sampler.yaml](../template/取样器/rabbit_sampler.yaml)
+**配置模板**
 
 ```yaml
 title: RabbitMQ消息发送取样器
@@ -248,13 +248,13 @@ config:
   message: '{"userId": 12345, "timestamp": "${timestamp()}"}'
 ```
 
-**相关文档**：[RabbitMQ 协议文档](../protocols/RabbitMQ.md#取样器)
+**相关文档**：[RabbitMQ 协议文档](/guide/protocols/rabbitmq)
 
 ### 🎯 ActiveMQ 取样器
 
 用于发送 ActiveMQ 消息。
 
-**配置模板**：[active_sampler.yaml](../template/取样器/active_sampler.yaml)
+**配置模板**
 
 ```yaml
 title: ActiveMQ消息发送取样器
@@ -264,13 +264,13 @@ config:
   message: '{"userId": 12345, "action": "create"}'
 ```
 
-**相关文档**：[ActiveMQ 协议文档](../protocols/ActiveMQ.md#取样器)
+**相关文档**：[ActiveMQ 协议文档](/guide/protocols/activemq)
 
 ### 🍃 MongoDB 取样器
 
 用于执行 MongoDB 操作。
 
-**配置模板**：[mongo_sampler.yaml](../template/取样器/mongo_sampler.yaml)
+**配置模板**
 
 ```yaml
 title: MongoDB操作取样器
@@ -281,7 +281,7 @@ config:
   filter: '{"_id": 12345}'
 ```
 
-**相关文档**：[MongoDB 协议文档](../protocols/MongoDB.md#取样器)
+**相关文档**：[MongoDB 协议文档](/guide/protocols/mongodb)
 
 ## 🔧 使用场景
 
@@ -308,7 +308,7 @@ children:
     assertions:
       - { testclass: http, field: 'status', expected: 201, rule: '==' }
       - { testclass: json, field: '$.data.name', expected: '${user_name}', rule: '==' }
-  
+
   # 查询用户
   - title: "查询用户"
     testclass: http
@@ -320,7 +320,7 @@ children:
     assertions:
       - { testclass: http, field: 'status', expected: 200, rule: '==' }
       - { testclass: json, field: '$.data.email', expected: '${user_email}', rule: '==' }
-  
+
   # 更新用户
   - title: "更新用户"
     testclass: http
@@ -333,7 +333,7 @@ children:
         name: Updated ${user_name}
     assertions:
       - { testclass: http, field: 'status', expected: 200, rule: '==' }
-  
+
   # 删除用户
   - title: "删除用户"
     testclass: http
@@ -366,7 +366,7 @@ children:
       - { testclass: result, ref_name: insert_result }
     assertions:
       - { testclass: result, expected: 1, rule: '==' }  # 影响行数为1
-  
+
   # 查询用户数据
   - title: "查询用户数据"
     testclass: jdbc
@@ -378,7 +378,7 @@ children:
       - { testclass: json, field: '$[0].id', ref_name: user_id }
     assertions:
       - { testclass: json, field: '$[0].name', expected: '${user_name}', rule: '==' }
-  
+
   # 更新用户数据
   - title: "更新用户数据"
     testclass: jdbc
@@ -389,7 +389,7 @@ children:
         - ${user_id}
     assertions:
       - { testclass: result, expected: 1, rule: '==' }  # 影响行数为1
-  
+
   # 删除用户数据
   - title: "删除用户数据"
     testclass: jdbc
@@ -421,7 +421,7 @@ children:
       value: ${order_data}
     assertions:
       - { testclass: result, expected: true, rule: '==' }  # 发送成功
-  
+
   # 验证订单处理结果
   - title: "验证订单处理"
     testclass: http
@@ -459,7 +459,7 @@ children:
       expire: 3600  # 1小时过期
     assertions:
       - { testclass: result, expected: 'OK', rule: '==' }
-  
+
   # 获取用户会话
   - title: "获取用户会话"
     testclass: redis
@@ -470,7 +470,7 @@ children:
       - { testclass: result, ref_name: retrieved_session }
     assertions:
       - { testclass: result, expected: '${user_data}', rule: '==' }
-  
+
   # 验证会话过期
   - title: "验证会话过期"
     testclass: redis
@@ -577,7 +577,7 @@ children:
     - RetryInterceptor:
         max_attempts: 5
         retry_delay: 2000
-        retry_on_status: [404, 500, 502, 503]
+        retry_on_status: [ 404, 500, 502, 503 ]
   assertions:
     - { testclass: http, field: 'status', expected: 200, rule: '==' }
 ```
@@ -596,13 +596,13 @@ children:
     config:
       method: GET
       path: /users/${user_id}
-  
+
   - title: "查询订单信息"
     testclass: http
     config:
       method: GET
       path: /orders/${order_id}
-  
+
   - title: "查询产品信息"
     testclass: http
     config:
@@ -672,7 +672,7 @@ children:
       - !include 'samplers/user/query_user.yaml'
       - !include 'samplers/user/update_user.yaml'
       - !include 'samplers/user/delete_user.yaml'
-  
+
   # 订单管理模块
   - title: "订单管理测试"
     children:
@@ -681,27 +681,5 @@ children:
       - !include 'samplers/order/update_order.yaml'
       - !include 'samplers/order/delete_order.yaml'
 ```
-
----
-
-## 📚 相关文档
-
-- [测试集合管理](./测试集合.md) - 了解测试集合的组织和管理
-- [配置元件](./配置元件.md) - 学习基础配置管理
-- [前置处理器](./前置处理器.md) - 掌握测试前的预处理机制
-- [后置处理器](./后置处理器.md) - 了解测试后的后处理机制
-
-### 协议文档
-
-- [HTTP 协议](../protocols/HTTP.md#取样器) - HTTP 取样器详细说明
-- [JDBC 协议](../protocols/JDBC.md#取样器) - 数据库取样器详细说明
-- [Redis 协议](../protocols/Redis.md#取样器) - Redis 取样器详细说明
-- [Dubbo 协议](../protocols/Dubbo.md#取样器) - Dubbo 取样器详细说明
-- [Kafka 协议](../protocols/Kafka.md#取样器) - Kafka 取样器详细说明
-- [RabbitMQ 协议](../protocols/RabbitMQ.md#取样器) - RabbitMQ 取样器详细说明
-- [ActiveMQ 协议](../protocols/ActiveMQ.md#取样器) - ActiveMQ 取样器详细说明
-- [MongoDB 协议](../protocols/MongoDB.md#取样器) - MongoDB 取样器详细说明
-
----
 
 **💡 提示**：取样器是测试执行的核心组件，合理设计和使用取样器可以构建高效、可靠的测试体系！

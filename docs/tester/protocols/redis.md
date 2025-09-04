@@ -2,13 +2,15 @@
 
 ## 概述
 
-Redis 协议支持为 Ryze 测试框架提供了与 Redis 数据库进行交互的能力。支持字符串、哈希、列表、集合等多种数据类型操作，以及缓存测试、分布式锁测试等常见 Redis 应用场景。
+Redis 协议支持为 Ryze 测试框架提供了与 Redis 数据库进行交互的能力。支持字符串、哈希、列表、集合等多种数据类型操作，以及缓存测试、分布式锁测试等常见
+Redis 应用场景。
 
 ## 依赖引入
 
 Redis 协议支持内置在核心模块中，无需额外依赖：
 
 ```xml
+
 <dependency>
     <groupId>io.github.xiaomisum</groupId>
     <artifactId>ryze</artifactId>
@@ -61,7 +63,7 @@ testclass: redis  # redis 前置处理器类型
 config: # 处理器配置
   datasource: redis_source  # 数据源，必须先定义数据源
   command: SETEX  # Redis命令
-  args:  # 命令参数
+  args: # 命令参数
     - test:user:1
     - 3600
     - '{"name":"测试用户","age":25}'
@@ -76,7 +78,7 @@ testclass: redis  # redis 后置处理器类型
 config: # 处理器配置
   datasource: redis_source  # 数据源，必须先定义数据源
   command: DEL  # Redis命令
-  args:  # 命令参数
+  args: # 命令参数
     - test:user:1
     - test:list
 ```
@@ -91,7 +93,7 @@ testclass: redis  # 取样器类型
 config: # 取样器配置
   datasource: redis_source  # 数据源，必须先定义数据源
   command: GET  # Redis命令
-  args:  # 命令参数
+  args: # 命令参数
     - test:user:1
 ```
 
@@ -104,7 +106,9 @@ config: # 取样器配置
   "config": {
     "datasource": "redis_source",
     "command": "HGETALL",
-    "args": ["user:profile:123"]
+    "args": [
+      "user:profile:123"
+    ]
   }
 }
 ```
@@ -128,52 +132,52 @@ config: # 取样器配置
 import static io.github.xiaomisum.ryze.MagicBox.*;
 
 public class RedisApiExample {
-    
+
     public void setupRedisDataSource() {
         // 配置 Redis 数据源
         redisDatasource("redisDefault", datasource -> datasource
-            .url("redis://localhost:6379/0")
-            .timeout(5000)
-            .maxTotal(10)
-            .maxIdle(5)
-            .minIdle(1)
+                .url("redis://localhost:6379/0")
+                .timeout(5000)
+                .maxTotal(10)
+                .maxIdle(5)
+                .minIdle(1)
         );
     }
-    
+
     public void testStringOperations() {
         // 字符串操作
         Result setResult = redis("设置用户缓存", builder -> builder
-            .datasource("redisDefault")
-            .command("SETEX")
-            .args("user:123", "3600", "张三")
+                .datasource("redisDefault")
+                .command("SETEX")
+                .args("user:123", "3600", "张三")
         );
-        
+
         Result getResult = redis("获取用户缓存", builder -> builder
-            .datasource("redisDefault")
-            .command("GET")
-            .args("user:123")
+                .datasource("redisDefault")
+                .command("GET")
+                .args("user:123")
         );
-        
+
         assertThat(getResult.getResponseBody()).isEqualTo("张三");
     }
-    
+
     public void testHashOperations() {
         // 哈希操作
         redis("设置用户信息", builder -> builder
-            .datasource("redisDefault")
-            .command("HMSET")
-            .args("user:info:123", 
-                  "name", "李四",
-                  "age", "30",
-                  "city", "北京")
+                .datasource("redisDefault")
+                .command("HMSET")
+                .args("user:info:123",
+                        "name", "李四",
+                        "age", "30",
+                        "city", "北京")
         );
-        
+
         Result result = redis("获取用户信息", builder -> builder
-            .datasource("redisDefault")
-            .command("HGETALL")
-            .args("user:info:123")
+                .datasource("redisDefault")
+                .command("HGETALL")
+                .args("user:info:123")
         );
-        
+
         // 验证结果
         assertThat(result.extract("$.name")).isEqualTo("李四");
         assertThat(result.extract("$.age")).isEqualTo("30");
@@ -187,64 +191,64 @@ public class RedisApiExample {
 import static io.github.xiaomisum.ryze.MagicBox.*;
 
 public class RedisTestSuite {
-    
+
     public void redisCacheTestSuite() {
         suite("Redis缓存测试套件", builder -> {
             // 配置 Redis 默认设置
             builder.configure(configure -> configure
-                .redis(redis -> redis
-                    .ref("redisDefault")
-                    .url("redis://localhost:6379/0")
-                    .timeout(5000)
-                    .maxTotal(10)
-                    .maxIdle(5)
-                    .minIdle(1)
-                )
+                    .redis(redis -> redis
+                            .ref("redisDefault")
+                            .url("redis://localhost:6379/0")
+                            .timeout(5000)
+                            .maxTotal(10)
+                            .maxIdle(5)
+                            .minIdle(1)
+                    )
             );
-            
+
             builder.children(children -> {
                 // 前置处理：清理测试数据
                 children.redisPreprocessor("清理测试数据", preprocessor -> preprocessor
-                    .datasource("redisDefault")
-                    .command("FLUSHDB")
+                        .datasource("redisDefault")
+                        .command("FLUSHDB")
                 );
-                
+
                 // 测试1：字符串缓存
                 children.redis("设置用户缓存", redis -> redis
-                    .datasource("redisDefault")
-                    .command("SETEX")
-                    .args("test:user:1", "3600", "{\"name\":\"测试用户\",\"age\":25}")
-                    .assertion(assertion -> assertion
-                        .responseBody("OK")
-                    )
+                        .datasource("redisDefault")
+                        .command("SETEX")
+                        .args("test:user:1", "3600", "{\"name\":\"测试用户\",\"age\":25}")
+                        .assertion(assertion -> assertion
+                                .responseBody("OK")
+                        )
                 );
-                
+
                 // 测试2：获取缓存
                 children.redis("获取用户缓存", redis -> redis
-                    .datasource("redisDefault")
-                    .command("GET")
-                    .args("test:user:1")
-                    .assertion(assertion -> assertion
-                        .json("$.name", "测试用户", "==")
-                        .json("$.age", 25, "==")
-                    )
+                        .datasource("redisDefault")
+                        .command("GET")
+                        .args("test:user:1")
+                        .assertion(assertion -> assertion
+                                .json("$.name", "测试用户", "==")
+                                .json("$.age", 25, "==")
+                        )
                 );
-                
+
                 // 测试3：列表操作
                 children.redis("添加列表元素", redis -> redis
-                    .datasource("redisDefault")
-                    .command("LPUSH")
-                    .args("test:list", "item1", "item2", "item3")
-                    .assertion(assertion -> assertion
-                        .responseBody("3")
-                    )
+                        .datasource("redisDefault")
+                        .command("LPUSH")
+                        .args("test:list", "item1", "item2", "item3")
+                        .assertion(assertion -> assertion
+                                .responseBody("3")
+                        )
                 );
-                
+
                 // 后置处理：清理数据
                 children.redisPostprocessor("清理测试数据", postprocessor -> postprocessor
-                    .datasource("redisDefault")
-                    .command("DEL")
-                    .args("test:user:1", "test:list")
+                        .datasource("redisDefault")
+                        .command("DEL")
+                        .args("test:user:1", "test:list")
                 );
             });
         });
@@ -263,10 +267,10 @@ import static io.github.xiaomisum.ryze.MagicBox.*
 def setupRedis() {
     redisDatasource("redisDefault") { datasource ->
         datasource.url("redis://localhost:6379/0")
-                  .timeout(5000)
-                  .maxTotal(10)
-                  .maxIdle(5)
-                  .minIdle(1)
+                .timeout(5000)
+                .maxTotal(10)
+                .maxIdle(5)
+                .minIdle(1)
     }
 }
 
@@ -275,17 +279,17 @@ def stringOperations() {
     // 设置值
     redis("设置用户名") { builder ->
         builder.datasource("redisDefault")
-               .command("SET")
-               .args("user:123:name", "张三")
+                .command("SET")
+                .args("user:123:name", "张三")
     }
-    
+
     // 获取值
     def result = redis("获取用户名") { builder ->
         builder.datasource("redisDefault")
-               .command("GET")
-               .args("user:123:name")
+                .command("GET")
+                .args("user:123:name")
     }
-    
+
     assert result.responseBody == "张三"
     return result.responseBody
 }
@@ -295,21 +299,21 @@ def hashOperations() {
     // 设置哈希字段
     redis("设置用户信息") { builder ->
         builder.datasource("redisDefault")
-               .command("HMSET")
-               .args("user:info:123", 
-                     "name", "李四",
-                     "age", "30",
-                     "city", "北京",
-                     "department", "技术部")
+                .command("HMSET")
+                .args("user:info:123",
+                        "name", "李四",
+                        "age", "30",
+                        "city", "北京",
+                        "department", "技术部")
     }
-    
+
     // 获取所有哈希字段
     def result = redis("获取用户信息") { builder ->
         builder.datasource("redisDefault")
-               .command("HGETALL")
-               .args("user:info:123")
+                .command("HGETALL")
+                .args("user:info:123")
     }
-    
+
     // 返回结果为 Map 形式
     return result.responseBody
 }
@@ -317,23 +321,23 @@ def hashOperations() {
 // 列表操作
 def listOperations() {
     def listKey = "user:notifications:123"
-    
+
     // 添加通知
     ["欢迎加入", "系统更新", "新消息提醒"].each { notification ->
         redis("添加通知: ${notification}") { builder ->
             builder.datasource("redisDefault")
-                   .command("LPUSH")
-                   .args(listKey, notification)
+                    .command("LPUSH")
+                    .args(listKey, notification)
         }
     }
-    
+
     // 获取所有通知
     def result = redis("获取通知列表") { builder ->
         builder.datasource("redisDefault")
-               .command("LRANGE")
-               .args(listKey, "0", "-1")
+                .command("LRANGE")
+                .args(listKey, "0", "-1")
     }
-    
+
     return result.responseBody
 }
 ```
@@ -349,26 +353,26 @@ suite("Redis缓存功能测试") { builder ->
     builder.configure { configure ->
         configure.redis { redis ->
             redis.ref("redisDefault")
-                 .url("redis://localhost:6379/0")
-                 .timeout(5000)
-                 .maxTotal(10)
-                 .maxIdle(5)
-                 .minIdle(1)
+                    .url("redis://localhost:6379/0")
+                    .timeout(5000)
+                    .maxTotal(10)
+                    .maxIdle(5)
+                    .minIdle(1)
         }
     }
-    
+
     builder.children { children ->
         // 1. 数据准备：清理旧数据
         children.redisPreprocessor("清理测试数据") { preprocessor ->
             preprocessor.datasource("redisDefault")
-                        .command("FLUSHDB")
+                    .command("FLUSHDB")
         }
-        
+
         // 2. 基本缓存操作
         children.redis("设置用户基本信息") { redis ->
             redis.datasource("redisDefault")
-                 .command("SETEX")
-                 .args("cache:user:001", "3600", """
+                    .command("SETEX")
+                    .args("cache:user:001", "3600", """
                      {
                          "id": "001",
                          "name": "Groovy测试用户",
@@ -377,110 +381,110 @@ suite("Redis缓存功能测试") { builder ->
                          "lastLogin": "2024-01-01T10:00:00Z"
                      }
                  """)
-                 .assertion { assertion ->
-                     assertion.responseBody("OK")
-                 }
+                    .assertion { assertion ->
+                        assertion.responseBody("OK")
+                    }
         }
-        
+
         // 3. 验证缓存获取
         children.redis("获取用户信息") { redis ->
             redis.datasource("redisDefault")
-                 .command("GET")
-                 .args("cache:user:001")
-                 .assertion { assertion ->
-                     assertion.json("$.id", "001", "==")
-                              .json("$.name", "Groovy测试用户", "==")
-                              .json("$.role", "developer", "==")
-                              .json("$.email", "groovy@test.com", "==")
-                 }
+                    .command("GET")
+                    .args("cache:user:001")
+                    .assertion { assertion ->
+                        assertion.json("$.id", "001", "==")
+                                .json("$.name", "Groovy测试用户", "==")
+                                .json("$.role", "developer", "==")
+                                .json("$.email", "groovy@test.com", "==")
+                    }
         }
-        
+
         // 4. 设置哈希类型数据
         children.redis("设置用户配置") { redis ->
             redis.datasource("redisDefault")
-                 .command("HMSET")
-                 .args("config:user:001",
-                       "theme", "dark",
-                       "language", "zh-CN",
-                       "timezone", "Asia/Shanghai",
-                       "notifications", "true")
-                 .assertion { assertion ->
-                     assertion.responseBody("OK")
-                 }
+                    .command("HMSET")
+                    .args("config:user:001",
+                            "theme", "dark",
+                            "language", "zh-CN",
+                            "timezone", "Asia/Shanghai",
+                            "notifications", "true")
+                    .assertion { assertion ->
+                        assertion.responseBody("OK")
+                    }
         }
-        
+
         // 5. 获取哈希数据
         children.redis("获取用户配置") { redis ->
             redis.datasource("redisDefault")
-                 .command("HGETALL")
-                 .args("config:user:001")
-                 .assertion { assertion ->
-                     assertion.json("$.theme", "dark", "==")
-                              .json("$.language", "zh-CN", "==")
-                              .json("$.timezone", "Asia/Shanghai", "==")
-                              .json("$.notifications", "true", "==")
-                 }
+                    .command("HGETALL")
+                    .args("config:user:001")
+                    .assertion { assertion ->
+                        assertion.json("$.theme", "dark", "==")
+                                .json("$.language", "zh-CN", "==")
+                                .json("$.timezone", "Asia/Shanghai", "==")
+                                .json("$.notifications", "true", "==")
+                    }
         }
-        
+
         // 6. 列表操作：添加最近访问记录
         children.redis("添加访问记录") { redis ->
             redis.datasource("redisDefault")
-                 .command("LPUSH")
-                 .args("recent:user:001", "/dashboard", "/profile", "/settings")
-                 .assertion { assertion ->
-                     assertion.responseBody("3")
-                 }
+                    .command("LPUSH")
+                    .args("recent:user:001", "/dashboard", "/profile", "/settings")
+                    .assertion { assertion ->
+                        assertion.responseBody("3")
+                    }
         }
-        
+
         // 7. 获取最近访问记录
         children.redis("获取访问记录") { redis ->
             redis.datasource("redisDefault")
-                 .command("LRANGE")
-                 .args("recent:user:001", "0", "4")
-                 .assertion { assertion ->
-                     assertion.json("$.size()", 3, "==")
-                              .json("$[0]", "/settings", "==")
-                              .json("$[1]", "/profile", "==")
-                              .json("$[2]", "/dashboard", "==")
-                 }
+                    .command("LRANGE")
+                    .args("recent:user:001", "0", "4")
+                    .assertion { assertion ->
+                        assertion.json("$.size()", 3, "==")
+                                .json("$[0]", "/settings", "==")
+                                .json("$[1]", "/profile", "==")
+                                .json("$[2]", "/dashboard", "==")
+                    }
         }
-        
+
         // 8. 集合操作：添加权限
         children.redis("添加用户权限") { redis ->
             redis.datasource("redisDefault")
-                 .command("SADD")
-                 .args("permissions:user:001", "read", "write", "delete", "admin")
-                 .assertion { assertion ->
-                     assertion.responseBody("4")
-                 }
+                    .command("SADD")
+                    .args("permissions:user:001", "read", "write", "delete", "admin")
+                    .assertion { assertion ->
+                        assertion.responseBody("4")
+                    }
         }
-        
+
         // 9. 检查权限
         children.redis("检查管理员权限") { redis ->
             redis.datasource("redisDefault")
-                 .command("SISMEMBER")
-                 .args("permissions:user:001", "admin")
-                 .assertion { assertion ->
-                     assertion.responseBody("1")
-                 }
+                    .command("SISMEMBER")
+                    .args("permissions:user:001", "admin")
+                    .assertion { assertion ->
+                        assertion.responseBody("1")
+                    }
         }
-        
+
         // 10. 获取所有权限
         children.redis("获取所有权限") { redis ->
             redis.datasource("redisDefault")
-                 .command("SMEMBERS")
-                 .args("permissions:user:001")
-                 .assertion { assertion ->
-                     assertion.json("$.size()", 4, "==")
-                 }
+                    .command("SMEMBERS")
+                    .args("permissions:user:001")
+                    .assertion { assertion ->
+                        assertion.json("$.size()", 4, "==")
+                    }
         }
-        
+
         // 11. 清理：删除所有测试数据
         children.redisPostprocessor("清理所有测试数据") { postprocessor ->
             postprocessor.datasource("redisDefault")
-                         .command("DEL")
-                         .args("cache:user:001", "config:user:001", 
-                               "recent:user:001", "permissions:user:001")
+                    .command("DEL")
+                    .args("cache:user:001", "config:user:001",
+                            "recent:user:001", "permissions:user:001")
         }
     }
 }
@@ -488,7 +492,4 @@ suite("Redis缓存功能测试") { builder ->
 
 ## 相关文档
 
-- [配置元件示例](../template/配置元件/redis_defaults.yaml)
-- [处理器示例](../template/处理器/redis_preprocessor.yaml)
-- [取样器示例](../template/取样器/redis_sampler.yaml)
 - [Redis 官方文档](https://redis.io/documentation)
