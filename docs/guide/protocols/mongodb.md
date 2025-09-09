@@ -2,7 +2,8 @@
 
 ## 概述
 
-MongoDB 协议支持为 Ryze 测试框架提供了与 MongoDB 数据库进行交互的能力。支持文档的增删改查、聚合查询、索引操作等 MongoDB 核心功能，适用于 NoSQL 数据库的测试场景。
+MongoDB 协议支持为 Ryze 测试框架提供了与 MongoDB 数据库进行交互的能力。支持文档的增删改查、聚合查询、索引操作等 MongoDB
+核心功能，适用于 NoSQL 数据库的测试场景。
 
 ## 依赖引入
 
@@ -10,7 +11,7 @@ MongoDB 协议支持为 Ryze 测试框架提供了与 MongoDB 数据库进行交
 <dependency>
     <groupId>io.github.xiaomisum</groupId>
     <artifactId>ryze-mongo</artifactId>
-    <version>6.0.1</version>
+    <version>${version}</version>
 </dependency>
 ```
 
@@ -67,7 +68,9 @@ config: # 取样器配置
     "collection": "users",
     "action": "find",
     "condition": {
-      "age": {"$gte": 18},
+      "age": {
+        "$gte": 18
+      },
       "status": "active"
     }
   }
@@ -88,60 +91,60 @@ config: # 取样器配置
 import static io.github.xiaomisum.ryze.protocol.mongo.MongoMagicBox.*;
 
 public class MongoApiExample {
-    
+
     public void testInsertDocument() {
         // 插入文档
         Result result = mongo("插入用户文档", builder -> builder
-            .url("mongodb://localhost:27017")
-            .database("testdb")
-            .collection("users")
-            .action("insert")
-            .document(Map.of(
-                "name", "张三",
-                "email", "zhangsan@example.com",
-                "age", 25,
-                "department", "技术部",
-                "skills", List.of("Java", "Python", "MongoDB"),
-                "createdAt", new Date()
-            ))
+                .url("mongodb://localhost:27017")
+                .database("testdb")
+                .collection("users")
+                .action("insert")
+                .document(Map.of(
+                        "name", "张三",
+                        "email", "zhangsan@example.com",
+                        "age", 25,
+                        "department", "技术部",
+                        "skills", List.of("Java", "Python", "MongoDB"),
+                        "createdAt", new Date()
+                ))
         );
-        
+
         assertThat(result.extract("$.insertedId")).isNotNull();
     }
-    
+
     public void testFindDocuments() {
         // 查询文档
         Result result = mongo("查询用户文档", builder -> builder
-            .url("mongodb://localhost:27017")
-            .database("testdb")
-            .collection("users")
-            .action("find")
-            .condition(Map.of(
-                "department", "技术部",
-                "age", Map.of("$gte", 20)
-            ))
+                .url("mongodb://localhost:27017")
+                .database("testdb")
+                .collection("users")
+                .action("find")
+                .condition(Map.of(
+                        "department", "技术部",
+                        "age", Map.of("$gte", 20)
+                ))
         );
-        
+
         assertThat(result.extract("$.length()")).isGreaterThan(0);
     }
-    
+
     public void testUpdateDocument() {
         // 更新文档
         mongo("更新用户信息", builder -> builder
-            .url("mongodb://localhost:27017")
-            .database("testdb")
-            .collection("users")
-            .action("update")
-            .condition(Map.of("email", "zhangsan@example.com"))
-            .document(Map.of(
-                "$set", Map.of(
-                    "age", 26,
-                    "lastModified", new Date()
-                ),
-                "$addToSet", Map.of(
-                    "skills", "Docker"
-                )
-            ))
+                .url("mongodb://localhost:27017")
+                .database("testdb")
+                .collection("users")
+                .action("update")
+                .condition(Map.of("email", "zhangsan@example.com"))
+                .document(Map.of(
+                        "$set", Map.of(
+                                "age", 26,
+                                "lastModified", new Date()
+                        ),
+                        "$addToSet", Map.of(
+                                "skills", "Docker"
+                        )
+                ))
         );
     }
 }
@@ -156,23 +159,23 @@ import static io.github.xiaomisum.ryze.protocol.mongo.MongoMagicBox.*
 def createUser() {
     def result = mongo("创建用户文档") { builder ->
         builder.url("mongodb://localhost:27017")
-               .database("testdb")
-               .collection("users")
-               .action("insert")
-               .document([
-                   name: "李四",
-                   email: "lisi@example.com",
-                   age: 30,
-                   department: "产品部",
-                   profile: [
-                       bio: "产品经理",
-                       location: "北京",
-                       joinDate: new Date()
-                   ],
-                   tags: ["product", "management", "strategy"]
-               ])
+                .database("testdb")
+                .collection("users")
+                .action("insert")
+                .document([
+                        name      : "李四",
+                        email     : "lisi@example.com",
+                        age       : 30,
+                        department: "产品部",
+                        profile   : [
+                                bio     : "产品经理",
+                                location: "北京",
+                                joinDate: new Date()
+                        ],
+                        tags      : ["product", "management", "strategy"]
+                ])
     }
-    
+
     def userId = result.extract("$.insertedId")
     return userId
 }
@@ -182,98 +185,98 @@ suite("MongoDB数据库测试") { builder ->
     builder.configure { configure ->
         configure.mongo { mongo ->
             mongo.url("mongodb://localhost:27017")
-                 .database("testdb")
+                    .database("testdb")
         }
     }
-    
+
     builder.children { children ->
         // 1. 清理测试数据
         children.mongoPreprocessor("清理测试数据") { preprocessor ->
             preprocessor.collection("users")
-                        .action("delete")
-                        .condition([email: [$regex: ".*@test.com"]])
+                    .action("delete")
+                    .condition([email: [$regex: ".*@test.com"]])
         }
-        
+
         // 2. 插入测试数据
         children.mongo("插入用户数据") { mongo ->
             mongo.collection("users")
-                 .action("insert")
-                 .document([
-                     name: "Groovy测试用户",
-                     email: "groovy@test.com",
-                     age: 28,
-                     department: "测试部",
-                     skills: ["Groovy", "MongoDB", "Testing"],
-                     metadata: [
-                         createdBy: "test-suite",
-                         version: "1.0",
-                         environment: "testing"
-                     ],
-                     active: true
-                 ])
-                 .assertion { assertion ->
-                     assertion.json("$.insertedId", "", "isNotEmpty")
-                 }
-                 .extractor { extractor ->
-                     extractor.json("$.insertedId", "testUserId")
-                 }
+                    .action("insert")
+                    .document([
+                            name      : "Groovy测试用户",
+                            email     : "groovy@test.com",
+                            age       : 28,
+                            department: "测试部",
+                            skills    : ["Groovy", "MongoDB", "Testing"],
+                            metadata  : [
+                                    createdBy  : "test-suite",
+                                    version    : "1.0",
+                                    environment: "testing"
+                            ],
+                            active    : true
+                    ])
+                    .assertion { assertion ->
+                        assertion.json("$.insertedId", "", "isNotEmpty")
+                    }
+                    .extractor { extractor ->
+                        extractor.json("$.insertedId", "testUserId")
+                    }
         }
-        
+
         // 3. 查询数据
         children.mongo("查询用户信息") { mongo ->
             mongo.collection("users")
-                 .action("find")
-                 .condition([email: "groovy@test.com"])
-                 .assertion { assertion ->
-                     assertion.json("$[0].name", "Groovy测试用户", "==")
-                              .json("$[0].department", "测试部", "==")
-                              .json("$[0].active", true, "==")
-                              .json("$[0].skills.size()", 3, "==")
-                 }
+                    .action("find")
+                    .condition([email: "groovy@test.com"])
+                    .assertion { assertion ->
+                        assertion.json("$[0].name", "Groovy测试用户", "==")
+                                .json("$[0].department", "测试部", "==")
+                                .json("$[0].active", true, "==")
+                                .json("$[0].skills.size()", 3, "==")
+                    }
         }
-        
+
         // 4. 更新数据
         children.mongo("更新用户信息") { mongo ->
             mongo.collection("users")
-                 .action("update")
-                 .condition([_id: "${testUserId}"])
-                 .document([
-                     "$set": [
-                         age: 30,
-                         department: "高级测试部",
-                         "metadata.lastModified": new Date(),
-                         "metadata.version": "1.1"
-                     ],
-                     "$addToSet": [
-                         skills: "Automation"
-                     ]
-                 ])
-                 .assertion { assertion ->
-                     assertion.json("$.modifiedCount", 1, "==")
-                 }
+                    .action("update")
+                    .condition([_id: "${testUserId}"])
+                    .document([
+                            "$set"     : [
+                                    age                    : 30,
+                                    department             : "高级测试部",
+                                    "metadata.lastModified": new Date(),
+                                    "metadata.version"     : "1.1"
+                            ],
+                            "$addToSet": [
+                                    skills: "Automation"
+                            ]
+                    ])
+                    .assertion { assertion ->
+                        assertion.json("$.modifiedCount", 1, "==")
+                    }
         }
-        
+
         // 5. 验证更新结果
         children.mongo("验证更新结果") { mongo ->
             mongo.collection("users")
-                 .action("find")
-                 .condition([_id: "${testUserId}"])
-                 .assertion { assertion ->
-                     assertion.json("$[0].age", 30, "==")
-                              .json("$[0].department", "高级测试部", "==")
-                              .json("$[0].skills", "Automation", "contains")
-                              .json("$[0].metadata.version", "1.1", "==")
-                 }
+                    .action("find")
+                    .condition([_id: "${testUserId}"])
+                    .assertion { assertion ->
+                        assertion.json("$[0].age", 30, "==")
+                                .json("$[0].department", "高级测试部", "==")
+                                .json("$[0].skills", "Automation", "contains")
+                                .json("$[0].metadata.version", "1.1", "==")
+                    }
         }
-        
+
         // 6. 删除数据
         children.mongo("删除测试数据") { mongo ->
             mongo.collection("users")
-                 .action("delete")
-                 .condition([email: "groovy@test.com"])
-                 .assertion { assertion ->
-                     assertion.json("$.deletedCount", 1, "==")
-                 }
+                    .action("delete")
+                    .condition([email: "groovy@test.com"])
+                    .assertion { assertion ->
+                        assertion.json("$.deletedCount", 1, "==")
+                    }
         }
     }
 }

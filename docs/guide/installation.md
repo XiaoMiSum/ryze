@@ -17,7 +17,7 @@
 <dependency>
     <groupId>io.github.xiaomisum</groupId>
     <artifactId>ryze</artifactId>
-    <version>6.0.1</version>
+    <version>${version}</version>
 </dependency>
 ```
 
@@ -30,35 +30,35 @@
 <dependency>
     <groupId>io.github.xiaomisum</groupId>
     <artifactId>ryze-dubbo</artifactId>
-    <version>6.0.1</version>
+    <version>${version}</version>
 </dependency>
 
 <!-- Kafka协议支持 -->
 <dependency>
     <groupId>io.github.xiaomisum</groupId>
     <artifactId>ryze-kafka</artifactId>
-    <version>6.0.1</version>
+    <version>${version}</version>
 </dependency>
 
 <!-- MongoDB协议支持 -->
 <dependency>
     <groupId>io.github.xiaomisum</groupId>
     <artifactId>ryze-mongo</artifactId>
-    <version>6.0.1</version>
+    <version>${version}</version>
 </dependency>
 
 <!-- RabbitMQ协议支持 -->
 <dependency>
     <groupId>io.github.xiaomisum</groupId>
     <artifactId>ryze-rabbit</artifactId>
-    <version>6.0.1</version>
+    <version>${version}</version>
 </dependency>
 
 <!-- ActiveMQ协议支持 -->
 <dependency>
     <groupId>io.github.xiaomisum</groupId>
     <artifactId>ryze-active</artifactId>
-    <version>6.0.1</version>
+    <version>${version}</version>
 </dependency>
 ```
 
@@ -69,26 +69,26 @@
 ### 核心模块
 
 ```gradle
-implementation 'io.github.xiaomisum:ryze:6.0.1'
+implementation 'io.github.xiaomisum:ryze:${version}'
 ```
 
 ### 协议模块
 
 ```gradle
 // Dubbo协议支持
-implementation 'io.github.xiaomisum:ryze-dubbo:6.0.1'
+implementation 'io.github.xiaomisum:ryze-dubbo:${version}'
 
 // Kafka协议支持
-implementation 'io.github.xiaomisum:ryze-kafka:6.0.1'
+implementation 'io.github.xiaomisum:ryze-kafka:${version}'
 
 // MongoDB协议支持
-implementation 'io.github.xiaomisum:ryze-mongo:6.0.1'
+implementation 'io.github.xiaomisum:ryze-mongo:${version}'
 
 // RabbitMQ协议支持
-implementation 'io.github.xiaomisum:ryze-rabbit:6.0.1'
+implementation 'io.github.xiaomisum:ryze-rabbit:${version}'
 
 // ActiveMQ协议支持
-implementation 'io.github.xiaomisum:ryze-active:6.0.1'
+implementation 'io.github.xiaomisum:ryze-active:${version}'
 ```
 
 ## IDE配置
@@ -113,7 +113,7 @@ implementation 'io.github.xiaomisum:ryze-active:6.0.1'
 import static io.github.xiaomisum.ryze.MagicBox.*;
 
 public class InstallationTest {
-    public static void main(String[] args) {
+    static void main(String[] args) {
         var result = http(builder -> {
             builder.title("安装验证测试")
                    .config(config -> config
@@ -140,7 +140,7 @@ public class InstallationTest {
 <dependency>
     <groupId>io.github.xiaomisum</groupId>
     <artifactId>ryze</artifactId>
-    <version>6.0.1</version>
+    <version>${version}</version>
     <exclusions>
         <exclusion>
             <groupId>com.alibaba</groupId>

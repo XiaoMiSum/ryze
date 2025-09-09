@@ -39,7 +39,7 @@ cd ryze-demo
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <ryze.version>6.0.1</ryze.version>
+        <ryze.version>${version}</ryze.version>
     </properties>
 
     <dependencies>

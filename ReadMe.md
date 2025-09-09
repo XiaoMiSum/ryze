@@ -122,7 +122,7 @@ graph TB
 <dependency>
     <groupId>io.github.xiaomisum</groupId>
     <artifactId>ryze</artifactId>
-    <version>6.0.1</version>
+    <version>${version}</version>
 </dependency>
 
         <!-- HTTP 协议支持 (已内置在核心模块) -->
@@ -131,7 +131,7 @@ graph TB
 <dependency>
 <groupId>io.github.xiaomisum</groupId>
 <artifactId>ryze-dubbo</artifactId>
-<version>6.0.1</version>
+<version>${version}</version>
 </dependency>
 
         <!-- 其他协议模块根据需要添加 -->
@@ -142,9 +142,9 @@ graph TB
 在您的 `build.gradle` 中添加：
 
 ```gradle
-implementation 'io.github.xiaomisum:ryze:6.0.1'
+implementation 'io.github.xiaomisum:ryze:${version}'
 // 根据需要添加其他协议模块
-implementation 'io.github.xiaomisum:ryze-dubbo:6.0.1'
+implementation 'io.github.xiaomisum:ryze-dubbo:${version}'
 ```
 
 ## 💡 使用示例
@@ -659,22 +659,22 @@ variables:
 
 ### 核心模块
 
-| 模块            | 功能              | Maven 坐标                                |
-|---------------|-----------------|-----------------------------------------|
-| `ryze`        | 核心模块，包含HTTP协议支持 | `io.github.xiaomisum:ryze:6.0.1`        |
-| `ryze-testng` | TestNG 集成支持     | `io.github.xiaomisum:ryze-testng:6.0.1` |
+| 模块            | 功能              | Maven 坐标                                     |
+|---------------|-----------------|----------------------------------------------|
+| `ryze`        | 核心模块，包含HTTP协议支持 | `io.github.xiaomisum:ryze:${version}`        |
+| `ryze-testng` | TestNG 集成支持     | `io.github.xiaomisum:ryze-testng:${version}` |
 
 ### 协议模块
 
-| 协议       | 模块名           | 功能描述            | Maven 坐标                                |
-|----------|---------------|-----------------|-----------------------------------------|
-| Dubbo    | `ryze-dubbo`  | Dubbo RPC 协议支持  | `io.github.xiaomisum:ryze-dubbo:6.0.1`  |
-| JDBC     | 内置            | 数据库测试支持         | -                                       |
-| Redis    | 内置            | Redis 数据库测试     | -                                       |
-| MongoDB  | `ryze-mongo`  | MongoDB 数据库测试   | `io.github.xiaomisum:ryze-mongo:6.0.1`  |
-| Kafka    | `ryze-kafka`  | Kafka 消息队列测试    | `io.github.xiaomisum:ryze-kafka:6.0.1`  |
-| RabbitMQ | `ryze-rabbit` | RabbitMQ 消息队列测试 | `io.github.xiaomisum:ryze-rabbit:6.0.1` |
-| ActiveMQ | `ryze-active` | ActiveMQ 消息队列测试 | `io.github.xiaomisum:ryze-active:6.0.1` |
+| 协议       | 模块名           | 功能描述            | Maven 坐标                                     |
+|----------|---------------|-----------------|----------------------------------------------|
+| Dubbo    | `ryze-dubbo`  | Dubbo RPC 协议支持  | `io.github.xiaomisum:ryze-dubbo:${version}`  |
+| JDBC     | 内置            | 数据库测试支持         | -                                            |
+| Redis    | 内置            | Redis 数据库测试     | -                                            |
+| MongoDB  | `ryze-mongo`  | MongoDB 数据库测试   | `io.github.xiaomisum:ryze-mongo:${version}`  |
+| Kafka    | `ryze-kafka`  | Kafka 消息队列测试    | `io.github.xiaomisum:ryze-kafka:${version}`  |
+| RabbitMQ | `ryze-rabbit` | RabbitMQ 消息队列测试 | `io.github.xiaomisum:ryze-rabbit:${version}` |
+| ActiveMQ | `ryze-active` | ActiveMQ 消息队列测试 | `io.github.xiaomisum:ryze-active:${version}` |
 
 ### 示例模块
 

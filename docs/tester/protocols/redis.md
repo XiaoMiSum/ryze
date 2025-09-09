@@ -2,7 +2,8 @@
 
 ## 概述
 
-Redis 协议支持为 Ryze 测试框架提供了与 Redis 数据库进行交互的能力。支持字符串、哈希、列表、集合等多种数据类型操作，以及缓存测试、分布式锁测试等常见 Redis 应用场景。
+Redis 协议支持为 Ryze 测试框架提供了与 Redis 数据库进行交互的能力。支持字符串、哈希、列表、集合等多种数据类型操作，以及缓存测试、分布式锁测试等常见
+Redis 应用场景。
 
 ## 依赖引入
 
@@ -12,7 +13,7 @@ Redis 协议支持内置在核心模块中，无需额外依赖：
 <dependency>
     <groupId>io.github.xiaomisum</groupId>
     <artifactId>ryze</artifactId>
-    <version>6.0.1</version>
+    <version>${version}</version>
 </dependency>
 ```
 

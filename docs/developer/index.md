@@ -456,7 +456,7 @@ mkdir -p src/test/java
     <parent>
         <groupId>io.github.xiaomisum</groupId>
         <artifactId>ryze-parent</artifactId>
-        <version>6.0.1</version>
+        <version>${version}</version>
     </parent>
 
     <artifactId>ryze-myprotocol</artifactId>
@@ -643,7 +643,7 @@ Ryze 框架支持开发多种类型的扩展组件来增强测试能力。所有
 <dependency>
     <groupId>io.github.xiaomisum</groupId>
     <artifactId>ryze-myprotocol</artifactId>
-    <version>6.0.1</version>
+    <version>${version}</version>
 </dependency>
 ```
 

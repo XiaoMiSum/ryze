@@ -10,7 +10,7 @@ Kafka 协议支持为 Ryze 测试框架提供了与 Apache Kafka 消息流平台
 <dependency>
     <groupId>io.github.xiaomisum</groupId>
     <artifactId>ryze-kafka</artifactId>
-    <version>6.0.1</version>
+    <version>${version}</version>
 </dependency>
 ```
 
@@ -164,57 +164,57 @@ config: # 取样器配置
 import static io.github.xiaomisum.ryze.protocol.kafka.KafkaMagicBox.*;
 
 public class KafkaApiExample {
-    
+
     public void testProduceMessage() {
         // 发送 Kafka 消息
         Result result = kafka("发送用户事件", builder -> builder
-            .bootstrapServers("localhost:9092")
-            .topic("user.events")
-            .key("user-12345")
-            .message(Map.of(
-                "eventType", "user_login",
-                "userId", 12345,
-                "timestamp", System.currentTimeMillis(),
-                "metadata", Map.of(
-                    "ip", "192.168.1.100",
-                    "userAgent", "Chrome/95.0"
-                )
-            ))
-            .acks(1)
-            .retries(3)
+                .bootstrapServers("localhost:9092")
+                .topic("user.events")
+                .key("user-12345")
+                .message(Map.of(
+                        "eventType", "user_login",
+                        "userId", 12345,
+                        "timestamp", System.currentTimeMillis(),
+                        "metadata", Map.of(
+                                "ip", "192.168.1.100",
+                                "userAgent", "Chrome/95.0"
+                        )
+                ))
+                .acks(1)
+                .retries(3)
         );
-        
+
         assertThat(result.isSuccess()).isTrue();
     }
-    
+
     public void testBatchMessages() {
         // 批量发送消息
         for (int i = 1; i <= 10; i++) {
             kafka("发送批量消息 " + i, builder -> builder
-                .bootstrapServers("localhost:9092")
-                .topic("batch.test")
-                .key("batch-" + i)
-                .message("批量消息内容: " + i)
-                .lingerMs(20)
+                    .bootstrapServers("localhost:9092")
+                    .topic("batch.test")
+                    .key("batch-" + i)
+                    .message("批量消息内容: " + i)
+                    .lingerMs(20)
             );
         }
     }
-    
+
     public void testTransactionMessage() {
         // 发送事务相关消息
         kafka("发送交易事件", builder -> builder
-            .bootstrapServers("localhost:9092")
-            .topic("transaction.events")
-            .key("txn-001")
-            .message(Map.of(
-                "transactionId", "TXN-001",
-                "accountId", "ACC-12345",
-                "amount", 1000.00,
-                "type", "credit",
-                "timestamp", System.currentTimeMillis()
-            ))
-            .acks("all") // 确保所有副本都收到
-            .retries(5)
+                .bootstrapServers("localhost:9092")
+                .topic("transaction.events")
+                .key("txn-001")
+                .message(Map.of(
+                        "transactionId", "TXN-001",
+                        "accountId", "ACC-12345",
+                        "amount", 1000.00,
+                        "type", "credit",
+                        "timestamp", System.currentTimeMillis()
+                ))
+                .acks("all") // 确保所有副本都收到
+                .retries(5)
         );
     }
 }
@@ -226,101 +226,101 @@ public class KafkaApiExample {
 import static io.github.xiaomisum.ryze.protocol.kafka.KafkaMagicBox.*;
 
 public class KafkaTestSuite {
-    
+
     public void eventStreamingTestSuite() {
         suite("Kafka事件流测试套件", builder -> {
             // 配置 Kafka 默认设置
             builder.configure(configure -> configure
-                .kafka(kafka -> kafka
-                    .bootstrapServers("localhost:9092")
-                    .keySerializer("org.apache.kafka.common.serialization.StringSerializer")
-                    .valueSerializer("org.apache.kafka.common.serialization.StringSerializer")
-                    .acks(1)
-                    .retries(5)
-                    .lingerMs(20)
-                )
+                    .kafka(kafka -> kafka
+                            .bootstrapServers("localhost:9092")
+                            .keySerializer("org.apache.kafka.common.serialization.StringSerializer")
+                            .valueSerializer("org.apache.kafka.common.serialization.StringSerializer")
+                            .acks(1)
+                            .retries(5)
+                            .lingerMs(20)
+                    )
             );
-            
+
             builder.children(children -> {
                 // 前置处理：发送测试开始事件
                 children.kafkaPreprocessor("发送测试开始事件", preprocessor -> preprocessor
-                    .topic("test.lifecycle")
-                    .key("test-start")
-                    .message(Map.of(
-                        "event", "test_started",
-                        "suiteId", "kafka-test-suite",
-                        "timestamp", System.currentTimeMillis()
-                    ))
+                        .topic("test.lifecycle")
+                        .key("test-start")
+                        .message(Map.of(
+                                "event", "test_started",
+                                "suiteId", "kafka-test-suite",
+                                "timestamp", System.currentTimeMillis()
+                        ))
                 );
-                
+
                 // 测试1：用户行为事件
                 children.kafka("发送用户注册事件", kafka -> kafka
-                    .topic("user.lifecycle")
-                    .key("user-001")
-                    .message(Map.of(
-                        "eventType", "user_registered",
-                        "userId", "USER-001",
-                        "email", "test@example.com",
-                        "registrationTime", System.currentTimeMillis(),
-                        "source", "web"
-                    ))
+                        .topic("user.lifecycle")
+                        .key("user-001")
+                        .message(Map.of(
+                                "eventType", "user_registered",
+                                "userId", "USER-001",
+                                "email", "test@example.com",
+                                "registrationTime", System.currentTimeMillis(),
+                                "source", "web"
+                        ))
                 );
-                
+
                 // 测试2：订单事件流
                 children.kafka("发送订单创建事件", kafka -> kafka
-                    .topic("order.events")
-                    .key("order-001")
-                    .message(Map.of(
-                        "eventType", "order_created",
-                        "orderId", "ORDER-001",
-                        "customerId", "USER-001",
-                        "totalAmount", 299.99,
-                        "items", List.of(
-                            Map.of("productId", "P001", "quantity", 2),
-                            Map.of("productId", "P002", "quantity", 1)
-                        ),
-                        "timestamp", System.currentTimeMillis()
-                    ))
+                        .topic("order.events")
+                        .key("order-001")
+                        .message(Map.of(
+                                "eventType", "order_created",
+                                "orderId", "ORDER-001",
+                                "customerId", "USER-001",
+                                "totalAmount", 299.99,
+                                "items", List.of(
+                                        Map.of("productId", "P001", "quantity", 2),
+                                        Map.of("productId", "P002", "quantity", 1)
+                                ),
+                                "timestamp", System.currentTimeMillis()
+                        ))
                 );
-                
+
                 // 测试3：库存变更事件
                 children.kafka("发送库存变更事件", kafka -> kafka
-                    .topic("inventory.changes")
-                    .key("product-P001")
-                    .message(Map.of(
-                        "eventType", "stock_decreased",
-                        "productId", "P001",
-                        "changeAmount", -2,
-                        "remainingStock", 98,
-                        "reason", "order_fulfillment",
-                        "timestamp", System.currentTimeMillis()
-                    ))
+                        .topic("inventory.changes")
+                        .key("product-P001")
+                        .message(Map.of(
+                                "eventType", "stock_decreased",
+                                "productId", "P001",
+                                "changeAmount", -2,
+                                "remainingStock", 98,
+                                "reason", "order_fulfillment",
+                                "timestamp", System.currentTimeMillis()
+                        ))
                 );
-                
+
                 // 测试4：支付事件
                 children.kafka("发送支付完成事件", kafka -> kafka
-                    .topic("payment.events")
-                    .key("payment-001")
-                    .message(Map.of(
-                        "eventType", "payment_completed",
-                        "paymentId", "PAY-001",
-                        "orderId", "ORDER-001",
-                        "amount", 299.99,
-                        "method", "credit_card",
-                        "timestamp", System.currentTimeMillis()
-                    ))
+                        .topic("payment.events")
+                        .key("payment-001")
+                        .message(Map.of(
+                                "eventType", "payment_completed",
+                                "paymentId", "PAY-001",
+                                "orderId", "ORDER-001",
+                                "amount", 299.99,
+                                "method", "credit_card",
+                                "timestamp", System.currentTimeMillis()
+                        ))
                 );
-                
+
                 // 后置处理：发送测试完成事件
                 children.kafkaPostprocessor("发送测试完成事件", postprocessor -> postprocessor
-                    .topic("test.lifecycle")
-                    .key("test-end")
-                    .message(Map.of(
-                        "event", "test_completed",
-                        "suiteId", "kafka-test-suite",
-                        "timestamp", System.currentTimeMillis(),
-                        "status", "success"
-                    ))
+                        .topic("test.lifecycle")
+                        .key("test-end")
+                        .message(Map.of(
+                                "event", "test_completed",
+                                "suiteId", "kafka-test-suite",
+                                "timestamp", System.currentTimeMillis(),
+                                "status", "success"
+                        ))
                 );
             });
         });

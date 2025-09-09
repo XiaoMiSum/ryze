@@ -13,7 +13,7 @@ JDBC 支持内置在核心模块中，需要添加对应的数据库驱动：
 <dependency>
     <groupId>io.github.xiaomisum</groupId>
     <artifactId>ryze</artifactId>
-    <version>6.0.1</version>
+    <version>${version}</version>
 </dependency>
 
 <!-- MySQL 驱动 -->
@@ -83,10 +83,11 @@ config: # 取样器配置
 import io.github.xiaomisum.ryze.MagicBox;
 import io.github.xiaomisum.ryze.support.testng.annotation.RyzeTest;
 import org.testng.annotations.Test;
+
 import java.util.Map;
 
 public class JdbcApiExample {
-    
+
     @Test
     @RyzeTest
     public void testJdbcInsert() {
@@ -94,20 +95,20 @@ public class JdbcApiExample {
         MagicBox.jdbc(jdbc -> {
             jdbc.title("插入用户：tick = jdbc_preprocessor");
             jdbc.configureElements(ele -> ele.jdbc(j -> j
-                .refName("jdbc_source")
-                .config(config -> config
-                    .username("root")
-                    .password("123456qq!")
-                    .url("jdbc:mysql://127.0.0.1:3306/ryze-test?characterEncoding=utf8&useSSL=true&serverTimezone=GMT%2b8&failOverReadOnly=false")
-                )
+                    .refName("jdbc_source")
+                    .config(config -> config
+                            .username("root")
+                            .password("123456qq!")
+                            .url("jdbc:mysql://127.0.0.1:3306/ryze-test?characterEncoding=utf8&useSSL=true&serverTimezone=GMT%2b8&failOverReadOnly=false")
+                    )
             ));
             jdbc.config(config -> config
-                .datasource("jdbc_source")
-                .sql("insert into t_001 (tick, name) values (\"jdbc_preprocessor\", \"ryze_http_sampler\");")
+                    .datasource("jdbc_source")
+                    .sql("insert into t_001 (tick, name) values (\"jdbc_preprocessor\", \"ryze_http_sampler\");")
             );
         });
     }
-    
+
     @Test
     @RyzeTest
     public void testJdbcQuery() {
@@ -115,22 +116,22 @@ public class JdbcApiExample {
         MagicBox.jdbc(jdbc -> {
             jdbc.title("查找用户：tick = jdbc_preprocessor");
             jdbc.configureElements(ele -> ele.jdbc(j -> j
-                .refName("jdbc_source")
-                .config(config -> config
-                    .username("root")
-                    .password("123456qq!")
-                    .url("jdbc:mysql://127.0.0.1:3306/ryze-test?characterEncoding=utf8&useSSL=true&serverTimezone=GMT%2b8&failOverReadOnly=false")
-                )
+                    .refName("jdbc_source")
+                    .config(config -> config
+                            .username("root")
+                            .password("123456qq!")
+                            .url("jdbc:mysql://127.0.0.1:3306/ryze-test?characterEncoding=utf8&useSSL=true&serverTimezone=GMT%2b8&failOverReadOnly=false")
+                    )
             ));
             jdbc.postprocessors(post -> post.jdbc(j -> j
-                .config(config -> config
-                    .datasource("jdbc_source")
-                    .sql("truncate table t_001;")
-                )
+                    .config(config -> config
+                            .datasource("jdbc_source")
+                            .sql("truncate table t_001;")
+                    )
             ));
             jdbc.config(config -> config
-                .datasource("jdbc_source")
-                .sql("select * from t_001  where tick = \"jdbc_preprocessor\";")
+                    .datasource("jdbc_source")
+                    .sql("select * from t_001  where tick = \"jdbc_preprocessor\";")
             );
             jdbc.assertions(assertions -> assertions.json("$.name", "ryze_http_sampler"));
         });
@@ -144,10 +145,11 @@ public class JdbcApiExample {
 import io.github.xiaomisum.ryze.MagicBox;
 import io.github.xiaomisum.ryze.support.testng.annotation.RyzeTest;
 import org.testng.annotations.Test;
+
 import java.util.Map;
 
 public class JdbcSuiteExample {
-    
+
     @Test
     @RyzeTest
     public void userDatabaseTestSuite() {
@@ -155,62 +157,62 @@ public class JdbcSuiteExample {
             suite.variables("id", 1);
             suite.variables(var -> var.put("tick", "ryze"));
             suite.variables(Map.of("a", 1, "b", 2));
-            
+
             // 配置 JDBC 数据源
             suite.configureElements(ele -> ele.jdbc(jdbc -> jdbc
-                .refName("jdbc_source")
-                .config(config -> config
-                    .username("root")
-                    .password("123456qq!")
-                    .url("jdbc:mysql://127.0.0.1:3306/ryze-test?characterEncoding=utf8&useSSL=true&serverTimezone=GMT%2b8&failOverReadOnly=false")
-                )
+                    .refName("jdbc_source")
+                    .config(config -> config
+                            .username("root")
+                            .password("123456qq!")
+                            .url("jdbc:mysql://127.0.0.1:3306/ryze-test?characterEncoding=utf8&useSSL=true&serverTimezone=GMT%2b8&failOverReadOnly=false")
+                    )
             ));
-            
+
             // 前置处理：插入测试数据
             suite.preprocessors(pre ->
                     pre.jdbc(jdbc -> jdbc.config(config -> config
-                        .datasource("jdbc_source")
-                        .sql("insert into t_001 (tick, name) values (\"jdbc_preprocessor\", \"jdbc_preprocessor\");")
+                            .datasource("jdbc_source")
+                            .sql("insert into t_001 (tick, name) values (\"jdbc_preprocessor\", \"jdbc_preprocessor\");")
                     ))
             );
-            
+
             // 后置处理：清理数据
             suite.postprocessors(post -> post.jdbc(jdbc -> jdbc.config(config -> config
-                .datasource("jdbc_source")
-                .sql("truncate table t_001;")
+                    .datasource("jdbc_source")
+                    .sql("truncate table t_001;")
             )));
-            
+
             suite.children(child -> child.jdbc(jdbc -> jdbc
-                .title("步骤1")
-                .variables("username", "ryze")
-                .config(config -> config
-                    .datasource("jdbc_source")
-                    .sql("select * from t_001  where tick = \"jdbc_preprocessor\";")
-                )
-                .validators(validator -> validator.json(json -> json
-                    .field("$.name")
-                    .expected("jdbc_preprocessor")
-                ))
+                    .title("步骤1")
+                    .variables("username", "ryze")
+                    .config(config -> config
+                            .datasource("jdbc_source")
+                            .sql("select * from t_001  where tick = \"jdbc_preprocessor\";")
+                    )
+                    .validators(validator -> validator.json(json -> json
+                            .field("$.name")
+                            .expected("jdbc_preprocessor")
+                    ))
             ));
-            
+
             suite.children(child -> child.jdbc(jdbc -> jdbc
-                .title("步骤2")
-                .config(config -> config
-                    .datasource("jdbc_source")
-                    .sql("update t_001  set name = \"步骤2:jdbcSampler\" where tick = \"jdbc_preprocessor\";")
-                )
+                    .title("步骤2")
+                    .config(config -> config
+                            .datasource("jdbc_source")
+                            .sql("update t_001  set name = \"步骤2:jdbcSampler\" where tick = \"jdbc_preprocessor\";")
+                    )
             ));
-            
+
             suite.children(child -> child.jdbc(jdbc -> jdbc
-                .title("步骤3")
-                .config(config -> config
-                    .datasource("jdbc_source")
-                    .sql("select * from t_001  where tick = \"jdbc_preprocessor\";")
-                )
-                .validators(validator -> validator.json(json -> json
-                    .field("$.name")
-                    .expected("步骤2:jdbcSampler")
-                ))
+                    .title("步骤3")
+                    .config(config -> config
+                            .datasource("jdbc_source")
+                            .sql("select * from t_001  where tick = \"jdbc_preprocessor\";")
+                    )
+                    .validators(validator -> validator.json(json -> json
+                            .field("$.name")
+                            .expected("步骤2:jdbcSampler")
+                    ))
             ));
         });
     }
@@ -227,7 +229,7 @@ import io.github.xiaomisum.ryze.support.testng.annotation.RyzeTest
 import org.testng.annotations.Test
 
 class GroovyJdbcExample {
-    
+
     @Test
     @RyzeTest
     void testJdbcInsert() {
@@ -250,7 +252,7 @@ class GroovyJdbcExample {
             }
         })
     }
-    
+
     @Test
     @RyzeTest
     void testJdbcQuery() {
@@ -295,7 +297,7 @@ import io.github.xiaomisum.ryze.support.testng.annotation.RyzeTest
 import org.testng.annotations.Test
 
 class GroovyJdbcSuiteExample {
-    
+
     @Test
     @RyzeTest
     void userDatabaseTestSuite() {
@@ -303,7 +305,7 @@ class GroovyJdbcSuiteExample {
             variables("id", 1)
             variables { put("tick", "ryze") }
             variables Map.of("a", 1, "b", 2)
-            
+
             // 数据源配置
             configureElements {
                 jdbc {
@@ -315,7 +317,7 @@ class GroovyJdbcSuiteExample {
                     }
                 }
             }
-            
+
             // 前置处理：插入测试数据
             preprocessors {
                 jdbc {
@@ -325,7 +327,7 @@ class GroovyJdbcSuiteExample {
                     }
                 }
             }
-            
+
             // 后置处理：清理数据
             postprocessors {
                 jdbc {
@@ -335,7 +337,7 @@ class GroovyJdbcSuiteExample {
                     }
                 }
             }
-            
+
             children {
                 jdbc {
                     title "步骤1"
@@ -349,7 +351,7 @@ class GroovyJdbcSuiteExample {
                     }
                 }
             }
-            
+
             children {
                 jdbc {
                     title "步骤2"
@@ -359,7 +361,7 @@ class GroovyJdbcSuiteExample {
                     }
                 }
             }
-            
+
             children {
                 jdbc {
                     title "步骤3"
@@ -432,6 +434,7 @@ public void transactionTest() {
 ### 参数化查询
 
 ```java
+
 @Test
 @RyzeTest
 public void parameterizedQuery() {
@@ -440,13 +443,13 @@ public void parameterizedQuery() {
         jdbc.variables("userId", 1);
         jdbc.variables("status", "active");
         jdbc.config(config -> config
-            .datasource("jdbc_source")
-            .sql("SELECT * FROM users WHERE id = ? AND status = ?")
-            .parameters("${userId}", "${status}")
+                .datasource("jdbc_source")
+                .sql("SELECT * FROM users WHERE id = ? AND status = ?")
+                .parameters("${userId}", "${status}")
         );
         jdbc.assertions(assertions -> assertions
-            .json("$[0].id", "${userId}")
-            .json("$[0].status", "${status}")
+                .json("$[0].id", "${userId}")
+                .json("$[0].status", "${status}")
         );
     });
 }
@@ -477,16 +480,16 @@ Ryze JDBC 支持所有兼容 JDBC 标准的数据库：
 ### FAQ
 
 1. **如何处理数据库连接超时？**
-   - 在数据源配置中设置 `max_wait` 参数控制连接超时时间。
+    - 在数据源配置中设置 `max_wait` 参数控制连接超时时间。
 
 2. **如何使用数据库事务？**
-   - 通过 SQL 语句 `START TRANSACTION`、`COMMIT`、`ROLLBACK` 控制事务。
+    - 通过 SQL 语句 `START TRANSACTION`、`COMMIT`、`ROLLBACK` 控制事务。
 
 3. **如何处理 SQL 注入问题？**
-   - 使用参数化查询，通过 `parameters` 配置传递参数值。
+    - 使用参数化查询，通过 `parameters` 配置传递参数值。
 
 4. **如何验证查询结果？**
-   - 使用 `validators` 和 `assertions` 对查询结果进行 JSON 路径验证。
+    - 使用 `validators` 和 `assertions` 对查询结果进行 JSON 路径验证。
 
 ## 📚 相关文档
 

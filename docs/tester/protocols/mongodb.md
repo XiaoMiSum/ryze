@@ -2,15 +2,17 @@
 
 ## 概述
 
-MongoDB 协议支持为 Ryze 测试框架提供了与 MongoDB 数据库进行交互的能力。支持文档的增删改查、聚合查询、索引操作等 MongoDB 核心功能，适用于 NoSQL 数据库的测试场景。
+MongoDB 协议支持为 Ryze 测试框架提供了与 MongoDB 数据库进行交互的能力。支持文档的增删改查、聚合查询、索引操作等 MongoDB
+核心功能，适用于 NoSQL 数据库的测试场景。
 
 ## 依赖引入
 
 ```xml
+
 <dependency>
     <groupId>io.github.xiaomisum</groupId>
     <artifactId>ryze-mongo</artifactId>
-    <version>6.0.1</version>
+    <version>${version}</version>
 </dependency>
 ```
 

@@ -2,7 +2,8 @@
 
 ## 概述
 
-RabbitMQ 协议支持为 Ryze 测试框架提供了与 RabbitMQ 消息代理进行交互的能力。支持多种交换机类型（direct、topic、fanout、headers）、队列管理、路由规则等 AMQP 协议特性。
+RabbitMQ 协议支持为 Ryze 测试框架提供了与 RabbitMQ 消息代理进行交互的能力。支持多种交换机类型（direct、topic、fanout、headers）、队列管理、路由规则等
+AMQP 协议特性。
 
 ## 依赖引入
 
@@ -10,7 +11,7 @@ RabbitMQ 协议支持为 Ryze 测试框架提供了与 RabbitMQ 消息代理进�
 <dependency>
     <groupId>io.github.xiaomisum</groupId>
     <artifactId>ryze-rabbit</artifactId>
-    <version>6.0.1</version>
+    <version>${version}</version>
 </dependency>
 ```
 
@@ -81,44 +82,44 @@ config: # 取样器配置
 import static io.github.xiaomisum.ryze.protocol.rabbitmq.RabbitMQMagicBox.*;
 
 public class RabbitMQApiExample {
-    
+
     public void testDirectExchange() {
         // 直接交换机消息
         Result result = rabbitmq("发送直接消息", builder -> builder
-            .host("localhost")
-            .port(5672)
-            .username("guest")
-            .password("guest")
-            .queue(queue -> queue
-                .name("user.notifications")
-                .durable(true)
-                .autoDelete(false)
-            )
-            .exchange(exchange -> exchange
-                .name("user.direct")
-                .type("direct")
-                .routingKey("user.notification")
-            )
-            .message(Map.of(
-                "userId", 12345,
-                "title", "系统通知",
-                "content", "您的账户已成功注册"
-            ))
+                .host("localhost")
+                .port(5672)
+                .username("guest")
+                .password("guest")
+                .queue(queue -> queue
+                        .name("user.notifications")
+                        .durable(true)
+                        .autoDelete(false)
+                )
+                .exchange(exchange -> exchange
+                        .name("user.direct")
+                        .type("direct")
+                        .routingKey("user.notification")
+                )
+                .message(Map.of(
+                        "userId", 12345,
+                        "title", "系统通知",
+                        "content", "您的账户已成功注册"
+                ))
         );
-        
+
         assertThat(result.isSuccess()).isTrue();
     }
-    
+
     public void testTopicExchange() {
         // 主题交换机消息
         rabbitmq("发送主题消息", builder -> builder
-            .host("localhost")
-            .exchange(exchange -> exchange
-                .name("logs.topic")
-                .type("topic")
-                .routingKey("application.error.database")
-            )
-            .message("数据库连接失败: Connection timeout")
+                .host("localhost")
+                .exchange(exchange -> exchange
+                        .name("logs.topic")
+                        .type("topic")
+                        .routingKey("application.error.database")
+                )
+                .message("数据库连接失败: Connection timeout")
         );
     }
 }
@@ -133,19 +134,19 @@ import static io.github.xiaomisum.ryze.protocol.rabbitmq.RabbitMQMagicBox.*
 def sendQueueMessage() {
     rabbitmq("发送队列消息") { builder ->
         builder.host("localhost")
-               .port(5672)
-               .username("guest")
-               .password("guest")
-               .queue { queue ->
-                   queue.name("task.queue")
-                        .durable(true)
-               }
-               .message([
-                   taskId: UUID.randomUUID().toString(),
-                   type: "email",
-                   recipient: "user@example.com",
-                   subject: "欢迎使用我们的服务"
-               ])
+                .port(5672)
+                .username("guest")
+                .password("guest")
+                .queue { queue ->
+                    queue.name("task.queue")
+                            .durable(true)
+                }
+                .message([
+                        taskId   : UUID.randomUUID().toString(),
+                        type     : "email",
+                        recipient: "user@example.com",
+                        subject  : "欢迎使用我们的服务"
+                ])
     }
 }
 
@@ -160,39 +161,39 @@ suite("RabbitMQ消息测试") { builder ->
                     .timeout(5000)
         }
     }
-    
+
     builder.children { children ->
         // 1. 发送直接消息
         children.rabbitmq("发送直接消息") { rabbitmq ->
             rabbitmq.queue { queue ->
-                        queue.name("direct.queue")
-                             .durable(true)
-                    }
+                queue.name("direct.queue")
+                        .durable(true)
+            }
                     .message("直接消息内容")
         }
-        
+
         // 2. 发送交换机消息
         children.rabbitmq("发送交换机消息") { rabbitmq ->
             rabbitmq.exchange { exchange ->
-                        exchange.name("user.fanout")
-                                .type("fanout")
-                    }
+                exchange.name("user.fanout")
+                        .type("fanout")
+            }
                     .message([
-                        eventType: "user_updated",
-                        userId: "12345",
-                        changes: ["email", "profile"],
-                        timestamp: new Date()
+                            eventType: "user_updated",
+                            userId   : "12345",
+                            changes  : ["email", "profile"],
+                            timestamp: new Date()
                     ])
         }
-        
+
         // 3. 发送主题消息
         ["info", "warning", "error"].each { level ->
             children.rabbitmq("发送${level}日志") { rabbitmq ->
                 rabbitmq.exchange { exchange ->
-                            exchange.name("logs.topic")
-                                    .type("topic")
-                                    .routingKey("application.${level}.service")
-                        }
+                    exchange.name("logs.topic")
+                            .type("topic")
+                            .routingKey("application.${level}.service")
+                }
                         .message("日志内容: ${level} level message")
             }
         }

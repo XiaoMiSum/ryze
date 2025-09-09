@@ -44,7 +44,6 @@ features:
     details: 基于 FreeMarker 模板引擎，支持动态参数和变量替换
 ---
 
-
 # Ryze - 多协议测试框架
 
 Ryze 是一个基于 Java 21 开发的现代化测试框架，专为多协议测试而设计。它通过 JSON
@@ -64,7 +63,7 @@ Ryze 是一个基于 Java 21 开发的现代化测试框架，专为多协议测
 <dependency>
     <groupId>io.github.xiaomisum</groupId>
     <artifactId>ryze</artifactId>
-    <version>6.0.1</version>
+    <version>${version}</version>
 </dependency>
 ```
 

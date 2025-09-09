@@ -2,7 +2,8 @@
 
 ## 📖 概述
 
-HTTP(S) 协议是 Ryze 框架内置支持的核心协议，提供完整的 HTTP/HTTPS 接口测试能力，支持 GET、POST、PUT、DELETE 等各种 HTTP 方法，以及丰富的断言和数据提取功能。
+HTTP(S) 协议是 Ryze 框架内置支持的核心协议，提供完整的 HTTP/HTTPS 接口测试能力，支持 GET、POST、PUT、DELETE 等各种 HTTP
+方法，以及丰富的断言和数据提取功能。
 
 ## 🚀 依赖引入
 
@@ -12,7 +13,7 @@ HTTP 协议支持内置在核心模块中，无需额外依赖：
 <dependency>
     <groupId>io.github.xiaomisum</groupId>
     <artifactId>ryze</artifactId>
-    <version>6.0.1</version>
+    <version>${version}</version>
 </dependency>
 ```
 
@@ -158,10 +159,11 @@ config: # 取样器配置
 import io.github.xiaomisum.ryze.MagicBox;
 import io.github.xiaomisum.ryze.support.testng.annotation.RyzeTest;
 import org.testng.annotations.Test;
+
 import java.util.Map;
 
 public class HttpApiExample {
-    
+
     @Test
     @RyzeTest
     public void testHttpGet() {
@@ -170,16 +172,16 @@ public class HttpApiExample {
             http.variables("id", 1);
             http.title("获取用户信息：id = ${id}");
             http.config(config -> config
-                .protocol("http")
-                .host("127.0.0.1")
-                .port("58081")
-                .method("GET")
-                .path("/user/${id}")
+                    .protocol("http")
+                    .host("127.0.0.1")
+                    .port("58081")
+                    .method("GET")
+                    .path("/user/${id}")
             );
             http.assertions(assertions -> assertions.json("$.data.id", "${id}"));
         });
     }
-    
+
     @Test
     @RyzeTest
     public void testHttpPost() {
@@ -187,16 +189,16 @@ public class HttpApiExample {
         MagicBox.http(http -> {
             http.title("创建用户");
             http.config(config -> config
-                .protocol("http")
-                .host("127.0.0.1")
-                .port("58081")
-                .method("POST")
-                .path("/user")
-                .body(body -> {
-                    body.put("id", "ryze");
-                    body.put("name", "ryze_http_sampler");
-                    body.put("age", 1);
-                })
+                    .protocol("http")
+                    .host("127.0.0.1")
+                    .port("58081")
+                    .method("POST")
+                    .path("/user")
+                    .body(body -> {
+                        body.put("id", "ryze");
+                        body.put("name", "ryze_http_sampler");
+                        body.put("age", 1);
+                    })
             );
             http.assertions(assertions -> assertions.httpStatus(200));
         });
@@ -211,10 +213,11 @@ import io.github.xiaomisum.ryze.MagicBox;
 import io.github.xiaomisum.ryze.support.Collections;
 import io.github.xiaomisum.ryze.support.testng.annotation.RyzeTest;
 import org.testng.annotations.Test;
+
 import java.util.Map;
 
 public class HttpSuiteExample {
-    
+
     @Test
     @RyzeTest
     public void userApiTestSuite() {
@@ -223,60 +226,60 @@ public class HttpSuiteExample {
             suite.variables("t_body", Collections.of("id", "ryze", "name", "ryze_http_preprocessor", "age", 0));
             suite.variables(Map.of("a", 1, "b", 2));
             suite.variables(var -> var.put("c", 3).put("d", 4));
-            
+
             // 配置默认HTTP设置
             suite.configureElements(ele ->
                     ele.http(http -> http.config(config -> config
-                        .protocol("http")
-                        .host("127.0.0.1")
-                        .port("58081")
+                            .protocol("http")
+                            .host("127.0.0.1")
+                            .port("58081")
                     ))
             );
-            
+
             // 前置处理器：新增用户
             suite.preprocessors(pre ->
                     pre.http(http -> {
                         http.title("前置处理器新增用户");
                         http.config(config -> config
-                            .method("PUT")
-                            .path("/user")
-                            .body("${t_body}")
+                                .method("PUT")
+                                .path("/user")
+                                .body("${t_body}")
                         );
                         http.extractors(extract -> extract.json("t_id", "$.data.id"));
                     })
             );
-            
+
             suite.children(child -> {
                 child.http(http -> http
-                    .title("步骤1——获取用户：id = ${id}")
-                    .config(config -> config
-                        .method("GET")
-                        .path("/user/${id}")
-                    )
-                    .validators(validator -> validator.json("$.data.id", "${id}"))
+                        .title("步骤1——获取用户：id = ${id}")
+                        .config(config -> config
+                                .method("GET")
+                                .path("/user/${id}")
+                        )
+                        .validators(validator -> validator.json("$.data.id", "${id}"))
                 );
-                
+
                 child.http(http -> http
-                    .title("步骤2——修改用户：id = ${t_id}")
-                    .config(config -> config
-                        .method("POST")
-                        .path("/user")
-                        .body(body -> {
-                            body.put("id", "ryze");
-                            body.put("name", "ryze_http_sampler");
-                            body.put("age", 1);
-                        })
-                    )
-                    .validators(validator -> validator.httpStatus(200))
+                        .title("步骤2——修改用户：id = ${t_id}")
+                        .config(config -> config
+                                .method("POST")
+                                .path("/user")
+                                .body(body -> {
+                                    body.put("id", "ryze");
+                                    body.put("name", "ryze_http_sampler");
+                                    body.put("age", 1);
+                                })
+                        )
+                        .validators(validator -> validator.httpStatus(200))
                 );
-                
+
                 child.http(http -> http
-                    .title("步骤3——获取用户：id = ${t_body.id}")
-                    .config(config -> config
-                        .method("GET")
-                        .path("/user/${t_body.id}")
-                    )
-                    .validators(validator -> validator.json("$.data.name", "ryze_http_sampler"))
+                        .title("步骤3——获取用户：id = ${t_body.id}")
+                        .config(config -> config
+                                .method("GET")
+                                .path("/user/${t_body.id}")
+                        )
+                        .validators(validator -> validator.json("$.data.name", "ryze_http_sampler"))
                 );
             });
         });
@@ -294,7 +297,7 @@ import io.github.xiaomisum.ryze.support.testng.annotation.RyzeTest
 import org.testng.annotations.Test
 
 class GroovyHttpExample {
-    
+
     @Test
     @RyzeTest
     void testHttpGet() {
@@ -320,7 +323,7 @@ class GroovyHttpExample {
             }
         }
     }
-    
+
     @Test
     @RyzeTest
     void testHttpPost() {
@@ -356,7 +359,7 @@ import io.github.xiaomisum.ryze.support.testng.annotation.RyzeTest
 import org.testng.annotations.Test
 
 class GroovyHttpSuiteExample {
-    
+
     @Test
     @RyzeTest
     void userApiTestSuite() {
@@ -370,7 +373,7 @@ class GroovyHttpSuiteExample {
                 put([a: 1, b: 2])
             }
             variables Collections.newHashMap([c: 3, d: 4])
-            
+
             // HTTP默认配置
             configureElements {
                 http {
@@ -382,7 +385,7 @@ class GroovyHttpSuiteExample {
                     }
                 }
             }
-            
+
             // 前置处理器：新增用户
             preprocessors {
                 http {
@@ -400,7 +403,7 @@ class GroovyHttpSuiteExample {
                     }
                 }
             }
-            
+
             children {
                 http {
                     title "步骤1——获取用户：id = \${id}"
@@ -417,7 +420,7 @@ class GroovyHttpSuiteExample {
                     }
                 }
             }
-            
+
             children {
                 http {
                     title "步骤2——修改用户：id=\${t_id}"
@@ -435,7 +438,7 @@ class GroovyHttpSuiteExample {
                     }
                 }
             }
-            
+
             children {
                 http {
                     title "步骤3——获取用户：id =\${t_body.id}"
@@ -466,16 +469,16 @@ class GroovyHttpSuiteExample {
 ### FAQ
 
 1. **当一个测试集合内存在多个 HTTP默认配置时怎么办？**
-   - 多个 HTTP默认配置中的配置会合并，相同配置项以后定义的 HTTP默认配置的值为准。
+    - 多个 HTTP默认配置中的配置会合并，相同配置项以后定义的 HTTP默认配置的值为准。
 
 2. **取样器配置与默认配置冲突时如何处理？**
-   - 当取样器中的 HTTP配置项 与 HTTP默认配置中的配置项重复时，以取样器中的配置项的值为准。
+    - 当取样器中的 HTTP配置项 与 HTTP默认配置中的配置项重复时，以取样器中的配置项的值为准。
 
 3. **如何处理 HTTPS 证书问题？**
-   - 可以在配置中设置 `protocol: "https"` 并根据需要配置证书验证选项。
+    - 可以在配置中设置 `protocol: "https"` 并根据需要配置证书验证选项。
 
 4. **支持哪些 HTTP 方法？**
-   - 支持所有标准 HTTP 方法：GET、POST、PUT、DELETE、PATCH、HEAD、OPTIONS 等。
+    - 支持所有标准 HTTP 方法：GET、POST、PUT、DELETE、PATCH、HEAD、OPTIONS 等。
 
 ## 📚 相关文档
 

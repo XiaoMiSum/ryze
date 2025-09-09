@@ -32,7 +32,7 @@ mkdir -p src/test/java
     <parent>
         <groupId>io.github.xiaomisum</groupId>
         <artifactId>ryze-parent</artifactId>
-        <version>6.0.1</version>
+        <version>${version}</version>
     </parent>
 
     <artifactId>ryze-myprotocol</artifactId>
@@ -428,6 +428,7 @@ public class MyProtocolMagicBox {
 
 ```java
 import org.testng.annotations.Test;
+
 import static org.testng.Assert.*;
 
 class MyProtocolSamplerTest {

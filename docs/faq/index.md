@@ -23,7 +23,7 @@
 <dependency>
     <groupId>io.github.xiaomisum</groupId>
     <artifactId>ryze</artifactId>
-    <version>6.0.1</version>
+    <version>${version}</version>
 </dependency>
 ```
 
@@ -34,7 +34,7 @@
 <dependency>
     <groupId>io.github.xiaomisum</groupId>
     <artifactId>ryze-dubbo</artifactId>
-    <version>6.0.1</version>
+    <version>${version}</version>
 </dependency>
 ```
 
@@ -66,7 +66,7 @@ mvn dependency:tree
 <dependency>
     <groupId>io.github.xiaomisum</groupId>
     <artifactId>ryze-dubbo</artifactId>
-    <version>6.0.1</version>
+    <version>${version}</version>
     <exclusions>
         <exclusion>
             <groupId>org.slf4j</groupId>
@@ -868,7 +868,7 @@ public void test() {
 <!-- 先升级到中间版本测试 -->
 <ryze.version>5.9.9</ryze.version>
         <!-- 确认无问题后再升级到目标版本 -->
-<ryze.version>6.0.1</ryze.version>
+<ryze.version>${version}</ryze.version>
 ```
 
 3. **测试验证**：
