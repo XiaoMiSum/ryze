@@ -83,6 +83,14 @@ public class SyncTimer extends AbstractProcessor<SyncTimer, SyncTimer.TimerConfi
             this.timeout = builder.timeout;
         }
 
+        public int getTimeout() {
+            return timeout;
+        }
+
+        public void setTimeout(int timeout) {
+            this.timeout = timeout;
+        }
+        
         @Override
         public TimerConfigureItem merge(TimerConfigureItem other) {
             // 无需合并，返回当前对象的拷贝

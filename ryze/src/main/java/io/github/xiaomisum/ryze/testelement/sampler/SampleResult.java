@@ -38,10 +38,10 @@ import java.time.ZoneId;
 
 /**
  * 取样结果抽象类，用于存储和管理取样器执行的结果信息。
- * 
+ *
  * <p>该类记录了取样器执行过程中的关键信息，包括执行时间、请求数据、响应数据等，
  * 为测试报告生成和结果分析提供数据支持。</p>
- * 
+ *
  * <p>主要功能包括：
  * <ul>
  *   <li>记录取样开始和结束时间</li>
@@ -58,17 +58,17 @@ public abstract class SampleResult extends Result {
      * 取样开始时间
      */
     private LocalDateTime sampleStartTime;
-    
+
     /**
      * 取样结束时间
      */
     private LocalDateTime sampleEndTime;
-    
+
     /**
      * 请求数据
      */
     private Real request;
-    
+
     /**
      * 响应数据
      */
@@ -95,18 +95,16 @@ public abstract class SampleResult extends Result {
 
     /**
      * 标记取样开始时间
-     * 
+     *
      * <p>如果取样开始时间尚未设置，则记录当前时间作为取样开始时间。</p>
      */
     public void sampleStart() {
-        if (sampleStartTime == null) {
-            setSampleEndTime(LocalDateTime.now(ZoneId.systemDefault()));
-        }
+        setSampleStartTime(LocalDateTime.now(ZoneId.systemDefault()));
     }
 
     /**
      * 标记取样结束时间
-     * 
+     *
      * <p>如果取样结束时间尚未设置，则记录当前时间作为取样结束时间。</p>
      */
     public void sampleEnd() {
@@ -153,7 +151,7 @@ public abstract class SampleResult extends Result {
 
     /**
      * 获取执行时长
-     * 
+     *
      * <p>计算取样开始时间到结束时间的间隔，并格式化为秒为单位的字符串。</p>
      *
      * @return 执行时长字符串，格式为 "X.XX s"
@@ -202,7 +200,7 @@ public abstract class SampleResult extends Result {
 
     /**
      * 数据实体抽象类，用于表示请求或响应的数据内容
-     * 
+     *
      * <p>该类提供了数据的字节表示和字符串表示之间的转换功能，
      * 并定义了数据格式化的抽象方法供子类实现。</p>
      */
@@ -212,7 +210,7 @@ public abstract class SampleResult extends Result {
          * 数据的字节表示
          */
         private byte[] bytes;
-        
+
         /**
          * 数据的字符串表示（缓存）
          */
@@ -255,7 +253,7 @@ public abstract class SampleResult extends Result {
 
         /**
          * 获取数据的字符串表示
-         * 
+         *
          * <p>如果字符串表示尚未缓存，则从字节表示转换得到。</p>
          *
          * @return 数据的字符串表示
@@ -270,7 +268,7 @@ public abstract class SampleResult extends Result {
 
     /**
      * 默认数据实体实现类
-     * 
+     *
      * <p>该类提供了数据格式化的默认实现，直接返回数据的字符串表示。</p>
      */
     public static class DefaultReal extends Real {
