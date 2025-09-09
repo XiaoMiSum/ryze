@@ -31,9 +31,11 @@ package io.github.xiaomisum.ryze.interceptor.report;
 import io.github.xiaomisum.ryze.TestStatus;
 import io.github.xiaomisum.ryze.context.ContextWrapper;
 import io.github.xiaomisum.ryze.testelement.AbstractTestElement;
+import io.github.xiaomisum.ryze.testelement.sampler.SampleResult;
 import io.qameta.allure.Allure;
 import io.qameta.allure.model.StepResult;
 
+import java.sql.Timestamp;
 import java.util.Objects;
 
 import static io.qameta.allure.util.ResultsUtils.getStatus;
@@ -70,8 +72,11 @@ public interface AllureReportListener<T extends AbstractTestElement<?, ?, ?>> ex
      * @param context 上下文包装器，包含测试执行过程中的各种信息
      */
     static void startStep(String name, ContextWrapper context) {
-        String uuid = context.getUuid();
-        var step = new StepResult().setName(name)
+        var uuid = context.getUuid();
+        var startTime = context.getTestResult() instanceof SampleResult result ? result.getSampleStartTime() : context.getTestResult().getStartTime();
+        var endTime = context.getTestResult() instanceof SampleResult result ? result.getSampleEndTime() : context.getTestResult().getEndTime();
+        var step = new StepResult().setName(name).setStart(Timestamp.valueOf(startTime).getTime())
+                .setStop(Timestamp.valueOf(endTime).getTime())
                 .setStatus(getStatus(context.getTestResult().getThrowable()).orElse(context.getTestResult().getStatus().getAllureStatus()))
                 .setStatusDetails(getStatusDetails(context.getTestResult().getThrowable()).orElse(null));
         Allure.getLifecycle().startStep(uuid, step);
