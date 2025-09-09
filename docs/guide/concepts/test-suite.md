@@ -116,13 +116,13 @@ variables:
   # 环境配置
   environment: test
   base_url: https://test-api.example.com
-  
+
   # 数据库配置
   database:
     host: test-db.example.com
     port: 3306
     name: user_system_test
-  
+
   # 公共认证信息
   admin_credentials:
     username: admin
@@ -138,7 +138,7 @@ configelements:
     password: ${db_password}
     max_active: 10
     max_wait: 5000
-  
+
   # HTTP 全局配置
   - testclass: http_configure
     protocol: https
@@ -163,7 +163,7 @@ postprocessors:
 children:
   - title: 用户模块测试
     # 模块级配置...
-  
+
   - title: 角色模块测试
     # 模块级配置...
 ```
@@ -181,7 +181,7 @@ variables:
     username: testuser
     email: test@example.com
     department: IT
-  
+
   # 测试数据
   test_users:
     - { id: 1001, name: "张三", role: "admin" }
@@ -212,10 +212,10 @@ postprocessors:
 children:
   - title: 用户创建测试
     # 用例级配置...
-  
+
   - title: 用户查询测试
     # 用例级配置...
-  
+
   - title: 用户更新测试
     # 用例级配置...
 ```
@@ -234,7 +234,7 @@ variables:
     password: ${RandomString(length=12)}
     real_name: ${Faker('name.fullName')}
     phone: ${Faker('phoneNumber.cellPhone')}
-  
+
   expected_result:
     status: "success"
     code: 200
@@ -264,9 +264,9 @@ children:
       - { testclass: json, field: '$.data.user_id', ref_name: created_user_id }
       - { testclass: json, field: '$.data.token', ref_name: user_token }
     assertions:
-      - { testclass: json, field: '$.status', expected: ${expected_result.status}, rule: '==' }
-      - { testclass: http, field: 'status', expected: ${expected_result.code}, rule: '==' }
-  
+      - { testclass: json, field: '$.status', expected: ${ expected_result.status }, rule: '==' }
+      - { testclass: http, field: 'status', expected: ${ expected_result.code }, rule: '==' }
+
   # 步骤2：验证用户信息
   - title: "验证用户信息"
     testclass: http
@@ -276,17 +276,17 @@ children:
       headers:
         Authorization: Bearer ${user_token}
     assertions:
-      - { testclass: json, field: '$.data.username', expected: ${new_user.username}, rule: '==' }
-      - { testclass: json, field: '$.data.email', expected: ${new_user.email}, rule: '==' }
-  
+      - { testclass: json, field: '$.data.username', expected: ${ new_user.username }, rule: '==' }
+      - { testclass: json, field: '$.data.email', expected: ${ new_user.email }, rule: '==' }
+
   # 步骤3：数据库验证
   - title: "数据库验证用户信息"
     testclass: jdbc
     config:
       sql: "SELECT username, email, status FROM users WHERE id = ?"
-      parameters: [${created_user_id}]
+      parameters: [ ${ created_user_id } ]
     assertions:
-      - { testclass: result, expected: ${new_user.username}, rule: 'contains' }
+      - { testclass: result, expected: ${ new_user.username }, rule: 'contains' }
 ```
 
 ## 📚 最佳实践
@@ -318,18 +318,18 @@ variables:
   # 环境配置 - 使用小写下划线
   environment: test
   base_url: https://test-api.example.com
-  
+
   # 嵌套对象 - 使用小写下划线
   database_config:
     host: localhost
     port: 3306
     username: test_user
-  
+
   # 数组数据 - 使用复数形式
   test_users:
     - { id: 1, name: "user1" }
     - { id: 2, name: "user2" }
-  
+
   # 常量 - 使用大写下划线
   MAX_RETRY_COUNT: 3
   DEFAULT_TIMEOUT: 30000
@@ -366,13 +366,13 @@ variables:
     department: IT
     role: user
     status: active
-  
+
   # 引用公共配置
   test_user_1:
     <<: *standard_user
     username: testuser1
     email: user1@test.com
-  
+
   test_user_2:
     <<: *standard_user
     username: testuser2
@@ -392,39 +392,5 @@ variables:
 - **并发执行**：合理使用并发执行提高效率
 - **数据缓存**：复用公共数据，减少重复操作
 - **资源管理**：合理配置连接池和线程数
-
----
-
-## 📚 相关文档
-
-- [变量与函数](./变量与函数.md) - 学习动态数据管理技巧
-- [提取器使用](./提取器.md) - 掌握数据提取和传递
-- [验证器配置](./验证器.md) - 了解结果验证方法
-- [拦截器机制](./拦截器.md) - 实现高级测试逻辑
-- [配置元件](./配置元件.md) - 学习基础配置管理
-- [前置处理器](./前置处理器.md) - 掌握测试前的预处理机制
-- [后置处理器](./后置处理器.md) - 了解测试后的后处理机制
-- [取样器](./取样器.md) - 了解各种协议的取样器使用
-
-### 参考示例
-
-查看框架提供的模板文件：
-
-- [项目级集合模板](../template/测试集合/测试集合（项目）.yaml)
-- [模块级集合模板](../template/测试集合/测试集合（模块）.yaml)
-- [用例级集合模板](../template/测试集合/测试用例.yaml)
-
-### 协议文档
-
-- [HTTP 协议](../protocols/HTTP.md) - HTTP 协议详细说明
-- [JDBC 协议](../protocols/JDBC.md) - 数据库协议详细说明
-- [Redis 协议](../protocols/Redis.md) - Redis 协议详细说明
-- [Dubbo 协议](../protocols/Dubbo.md) - Dubbo 协议详细说明
-- [Kafka 协议](../protocols/Kafka.md) - Kafka 协议详细说明
-- [RabbitMQ 协议](../protocols/RabbitMQ.md) - RabbitMQ 协议详细说明
-- [ActiveMQ 协议](../protocols/ActiveMQ.md) - ActiveMQ 协议详细说明
-- [MongoDB 协议](../protocols/MongoDB.md) - MongoDB 协议详细说明
-
----
 
 **💡 提示**：合理的测试集合结构设计是测试项目成功的关键，建议在项目初期就认真考虑和设计好整体结构！

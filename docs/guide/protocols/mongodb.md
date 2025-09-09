@@ -8,6 +8,7 @@ MongoDB 协议支持为 Ryze 测试框架提供了与 MongoDB 数据库进行交
 ## 依赖引入
 
 ```xml
+
 <dependency>
     <groupId>io.github.xiaomisum</groupId>
     <artifactId>ryze-mongo</artifactId>
@@ -284,6 +285,4 @@ suite("MongoDB数据库测试") { builder ->
 
 ## 相关文档
 
-- [配置元件示例](../template/配置元件/mongo_defaults.yaml)
-- [取样器示例](../template/取样器/mongo_sampler.yaml)
 - [MongoDB 官方文档](https://docs.mongodb.com/)

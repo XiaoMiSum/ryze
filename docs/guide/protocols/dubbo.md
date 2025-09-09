@@ -8,6 +8,7 @@ Dubbo 协议支持为 Ryze 测试框架提供了与 Dubbo 微服务进行交互�
 ## 依赖引入
 
 ```xml
+
 <dependency>
     <groupId>io.github.xiaomisum</groupId>
     <artifactId>ryze-dubbo</artifactId>
@@ -588,7 +589,4 @@ def distributedServiceTest() {
 
 ## 相关文档
 
-- [配置元件示例](../template/配置元件/dubbo_defaults.yaml)
-- [处理器示例](../template/处理器/dubbo_preprocessor.yaml)
-- [取样器示例](../template/取样器/dubbo_sampler.yaml)
 - [Dubbo 官方文档](https://dubbo.apache.org/zh/docs/)

@@ -8,6 +8,7 @@ AMQP 协议特性。
 ## 依赖引入
 
 ```xml
+
 <dependency>
     <groupId>io.github.xiaomisum</groupId>
     <artifactId>ryze-rabbit</artifactId>
@@ -203,6 +204,4 @@ suite("RabbitMQ消息测试") { builder ->
 
 ## 相关文档
 
-- [配置元件示例](../template/配置元件/rabbit_defaults.yaml)
-- [取样器示例](../template/取样器/rabbit_sampler.yaml)
 - [RabbitMQ 官方文档](https://www.rabbitmq.com/documentation.html)

@@ -45,7 +45,7 @@
 # 通用配置元件结构
 - testclass: 协议类型
   config:
-    # 协议特定配置项
+  # 协议特定配置项
 ```
 
 ## 🔗 配置继承
@@ -118,8 +118,6 @@ children:
 
 用于定义 HTTP/HTTPS 请求的基础配置。
 
-**配置模板**：[http_defaults.yaml](../template/配置元件/http_defaults.yaml)
-
 ```yaml
 - testclass: http
   config:
@@ -133,13 +131,11 @@ children:
       h1: 1
 ```
 
-**相关文档**：[HTTP 协议文档](../protocols/HTTP.md#配置元件)
+**相关文档**：[HTTP 协议文档](/guide/protocols/http)
 
 ### 🗄️ JDBC 配置元件
 
 用于定义数据库连接的基础配置。
-
-**配置模板**：[jdbc_datasource.yaml](../template/配置元件/jdbc_datasource.yaml)
 
 ```yaml
 - testclass: jdbc
@@ -151,13 +147,11 @@ children:
     max_active: 10
 ```
 
-**相关文档**：[JDBC 协议文档](../protocols/JDBC.md#配置元件)
+**相关文档**：[JDBC 协议文档](/guide/protocols/jdbc)
 
 ### 🗃️ Redis 配置元件
 
 用于定义 Redis 连接的基础配置。
-
-**配置模板**：[redis_datasource.yaml](../template/配置元件/redis_datasource.yaml)
 
 ```yaml
 - testclass: redis
@@ -169,13 +163,11 @@ children:
     timeout: 2000
 ```
 
-**相关文档**：[Redis 协议文档](../protocols/Redis.md#配置元件)
+**相关文档**：[Redis 协议文档](/guide/protocols/redis)
 
 ### 🔌 Dubbo 配置元件
 
 用于定义 Dubbo 服务调用的基础配置。
-
-**配置模板**：[dubbo_defaults.yaml](../template/配置元件/dubbo_defaults.yaml)
 
 ```yaml
 - testclass: dubbo
@@ -186,13 +178,11 @@ children:
     timeout: 5000
 ```
 
-**相关文档**：[Dubbo 协议文档](../protocols/Dubbo.md#配置元件)
+**相关文档**：[Dubbo 协议文档](/guide/protocols/dubbo)
 
 ### 🚀 Kafka 配置元件
 
 用于定义 Kafka 消息发送的基础配置。
-
-**配置模板**：[kafka_defaults.yaml](../template/配置元件/kafka_defaults.yaml)
 
 ```yaml
 - testclass: kafka
@@ -203,13 +193,11 @@ children:
     value_serializer: org.apache.kafka.common.serialization.StringSerializer
 ```
 
-**相关文档**：[Kafka 协议文档](../protocols/Kafka.md#配置元件)
+**相关文档**：[Kafka 协议文档](/guide/protocols/kafka)
 
 ### 🐰 RabbitMQ 配置元件
 
 用于定义 RabbitMQ 消息发送的基础配置。
-
-**配置模板**：[rabbit_defaults.yaml](../template/配置元件/rabbit_defaults.yaml)
 
 ```yaml
 - testclass: rabbit
@@ -222,13 +210,11 @@ children:
     exchange: test-exchange
 ```
 
-**相关文档**：[RabbitMQ 协议文档](../protocols/RabbitMQ.md#配置元件)
+**相关文档**：[RabbitMQ 协议文档](/guide/protocols/rabbitmq)
 
 ### 🎯 ActiveMQ 配置元件
 
 用于定义 ActiveMQ 消息发送的基础配置。
-
-**配置模板**：[active_defaults.yaml](../template/配置元件/active_defaults.yaml)
 
 ```yaml
 - testclass: active
@@ -239,13 +225,11 @@ children:
     queue_name: test-queue
 ```
 
-**相关文档**：[ActiveMQ 协议文档](../protocols/ActiveMQ.md#配置元件)
+**相关文档**：[ActiveMQ 协议文档](/guide/protocols/activemq)
 
 ### 🍃 MongoDB 配置元件
 
 用于定义 MongoDB 连接的基础配置。
-
-**配置模板**：[mongo_defaults.yaml](../template/配置元件/mongo_defaults.yaml)
 
 ```yaml
 - testclass: mongo
@@ -255,7 +239,7 @@ children:
     collection: test_collection
 ```
 
-**相关文档**：[MongoDB 协议文档](../protocols/MongoDB.md#配置元件)
+**相关文档**：[MongoDB 协议文档](/guide/protocols/mongodb)
 
 ## 🔧 使用场景
 
@@ -274,7 +258,7 @@ configelements:
       headers:
         User-Agent: EcommerceTestFramework/1.0
         Accept: application/json
-  
+
   # 数据库全局配置
   - testclass: jdbc
     config:
@@ -282,7 +266,7 @@ configelements:
       url: jdbc:mysql://db.ecommerce.com:3306/ecommerce_test
       username: ${db_username}
       password: ${db_password}
-  
+
   # 缓存全局配置
   - testclass: redis
     config:
@@ -308,7 +292,7 @@ configelements:
       path: /api/v1/orders
       headers:
         X-Service: OrderService
-  
+
   # 订单数据库配置
   - testclass: jdbc
     config:
@@ -349,7 +333,7 @@ configelements:
   - testclass: http
     config:
       host: ${env_config.${environment}.api_host}
-  
+
   - testclass: jdbc
     config:
       url: ${env_config.${environment}.db_url}
@@ -443,27 +427,5 @@ configelements:
 - **超时设置**：根据实际网络环境设置合适的超时时间
 - **缓存利用**：对于不变的配置，考虑使用缓存机制
 - **懒加载**：仅在需要时才初始化配置元件
-
----
-
-## 📚 相关文档
-
-- [测试集合管理](./测试集合.md) - 了解测试集合的组织和管理
-- [前置处理器](./前置处理器.md) - 学习测试前的预处理机制
-- [后置处理器](./后置处理器.md) - 掌握测试后的后处理机制
-- [取样器](./取样器.md) - 了解各种协议的取样器使用
-
-### 协议文档
-
-- [HTTP 协议](../protocols/HTTP.md#配置元件) - HTTP 配置元件详细说明
-- [JDBC 协议](../protocols/JDBC.md#配置元件) - 数据库配置元件详细说明
-- [Redis 协议](../protocols/Redis.md#配置元件) - Redis 配置元件详细说明
-- [Dubbo 协议](../protocols/Dubbo.md#配置元件) - Dubbo 配置元件详细说明
-- [Kafka 协议](../protocols/Kafka.md#配置元件) - Kafka 配置元件详细说明
-- [RabbitMQ 协议](../protocols/RabbitMQ.md#配置元件) - RabbitMQ 配置元件详细说明
-- [ActiveMQ 协议](../protocols/ActiveMQ.md#配置元件) - ActiveMQ 配置元件详细说明
-- [MongoDB 协议](../protocols/MongoDB.md#配置元件) - MongoDB 配置元件详细说明
-
----
 
 **💡 提示**：合理使用配置元件可以显著提高测试配置的可维护性和复用性，建议在项目初期就设计好配置元件的分层结构！

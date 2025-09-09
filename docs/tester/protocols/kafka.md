@@ -7,6 +7,7 @@ Kafka 协议支持为 Ryze 测试框架提供了与 Apache Kafka 消息流平台
 ## 依赖引入
 
 ```xml
+
 <dependency>
     <groupId>io.github.xiaomisum</groupId>
     <artifactId>ryze-kafka</artifactId>
@@ -650,7 +651,4 @@ def performanceTest() {
 
 ## 相关文档
 
-- [配置元件示例](../template/配置元件/kafka_defaults.yaml)
-- [处理器示例](../template/处理器/kafka_preprocessor.yaml)
-- [取样器示例](../template/取样器/kafka_sampler.yaml)
 - [Kafka 官方文档](https://kafka.apache.org/documentation/)

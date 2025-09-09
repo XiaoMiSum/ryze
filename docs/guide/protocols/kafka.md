@@ -7,6 +7,7 @@ Kafka 协议支持为 Ryze 测试框架提供了与 Apache Kafka 消息流平台
 ## 依赖引入
 
 ```xml
+
 <dependency>
     <groupId>io.github.xiaomisum</groupId>
     <artifactId>ryze-kafka</artifactId>
@@ -339,33 +340,33 @@ import static io.github.xiaomisum.ryze.protocol.kafka.KafkaMagicBox.*
 def sendUserEvent() {
     kafka("用户登录事件") { builder ->
         builder.bootstrapServers("localhost:9092")
-               .topic("user.events")
-               .key("user-001")
-               .message([
-                   eventType: "login",
-                   userId: "001",
-                   loginTime: new Date(),
-                   source: "web"
-               ])
-               .acks(1)
-               .retries(3)
+                .topic("user.events")
+                .key("user-001")
+                .message([
+                        eventType: "login",
+                        userId   : "001",
+                        loginTime: new Date(),
+                        source   : "web"
+                ])
+                .acks(1)
+                .retries(3)
     }
 }
 
 // 发送不同类型的事件
 def sendVariousEvents() {
     def events = [
-        [type: "click", data: [button: "submit", page: "/login"]],
-        [type: "page_view", data: [url: "/dashboard", duration: 30]],
-        [type: "api_call", data: [endpoint: "/api/users", method: "GET"]]
+            [type: "click", data: [button: "submit", page: "/login"]],
+            [type: "page_view", data: [url: "/dashboard", duration: 30]],
+            [type: "api_call", data: [endpoint: "/api/users", method: "GET"]]
     ]
-    
+
     events.each { event ->
         kafka("发送${event.type}事件") { builder ->
             builder.bootstrapServers("localhost:9092")
-                   .topic("user.behavior")
-                   .key("user-001")
-                   .message(event)
+                    .topic("user.behavior")
+                    .key("user-001")
+                    .message(event)
         }
     }
 }
@@ -373,19 +374,19 @@ def sendVariousEvents() {
 // 高吞吐量消息发送
 def sendHighVolumeMessages() {
     def batchSize = 1000
-    
+
     (1..batchSize).each { i ->
         kafka("批量消息${i}") { builder ->
             builder.bootstrapServers("localhost:9092")
-                   .topic("high.volume")
-                   .key("batch-${i % 10}") // 分布到10个分区
-                   .message([
-                       id: i,
-                       timestamp: new Date(),
-                       data: "批量数据${i}"
-                   ])
-                   .lingerMs(50) // 批量发送优化
-                   .batchSize(16384)
+                    .topic("high.volume")
+                    .key("batch-${i % 10}") // 分布到10个分区
+                    .message([
+                            id       : i,
+                            timestamp: new Date(),
+                            data     : "批量数据${i}"
+                    ])
+                    .lingerMs(50) // 批量发送优化
+                    .batchSize(16384)
         }
     }
 }
@@ -402,221 +403,221 @@ suite("Kafka事件流测试") { builder ->
     builder.configure { configure ->
         configure.kafka { kafka ->
             kafka.bootstrapServers("localhost:9092")
-                 .acks(1)
-                 .retries(5)
-                 .lingerMs(20)
+                    .acks(1)
+                    .retries(5)
+                    .lingerMs(20)
         }
     }
-    
+
     builder.children { children ->
         // 1. 前置处理：清理并初始化
         children.kafkaPreprocessor("初始化测试环境") { preprocessor ->
             preprocessor.topic("test.control")
-                        .key("init")
-                        .message([
-                            action: "initialize",
-                            testSuite: "groovy-kafka-test",
-                            startTime: new Date(),
+                    .key("init")
+                    .message([
+                            action     : "initialize",
+                            testSuite  : "groovy-kafka-test",
+                            startTime  : new Date(),
                             environment: "testing"
-                        ])
+                    ])
         }
-        
+
         // 2. 用户生命周期事件测试
         children.kafka("用户注册事件") { kafka ->
             kafka.topic("user.lifecycle")
-                 .key("user-groovy-001")
-                 .message([
-                     eventType: "user_registered",
-                     userId: "GROOVY-USER-001",
-                     email: "groovy@test.com",
-                     profile: [
-                         name: "Groovy测试用户",
-                         age: 30,
-                         city: "北京",
-                         interests: ["编程", "测试", "Kafka"]
-                     ],
-                     registrationTime: new Date(),
-                     source: "mobile_app",
-                     metadata: [
-                         platform: "Android",
-                         version: "1.2.3",
-                         deviceId: "DEV-001"
-                     ]
-                 ])
+                    .key("user-groovy-001")
+                    .message([
+                            eventType       : "user_registered",
+                            userId          : "GROOVY-USER-001",
+                            email           : "groovy@test.com",
+                            profile         : [
+                                    name     : "Groovy测试用户",
+                                    age      : 30,
+                                    city     : "北京",
+                                    interests: ["编程", "测试", "Kafka"]
+                            ],
+                            registrationTime: new Date(),
+                            source          : "mobile_app",
+                            metadata        : [
+                                    platform: "Android",
+                                    version : "1.2.3",
+                                    deviceId: "DEV-001"
+                            ]
+                    ])
         }
-        
+
         // 3. 商品浏览事件
         def products = ["手机", "笔记本电脑", "耳机", "鼠标", "键盘"]
         products.each { product ->
             children.kafka("浏览${product}事件") { kafka ->
                 kafka.topic("user.behavior")
-                     .key("user-groovy-001")
-                     .message([
-                         eventType: "product_viewed",
-                         userId: "GROOVY-USER-001",
-                         productName: product,
-                         productId: "PROD-${product.hashCode()}",
-                         viewTime: new Date(),
-                         duration: (Math.random() * 60).intValue(),
-                         source: "product_list"
-                     ])
+                        .key("user-groovy-001")
+                        .message([
+                                eventType  : "product_viewed",
+                                userId     : "GROOVY-USER-001",
+                                productName: product,
+                                productId  : "PROD-${product.hashCode()}",
+                                viewTime   : new Date(),
+                                duration   : (Math.random() * 60).intValue(),
+                                source     : "product_list"
+                        ])
             }
         }
-        
+
         // 4. 购物车事件
         children.kafka("添加购物车事件") { kafka ->
             kafka.topic("cart.events")
-                 .key("user-groovy-001")
-                 .message([
-                     eventType: "item_added_to_cart",
-                     userId: "GROOVY-USER-001",
-                     cartId: "CART-GROOVY-001",
-                     item: [
-                         productId: "PROD-${products[0].hashCode()}",
-                         productName: products[0],
-                         quantity: 1,
-                         price: 2999.99
-                     ],
-                     cartTotal: 2999.99,
-                     timestamp: new Date()
-                 ])
+                    .key("user-groovy-001")
+                    .message([
+                            eventType: "item_added_to_cart",
+                            userId   : "GROOVY-USER-001",
+                            cartId   : "CART-GROOVY-001",
+                            item     : [
+                                    productId  : "PROD-${products[0].hashCode()}",
+                                    productName: products[0],
+                                    quantity   : 1,
+                                    price      : 2999.99
+                            ],
+                            cartTotal: 2999.99,
+                            timestamp: new Date()
+                    ])
         }
-        
+
         // 5. 订单事件流
         children.kafka("订单创建事件") { kafka ->
             kafka.topic("order.events")
-                 .key("order-groovy-001")
-                 .message([
-                     eventType: "order_created",
-                     orderId: "ORDER-GROOVY-001",
-                     customerId: "GROOVY-USER-001",
-                     items: [
-                         [
-                             productId: "PROD-${products[0].hashCode()}",
-                             productName: products[0],
-                             quantity: 1,
-                             unitPrice: 2999.99,
-                             totalPrice: 2999.99
-                         ]
-                     ],
-                     orderTotal: 2999.99,
-                     currency: "CNY",
-                     shippingAddress: [
-                         street: "测试街道123号",
-                         city: "北京",
-                         zipCode: "100000"
-                     ],
-                     paymentMethod: "alipay",
-                     orderTime: new Date(),
-                     status: "pending"
-                 ])
+                    .key("order-groovy-001")
+                    .message([
+                            eventType      : "order_created",
+                            orderId        : "ORDER-GROOVY-001",
+                            customerId     : "GROOVY-USER-001",
+                            items          : [
+                                    [
+                                            productId  : "PROD-${products[0].hashCode()}",
+                                            productName: products[0],
+                                            quantity   : 1,
+                                            unitPrice  : 2999.99,
+                                            totalPrice : 2999.99
+                                    ]
+                            ],
+                            orderTotal     : 2999.99,
+                            currency       : "CNY",
+                            shippingAddress: [
+                                    street : "测试街道123号",
+                                    city   : "北京",
+                                    zipCode: "100000"
+                            ],
+                            paymentMethod  : "alipay",
+                            orderTime      : new Date(),
+                            status         : "pending"
+                    ])
         }
-        
+
         // 6. 库存变更事件
         children.kafka("库存减少事件") { kafka ->
             kafka.topic("inventory.changes")
-                 .key("product-${products[0].hashCode()}")
-                 .message([
-                     eventType: "stock_decreased",
-                     productId: "PROD-${products[0].hashCode()}",
-                     productName: products[0],
-                     changeQuantity: -1,
-                     previousStock: 100,
-                     currentStock: 99,
-                     reason: "order_placement",
-                     orderId: "ORDER-GROOVY-001",
-                     timestamp: new Date()
-                 ])
+                    .key("product-${products[0].hashCode()}")
+                    .message([
+                            eventType     : "stock_decreased",
+                            productId     : "PROD-${products[0].hashCode()}",
+                            productName   : products[0],
+                            changeQuantity: -1,
+                            previousStock : 100,
+                            currentStock  : 99,
+                            reason        : "order_placement",
+                            orderId       : "ORDER-GROOVY-001",
+                            timestamp     : new Date()
+                    ])
         }
-        
+
         // 7. 支付事件
         children.kafka("支付处理事件") { kafka ->
             kafka.topic("payment.events")
-                 .key("payment-groovy-001")
-                 .message([
-                     eventType: "payment_initiated",
-                     paymentId: "PAY-GROOVY-001",
-                     orderId: "ORDER-GROOVY-001",
-                     customerId: "GROOVY-USER-001",
-                     amount: 2999.99,
-                     currency: "CNY",
-                     paymentMethod: "alipay",
-                     gateway: "alipay_gateway",
-                     timestamp: new Date(),
-                     status: "processing"
-                 ])
+                    .key("payment-groovy-001")
+                    .message([
+                            eventType    : "payment_initiated",
+                            paymentId    : "PAY-GROOVY-001",
+                            orderId      : "ORDER-GROOVY-001",
+                            customerId   : "GROOVY-USER-001",
+                            amount       : 2999.99,
+                            currency     : "CNY",
+                            paymentMethod: "alipay",
+                            gateway      : "alipay_gateway",
+                            timestamp    : new Date(),
+                            status       : "processing"
+                    ])
         }
-        
+
         // 8. 支付成功事件
         children.kafka("支付成功事件") { kafka ->
             kafka.topic("payment.events")
-                 .key("payment-groovy-001")
-                 .message([
-                     eventType: "payment_completed",
-                     paymentId: "PAY-GROOVY-001",
-                     orderId: "ORDER-GROOVY-001",
-                     transactionId: "TXN-${UUID.randomUUID()}",
-                     amount: 2999.99,
-                     currency: "CNY",
-                     completedTime: new Date(),
-                     status: "success"
-                 ])
+                    .key("payment-groovy-001")
+                    .message([
+                            eventType    : "payment_completed",
+                            paymentId    : "PAY-GROOVY-001",
+                            orderId      : "ORDER-GROOVY-001",
+                            transactionId: "TXN-${UUID.randomUUID()}",
+                            amount       : 2999.99,
+                            currency     : "CNY",
+                            completedTime: new Date(),
+                            status       : "success"
+                    ])
         }
-        
+
         // 9. 订单状态更新事件
         ["confirmed", "shipped", "delivered"].each { status ->
             children.kafka("订单${status}事件") { kafka ->
                 kafka.topic("order.status")
-                     .key("order-groovy-001")
-                     .message([
-                         eventType: "order_status_changed",
-                         orderId: "ORDER-GROOVY-001",
-                         previousStatus: status == "confirmed" ? "pending" : 
-                                         status == "shipped" ? "confirmed" : "shipped",
-                         currentStatus: status,
-                         updateTime: new Date(),
-                         operator: "system"
-                     ])
+                        .key("order-groovy-001")
+                        .message([
+                                eventType     : "order_status_changed",
+                                orderId       : "ORDER-GROOVY-001",
+                                previousStatus: status == "confirmed" ? "pending" :
+                                        status == "shipped" ? "confirmed" : "shipped",
+                                currentStatus : status,
+                                updateTime    : new Date(),
+                                operator      : "system"
+                        ])
             }
         }
-        
+
         // 10. 系统监控事件
         children.kafka("系统监控数据") { kafka ->
             kafka.topic("system.monitoring")
-                 .key("app-server-01")
-                 .message([
-                     timestamp: new Date(),
-                     serverId: "app-server-01",
-                     metrics: [
-                         cpu: [usage: 75.5, loadAverage: 2.1],
-                         memory: [used: 4200, total: 8192, percentage: 51.3],
-                         network: [inbound: 1500, outbound: 800], // KB/s
-                         activeConnections: 150,
-                         requestRate: 200 // requests/minute
-                     ],
-                     alerts: [],
-                     status: "healthy"
-                 ])
+                    .key("app-server-01")
+                    .message([
+                            timestamp: new Date(),
+                            serverId : "app-server-01",
+                            metrics  : [
+                                    cpu              : [usage: 75.5, loadAverage: 2.1],
+                                    memory           : [used: 4200, total: 8192, percentage: 51.3],
+                                    network          : [inbound: 1500, outbound: 800], // KB/s
+                                    activeConnections: 150,
+                                    requestRate      : 200 // requests/minute
+                            ],
+                            alerts   : [],
+                            status   : "healthy"
+                    ])
         }
-        
+
         // 11. 后置处理：测试完成事件
         children.kafkaPostprocessor("测试完成通知") { postprocessor ->
             postprocessor.topic("test.control")
-                         .key("complete")
-                         .message([
-                             action: "complete",
-                             testSuite: "groovy-kafka-test",
-                             endTime: new Date(),
-                             status: "success",
-                             totalEvents: 15,
-                             summary: [
-                                 userEvents: 2,
-                                 orderEvents: 4,
-                                 paymentEvents: 2,
-                                 inventoryEvents: 1,
-                                 systemEvents: 1
-                             ]
-                         ])
+                    .key("complete")
+                    .message([
+                            action     : "complete",
+                            testSuite  : "groovy-kafka-test",
+                            endTime    : new Date(),
+                            status     : "success",
+                            totalEvents: 15,
+                            summary    : [
+                                    userEvents     : 2,
+                                    orderEvents    : 4,
+                                    paymentEvents  : 2,
+                                    inventoryEvents: 1,
+                                    systemEvents   : 1
+                            ]
+                    ])
         }
     }
 }
@@ -625,22 +626,22 @@ suite("Kafka事件流测试") { builder ->
 def performanceTest() {
     def messageCount = 10000
     def partitionCount = 10
-    
+
     suite("Kafka性能测试") { builder ->
         builder.children { children ->
             // 高并发消息发送
             (1..messageCount).each { i ->
                 children.kafka("性能测试${i}") { kafka ->
                     kafka.topic("performance.test")
-                         .key("perf-${i % partitionCount}")
-                         .message([
-                             messageId: i,
-                             timestamp: new Date(),
-                             payload: "性能测试数据" * 5,
-                             batch: Math.floor(i / 100)
-                         ])
-                         .lingerMs(10)
-                         .batchSize(65536)
+                            .key("perf-${i % partitionCount}")
+                            .message([
+                                    messageId: i,
+                                    timestamp: new Date(),
+                                    payload  : "性能测试数据" * 5,
+                                    batch    : Math.floor(i / 100)
+                            ])
+                            .lingerMs(10)
+                            .batchSize(65536)
                 }
             }
         }
@@ -650,7 +651,4 @@ def performanceTest() {
 
 ## 相关文档
 
-- [配置元件示例](../template/配置元件/kafka_defaults.yaml)
-- [处理器示例](../template/处理器/kafka_preprocessor.yaml)
-- [取样器示例](../template/取样器/kafka_sampler.yaml)
 - [Kafka 官方文档](https://kafka.apache.org/documentation/)

@@ -492,7 +492,4 @@ suite("Redis缓存功能测试") { builder ->
 
 ## 相关文档
 
-- [配置元件示例](../template/配置元件/redis_defaults.yaml)
-- [处理器示例](../template/处理器/redis_preprocessor.yaml)
-- [取样器示例](../template/取样器/redis_sampler.yaml)
 - [Redis 官方文档](https://redis.io/documentation)

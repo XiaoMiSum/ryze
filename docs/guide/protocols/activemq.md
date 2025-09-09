@@ -531,6 +531,4 @@ def performanceTest() {
 
 ## 相关文档
 
-- [配置元件示例](../template/配置元件/active_defaults.yaml)
-- [取样器示例](../template/取样器/active_sampler.yaml)
 - [ActiveMQ 官方文档](https://activemq.apache.org/)

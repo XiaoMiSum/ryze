@@ -36,7 +36,7 @@
 # 通用后置处理器结构
 - testclass: 协议类型
   config:
-    # 协议特定配置项
+  # 协议特定配置项
 ```
 
 ## ⏱️ 执行时机
@@ -83,30 +83,17 @@ children:
               path: /notifications
               body:
                 message: "User ${new_user_id} created"
-    
-    # 集合级后置处理器
     postprocessors:
       - testclass: http
         config:
           method: DELETE
           path: /users/${new_user_id}
         # 清理测试数据
-
-# 模块级后置处理器
 postprocessors:
   - testclass: jdbc
     config:
       sql: "DELETE FROM audit_logs WHERE user_id = ${user_id}"
 
-# 项目级后置处理器
-postprocessors:
-  - testclass: http
-    config:
-      method: POST
-      path: /reports
-      body:
-        test_suite: "User Operations"
-        status: "completed"
 ```
 
 ## 🌐 各协议后置处理器
@@ -115,7 +102,7 @@ postprocessors:
 
 用于执行 HTTP 请求作为后处理逻辑。
 
-**配置模板**：[http_postprocessor.yaml](../template/处理器/http_postprocessor.yaml)
+**配置模板**
 
 ```yaml
 - testclass: http
@@ -133,13 +120,13 @@ postprocessors:
     body: { userName: 'ryze', password: '123456qq' }
 ```
 
-**相关文档**：[HTTP 协议文档](../protocols/HTTP.md#后置处理器)
+**相关文档**：[HTTP 协议文档](/guide/protocols/http)
 
 ### 🗄️ JDBC 后置处理器
 
 用于执行数据库操作作为后处理逻辑。
 
-**配置模板**：[jdbc_postprocessor.yaml](../template/处理器/jdbc_postprocessor.yaml)
+**配置模板**
 
 ```yaml
 - testclass: jdbc
@@ -147,13 +134,13 @@ postprocessors:
     sql: "DELETE FROM users WHERE name = 'testuser'"
 ```
 
-**相关文档**：[JDBC 协议文档](../protocols/JDBC.md#处理器)
+**相关文档**：[JDBC 协议文档](/guide/protocols/jdbc)
 
 ### 🗃️ Redis 后置处理器
 
 用于执行 Redis 操作作为后处理逻辑。
 
-**配置模板**：[redis_postprocessor.yaml](../template/处理器/redis_postprocessor.yaml)
+**配置模板**
 
 ```yaml
 - testclass: redis
@@ -162,13 +149,13 @@ postprocessors:
     key: test_key
 ```
 
-**相关文档**：[Redis 协议文档](../protocols/Redis.md#处理器)
+**相关文档**：[Redis 协议文档](/guide/protocols/redis)
 
 ### 🔌 Dubbo 后置处理器
 
 用于执行 Dubbo 服务调用作为后处理逻辑。
 
-**配置模板**：[dubbo_postprocessor.yaml](../template/处理器/dubbo_postprocessor.yaml)
+**配置模板**
 
 ```yaml
 - testclass: dubbo
@@ -179,13 +166,13 @@ postprocessors:
       - 12345
 ```
 
-**相关文档**：[Dubbo 协议文档](../protocols/Dubbo.md#处理器)
+**相关文档**：[Dubbo 协议文档](/guide/protocols/dubbo)
 
 ### 🚀 Kafka 后置处理器
 
 用于发送 Kafka 消息作为后处理逻辑。
 
-**配置模板**：[kafka_postprocessor.yaml](../template/处理器/kafka_postprocessor.yaml)
+**配置模板**
 
 ```yaml
 - testclass: kafka
@@ -195,13 +182,13 @@ postprocessors:
     value: '{"userId": 12345, "action": "delete"}'
 ```
 
-**相关文档**：[Kafka 协议文档](../protocols/Kafka.md#处理器)
+**相关文档**：[Kafka 协议文档](/guide/protocols/kafka)
 
 ### 🐰 RabbitMQ 后置处理器
 
 用于发送 RabbitMQ 消息作为后处理逻辑。
 
-**配置模板**：[rabbit_postprocessor.yaml](../template/处理器/rabbit_postprocessor.yaml)
+**配置模板**
 
 ```yaml
 - testclass: rabbit
@@ -211,13 +198,13 @@ postprocessors:
     message: '{"userId": 12345, "timestamp": "${timestamp()}"}'
 ```
 
-**相关文档**：[RabbitMQ 协议文档](../protocols/RabbitMQ.md#处理器)
+**相关文档**：[RabbitMQ 协议文档](/guide/protocols/rabbitmq)
 
 ### 🎯 ActiveMQ 后置处理器
 
 用于发送 ActiveMQ 消息作为后处理逻辑。
 
-**配置模板**：[active_postprocessor.yaml](../template/处理器/active_postprocessor.yaml)
+**配置模板**
 
 ```yaml
 - testclass: active
@@ -226,13 +213,13 @@ postprocessors:
     message: '{"userId": 12345, "action": "delete"}'
 ```
 
-**相关文档**：[ActiveMQ 协议文档](../protocols/ActiveMQ.md#处理器)
+**相关文档**：[ActiveMQ 协议文档](/guide/protocols/activemq)
 
 ### 🍃 MongoDB 后置处理器
 
 用于执行 MongoDB 操作作为后处理逻辑。
 
-**配置模板**：[mongo_postprocessor.yaml](../template/处理器/mongo_postprocessor.yaml)
+**配置模板**
 
 ```yaml
 - testclass: mongo
@@ -242,7 +229,7 @@ postprocessors:
     filter: '{"name": "testuser"}'
 ```
 
-**相关文档**：[MongoDB 协议文档](../protocols/MongoDB.md#处理器)
+**相关文档**：[MongoDB 协议文档](/guide/protocols/mongodb)
 
 ## 🔧 使用场景
 
@@ -300,7 +287,7 @@ children:
           path: /orders/${order_id}
         assertions:
           - { testclass: json, field: '$.data.status', expected: 'processed', rule: '==' }
-      
+
       # 发送测试结果通知
       - testclass: http
         config:
@@ -433,7 +420,7 @@ postprocessors:
     config:
       method: DELETE
       path: /users/${user_id}
-  
+
   - testclass: http
     # 仅在测试失败时发送告警
     condition: ${test_result == 'failed'}
@@ -500,27 +487,5 @@ postprocessors:
   # 报告生成模块
   - !include 'processors/report_generation.yaml'
 ```
-
----
-
-## 📚 相关文档
-
-- [测试集合管理](./测试集合.md) - 了解测试集合的组织和管理
-- [配置元件](./配置元件.md) - 学习基础配置管理
-- [前置处理器](./前置处理器.md) - 掌握测试前的预处理机制
-- [取样器](./取样器.md) - 了解各种协议的取样器使用
-
-### 协议文档
-
-- [HTTP 协议](../protocols/HTTP.md#处理器) - HTTP 处理器详细说明
-- [JDBC 协议](../protocols/JDBC.md#处理器) - 数据库处理器详细说明
-- [Redis 协议](../protocols/Redis.md#处理器) - Redis 处理器详细说明
-- [Dubbo 协议](../protocols/Dubbo.md#处理器) - Dubbo 处理器详细说明
-- [Kafka 协议](../protocols/Kafka.md#处理器) - Kafka 处理器详细说明
-- [RabbitMQ 协议](../protocols/RabbitMQ.md#处理器) - RabbitMQ 处理器详细说明
-- [ActiveMQ 协议](../protocols/ActiveMQ.md#处理器) - ActiveMQ 处理器详细说明
-- [MongoDB 协议](../protocols/MongoDB.md#处理器) - MongoDB 处理器详细说明
-
----
 
 **💡 提示**：后置处理器是确保测试环境清洁和结果可靠的重要工具，合理使用可以显著提高测试的自动化程度！

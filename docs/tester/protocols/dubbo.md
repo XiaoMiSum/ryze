@@ -8,6 +8,7 @@ Dubbo 协议支持为 Ryze 测试框架提供了与 Dubbo 微服务进行交互�
 ## 依赖引入
 
 ```xml
+
 <dependency>
     <groupId>io.github.xiaomisum</groupId>
     <artifactId>ryze-dubbo</artifactId>
@@ -418,133 +419,133 @@ suite("用户服务Dubbo测试套件") { builder ->
     builder.configure { configure ->
         configure.dubbo { dubbo ->
             dubbo.ref("dubboDefault")
-                 .registry { registry ->
-                     registry.protocol("zookeeper")
-                             .address("localhost:2181")
-                             .version("1.0.0")
-                             .timeout(30000)
-                 }
-                 .reference { reference ->
-                     reference.version("1.0.0")
-                              .timeout(5000)
-                              .retries(1)
-                              .loadBalance("random")
-                              .async(false)
-                 }
+                    .registry { registry ->
+                        registry.protocol("zookeeper")
+                                .address("localhost:2181")
+                                .version("1.0.0")
+                                .timeout(30000)
+                    }
+                    .reference { reference ->
+                        reference.version("1.0.0")
+                                .timeout(5000)
+                                .retries(1)
+                                .loadBalance("random")
+                                .async(false)
+                    }
         }
     }
-    
+
     builder.children { children ->
         // 1. 准备数据：创建测试用户
         children.dubboPreprocessor("创建测试用户") { preprocessor ->
             preprocessor.interfaceName("com.example.service.UserService")
-                        .methodName("createUser")
-                        .parameterTypes("com.example.model.User")
-                        .parameters([
-                            name: "Groovy测试用户",
-                            email: "groovy@test.com",
-                            age: 30,
+                    .methodName("createUser")
+                    .parameterTypes("com.example.model.User")
+                    .parameters([
+                            name      : "Groovy测试用户",
+                            email     : "groovy@test.com",
+                            age       : 30,
                             department: "测试部门",
-                            role: "developer",
-                            status: "active"
-                        ])
-                        .extractor { extractor ->
-                            extractor.json("$.id", "testUserId")
-                                     .json("$.email", "testUserEmail")
-                        }
+                            role      : "developer",
+                            status    : "active"
+                    ])
+                    .extractor { extractor ->
+                        extractor.json("$.id", "testUserId")
+                                .json("$.email", "testUserEmail")
+                    }
         }
-        
+
         // 2. 查询用户详情
         children.dubbo("查询用户详情") { dubbo ->
             dubbo.interfaceName("com.example.service.UserService")
-                 .methodName("getUserById")
-                 .parameterTypes("java.lang.Long")
-                 .parameters("${testUserId}")
-                 .assertion { assertion ->
-                     assertion.json("$.id", "${testUserId}", "==")
-                              .json("$.name", "Groovy测试用户", "==")
-                              .json("$.email", "groovy@test.com", "==")
-                              .json("$.department", "测试部门", "==")
-                              .json("$.status", "active", "==")
-                 }
+                    .methodName("getUserById")
+                    .parameterTypes("java.lang.Long")
+                    .parameters("${testUserId}")
+                    .assertion { assertion ->
+                        assertion.json("$.id", "${testUserId}", "==")
+                                .json("$.name", "Groovy测试用户", "==")
+                                .json("$.email", "groovy@test.com", "==")
+                                .json("$.department", "测试部门", "==")
+                                .json("$.status", "active", "==")
+                    }
         }
-        
+
         // 3. 获取用户列表
         children.dubbo("获取部门用户列表") { dubbo ->
             dubbo.interfaceName("com.example.service.UserService")
-                 .methodName("getUsersByDepartment")
-                 .parameterTypes("java.lang.String")
-                 .parameters("测试部门")
-                 .assertion { assertion ->
-                     assertion.json("$.size()", 1, ">=")
-                              .json("$[?(@.id == '${testUserId}')].name", "Groovy测试用户", "==")
-                 }
+                    .methodName("getUsersByDepartment")
+                    .parameterTypes("java.lang.String")
+                    .parameters("测试部门")
+                    .assertion { assertion ->
+                        assertion.json("$.size()", 1, ">=")
+                                .json("$[?(@.id == '${testUserId}')].name", "Groovy测试用户", "==")
+                    }
         }
-        
+
         // 4. 更新用户信息
         children.dubbo("更新用户信息") { dubbo ->
             dubbo.interfaceName("com.example.service.UserService")
-                 .methodName("updateUser")
-                 .parameterTypes("java.lang.Long", "com.example.model.User")
-                 .parameters("${testUserId}", [
-                     name: "更新后的Groovy用户",
-                     age: 35,
-                     department: "升级后部门",
-                     role: "senior_developer",
-                     lastModified: new Date().toString()
-                 ])
-                 .assertion { assertion ->
-                     assertion.json("$.success", true, "==")
-                              .json("$.message", "更新成功", "==")
-                 }
+                    .methodName("updateUser")
+                    .parameterTypes("java.lang.Long", "com.example.model.User")
+                    .parameters("${testUserId}", [
+                            name        : "更新后的Groovy用户",
+                            age         : 35,
+                            department  : "升级后部门",
+                            role        : "senior_developer",
+                            lastModified: new Date().toString()
+                    ])
+                    .assertion { assertion ->
+                        assertion.json("$.success", true, "==")
+                                .json("$.message", "更新成功", "==")
+                    }
         }
-        
+
         // 5. 验证更新结果
         children.dubbo("验证更新结果") { dubbo ->
             dubbo.interfaceName("com.example.service.UserService")
-                 .methodName("getUserById")
-                 .parameterTypes("java.lang.Long")
-                 .parameters("${testUserId}")
-                 .assertion { assertion ->
-                     assertion.json("$.name", "更新后的Groovy用户", "==")
-                              .json("$.age", 35, "==")
-                              .json("$.department", "升级后部门", "==")
-                              .json("$.role", "senior_developer", "==")
-                 }
+                    .methodName("getUserById")
+                    .parameterTypes("java.lang.Long")
+                    .parameters("${testUserId}")
+                    .assertion { assertion ->
+                        assertion.json("$.name", "更新后的Groovy用户", "==")
+                                .json("$.age", 35, "==")
+                                .json("$.department", "升级后部门", "==")
+                                .json("$.role", "senior_developer", "==")
+                    }
         }
-        
+
         // 6. 测试业务逻辑
         children.dubbo("测试用户激活状态") { dubbo ->
             dubbo.interfaceName("com.example.service.UserService")
-                 .methodName("isUserActive")
-                 .parameterTypes("java.lang.Long")
-                 .parameters("${testUserId}")
-                 .assertion { assertion ->
-                     assertion.json("$.active", true, "==")
-                              .json("$.status", "active", "==")
-                 }
+                    .methodName("isUserActive")
+                    .parameterTypes("java.lang.Long")
+                    .parameters("${testUserId}")
+                    .assertion { assertion ->
+                        assertion.json("$.active", true, "==")
+                                .json("$.status", "active", "==")
+                    }
         }
-        
+
         // 7. 测试权限检查
         children.dubbo("检查用户权限") { dubbo ->
             dubbo.interfaceName("com.example.service.AuthService")
-                 .methodName("checkUserPermissions")
-                 .parameterTypes("java.lang.Long", "java.lang.String")
-                 .parameters("${testUserId}", "admin")
-                 .assertion { assertion ->
-                     assertion.json("$.hasPermission", true, "||false")
-                 }
+                    .methodName("checkUserPermissions")
+                    .parameterTypes("java.lang.Long", "java.lang.String")
+                    .parameters("${testUserId}", "admin")
+                    .assertion { assertion ->
+                        assertion.json("$.hasPermission", true, "||false")
+                    }
         }
-        
+
         // 8. 清理：删除测试用户
         children.dubboPostprocessor("删除测试用户") { postprocessor ->
             postprocessor.interfaceName("com.example.service.UserService")
-                         .methodName("deleteUser")
-                         .parameterTypes("java.lang.Long")
-                         .parameters("${testUserId}")
-                         .assertion { assertion ->
-                             assertion.json("$.deleted", true, "==")
-                         }
+                    .methodName("deleteUser")
+                    .parameterTypes("java.lang.Long")
+                    .parameters("${testUserId}")
+                    .assertion { assertion ->
+                        assertion.json("$.deleted", true, "==")
+                    }
         }
     }
 }
@@ -556,29 +557,29 @@ def distributedServiceTest() {
             // 测试服务发现
             children.dubbo("服务发现测试") { dubbo ->
                 dubbo.interfaceName("com.example.service.DiscoveryService")
-                     .methodName("listAvailableServices")
-                     .parameterTypes()
-                     .parameters()
-                     .assertion { assertion ->
-                         assertion.json("$.size()", 0, ">")
-                                  .json("$[?(@.name == 'UserService')].status", "UP", "==")
-                     }
+                        .methodName("listAvailableServices")
+                        .parameterTypes()
+                        .parameters()
+                        .assertion { assertion ->
+                            assertion.json("$.size()", 0, ">")
+                                    .json("$[?(@.name == 'UserService')].status", "UP", "==")
+                        }
             }
-            
+
             // 测试负载均衡
             (1..5).each { i ->
                 children.dubbo("负载均衡测试: ${i}") { dubbo ->
                     dubbo.interfaceName("com.example.service.LoadBalanceService")
-                         .methodName("getServerInfo")
-                         .parameterTypes()
-                         .parameters()
-                         .reference { reference ->
-                             reference.loadBalance("roundrobin")
-                         }
-                         .assertion { assertion ->
-                             assertion.json("$.serverId", "", "isNotEmpty")
-                                      .json("$.serverName", "", "isNotEmpty")
-                         }
+                            .methodName("getServerInfo")
+                            .parameterTypes()
+                            .parameters()
+                            .reference { reference ->
+                                reference.loadBalance("roundrobin")
+                            }
+                            .assertion { assertion ->
+                                assertion.json("$.serverId", "", "isNotEmpty")
+                                        .json("$.serverName", "", "isNotEmpty")
+                            }
                 }
             }
         }
@@ -588,7 +589,4 @@ def distributedServiceTest() {
 
 ## 相关文档
 
-- [配置元件示例](../template/配置元件/dubbo_defaults.yaml)
-- [处理器示例](../template/处理器/dubbo_preprocessor.yaml)
-- [取样器示例](../template/取样器/dubbo_sampler.yaml)
 - [Dubbo 官方文档](https://dubbo.apache.org/zh/docs/)

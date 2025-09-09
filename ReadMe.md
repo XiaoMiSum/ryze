@@ -13,7 +13,7 @@
     <img src="http://img.shields.io/badge/License-MIT-blue.svg" alt="License">
   </a>
   <a href="https://central.sonatype.com/artifact/io.github.xiaomisum/ryze">
-    <img src="https:///maven-badges.sml.io/sonatype-central/io.github.xiaomisum/ryze/badge.svg" alt="Maven Central">
+    <img alt="Maven Central Version" src="https://img.shields.io/maven-central/v/io.github.xiaomisum/ryze">
   </a>
   <a href="https://github.com/XiaoMiSum">
     <img src="https://img.shields.io/badge/Author-xiaomi-yellow.svg" alt="Author">
@@ -59,7 +59,6 @@ Ryze 是一个基于 Java 21 开发的现代化测试框架，专为多协议测
 - [🏗️ 系统架构](#system-architecture)
 - [🚀 快速开始](#quick-start)
 - [💡 使用示例](#usage-examples)
-- [📚 详细文档](#detailed-documentation)
 - [📁 文档中心](#documentation-center)
 - [🧩 模块说明](#module-description)
 - [🛠️ 开发指南](#development-guide)
@@ -370,49 +369,6 @@ println "测试结果: ${result.success}"
 }
 ```
 
-## 📚 详细文档
-
-<a name="detailed-documentation"></a>
-| 文档类型 | 链接 | 说明 |
-|------------|------|------|
-| 🗠️ 架构设计 | [Architecture.md](./docs/Architecture.md) | 框架整体架构设计和设计模式 |
-| 🚀 快速入门 | [QuickStart.md](./docs/QuickStart.md) | 5分钟快速上手指南 |
-| 📝 API文档 | [API.md](./docs/API.md) | 详细的API接口文档 |
-| 🌐 协议指南 | [Protocols.md](./docs/Protocols.md) | 各协议模块使用指南 |
-| 🛠️ 开发指南 | [Development.md](./docs/Development.md) | 开发环境搭建和贡献指南 |
-| 📋 模板引擎 | [Template Guide](#📋-模板引擎和变量系统) | FreeMarker模板引擎使用指南 |
-| ❓ FAQ | [FAQ.md](./docs/FAQ.md) | 常见问题解答 |
-
-### 核心概念
-
-- **[测试集合](./docs/help/测试集合.md)** - 如何组织和管理测试用例
-- **[变量与函数](./docs/help/变量与函数.md)** - 动态数据生成和变量管理
-- **[提取器](./docs/help/提取器.md)** - 从响应中提取数据
-- **[验证器](./docs/help/验证器.md)** - 结果验证和断言
-- **[拦截器](./docs/help/拦截器.md)** - 请求和响应拦截处理
-
-### 📋 模板示例
-
-项目提供了丰富的YAML配置模板，位于各协议示例模块的 `src/test/resources/` 目录下：
-
-| 模板类型     | 位置示例                                            | 描述         |
-|----------|-------------------------------------------------|------------|
-| **测试用例** | `example/http-example/src/test/resources/测试用例/` | 完整的测试套件模板  |
-| **取样器**  | `example/http-example/src/test/resources/取样器/`  | 各协议取样器配置模板 |
-| **处理器**  | `example/http-example/src/test/resources/处理器/`  | 前置/后置处理器模板 |
-| **配置元件** | `example/http-example/src/test/resources/配置元件/` | 协议默认配置模板   |
-
-#### 可用协议模板
-
-- **HTTP**: `example/http-example/src/test/resources/`
-- **JDBC**: `example/jdbc-example/src/test/resources/`
-- **Redis**: `example/redis-example/src/test/resources/`
-- **Dubbo**: `example/dubbo-example/src/test/resources/`
-- **MongoDB**: `example/mongo-example/src/test/resources/`
-- **Kafka**: `example/kafka-example/src/test/resources/`
-- **RabbitMQ**: `example/rabbit-example/src/test/resources/`
-- **ActiveMQ**: `example/active-example/src/test/resources/`
-
 ## 📁 文档中心
 
 <a name="documentation-center"></a>
@@ -425,58 +381,6 @@ println "测试结果: ${result.success}"
 - [https://xiaomisum.github.io/ryze](https://xiaomisum.github.io/ryze)
 
 在线文档包含了框架的所有功能介绍、使用指南和 API 参考，是学习和使用 Ryze 的最佳资源。
-
-### 📚 核心文档
-
-| 文档                                      | 描述            |
-|-----------------------------------------|---------------|
-| [index.md](docs/index.md)               | 文档目录          |
-| [Architecture.md](docs/Architecture.md) | 框架整体架构设计和设计模式 |
-| [QuickStart.md](docs/QuickStart.md)     | 5分钟快速上手指南     |
-| [API.md](docs/API.md)                   | 详细的API接口文档    |
-| [Protocols.md](docs/Protocols.md)       | 各协议模块使用指南     |
-| [Development.md](docs/Development.md)   | 开发环境搭建和贡献指南   |
-| [FAQ.md](docs/FAQ.md)                   | 常见问题解答        |
-
-### 🎯 核心概念
-
-| 概念                          | 描述          |
-|-----------------------------|-------------|
-| [测试集合](docs/help/测试集合.md)   | 如何组织和管理测试用例 |
-| [变量与函数](docs/help/变量与函数.md) | 动态数据生成和变量管理 |
-| [提取器](docs/help/提取器.md)     | 从响应中提取数据    |
-| [验证器](docs/help/验证器.md)     | 结果验证和断言     |
-| [拦截器](docs/help/拦截器.md)     | 请求和响应拦截处理   |
-| [前置处理器](docs/help/前置处理器.md) | 请求前的数据处理    |
-| [后置处理器](docs/help/后置处理器.md) | 响应后的数据处理    |
-| [配置元件](docs/help/配置元件.md)   | 全局配置管理      |
-| [取样器](docs/help/取样器.md)     | 各协议的测试执行器   |
-
-### 🌐 协议文档
-
-| 协议                                     | 描述              |
-|----------------------------------------|-----------------|
-| [HTTP](docs/protocols/HTTP.md)         | HTTP/HTTPS 协议测试 |
-| [Dubbo](docs/protocols/Dubbo.md)       | Dubbo RPC 测试    |
-| [JDBC](docs/protocols/JDBC.md)         | 数据库测试           |
-| [Redis](docs/protocols/Redis.md)       | Redis 缓存测试      |
-| [MongoDB](docs/protocols/MongoDB.md)   | MongoDB 文档数据库测试 |
-| [Kafka](docs/protocols/Kafka.md)       | Kafka 消息队列测试    |
-| [RabbitMQ](docs/protocols/RabbitMQ.md) | RabbitMQ 消息队列测试 |
-| [ActiveMQ](docs/protocols/ActiveMQ.md) | ActiveMQ 消息队列测试 |
-
-### 📋 模板示例
-
-项目提供了丰富的YAML配置模板，位于 [template](docs/template) 目录下：
-
-| 模板类型                       | 描述         |
-|----------------------------|------------|
-| [测试集合](docs/template/测试集合) | 完整的测试套件模板  |
-| [取样器](docs/template/取样器)   | 各协议取样器配置模板 |
-| [处理器](docs/template/处理器)   | 前置/后置处理器模板 |
-| [提取器](docs/template/提取器)   | 数据提取器模板    |
-| [验证器](docs/template/验证器)   | 结果验证器模板    |
-| [配置元件](docs/template/配置元件) | 协议默认配置模板   |
 
 ## 📋 模板引擎和变量系统
 

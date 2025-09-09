@@ -2,7 +2,8 @@
 
 ## 📋 简介
 
-本示例演示了如何使用 Ryze 框架进行 Dubbo 服务测试。示例包含 Docker Zookeeper 环境搭建、Dubbo Java 服务端和对应的 Ryze 测试用例。
+本示例演示了如何使用 Ryze 框架进行 Dubbo 服务测试。示例包含 Docker Zookeeper 环境搭建、Dubbo Java 服务端和对应的 Ryze
+测试用例。
 
 ## 🚀 环境准备
 
@@ -30,6 +31,7 @@
 ### 验证环境
 
 通过以下命令验证 Zookeeper 和 Dubbo 服务是否正常运行：
+
 ```bash
 docker ps | grep zookeeper
 ```
@@ -48,6 +50,7 @@ docker ps | grep zookeeper
 ### 测试内容
 
 测试用例包含以下场景：
+
 - Dubbo 服务调用测试
 - 参数传递测试
 - 返回值验证测试
@@ -102,9 +105,3 @@ dubbo-example/
 │   └── dubbo_service.png                 # Dubbo 服务端截图
 └── pom.xml                               # Maven 配置文件
 ```
-
-## 🤝 相关文档
-
-- [Dubbo 协议文档](../../docs/protocols/Dubbo.md)
-- [测试集合管理](../../docs/help/测试集合.md)
-- [变量与函数](../../docs/help/变量与函数.md)
