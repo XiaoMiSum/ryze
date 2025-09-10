@@ -81,11 +81,7 @@ public class RegexMatcher extends ProxyMatcher {
      * @throws IllegalArgumentException 当期望值为null时抛出
      */
     public RegexMatcher(Object expected, boolean strict) {
-        super(strict);
-        if (expected == null) {
-            throw new IllegalArgumentException("Regex pattern cannot be null");
-        }
-
+        super(expected, strict);
     }
 
     /**
@@ -100,6 +96,9 @@ public class RegexMatcher extends ProxyMatcher {
      */
     @Override
     public boolean matches(Object actualValue) {
+        if (expectedValue == null) {
+            throw new IllegalArgumentException("Regex pattern cannot be null");
+        }
         this.pattern = Pattern.compile(expectedValue.toString(), !strict ? Pattern.CASE_INSENSITIVE : 0);
         return pattern.matcher((String) actualValue).matches();
     }
