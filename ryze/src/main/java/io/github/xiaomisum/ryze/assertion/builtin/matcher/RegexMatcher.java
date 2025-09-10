@@ -58,7 +58,11 @@ public class RegexMatcher extends ProxyMatcher {
      * 正则表达式模式
      * <p>编译后的Pattern对象，用于执行匹配操作</p>
      */
-    private final Pattern pattern;
+    private Pattern pattern;
+
+    public RegexMatcher() {
+        this(null, false);
+    }
 
     /**
      * 构造函数，使用默认的非严格模式
@@ -81,7 +85,7 @@ public class RegexMatcher extends ProxyMatcher {
         if (expected == null) {
             throw new IllegalArgumentException("Regex pattern cannot be null");
         }
-        this.pattern = Pattern.compile(expected.toString(), !strict ? Pattern.CASE_INSENSITIVE : 0);
+
     }
 
     /**
@@ -96,6 +100,7 @@ public class RegexMatcher extends ProxyMatcher {
      */
     @Override
     public boolean matches(Object actualValue) {
+        this.pattern = Pattern.compile(expectedValue.toString(), !strict ? Pattern.CASE_INSENSITIVE : 0);
         return pattern.matcher((String) actualValue).matches();
     }
 

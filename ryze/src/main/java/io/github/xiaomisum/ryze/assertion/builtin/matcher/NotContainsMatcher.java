@@ -57,6 +57,9 @@ import org.hamcrest.Description;
 @KW({"not_contains", "not_contain", "nct", "不包含", "⊈"})
 public class NotContainsMatcher extends ProxyMatcher {
 
+    public NotContainsMatcher() {
+    }
+
     /**
      * 构造函数，使用默认的非严格模式
      *

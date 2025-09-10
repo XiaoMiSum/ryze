@@ -57,6 +57,10 @@ import org.hamcrest.Description;
 @KW({"equals", "equal", "qe", "is", "=", "==", "===", "等于", "相等"})
 public class EqualsMatcher extends ProxyMatcher {
 
+    public EqualsMatcher() {
+
+    }
+
     /**
      * 构造函数，使用默认的非严格模式
      *

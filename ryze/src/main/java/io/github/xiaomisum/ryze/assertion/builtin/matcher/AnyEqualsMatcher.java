@@ -57,6 +57,9 @@ import java.util.Collection;
  */
 @KW({"equals_any", "any_equals", "equal_any", "any_equal", "eq_any", "any_eq"})
 public class AnyEqualsMatcher extends ProxyMatcher {
+    public AnyEqualsMatcher() {
+
+    }
 
     /**
      * 构造函数，使用默认的非严格模式

@@ -56,6 +56,9 @@ import org.hamcrest.Description;
  */
 @KW({"contains", "ct", "包含", "⊆", "contain"})
 public class ContainsMatcher extends ProxyMatcher {
+    public ContainsMatcher() {
+
+    }
 
     /**
      * 构造函数，使用默认的非严格模式

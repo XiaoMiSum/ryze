@@ -51,6 +51,10 @@ import io.github.xiaomisum.ryze.testelement.KW;
 @KW({"<", "小于", "less", "less_than", "lt"})
 public class LessMatcher extends NumberMatcher {
 
+    public LessMatcher() {
+        super(null, Matchers.CompareOperator.LESS_THAN);
+    }
+
     /**
      * 构造函数
      *

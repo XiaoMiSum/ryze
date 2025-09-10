@@ -58,6 +58,10 @@ import java.util.Collection;
 @KW({"any_contains", "contains_any", "any_contains", "contain_any"})
 public class AnyContainsMatcher extends ProxyMatcher {
 
+    public AnyContainsMatcher() {
+
+    }
+
     /**
      * 构造函数，使用默认的非严格模式
      *

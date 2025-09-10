@@ -51,6 +51,10 @@ import io.github.xiaomisum.ryze.testelement.KW;
 @KW({">=", "大于等于", "greater_or_equals", "greater_than_or_equals", "gte"})
 public class GreaterOrEqualsMatcher extends NumberMatcher {
 
+    public GreaterOrEqualsMatcher() {
+        super(null, Matchers.CompareOperator.GREATER_THAN_OR_EQUAL);
+    }
+
     /**
      * 构造函数
      *

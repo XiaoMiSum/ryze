@@ -54,6 +54,10 @@ import org.hamcrest.Description;
 @KW({"same", "object", "same_object"})
 public class SameObjectMatcher extends ProxyMatcher {
 
+    public SameObjectMatcher() {
+        super();
+    }
+
     /**
      * 构造函数，使用默认的非严格模式
      *
