@@ -82,4 +82,12 @@ public abstract class ProxyMatcher extends BaseMatcher<Object> {
         this.expectedValue = expectedValue;
         this.strict = strict;
     }
+
+    public void setExpectedValue(Object expectedValue) {
+        this.expectedValue = expectedValue;
+    }
+
+    public void setStrict(boolean strict) {
+        this.strict = strict;
+    }
 }
