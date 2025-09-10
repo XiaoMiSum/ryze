@@ -24,7 +24,7 @@ public class RyzeServiceLoader {
             var keys = getKeyWord(implClazz);
             keys.stream().distinct().forEach(key -> keyMap.put(key, implClazz));
         });
-        return Collections.unmodifiableMap(keyMap);
+        return Collections.newHashMap(keyMap);
     }
 
     @SuppressWarnings("unchecked")
@@ -35,7 +35,7 @@ public class RyzeServiceLoader {
         serviceLoader.iterator().forEachRemaining(t -> {
             collections.add((Class<T>) t.getClass());
         });
-        return Collections.unmodifiableList(collections);
+        return Collections.newArrayList(collections);
     }
 
     /**
@@ -52,7 +52,7 @@ public class RyzeServiceLoader {
             var keys = getKeyWord(t.getClass());
             keys.stream().distinct().forEach(key -> keyMap.put(key, t));
         });
-        return Collections.unmodifiableMap(keyMap);
+        return Collections.newHashMap(keyMap);
     }
 
     public static <T> List<T> loadAsInstanceListBySPI(Class<T> clazz) {
