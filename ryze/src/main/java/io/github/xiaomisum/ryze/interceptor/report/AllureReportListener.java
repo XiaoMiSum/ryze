@@ -38,7 +38,6 @@ import io.qameta.allure.model.StepResult;
 import java.sql.Timestamp;
 import java.util.Objects;
 
-import static io.qameta.allure.Allure.getLifecycle;
 import static io.qameta.allure.util.ResultsUtils.getStatus;
 import static io.qameta.allure.util.ResultsUtils.getStatusDetails;
 
@@ -74,8 +73,7 @@ public interface AllureReportListener<T extends AbstractTestElement<?, ?, ?>> ex
      */
     static void startStep(String name, ContextWrapper context) {
         var uuid = context.getUuid();
-        var startTime = context.getTestResult() instanceof SampleResult result ? result.getSampleStartTime() : context.getTestResult().getStartTime();
-        var step = new StepResult().setName(name).setStart(Timestamp.valueOf(startTime).getTime())
+        var step = new StepResult().setName(name)
                 .setStatus(getStatus(context.getTestResult().getThrowable()).orElse(context.getTestResult().getStatus().getAllureStatus()))
                 .setStatusDetails(getStatusDetails(context.getTestResult().getThrowable()).orElse(null));
         Allure.getLifecycle().startStep(uuid, step);
@@ -93,9 +91,11 @@ public interface AllureReportListener<T extends AbstractTestElement<?, ?, ?>> ex
      * @param context 上下文包装器，用于标识要停止的测试步骤
      */
     static void stopStep(ContextWrapper context) {
-        var uuid = context.getUuid();
-        var endTime = context.getTestResult() instanceof SampleResult result ? result.getSampleEndTime() : context.getTestResult().getEndTime();
-        getLifecycle().updateStep(uuid, step -> step.setStop(Timestamp.valueOf(endTime).getTime()));
-        Allure.getLifecycle().stopStep(uuid);
+        var startTime = context.getTestResult() instanceof SampleResult result ? result.getSampleStartTime() : context.getTestResult().getStartTime();
+        // 使用测试结果中的开始时间，如果为空则使用 startStep执行时的默认时间
+        if (startTime != null) {
+            Allure.getLifecycle().updateStep(context.getUuid(), step -> step.setStop(Timestamp.valueOf(startTime).getTime()));
+        }
+        Allure.getLifecycle().stopStep(context.getUuid());
     }
 }
