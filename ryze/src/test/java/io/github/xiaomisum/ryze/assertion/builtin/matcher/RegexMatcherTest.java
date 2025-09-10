@@ -53,7 +53,7 @@ public class RegexMatcherTest {
 
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testConstructorWithNullExpected() {
-        new RegexMatcher(null);
+        new RegexMatcher(null).matches("123");
     }
 
     @Test

@@ -78,7 +78,6 @@ public class RegexMatcher extends ProxyMatcher {
      *
      * @param expected 期望的正则表达式模式
      * @param strict   严格匹配标志，true表示区分大小写，false表示忽略大小写
-     * @throws IllegalArgumentException 当期望值为null时抛出
      */
     public RegexMatcher(Object expected, boolean strict) {
         super(expected, strict);
@@ -96,7 +95,7 @@ public class RegexMatcher extends ProxyMatcher {
      */
     @Override
     public boolean matches(Object actualValue) {
-        if (expectedValue == null) {
+        if (expectedValue == null || expectedValue.toString().isBlank()) {
             throw new IllegalArgumentException("Regex pattern cannot be null");
         }
         this.pattern = Pattern.compile(expectedValue.toString(), !strict ? Pattern.CASE_INSENSITIVE : 0);
@@ -112,6 +111,6 @@ public class RegexMatcher extends ProxyMatcher {
      */
     @Override
     public void describeTo(Description description) {
-        description.appendText("matches regex: ").appendValue(pattern.pattern()).appendText(strict ? "" : " (ignore case)");
+        description.appendText("matches regex: ").appendValue(expectedValue).appendText(strict ? "" : " (ignore case)");
     }
 }
