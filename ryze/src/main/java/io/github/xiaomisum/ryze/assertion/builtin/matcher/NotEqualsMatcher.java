@@ -61,6 +61,9 @@ import java.util.Collection;
 @KW({"not_equals", "not_equal", "neq", "不等于", "!=", "<>", "not", "is_not"})
 public class NotEqualsMatcher extends ProxyMatcher {
 
+    public NotEqualsMatcher() {
+    }
+
     /**
      * 构造函数，使用默认的非严格模式
      *
