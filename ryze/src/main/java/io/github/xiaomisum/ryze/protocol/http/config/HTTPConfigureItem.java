@@ -33,10 +33,10 @@ import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
 import io.github.xiaomisum.ryze.config.ConfigureItem;
 import io.github.xiaomisum.ryze.context.ContextWrapper;
-import io.github.xiaomisum.ryze.testelement.AbstractTestElement;
 import io.github.xiaomisum.ryze.protocol.http.HTTPConstantsInterface;
 import io.github.xiaomisum.ryze.support.Collections;
 import io.github.xiaomisum.ryze.support.Customizer;
+import io.github.xiaomisum.ryze.testelement.AbstractTestElement;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;
@@ -44,8 +44,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.Consumer;
 
-import static io.github.xiaomisum.ryze.testelement.TestElementConstantsInterface.REF;
 import static io.github.xiaomisum.ryze.support.groovy.Groovy.call;
+import static io.github.xiaomisum.ryze.testelement.TestElementConstantsInterface.REF;
 
 /**
  * HTTP协议配置项类
@@ -538,6 +538,26 @@ public class HTTPConfigureItem implements ConfigureItem<HTTPConfigureItem>, HTTP
         }
 
         /**
+         * 设置协议
+         *
+         * @return 构建器实例
+         */
+        public Builder http() {
+            configure.protocol = HTTP;
+            return self;
+        }
+
+        /**
+         * 设置协议
+         *
+         * @return 构建器实例
+         */
+        public Builder https() {
+            configure.protocol = HTTPS;
+            return self;
+        }
+
+        /**
          * 设置主机
          *
          * @param host 主机
@@ -578,6 +598,76 @@ public class HTTPConfigureItem implements ConfigureItem<HTTPConfigureItem>, HTTP
          */
         public Builder method(String method) {
             configure.method = method;
+            return self;
+        }
+
+        /**
+         * 设置HTTP方法  GET
+         *
+         * @return 构建器实例
+         */
+        public Builder get() {
+            configure.method = GET;
+            return self;
+        }
+
+        /**
+         * 设置HTTP方法  POST
+         *
+         * @return 构建器实例
+         */
+        public Builder post() {
+            configure.method = POST;
+            return self;
+        }
+
+        /**
+         * 设置HTTP方法  PUT
+         *
+         * @return 构建器实例
+         */
+        public Builder put() {
+            configure.method = PUT;
+            return self;
+        }
+
+        /**
+         * 设置HTTP方法  DELETE
+         *
+         * @return 构建器实例
+         */
+        public Builder delete() {
+            configure.method = DELETE;
+            return self;
+        }
+
+        /**
+         * 设置HTTP方法  PATCH
+         *
+         * @return 构建器实例
+         */
+        public Builder patch() {
+            configure.method = PATCH;
+            return self;
+        }
+
+        /**
+         * 设置HTTP方法  OPTIONS
+         *
+         * @return 构建器实例
+         */
+        public Builder options() {
+            configure.method = OPTIONS;
+            return self;
+        }
+
+        /**
+         * 设置HTTP方法  TRACE
+         *
+         * @return 构建器实例
+         */
+        public Builder trace() {
+            configure.method = TRACE;
             return self;
         }
 
