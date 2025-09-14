@@ -33,6 +33,7 @@ import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import io.github.xiaomisum.ryze.protocol.http.config.HTTPConfigureItem;
 import io.github.xiaomisum.ryze.support.PrimitiveTypeChecker;
+import io.github.xiaomisum.ryze.testelement.sampler.DefaultSampleResult;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Strings;
 import org.apache.hc.client5.http.impl.cookie.BasicClientCookie;
@@ -41,6 +42,7 @@ import org.apache.hc.core5.http.message.BasicNameValuePair;
 import xyz.migoo.simplehttp.Form;
 import xyz.migoo.simplehttp.Request;
 import xyz.migoo.simplehttp.RequestEntity;
+import xyz.migoo.simplehttp.Response;
 
 import java.util.*;
 
@@ -89,12 +91,12 @@ public class HTTPClient extends Request implements HTTPConstantsInterface {
      * @param config HTTP配置项
      * @return HTTP请求对象
      */
-    public static Request build(HTTPConfigureItem config) {
+    public static HTTPClient build(HTTPConfigureItem config) {
         var port = StringUtils.isNotBlank(config.getPort()) ? ":" + config.getPort() : "";
         var path = Strings.CS.startsWith(config.getPath(), "/") ? config.getPath() : "/" + config.getPath();
         var url = "%s://%s%s%s".formatted(config.getProtocol(), config.getHost(), port, path);
         // bytes body data(binary) 不会同时出现
-        return new HTTPClient(config.getMethod(), url)
+        return (HTTPClient) new HTTPClient(config.getMethod(), url)
                 .headers(config.getHeaders())
                 .cookie(config.getCookie())
                 .query(config.getQuery())
@@ -241,4 +243,15 @@ public class HTTPClient extends Request implements HTTPConstantsInterface {
         return this;
     }
 
+
+    public Response execute(DefaultSampleResult result) {
+        result.sampleStart();
+        try {
+            return execute();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+            result.sampleEnd();
+        }
+    }
 }

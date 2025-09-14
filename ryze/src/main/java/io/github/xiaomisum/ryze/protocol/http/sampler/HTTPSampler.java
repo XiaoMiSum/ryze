@@ -3,14 +3,16 @@ package io.github.xiaomisum.ryze.protocol.http.sampler;
 import com.alibaba.fastjson2.annotation.JSONField;
 import io.github.xiaomisum.ryze.builder.*;
 import io.github.xiaomisum.ryze.context.ContextWrapper;
+import io.github.xiaomisum.ryze.protocol.http.HTTPClient;
+import io.github.xiaomisum.ryze.protocol.http.HTTPConstantsInterface;
+import io.github.xiaomisum.ryze.protocol.http.RealHTTPRealResultRequest;
+import io.github.xiaomisum.ryze.protocol.http.RealHTTPRealResultResponse;
+import io.github.xiaomisum.ryze.protocol.http.config.HTTPConfigureItem;
 import io.github.xiaomisum.ryze.testelement.KW;
 import io.github.xiaomisum.ryze.testelement.sampler.AbstractSampler;
 import io.github.xiaomisum.ryze.testelement.sampler.DefaultSampleResult;
 import io.github.xiaomisum.ryze.testelement.sampler.Sampler;
-import io.github.xiaomisum.ryze.protocol.http.*;
-import io.github.xiaomisum.ryze.protocol.http.config.HTTPConfigureItem;
 import org.apache.commons.lang3.StringUtils;
-import xyz.migoo.simplehttp.Request;
 import xyz.migoo.simplehttp.Response;
 
 import java.util.Objects;
@@ -19,7 +21,7 @@ import java.util.Objects;
 public class HTTPSampler extends AbstractSampler<HTTPSampler, HTTPConfigureItem, DefaultSampleResult> implements Sampler<DefaultSampleResult>, HTTPConstantsInterface {
 
     @JSONField(serialize = false)
-    private Request request;
+    private HTTPClient request;
     @JSONField(serialize = false)
     private Response response;
 
@@ -42,7 +44,7 @@ public class HTTPSampler extends AbstractSampler<HTTPSampler, HTTPConfigureItem,
 
     @Override
     protected void sample(ContextWrapper context, DefaultSampleResult result) {
-        response = HTTP.execute(request, result);
+        response = request.execute(result);
     }
 
     @Override
