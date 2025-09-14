@@ -31,14 +31,22 @@ import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
 import io.github.xiaomisum.ryze.config.ConfigureItem;
 import io.github.xiaomisum.ryze.context.ContextWrapper;
-import io.github.xiaomisum.ryze.testelement.AbstractTestElement;
 import io.github.xiaomisum.ryze.protocol.redis.RedisConstantsInterface;
+import io.github.xiaomisum.ryze.protocol.redis.processor.RedisPostprocessor;
+import io.github.xiaomisum.ryze.protocol.redis.processor.RedisPreprocessor;
+import io.github.xiaomisum.ryze.protocol.redis.sampler.RedisSampler;
+import io.github.xiaomisum.ryze.testelement.AbstractTestElement;
+import io.github.xiaomisum.ryze.testelement.sampler.DefaultSampleResult;
 import org.apache.commons.lang3.StringUtils;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.Protocol;
+import redis.clients.jedis.commands.ProtocolCommand;
 
 import java.util.Locale;
 import java.util.function.Consumer;
 
 import static io.github.xiaomisum.ryze.support.groovy.Groovy.call;
+import static redis.clients.jedis.Protocol.Command.*;
 
 /**
  * Redis协议配置项类
@@ -324,6 +332,22 @@ public class RedisConfigureItem implements ConfigureItem<RedisConfigureItem>, Re
 
         private RedisConfigureItem configure = new RedisConfigureItem();
 
+        private static String[] parseArgs(String key, String field, String... fields) {
+            var args = new String[fields.length + 2];
+            args[0] = key;
+            args[1] = field;
+            System.arraycopy(fields, 0, args, 2, fields.length);
+            return args;
+        }
+
+        private static String[] parseArgs(String key, String... fields) {
+            var args = new String[fields.length + 1];
+            args[0] = key;
+            System.arraycopy(fields, 0, args, 1, fields.length);
+            return args;
+        }
+
+
         /**
          * 设置数据源引用名称
          *
@@ -365,6 +389,479 @@ public class RedisConfigureItem implements ConfigureItem<RedisConfigureItem>, Re
          */
         public Builder args(String args) {
             configure.args = args;
+            return self;
+        }
+
+        public Builder args(String arg, String... args) {
+            configure.args = String.join(",", parseArgs(arg, args));
+            return self;
+        }
+
+
+        /**
+         * 删除指定的键
+         *
+         * @param key 键名
+         * @return 构建器实例
+         */
+        public Builder del(String key) {
+            return command(DEL, key);
+        }
+
+        /**
+         * 获取指定键的值
+         *
+         * @param key 键名
+         * @return 构建器实例
+         */
+        public Builder get(String key) {
+            return command(GET, key);
+        }
+
+        /**
+         * 设置指定键的值
+         *
+         * @param key   键名
+         * @param value 值
+         * @return 构建器实例
+         */
+        public Builder set(String key, String value) {
+            return command(SET, key, value);
+        }
+
+        /**
+         * 检查指定键是否存在
+         *
+         * @param key 键名
+         * @return 构建器实例
+         */
+        public Builder exists(String key) {
+            return command(EXISTS, key);
+        }
+
+        /**
+         * 设置键的过期时间
+         *
+         * @param key     键名
+         * @param timeout 过期时间(秒)
+         * @return 构建器实例
+         */
+        public Builder expire(String key, int timeout) {
+            return command(EXPIRE, key, String.valueOf(timeout));
+        }
+
+        /**
+         * 查找所有符合给定模式的键
+         *
+         * @param key 模式
+         * @return 构建器实例
+         */
+        public Builder keys(String key) {
+            return command(KEYS, key);
+        }
+
+        /**
+         * 删除哈希表中一个或多个指定字段
+         *
+         * @param key    哈希表键名
+         * @param field  字段名
+         * @param fields 更多字段名
+         * @return 构建器实例
+         */
+        public Builder hdel(String key, String field, String... fields) {
+            return command(HDEL, parseArgs(key, field, fields));
+        }
+
+        /**
+         * 获取存储在哈希表中指定字段的值
+         *
+         * @param key    哈希表键名
+         * @param field  字段名
+         * @param fields 更多字段名
+         * @return 构建器实例
+         */
+        public Builder hget(String key, String field, String... fields) {
+            return command(HGET, parseArgs(key, field, fields));
+        }
+
+        /**
+         * 同时将多个 field-value (字段-值)对设置到哈希表中
+         *
+         * @param key   哈希表键名
+         * @param field 字段名
+         * @param value 值
+         * @return 构建器实例
+         */
+        public Builder hset(String key, String field, String value) {
+            return command(HSET, key, field, value);
+        }
+
+        /**
+         * 获取在哈希表中指定 key 的所有字段和值
+         *
+         * @param key 哈希表键名
+         * @return 构建器实例
+         */
+        public Builder hgetAll(String key) {
+            return command(HGETALL, key);
+        }
+
+        /**
+         * 查看哈希表的指定字段是否存在
+         *
+         * @param key    哈希表键名
+         * @param field  字段名
+         * @param fields 更多字段名
+         * @return 构建器实例
+         */
+        public Builder hexists(String key, String field, String... fields) {
+            return command(HEXISTS, parseArgs(key, field, fields));
+        }
+
+        /**
+         * 获取哈希表中字段的数量
+         *
+         * @param key 哈希表键名
+         * @return 构建器实例
+         */
+        public Builder hlen(String key) {
+            return command(HLEN, key);
+        }
+
+        /**
+         * 获取哈希表中所有的字段名
+         *
+         * @param key 哈希表键名
+         * @return 构建器实例
+         */
+        public Builder hkeys(String key) {
+            return command(HKEYS, key);
+        }
+
+        /**
+         * 获取哈希表中所有的值
+         *
+         * @param key 哈希表键名
+         * @return 构建器实例
+         */
+        public Builder hvals(String key) {
+            return command(HVALS, key);
+        }
+
+        /**
+         * 同时将多个 field-value (字段-值)对设置到哈希表中
+         *
+         * @param key      哈希表键名
+         * @param field    字段名
+         * @param value    值
+         * @param keywords 更多字段和值的交替列表
+         * @return 构建器实例
+         */
+        public Builder hmset(String key, String field, String value, String... keywords) {
+            var tmp = new String[]{key, field, value};
+            var args = new String[tmp.length + keywords.length];
+            // 拷贝 key field value
+            System.arraycopy(tmp, 0, args, 0, tmp.length);
+            // 拷贝 keywords
+            System.arraycopy(keywords, 0, args, tmp.length, keywords.length);
+            return command(HMSET, args);
+        }
+
+        /**
+         * 获取所有给定字段的值
+         *
+         * @param key    哈希表键名
+         * @param field  字段名
+         * @param fields 更多字段名
+         * @return 构建器实例
+         */
+        public Builder hmget(String key, String field, String... fields) {
+            return command(HMGET, parseArgs(key, field, fields));
+        }
+
+        /**
+         * 通过索引获取列表中的元素
+         *
+         * @param key   列表键名
+         * @param index 索引
+         * @return 构建器实例
+         */
+        public Builder lindex(String key, int index) {
+            return command(LINDEX, key, String.valueOf(index));
+        }
+
+        /**
+         * 获取列表中指定范围的元素
+         *
+         * @param key   列表键名
+         * @param start 起始位置
+         * @param end   结束位置
+         * @return 构建器实例
+         */
+        public Builder lrange(String key, int start, int end) {
+            return command(LRANGE, key, String.valueOf(start), String.valueOf(end));
+        }
+
+        /**
+         * 获取列表的长度
+         *
+         * @param key 列表键名
+         * @return 构建器实例
+         */
+        public Builder llen(String key) {
+            return command(LRANGE, key);
+        }
+
+        /**
+         * 移除并获取列表的第一个元素
+         *
+         * @param key 列表键名
+         * @return 构建器实例
+         */
+        public Builder lpop(String key) {
+            return command(LPOP, key);
+        }
+
+        /**
+         * 将一个或多个值插入到列表头部
+         *
+         * @param key    列表键名
+         * @param value  值
+         * @param values 更多值
+         * @return 构建器实例
+         */
+        public Builder lpush(String key, String value, String... values) {
+            return command(LPUSH, parseArgs(key, value, values));
+        }
+
+        /**
+         * 将值插入到已存在的列表头部
+         *
+         * @param key   列表键名
+         * @param value 值
+         * @return 构建器实例
+         */
+        public Builder lpushx(String key, String value) {
+            return command(LPUSHX, key, value);
+        }
+
+        /**
+         * 通过索引设置列表元素的值
+         *
+         * @param key   列表键名
+         * @param index 索引
+         * @param value 值
+         * @return 构建器实例
+         */
+        public Builder lset(String key, int index, String value) {
+            return command(LSET, key, String.valueOf(index), value);
+        }
+
+        /**
+         * 对列表进行修剪
+         *
+         * @param key   列表键名
+         * @param start 起始位置
+         * @param end   结束位置
+         * @return 构建器实例
+         */
+        public Builder ltrim(String key, int start, int end) {
+            return command(LTRIM, key, String.valueOf(start), String.valueOf(end));
+        }
+
+        /**
+         * 移除并获取列表的最后一个元素
+         *
+         * @param key 列表键名
+         * @return 构建器实例
+         */
+        public Builder rpop(String key) {
+            return command(RPOP, key);
+        }
+
+        /**
+         * 将一个或多个值插入到列表尾部
+         *
+         * @param key    列表键名
+         * @param value  值
+         * @param values 更多值
+         * @return 构建器实例
+         */
+        public Builder rpush(String key, String value, String... values) {
+            return command(RPUSH, parseArgs(key, value, values));
+        }
+
+        /**
+         * 将值插入到已存在的列表尾部
+         *
+         * @param key   列表键名
+         * @param value 值
+         * @return 构建器实例
+         */
+        public Builder rpushx(String key, String value) {
+            return command(RPUSHX, key, value);
+        }
+
+        /**
+         * 向集合添加一个或多个成员
+         *
+         * @param key    集合键名
+         * @param value  成员
+         * @param values 更多成员
+         * @return 构建器实例
+         */
+        public Builder sadd(String key, String value, String... values) {
+            return command(SADD, parseArgs(key, value, values));
+        }
+
+        /**
+         * 获取集合的成员数
+         *
+         * @param key 集合键名
+         * @return 构建器实例
+         */
+        public Builder scard(String key) {
+            return command(SCARD, key);
+        }
+
+        /**
+         * 返回给定集合的差集
+         *
+         * @param key  集合键名
+         * @param keys 更多集合键名
+         * @return 构建器实例
+         */
+        public Builder sdiff(String key, String... keys) {
+            return command(SDIFF, parseArgs(key, keys));
+        }
+
+        /**
+         * 返回给定集合的差集并存储在指定的集合中
+         *
+         * @param key  集合键名
+         * @param keys 更多集合键名
+         * @return 构建器实例
+         */
+        public Builder sdiffstore(String key, String... keys) {
+            return command(SDIFFSTORE, parseArgs(key, keys));
+        }
+
+        /**
+         * 返回给定所有集合的交集
+         *
+         * @param key  集合键名
+         * @param keys 更多集合键名
+         * @return 构建器实例
+         */
+        public Builder sinter(String key, String... keys) {
+            return command(SINTER, parseArgs(key, keys));
+        }
+
+        /**
+         * 返回集合中的所有成员
+         *
+         * @param key 集合键名
+         * @return 构建器实例
+         */
+        public Builder smembers(String key) {
+            return command(SMEMBERS, key);
+        }
+
+        /**
+         * 判断 member 元素是否是集合 key 的成员
+         *
+         * @param key   集合键名
+         * @param value 成员
+         * @return 构建器实例
+         */
+        public Builder smismember(String key, String value) {
+            return command(SMISMEMBER, key, value);
+        }
+
+        /**
+         * 移除并返回集合中的一个随机元素
+         *
+         * @param key 集合键名
+         * @return 构建器实例
+         */
+        public Builder spop(String key) {
+            return command(SPOP, key);
+        }
+
+        /**
+         * 移除集合中一个或多个成员
+         *
+         * @param key    集合键名
+         * @param value  成员
+         * @param values 更多成员
+         * @return 构建器实例
+         */
+        public Builder srem(String key, String value, String... values) {
+            return command(SREM, parseArgs(key, value, values));
+        }
+
+        /**
+         * 返回给定所有集合的并集
+         *
+         * @param key  集合键名
+         * @param keys 更多集合键名
+         * @return 构建器实例
+         */
+        public Builder sunion(String key, String... keys) {
+            return command(SUNION, parseArgs(key, keys));
+        }
+
+        /**
+         * 将信息发送到指定的频道。
+         * 无法发送 json格式的字符串，因为key 和 message 会以逗号作为分隔符串连为一个新字符串。
+         * <p>
+         * 以 {@link Jedis#sendCommand(ProtocolCommand, String...)}  发送 command 和 args(key,message) 时，会以逗号作为分隔符重新创建一个 String[]，
+         * json格式的 message 会被分割成多个参数，从而导致错误。
+         *
+         * @param key     频道名
+         * @param message 消息内容
+         * @return 构建器实例
+         */
+        public Builder publish(String key, String message) {
+            return command(PUBLISH, key, message);
+        }
+
+        /**
+         * 将信息发送到指定的频道。
+         * 无法发送 json格式的字符串，因为key 和 message 会以逗号作为分隔符串连为一个新字符串。
+         * <p>
+         * 在Redis预处理器、后置处理器和取样器中使用时需要注意此问题。
+         * <p>
+         * 以 {@link Jedis#sendCommand(ProtocolCommand, String...)}  发送 command 和 args(key,message) 时，会以逗号作为分隔符重新创建一个 String[]，
+         * json格式的 message 会被分割成多个参数，从而导致错误。
+         *
+         * @param key     频道名
+         * @param message 消息内容
+         * @return 构建器实例
+         */
+        public Builder xadd(String key, String message) {
+            return command(XADD, key, "*", message);
+        }
+
+        /**
+         * 将信息发送到指定的频道。
+         *
+         * @param key      频道名
+         * @param message  消息内容
+         * @param messages 更多消息内容
+         * @return 构建器实例
+         */
+        public Builder xadd(String key, String message, String... messages) {
+            var args = new String[]{key, "*", message};
+            System.arraycopy(args, 0, args, args.length, messages.length);
+            return command(XADD, args);
+        }
+
+        private Builder command(Protocol.Command command, String... args) {
+            configure.command = command.name();
+            if (args != null && args.length > 0) {
+                configure.args = String.join(",", args);
+            }
             return self;
         }
 
