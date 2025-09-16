@@ -26,14 +26,12 @@
 package io.github.xiaomisum.ryze.protocol.http.extractor;
 
 import com.alibaba.fastjson2.annotation.JSONField;
-import io.github.xiaomisum.ryze.TestStatus;
 import io.github.xiaomisum.ryze.extractor.AbstractExtractor;
-import io.github.xiaomisum.ryze.extractor.ExtractResult;
 import io.github.xiaomisum.ryze.extractor.builtin.JSONExtractor;
 import io.github.xiaomisum.ryze.extractor.builtin.RegexExtractor;
+import io.github.xiaomisum.ryze.protocol.http.RealHTTPRealResultResponse;
 import io.github.xiaomisum.ryze.testelement.KW;
 import io.github.xiaomisum.ryze.testelement.sampler.SampleResult;
-import io.github.xiaomisum.ryze.protocol.http.RealHTTPRealResultResponse;
 
 /**
  * HTTP响应头提取器，专门用于从HTTP响应头中提取数据
@@ -103,21 +101,14 @@ public class HTTPHeaderExtractor extends AbstractExtractor {
      * @return 提取结果对象
      */
     @Override
-    protected ExtractResult extract(SampleResult result) {
-        var res = new ExtractResult("HTTP响应 提取: " + field);
+    protected Object extract(SampleResult result) {
         var response = (RealHTTPRealResultResponse) result.getResponse();
-        Object value = null;
         var headers = response.headers().stream().filter(header -> header.getName().equalsIgnoreCase(field)).toList();
         if (!headers.isEmpty()) {
             matchNum = (headers.size() < matchNum + 1) ? headers.size() - 1 : matchNum;
-            value = headers.get(matchNum).getValue();
-            res.setValue(value);
+            return headers.get(matchNum).getValue();
         }
-        if (value == null) {
-            res.setStatus(TestStatus.failed);
-            res.setMessage("响应头中不存在：" + field);
-        }
-        return res;
+        return null;
     }
 
 
