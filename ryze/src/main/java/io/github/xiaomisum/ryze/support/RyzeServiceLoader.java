@@ -68,9 +68,9 @@ public class RyzeServiceLoader {
     private static List<String> getKeyWord(Class<?> clazz) {
         var annotation = clazz.getAnnotation(KW.class);
         var keys = new ArrayList<String>();
-        keys.add(clazz.getSimpleName().toLowerCase());
+        keys.add(clazz.getSimpleName().toLowerCase(Locale.ROOT));
         if (annotation != null) {
-            Arrays.stream(annotation.value()).distinct().forEach(key -> keys.add(key.toLowerCase()));
+            Arrays.stream(annotation.value()).distinct().forEach(key -> keys.add(key.toLowerCase(Locale.ROOT)));
         }
         return keys;
     }

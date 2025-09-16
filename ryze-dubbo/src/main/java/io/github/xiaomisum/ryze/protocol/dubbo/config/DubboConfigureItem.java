@@ -33,15 +33,12 @@ import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
 import io.github.xiaomisum.ryze.config.ConfigureItem;
 import io.github.xiaomisum.ryze.context.ContextWrapper;
-import io.github.xiaomisum.ryze.testelement.AbstractTestElement;
 import io.github.xiaomisum.ryze.protocol.dubbo.DubboConstantsInterface;
 import io.github.xiaomisum.ryze.support.Collections;
+import io.github.xiaomisum.ryze.testelement.AbstractTestElement;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Consumer;
 
 import static io.github.xiaomisum.ryze.support.groovy.Groovy.call;
@@ -1361,6 +1358,21 @@ public class DubboConfigureItem implements ConfigureItem<DubboConfigureItem>, Du
         }
 
         /**
+         * 设置接口名称
+         * <p>
+         * 设置要调用的Dubbo服务接口的类名。<br>
+         * 例如：com.example.service.DemoService
+         * </p>
+         *
+         * @param clazz 接口类
+         * @return 构建器实例，支持链式调用
+         */
+        public Builder interfaceName(Class<?> clazz) {
+            configure.interfaceName = clazz.getName();
+            return self;
+        }
+
+        /**
          * 设置方法名称
          * <p>
          * 设置要调用的Dubbo服务接口中的具体方法名。<br>
@@ -1407,6 +1419,16 @@ public class DubboConfigureItem implements ConfigureItem<DubboConfigureItem>, Du
             List<Object> parameters = Collections.newArrayList();
             call(closure, parameters);
             return parameters(parameters);
+        }
+
+        /**
+         * 设置参数值列表（通过可变参数数组）
+         *
+         * @param parameters 参数数组
+         * @return 构建器实例，支持链式调用
+         */
+        public Builder parameters(Object... parameters) {
+            return parameters(Arrays.asList(parameters));
         }
 
         /**

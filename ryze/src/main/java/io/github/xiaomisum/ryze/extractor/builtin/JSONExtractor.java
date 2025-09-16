@@ -26,9 +26,7 @@
 package io.github.xiaomisum.ryze.extractor.builtin;
 
 import com.alibaba.fastjson2.JSONPath;
-import io.github.xiaomisum.ryze.TestStatus;
 import io.github.xiaomisum.ryze.extractor.AbstractExtractor;
-import io.github.xiaomisum.ryze.extractor.ExtractResult;
 import io.github.xiaomisum.ryze.testelement.KW;
 import io.github.xiaomisum.ryze.testelement.sampler.SampleResult;
 
@@ -82,23 +80,14 @@ public class JSONExtractor extends AbstractExtractor {
      *   <li>获取响应体的字符串表示</li>
      *   <li>使用JsonPath表达式提取数据</li>
      *   <li>封装提取结果</li>
-     *   <li>处理提取失败情况</li>
      * </ol></p>
      *
      * @param result 取样结果，包含待提取的响应数据
-     * @return 提取结果对象
      */
     @Override
-    protected ExtractResult extract(SampleResult result) {
-        var res = new ExtractResult("JSON 提取: " + field);
+    protected Object extract(SampleResult result) {
         var target = result.getResponse().bytesAsString();
-        Object value = JSONPath.extract(target, field);
-        res.setValue(value);
-        if (value == null) {
-            res.setStatus(TestStatus.failed);
-            res.setMessage(String.format("目标字符串不存在 JsonPath %s，目标字符串：\n%s", field, target));
-        }
-        return res;
+        return JSONPath.extract(target, field);
     }
 
     /**

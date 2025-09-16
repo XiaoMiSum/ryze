@@ -37,7 +37,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 
-import static io.github.xiaomisum.ryze.testelement.TestElementConstantsInterface.*;
+import static io.github.xiaomisum.ryze.testelement.TestElementConstantsInterface.TEST_CLASS;
+import static io.github.xiaomisum.ryze.testelement.TestElementConstantsInterface.VARIABLES;
 
 /**
  * JSON测试用例树结构解析器
@@ -76,7 +77,6 @@ public class JsonTree extends JSONObject {
      * @param testcase JSONObject类型的测试用例数据
      */
     public JsonTree(JSONObject testcase) {
-        replaceExpiredKeys(testcase);
         var json = prepare(testcase);
         initialize(json, isRyzeTestFramework(json));
     }
@@ -87,14 +87,14 @@ public class JsonTree extends JSONObject {
      * 处理流程：
      * 1. 如果是Ryze测试框架组件，先移除变量定义以减少遍历次数
      * 2. 遍历所有键值对：
-     *    - 将Ryze组件的键名转换为小写
-     *    - 递归处理嵌套的JSONObject和JSONArray对象
+     * - 将Ryze组件的键名转换为小写
+     * - 递归处理嵌套的JSONObject和JSONArray对象
      * 3. 根据组件类型设置测试类标识
      * 4. 重新添加变量定义到Ryze组件中
      * </p>
      *
-     * @param json    预处理后的测试用例数据
-     * @param isRyze  是否为Ryze测试框架组件
+     * @param json   预处理后的测试用例数据
+     * @param isRyze 是否为Ryze测试框架组件
      */
     private void initialize(JSONObject json, boolean isRyze) {
         // 1、先删除 Ryze组件中的变量，减少一次遍历
@@ -115,12 +115,6 @@ public class JsonTree extends JSONObject {
                 case null, default -> put(newKey, value);
             }
         });
-        if (isRyzeTestsuite(json)) {
-            put(TEST_CLASS, "__testsuite__");
-        }
-        if (isRyzeSampler(json)) {
-            put(TEST_CLASS, json.getString(TEST_CLASS).toLowerCase(Locale.ROOT));
-        }
         if (isRyze) {
             // 3、重新添加变量到 Ryze 组件
             put(VARIABLES, variables instanceof RyzeVariables ? variables :
@@ -183,43 +177,6 @@ public class JsonTree extends JSONObject {
      * @return 如果是Ryze测试框架组件返回true，否则返回false
      */
     private boolean isRyzeTestFramework(JSONObject json) {
-        return isRyzeTestsuite(json) || isRyzeSampler(json);
-    }
-
-    /**
-     * 判断是否为Ryze测试套件组件
-     *
-     * @param json 待判断的JSONObject对象
-     * @return 如果是Ryze测试套件组件返回true，否则返回false
-     */
-    private boolean isRyzeTestsuite(JSONObject json) {
-        return ((json.containsKey(CHILDREN) || json.containsKey(CHILD)) && json.containsKey(TITLE));
-    }
-
-    /**
-     * 判断是否为Ryze取样器组件
-     *
-     * @param json 待判断的JSONObject对象
-     * @return 如果是Ryze取样器组件返回true，否则返回false
-     */
-    private boolean isRyzeSampler(JSONObject json) {
         return json.containsKey(TEST_CLASS);
-    }
-
-    /**
-     * 替换过期的键名，保持向后兼容性
-     * <p>
-     * 目前主要处理将旧版本的CHILD键名替换为CHILDREN
-     * </p>
-     *
-     * @param json 需要处理的JSONObject对象
-     */
-    private void replaceExpiredKeys(JSONObject json) {
-        if (!isRyzeTestFramework(json)) {
-            return;
-        }
-        if (json.containsKey(CHILD)) {
-            json.put(CHILDREN, json.remove(CHILD));
-        }
     }
 }

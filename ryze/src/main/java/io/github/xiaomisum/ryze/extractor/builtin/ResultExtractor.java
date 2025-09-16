@@ -26,10 +26,9 @@
 package io.github.xiaomisum.ryze.extractor.builtin;
 
 import io.github.xiaomisum.ryze.extractor.AbstractExtractor;
-import io.github.xiaomisum.ryze.extractor.ExtractResult;
+import io.github.xiaomisum.ryze.support.ValidateResult;
 import io.github.xiaomisum.ryze.testelement.KW;
 import io.github.xiaomisum.ryze.testelement.sampler.SampleResult;
-import io.github.xiaomisum.ryze.support.ValidateResult;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -66,13 +65,10 @@ public class ResultExtractor extends AbstractExtractor {
      * <p>将响应体的完整内容提取为字符串并存储到指定变量中。</p>
      *
      * @param result 取样结果，包含待提取的响应数据
-     * @return 提取结果对象
      */
     @Override
-    protected ExtractResult extract(SampleResult result) {
-        var res = new ExtractResult("Result 提取");
-        res.setValue(result.getResponse().bytesAsString());
-        return res;
+    protected Object extract(SampleResult result) {
+        return result.getResponse().bytesAsString();
     }
 
     /**

@@ -33,8 +33,8 @@ import com.alibaba.fastjson2.JSONException;
 import com.alibaba.fastjson2.JSONReader;
 import com.alibaba.fastjson2.reader.ObjectReader;
 import io.github.xiaomisum.ryze.ApplicationConfig;
-import io.github.xiaomisum.ryze.testelement.TestElement;
 import io.github.xiaomisum.ryze.support.fastjson.interceptor.JSONInterceptor;
+import io.github.xiaomisum.ryze.testelement.TestElement;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.lang.reflect.Type;
@@ -42,8 +42,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import static io.github.xiaomisum.ryze.testelement.TestElementConstantsInterface.CONFIG;
-import static io.github.xiaomisum.ryze.testelement.TestElementConstantsInterface.TEST_CLASS;
+import static io.github.xiaomisum.ryze.testelement.TestElementConstantsInterface.*;
 
 /**
  * 测试元素对象反序列化器
@@ -87,6 +86,10 @@ public class TestElementObjectReader implements ObjectReader<TestElement> {
             elementMap.put(entry.getKey().toLowerCase(), entry.getValue());
         }
         var pair = checkTestElement(elementMap);
+        // 兼容旧版本测试容器配置
+        if (elementMap.containsKey(CHILD)) {
+            elementMap.put(CHILDREN, elementMap.remove(CHILD));
+        }
         JSONInterceptor interceptor = ApplicationConfig.getJsonInterceptorKeyMap().get(pair.getLeft());
         if (interceptor != null) {
             var config = interceptor.deserializeConfigureItem(elementMap.get(CONFIG));

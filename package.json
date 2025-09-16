@@ -17,7 +17,15 @@
     "http",
     "dubbo",
     "jdbc",
-    "redis"
+    "redis",
+    "接口测试",
+    "接口测试框架",
+    "自动化测试",
+    "测试框架",
+    "api",
+    "api测试",
+    "api测试框架",
+    "多协议测试框架"
   ],
   "author": "XiaoMiSum",
   "license": "MIT",

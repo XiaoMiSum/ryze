@@ -29,12 +29,14 @@ import io.github.xiaomisum.ryze.config.RyzeVariables;
 import io.github.xiaomisum.ryze.context.Context;
 import io.github.xiaomisum.ryze.context.ContextWrapper;
 import io.github.xiaomisum.ryze.context.SessionContext;
+import io.github.xiaomisum.ryze.support.ValidateResult;
 import io.github.xiaomisum.ryze.testelement.TestElement;
 import io.github.xiaomisum.ryze.testelement.TestElementConfigureGroup;
 import io.github.xiaomisum.ryze.testelement.TestElementConstantsInterface;
-import io.github.xiaomisum.ryze.support.ValidateResult;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * 测试会话执行器
@@ -53,34 +55,28 @@ public class SessionRunner {
      * ThreadLocal变量，用于存储当前线程的SessionRunner实例
      */
     public static final ThreadLocal<SessionRunner> HOLDER = new ThreadLocal<>();
-    
+
     /**
      * 会话上下文，存储当前会话的上下文信息
      */
     private final SessionContext sessionContext = new SessionContext();
-    
-    /**
-     * 用例执行过程中可用来进行数据存取的存储空间
-     * <p>用于在测试执行过程中存储和共享数据</p>
-     */
-    private final Map<String, Object> storage = new HashMap<>();
-    
+
     /**
      * 配置对象，包含测试执行的各种配置信息
      */
     private final Configure configure;
-    
+
     /**
      * Session 当前执行上下文链
      * <p>维护测试执行过程中的上下文层次结构</p>
      */
     private List<Context> contextChain = new ArrayList<>();
-    
+
     /**
      * 当前上下文包装器
      */
     private ContextWrapper context;
-    
+
     /**
      * 标识是否在测试框架支持模式下运行
      */
@@ -262,15 +258,6 @@ public class SessionRunner {
      */
     public void setContext(ContextWrapper context) {
         this.context = context;
-    }
-
-    /**
-     * 获取存储空间
-     *
-     * @return 存储空间映射
-     */
-    public Map<String, Object> getStorage() {
-        return storage;
     }
 
     /**

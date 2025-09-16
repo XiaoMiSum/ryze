@@ -34,6 +34,7 @@ import io.github.xiaomisum.ryze.support.TestDataLoader;
 
 import java.util.Map;
 
+import static io.github.xiaomisum.ryze.testelement.TestElementConstantsInterface.TESTSUITE;
 import static io.github.xiaomisum.ryze.testelement.TestElementConstantsInterface.TEST_CLASS;
 
 /**
@@ -90,6 +91,9 @@ public class Ryze {
      * @return 测试执行结果
      */
     public static Result start(Map<String, Object> testcase) {
+        if (!testcase.containsKey(TEST_CLASS)) {
+            testcase.put(TEST_CLASS, TESTSUITE);
+        }
         return start(new JsonTree(testcase));
     }
 
@@ -105,11 +109,10 @@ public class Ryze {
      * @return 测试执行结果
      */
     public static Result start(JsonTree testcase) {
-        try {
-            return new Ryze(testcase).runTest();
-        } finally {
-            SessionRunner.removeSession();
+        if (!testcase.containsKey(TEST_CLASS)) {
+            testcase.put(TEST_CLASS, TESTSUITE);
         }
+        return new Ryze(testcase).runTest();
     }
 
     /**
@@ -124,7 +127,11 @@ public class Ryze {
      * @return 测试执行结果
      */
     private Result runTest() {
-        var clazz = ApplicationConfig.getTestElementKeyMap().get(testcase.getString(TEST_CLASS));
-        return SessionRunner.getSessionIfNoneCreateNew().runTest(JSON.parseObject(testcase.toJSONString(), clazz));
+        try {
+            var clazz = ApplicationConfig.getTestElementKeyMap().get(testcase.getString(TEST_CLASS));
+            return SessionRunner.getSessionIfNoneCreateNew().runTest(JSON.parseObject(testcase.toJSONString(), clazz));
+        } finally {
+            SessionRunner.removeSession();
+        }
     }
 }

@@ -26,9 +26,7 @@
 package io.github.xiaomisum.ryze.extractor.builtin;
 
 import com.alibaba.fastjson2.annotation.JSONField;
-import io.github.xiaomisum.ryze.TestStatus;
 import io.github.xiaomisum.ryze.extractor.AbstractExtractor;
-import io.github.xiaomisum.ryze.extractor.ExtractResult;
 import io.github.xiaomisum.ryze.testelement.KW;
 import io.github.xiaomisum.ryze.testelement.sampler.SampleResult;
 import org.apache.commons.lang3.StringUtils;
@@ -98,18 +96,15 @@ public class RegexExtractor extends AbstractExtractor {
      *   <li>根据matchNum选择匹配项</li>
      *   <li>提取第一个捕获组的内容</li>
      *   <li>封装提取结果</li>
-     *   <li>处理提取失败情况</li>
      * </ol></p>
      *
      * @param result 取样结果，包含待提取的响应数据
      * @return 提取结果对象
      */
     @Override
-    protected ExtractResult extract(SampleResult result) {
-        var res = new ExtractResult("正则表达式 提取: %s ，匹配第 %s 个".formatted(field, matchNum + 1));
+    protected Object extract(SampleResult result) {
         var target = result.getResponse().bytesAsString();
         var value = "";
-
         var pattern = Pattern.compile(field);
         var matcher = pattern.matcher(target);
         matchNum = Math.max(0, matchNum);
@@ -119,12 +114,7 @@ public class RegexExtractor extends AbstractExtractor {
             value = matcher.group(1);
             state--;
         }
-
-        if (StringUtils.isBlank(value)) {
-            res.setStatus(TestStatus.failed);
-            res.setMessage(String.format("目标字符串没有匹配的数据 %s，目标字符串：\n%s", field, target));
-        }
-        return res;
+        return StringUtils.isBlank(value) ? null : value;
     }
 
     /**
