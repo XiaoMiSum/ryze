@@ -39,6 +39,7 @@ import io.github.xiaomisum.ryze.testelement.processor.Processor;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.lang.reflect.Type;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -77,9 +78,14 @@ public abstract class ProcessorObjectReader implements ObjectReader<Processor>, 
     @Override
     public Processor readObject(JSONReader jsonReader, Type fieldType, Object fieldName, long features) {
         var testElementMap = jsonReader.readObject();
-        var pair = checkTestElement(testElementMap, fieldName);
-        standardizeConfig(testElementMap, pair.getRight());
-        return JSON.parseObject(JSON.toJSONString(testElementMap), pair.getLeft());
+        var elementMap = new HashMap<String, Object>();
+        // 转换所有key 为小写
+        for (Map.Entry<String, Object> entry : testElementMap.entrySet()) {
+            elementMap.put(entry.getKey().toLowerCase(), entry.getValue());
+        }
+        var pair = checkTestElement(elementMap, fieldName);
+        standardizeConfig(elementMap, pair.getRight());
+        return JSON.parseObject(JSON.toJSONString(elementMap), pair.getLeft());
     }
 
     /**

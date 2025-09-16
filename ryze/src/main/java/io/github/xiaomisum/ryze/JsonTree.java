@@ -116,7 +116,6 @@ public class JsonTree extends JSONObject {
             }
         });
         if (isRyze) {
-            put(TEST_CLASS, json.getString(TEST_CLASS).toLowerCase(Locale.ROOT));
             // 3、重新添加变量到 Ryze 组件
             put(VARIABLES, variables instanceof RyzeVariables ? variables :
                     new RyzeVariables(Optional.ofNullable((JSONObject) variables).orElse(new JSONObject())));

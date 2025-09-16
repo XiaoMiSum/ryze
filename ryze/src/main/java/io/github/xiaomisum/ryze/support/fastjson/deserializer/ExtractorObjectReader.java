@@ -39,6 +39,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.lang.reflect.Type;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
@@ -82,16 +83,20 @@ public class ExtractorObjectReader implements ObjectReader<Extractor> {
     @Override
     public Extractor readObject(JSONReader jsonReader, Type fieldType, Object fieldName, long features) {
         var testElementMap = jsonReader.readObject();
-        var testClass = testElementMap.get(TEST_CLASS);
-        if (Objects.isNull(testClass) || StringUtils.isBlank(testClass.toString())) {
-            testClass = JSONExtractor.class.getSimpleName().toUpperCase();
+        var elementMap = new HashMap<String, Object>();
+        // 转换所有key 为小写
+        for (Map.Entry<String, Object> entry : testElementMap.entrySet()) {
+            elementMap.put(entry.getKey().toLowerCase(), entry.getValue());
         }
-        testElementMap.put(TEST_CLASS, testClass);
-        var variableName = testElementMap.remove(VARIABLE_NAME);
-        var refName = Objects.isNull(variableName) ? testElementMap.remove(REF_NAME) : variableName;
-        testElementMap.put(REF_NAME, refName);
-        var pair = checkTestElement(testElementMap);
-        return JSON.parseObject(JSON.toJSONString(testElementMap), pair.getLeft());
+        var testClass = elementMap.get(TEST_CLASS);
+        if (Objects.isNull(testClass) || StringUtils.isBlank(testClass.toString())) {
+            testClass = JSONExtractor.class.getSimpleName().toLowerCase(Locale.ROOT);
+        }
+        elementMap.put(TEST_CLASS, testClass);
+        var variableName = elementMap.remove(VARIABLE_NAME);
+        elementMap.put(REF_NAME, Objects.isNull(variableName) ? elementMap.remove(REF_NAME) : variableName);
+        var pair = checkTestElement(elementMap);
+        return JSON.parseObject(JSON.toJSONString(elementMap), pair.getLeft());
     }
 
     /**

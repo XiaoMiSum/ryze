@@ -39,6 +39,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.lang.reflect.Type;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
@@ -81,16 +82,21 @@ public class AssertionObjectReader implements ObjectReader<Assertion> {
     @Override
     public Assertion readObject(JSONReader jsonReader, Type fieldType, Object fieldName, long features) {
         var testElementMap = jsonReader.readObject();
-        var testClass = testElementMap.get(TEST_CLASS);
+        var elementMap = new HashMap<String, Object>();
+        // 转换所有key 为小写
+        for (Map.Entry<String, Object> entry : testElementMap.entrySet()) {
+            elementMap.put(entry.getKey().toLowerCase(), entry.getValue());
+        }
+        var testClass = elementMap.get(TEST_CLASS);
         if (Objects.isNull(testClass) || StringUtils.isBlank(testClass.toString())) {
-            testElementMap.put(TEST_CLASS, JSONAssertion.class.getSimpleName());
+            elementMap.put(TEST_CLASS, JSONAssertion.class.getSimpleName().toLowerCase());
         }
-        var pair = checkTestElement(testElementMap);
-        var rule = testElementMap.get(RULE);
+        var pair = checkTestElement(elementMap);
+        var rule = elementMap.get(RULE);
         if (Objects.isNull(rule) || StringUtils.isBlank(rule.toString())) {
-            testElementMap.put(RULE, "==");
+            elementMap.put(RULE, "==");
         }
-        return JSON.parseObject(JSON.toJSONString(testElementMap), pair.getLeft());
+        return JSON.parseObject(JSON.toJSONString(elementMap), pair.getLeft());
     }
 
     /**
