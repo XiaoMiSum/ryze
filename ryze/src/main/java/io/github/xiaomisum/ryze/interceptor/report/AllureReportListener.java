@@ -94,7 +94,7 @@ public interface AllureReportListener<T extends AbstractTestElement<?, ?, ?>> ex
         var startTime = context.getTestResult() instanceof SampleResult result ? result.getSampleStartTime() : context.getTestResult().getStartTime();
         // 使用测试结果中的开始时间，如果为空则使用 startStep执行时的默认时间
         if (startTime != null) {
-            Allure.getLifecycle().updateStep(context.getUuid(), step -> step.setStop(Timestamp.valueOf(startTime).getTime()));
+            Allure.getLifecycle().updateStep(context.getUuid(), step -> step.setStart(Timestamp.valueOf(startTime).getTime()));
         }
         Allure.getLifecycle().stopStep(context.getUuid());
     }
