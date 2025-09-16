@@ -32,6 +32,8 @@ import io.github.xiaomisum.ryze.builder.DefaultPreprocessorsBuilder;
 import io.github.xiaomisum.ryze.config.EmptyConfigureItem;
 import io.github.xiaomisum.ryze.context.ContextWrapper;
 
+import static io.github.xiaomisum.ryze.testelement.TestElementConstantsInterface.TESTSUITE;
+
 /**
  * 测试集合执行类
  * <p>
@@ -44,7 +46,7 @@ import io.github.xiaomisum.ryze.context.ContextWrapper;
  *
  * @author xiaomi
  */
-@KW("__testsuite__")
+@KW(TESTSUITE)
 public class TestSuite extends TestContainerExecutable<TestSuite, EmptyConfigureItem, TestSuiteResult> {
 
     /**

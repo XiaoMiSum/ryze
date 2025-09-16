@@ -132,4 +132,6 @@ public interface TestElementConstantsInterface {
      */
     String REF = "ref";
 
+    String TESTSUITE = "__testsuite__";
+
 }
