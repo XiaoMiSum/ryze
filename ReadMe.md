@@ -379,7 +379,7 @@ println "测试结果: ${result.success}"
 我们提供了基于 VitePress 的在线文档站点，您可以通过以下链接访问：
 
 - [在线文档](https://xiaomisum.github.io/ryze)
-- [中国大陆](https://ryze-docs.edgeone.app?eo_token=04fc8ca272b939d6cf6128520a7c0dd4&eo_time=1758070309)
+- [中国大陆](https://ryze-rr7xp0ri.maozi.io)
 
 在线文档包含了框架的所有功能介绍、使用指南和 API 参考，是学习和使用 Ryze 的最佳资源。
 
@@ -739,12 +739,12 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 感谢以下开源项目和组织的支持：
 
 - **[JetBrains](https://www.jetbrains.com)** - 提供优秀的 IDE 工具
+- **[帽子云](https://www.maoziyun.com/)** - 提供免费的静态页面托管服务
 - **[FastJSON2](https://github.com/alibaba/fastjson2)** - JSON 序列化库
 - **[FreeMarker](https://freemarker.apache.org)** - 模板引擎
 - **[Apache Commons](https://commons.apache.org)** - 工具类库
 - **[TestNG](https://testng.org)**  - 测试框架
 - **[Allure](https://docs.qameta.io/allure/)** - 测试报告框架
-- **[Dubbo](https://dubbo.apache.org)** - RPC 框架
 
 ---
 
