@@ -119,8 +119,8 @@ rule：验证规则，默认 ==
 
 当内置验证器无法满足特定需求时，Ryze 框架支持自定义验证器和验证规则扩展。详细的开发指南请参考：
 
-- **开发文档**：[Development.md](../Development.md) - 完整的开发指南和最佳实践
+- **开发文档**：[开发者文档](/developer/validator) - 完整的开发指南和最佳实践
 - **代码示例**
-  ：查看框架源码中的[内置验证器实现](../../ryze/src/main/resources/META-INF/services/io.github.xiaomisum.ryze.assertion.Assertion)
+  ：查看框架源码中的[内置验证器实现](https://github.com/XiaoMiSum/ryze/tree/master/ryze/src/main/resources/META-INF/services/io.github.xiaomisum.ryze.assertion.Assertion)
 
 **💡 提示**：验证器是确保测试质量的关键组件，合理使用各种验证规则可以构建强健的测试体系！

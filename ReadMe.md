@@ -378,7 +378,8 @@ println "测试结果: ${result.success}"
 
 我们提供了基于 VitePress 的在线文档站点，您可以通过以下链接访问：
 
-- [https://xiaomisum.github.io/ryze](https://xiaomisum.github.io/ryze)
+- [在线文档](https://xiaomisum.github.io/ryze)
+- [中国大陆](https://ryze-docs.edgeone.app?eo_token=cf78b8cdf714a00fb5309a7d2c1f1fea&eo_time=1758069431)
 
 在线文档包含了框架的所有功能介绍、使用指南和 API 参考，是学习和使用 Ryze 的最佳资源。
 
