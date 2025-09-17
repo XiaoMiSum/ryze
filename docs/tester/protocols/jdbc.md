@@ -16,17 +16,17 @@ JDBC 支持内置在核心模块中，需要添加对应的数据库驱动：
     <version>${version}</version>
 </dependency>
 
-<!-- MySQL 驱动 -->
+        <!-- MySQL 驱动 -->
 <dependency>
-    <groupId>com.mysql</groupId>
-    <artifactId>mysql-connector-j</artifactId>
-    <version>9.3.0</version>
+<groupId>com.mysql</groupId>
+<artifactId>mysql-connector-j</artifactId>
+<version>9.3.0</version>
 </dependency>
 ```
 
 ## ⚙️ 配置元件
 
-### JDBC 数据源 [示例](../../template/配置元件/jdbc_datasource.yaml)
+### JDBC 数据源
 
 JDBC 数据源：使用该组件配置 JDBC数据源，用于 JDBC处理器\取样器引用。
 
@@ -45,7 +45,7 @@ config: # 可简化填写，无需config关键字，直接将配置内容至于�
 
 ## 🔧 处理器
 
-### 前置处理器 [示例](../../template/处理器/jdbc_preprocessor.yaml)
+### 前置处理器
 
 ```yaml
 testclass: jdbc  # jdbc 前置处理器类型
@@ -54,7 +54,7 @@ config: # 处理器配置
   statement: 'select * from sys_user where id = 1;'  # sql语句
 ```
 
-### 后置处理器 [示例](../../template/处理器/jdbc_postprocessor.yaml)
+### 后置处理器
 
 ```yaml
 testclass: jdbc_postprocessor  # jdbc 后置处理器类型
@@ -65,7 +65,7 @@ config: # 处理器配置
 
 ## 📊 取样器
 
-### JDBC 取样器 [示例](../../template/取样器/jdbc_sampler.yaml)
+### JDBC 取样器
 
 ```yaml
 title: 标准jdbc取样器
@@ -385,6 +385,7 @@ class GroovyJdbcSuiteExample {
 ### 事务处理
 
 ```java
+
 @Test
 @RyzeTest
 public void transactionTest() {
@@ -392,39 +393,39 @@ public void transactionTest() {
         suite.children(child -> {
             // 开启事务
             child.jdbc(jdbc -> jdbc
-                .title("开启事务")
-                .config(config -> config
-                    .datasource("jdbc_source")
-                    .sql("START TRANSACTION")
-                )
+                    .title("开启事务")
+                    .config(config -> config
+                            .datasource("jdbc_source")
+                            .sql("START TRANSACTION")
+                    )
             );
-            
+
             // 执行多个操作
             child.jdbc(jdbc -> jdbc
-                .title("插入操作1")
-                .config(config -> config
-                    .datasource("jdbc_source")
-                    .sql("INSERT INTO users (name, email) VALUES (?, ?)")
-                    .parameters("事务用户1", "tx1@test.com")
-                )
+                    .title("插入操作1")
+                    .config(config -> config
+                            .datasource("jdbc_source")
+                            .sql("INSERT INTO users (name, email) VALUES (?, ?)")
+                            .parameters("事务用户1", "tx1@test.com")
+                    )
             );
-            
+
             child.jdbc(jdbc -> jdbc
-                .title("插入操作2")
-                .config(config -> config
-                    .datasource("jdbc_source")
-                    .sql("INSERT INTO users (name, email) VALUES (?, ?)")
-                    .parameters("事务用户2", "tx2@test.com")
-                )
+                    .title("插入操作2")
+                    .config(config -> config
+                            .datasource("jdbc_source")
+                            .sql("INSERT INTO users (name, email) VALUES (?, ?)")
+                            .parameters("事务用户2", "tx2@test.com")
+                    )
             );
-            
+
             // 提交事务
             child.jdbc(jdbc -> jdbc
-                .title("提交事务")
-                .config(config -> config
-                    .datasource("jdbc_source")
-                    .sql("COMMIT")
-                )
+                    .title("提交事务")
+                    .config(config -> config
+                            .datasource("jdbc_source")
+                            .sql("COMMIT")
+                    )
             );
         });
     });

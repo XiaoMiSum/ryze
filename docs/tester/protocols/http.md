@@ -10,6 +10,7 @@ HTTP(S) 协议是 Ryze 框架内置支持的核心协议，提供完整的 HTTP/
 HTTP 协议支持内置在核心模块中，无需额外依赖：
 
 ```xml
+
 <dependency>
     <groupId>io.github.xiaomisum</groupId>
     <artifactId>ryze</artifactId>
@@ -19,7 +20,7 @@ HTTP 协议支持内置在核心模块中，无需额外依赖：
 
 ## ⚙️ 配置元件
 
-### HTTP 默认配置 [示例](../../template/配置元件/http_defaults.yaml)
+### HTTP 默认配置
 
 HTTP 默认配置：使用该组件，可配置 HTTP协议的默认配置，降低测试集合的配置复杂度。
 
@@ -62,7 +63,7 @@ config: # 可简化填写，无需config关键字，直接将配置内容至于�
 
 ## 🔧 处理器
 
-### 前置处理器 [示例](../../template/处理器/http_preprocessor.yaml)
+### 前置处理器
 
 前置处理器在主要测试之前执行，常用于获取认证 token 或准备测试数据。
 
@@ -82,7 +83,7 @@ config: # 处理器配置
   body: { userName: 'ryze', password: '123456qq' } # 请求body 优先级高于 data
 ```
 
-### 后置处理器 [示例](../../template/处理器/http_postprocessor.yaml)
+### 后置处理器
 
 后置处理器在主要测试之后执行，常用于清理测试数据或发送通知。
 
@@ -104,7 +105,7 @@ config: # 处理器配置
 
 ## 📊 取样器
 
-### HTTP 取样器 [示例](../../template/取样器/http_sampler.yaml)
+### HTTP 取样器
 
 #### YAML 配置方式
 
@@ -297,7 +298,7 @@ import io.github.xiaomisum.ryze.support.testng.annotation.RyzeTest
 import org.testng.annotations.Test
 
 class GroovyHttpExample {
-    
+
     @Test
     @RyzeTest
     void testHttpGet() {
@@ -323,7 +324,7 @@ class GroovyHttpExample {
             }
         }
     }
-    
+
     @Test
     @RyzeTest
     void testHttpPost() {
@@ -359,7 +360,7 @@ import io.github.xiaomisum.ryze.support.testng.annotation.RyzeTest
 import org.testng.annotations.Test
 
 class GroovyHttpSuiteExample {
-    
+
     @Test
     @RyzeTest
     void userApiTestSuite() {
@@ -373,7 +374,7 @@ class GroovyHttpSuiteExample {
                 put([a: 1, b: 2])
             }
             variables Collections.newHashMap([c: 3, d: 4])
-            
+
             // HTTP默认配置
             configureElements {
                 http {
@@ -385,7 +386,7 @@ class GroovyHttpSuiteExample {
                     }
                 }
             }
-            
+
             // 前置处理器：新增用户
             preprocessors {
                 http {
@@ -403,7 +404,7 @@ class GroovyHttpSuiteExample {
                     }
                 }
             }
-            
+
             children {
                 http {
                     title "步骤1——获取用户：id = \${id}"
@@ -420,7 +421,7 @@ class GroovyHttpSuiteExample {
                     }
                 }
             }
-            
+
             children {
                 http {
                     title "步骤2——修改用户：id=\${t_id}"
@@ -438,7 +439,7 @@ class GroovyHttpSuiteExample {
                     }
                 }
             }
-            
+
             children {
                 http {
                     title "步骤3——获取用户：id =\${t_body.id}"
