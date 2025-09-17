@@ -14,8 +14,8 @@ export default defineConfig({
       { text: '首页', link: '/' },
       { text: '文档', link: '/guide/introduction' },
       { text: '测试人员', link: '/tester/test-suite/test-suite-project' },
-      { text: '开发者', link: '/developer' },
-      { text: 'FAQ', link: '/faq' }
+      { text: '开发者', link: '/developer/style' },
+      { text: 'FAQ', link: '/faq/same' }
     ],
     
     sidebar: {
@@ -100,10 +100,10 @@ export default defineConfig({
             },
             {
               text: '提取器', items: [
-                { text: 'HTTP响应头提取器', link: '/tester/template/extractor/http_header_extractor' },
-                { text: 'JSON 提取器', link: '/tester/template/extractor/json_extractor' },
-                { text: '正则表达式提取器', link: '/tester/template/extractor/regex_extractor' },
-                { text: '响应结果提取器', link: '/tester/template/extractor/result_extractor' }
+                { text: 'HTTP响应头提取器', link: '/tester/extractor/http_header_extractor' },
+                { text: 'JSON 提取器', link: '/tester/extractor/json_extractor' },
+                { text: '正则表达式提取器', link: '/tester/extractor/regex_extractor' },
+                { text: '响应结果提取器', link: '/tester/extractor/result_extractor' }
               ]
             },
             {
@@ -133,7 +133,7 @@ export default defineConfig({
         {
           text: '开发者指南',
           items: [
-            { text: '编码规范', link: '/developer' },
+            { text: '编码规范', link: '/developer/style' },
             { text: '架构设计', link: '/developer/architecture' },
             { text: '新协议', link: '/developer/NewProtocol' },
             { text: '拦截器', link: '/developer/interceptor' },
@@ -158,7 +158,7 @@ export default defineConfig({
       '/faq/': [
         {
           text: 'FAQ',
-          link: '/faq'
+          link: '/faq/same'
         }
       ]
     },

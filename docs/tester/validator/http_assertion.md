@@ -14,13 +14,13 @@ strict: false # 是否严格验证，默认否：忽略大小写验证
 
 ## 参数说明
 
-| 参数 | 必填 | 说明 |
-|------|------|------|
-| testclass | 是 | 验证器类型，固定值为 `http` |
-| field | 是 | 要验证的 HTTP 响应部分，可选值包括：`status`（状态码）、`header[索引].字段名`（响应头）、`body`（响应体） |
-| expected | 是 | 期望值 |
-| rule | 是 | 验证规则，支持多种比较操作 |
-| strict | 否 | 是否严格验证，默认为 `false`（忽略大小写） |
+| 参数        | 必填 | 说明                                                                   |
+|-----------|----|----------------------------------------------------------------------|
+| testclass | 是  | 验证器类型，固定值为 `http`                                                    |
+| field     | 是  | 要验证的 HTTP 响应部分，可选值包括：`status`（状态码）、`header[索引].字段名`（响应头）、`body`（响应体） |
+| expected  | 是  | 期望值                                                                  |
+| rule      | 是  | 验证规则，支持多种比较操作                                                        |
+| strict    | 否  | 是否严格验证，默认为 `false`（忽略大小写）                                            |
 
 ## 使用示例
 
@@ -95,18 +95,19 @@ strict: false # 是否严格验证，默认否：忽略大小写验证
 
 HTTP 验证器支持以下验证规则：
 
-| 规则 | 说明 | 示例 |
-|------|------|------|
-| `==` | 相等 | `expected: 200, rule: "=="` |
-| `!=` | 不相等 | `expected: 404, rule: "!="` |
-| `>` | 大于 | `expected: 0, rule: ">"` |
-| `<` | 小于 | `expected: 10000, rule: "<"` |
-| `>=` | 大于等于 | `expected: 0, rule: ">="` |
-| `<=` | 小于等于 | `expected: 100, rule: "<="` |
-| `contains` | 包含 | `expected: "success", rule: "contains"` |
-| `notContains` | 不包含 | `expected: "error", rule: "notContains"` |
-| `startsWith` | 以...开始 | `expected: "http", rule: "startsWith"` |
-| `endsWith` | 以...结束 | `expected: ".com", rule: "endsWith"` |
-| `matches` | 正则匹配 | `expected: "^\\d{4}-\\d{2}-\\d{2}$", rule: "matches"` |
-| `isNotEmpty` | 非空 | `expected: "", rule: "isNotEmpty"` |
-| `isEmpty` | 为空 | `expected: "", rule: "isEmpty"` |
+| 规则             | 说明     | 示例                                                                              |
+|----------------|--------|---------------------------------------------------------------------------------|
+| `==`           | 相等     | `field: status, expected: 200, rule: "=="`                                      |
+| `eq_any`       | 任意一个相等 | `field: status, expected: [200, 300], rule: "eq_any"`                           |
+| `!=`           | 不相等    | `field: status, expected: 404, rule: "!="`                                      |
+| `>`            | 大于     | `field: status, expected: 0, rule: ">"`                                         |
+| `<`            | 小于     | `field: status, expected: 10000, rule: "<"`                                     |
+| `>=`           | 大于等于   | `field: status, expected: 0, rule: ">="`                                        |
+| `<=`           | 小于等于   | `field: status, expected: 100, rule: "<="`                                      |
+| `contains`     | 包含     | `field: header.Content-Type, expected: "success", rule: "contains"`             |
+| `any_contains` | 包含任意一个 | `field: header.Content-Type, expected: [success, false], rule: "any_contains"`  |
+| `not_contains` | 不包含    | `field: header.Content-Type, expected: "error", rule: "not_contains"`           |
+| `regex`        | 正则匹配   | `field: header.Content-Type, expected: "^\\d{4}-\\d{2}-\\d{2}$", rule: "regex"` |
+| `isNotEmpty`   | 非空     | `field: header.Content-Type, rule: "isNotEmpty"`                                |
+| `isEmpty`      | 为空     | `field: header.Content-Type,  rule: "isEmpty"`                                  |
+| `same_object`  | 对象匹配   | `field: body, expected: {}, rule: "same_object"`                                |
