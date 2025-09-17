@@ -119,8 +119,8 @@ Ryze 是一个基于 Java 21 开发的现代化测试框架，专为多协议测
 
 ### 👨‍💻 开发者文档
 
-- [开发者指南](/developer/) - 架构设计、编码规范和扩展机制
-- [API 参考](/developer/api/) - 核心 API 和组件接口文档
+- [开发者指南](/developer) - 架构设计、编码规范和扩展机制
+- [API 参考](/developer/api) - 核心 API 和组件接口文档
 
 ### 📋 测试工程师文档
 
@@ -129,7 +129,7 @@ Ryze 是一个基于 Java 21 开发的现代化测试框架，专为多协议测
 
 ## 📞 获取帮助
 
-- [常见问题](/faq/) - 常见问题解答和故障排除
+- [常见问题](/faq) - 常见问题解答和故障排除
 - [GitHub Issues](https://github.com/XiaoMiSum/ryze/issues) - 问题反馈和功能建议
 
 ---

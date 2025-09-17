@@ -82,9 +82,8 @@ public class RyzeDatasourceFilterInterceptor implements IDataProviderInterceptor
         }
         // 过滤数据
         var result = new ArrayList<Object[]>();
-        for (Integer index : SeqParser.parseSeq(datasource.slice(), dataList.size())) {
-            result.add(dataList.get(index - 1));
-        }
+        var seqList = SeqParser.parseSeq(datasource.slice(), dataList.size());
+        seqList.forEach(index -> result.add(dataList.get(index - 1)));
         return result.iterator();
     }
 }

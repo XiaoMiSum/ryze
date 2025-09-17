@@ -133,7 +133,7 @@ export default defineConfig({
         {
           text: '开发者指南',
           items: [
-            { text: '编码规范', link: '/developer/' },
+            { text: '编码规范', link: '/developer' },
             { text: '架构设计', link: '/developer/architecture' },
             { text: '新协议', link: '/developer/NewProtocol' },
             { text: '拦截器', link: '/developer/interceptor' },
@@ -158,7 +158,7 @@ export default defineConfig({
       '/faq/': [
         {
           text: 'FAQ',
-          link: '/faq/' 
+          link: '/faq'
         }
       ]
     },

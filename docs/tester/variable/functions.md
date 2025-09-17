@@ -336,8 +336,8 @@ variables:
 
 当内置函数无法满足特定需求时，Ryze 框架支持自定义函数扩展。详细的开发指南请参考：
 
-- **开发文档**：[Development.md](../Development.md) - 完整的开发指南和最佳实践
+- **开发文档**：[开发者文档](/developer/function) - 完整的开发指南和最佳实践
 - **代码示例**
-  ：查看框架源码中的[内置函数实现](../../ryze/src/main/resources/META-INF/services/io.github.xiaomisum.ryze.function.Function)
+  ：查看框架源码中的[内置函数实现](https://github.com/XiaoMiSum/ryze/tree/master/ryze/src/main/resources/META-INF/services/io.github.xiaomisum.ryze.function.Function)
 
 **💡 提示**：变量和函数是 Ryze 框架中实现动态测试的核心功能，合理使用可以大大提高测试的灵活性和可维护性！
