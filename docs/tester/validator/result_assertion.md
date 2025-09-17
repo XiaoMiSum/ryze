@@ -39,7 +39,7 @@ strict: false # 是否严格验证，默认否：忽略大小写验证
   "assertions": [
     {
       "testclass": "result",
-      "expected": true,
+      "expected": "响应消息内容",
       "rule": "=="
     }
   ]
@@ -110,37 +110,3 @@ strict: false # 是否严格验证，默认否：忽略大小写验证
 | `isNotEmpty`   | 非空     | `rule: "isNotEmpty"`                                |
 | `isEmpty`      | 为空     | ` rule: "isEmpty"`                                  |
 | `same_object`  | 对象匹配   | `expected: {}, rule: "same_object"`                 |
-
-## 验证内容说明
-
-结果验证器验证的内容根据不同的测试类型而有所不同：
-
-### HTTP测试
-
-验证HTTP请求是否成功执行，返回布尔值：
-
-- `true`：请求成功发送并收到响应
-- `false`：请求失败（如网络错误、超时等）
-
-### 数据库测试
-
-验证SQL执行影响的行数：
-
-- 对于SELECT语句，返回查询结果集的大小
-- 对于INSERT/UPDATE/DELETE语句，返回受影响的行数
-
-### 消息队列测试
-
-验证消息是否成功发送：
-
-- `true`：消息成功发送到队列
-- `false`：消息发送失败
-
-### Redis测试
-
-验证操作是否成功执行：
-
-- 对于读取操作，返回获取到的值或null
-- 对于写入操作，返回操作结果（如"OK"）
-
-通过结果验证器，可以确保整个测试步骤按预期执行，而不仅仅是验证响应内容的特定部分。
