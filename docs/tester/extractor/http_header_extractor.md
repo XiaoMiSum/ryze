@@ -12,11 +12,11 @@ ref_name: content_type # 引用变量名称
 
 ## 参数说明
 
-| 参数 | 必填 | 说明 |
-|------|------|------|
-| testclass | 是 | 提取器类型，固定值为 `http` |
-| field | 是 | 要提取的响应头字段名，区分大小写 |
-| ref_name | 是 | 提取值存储的变量名称 |
+| 参数        | 必填 | 说明                |
+|-----------|----|-------------------|
+| testclass | 是  | 提取器类型，固定值为 `http` |
+| field     | 是  | 要提取的响应头字段名，区分大小写  |
+| ref_name  | 是  | 提取值存储的变量名称        |
 
 ## 使用示例
 
@@ -35,7 +35,7 @@ ref_name: content_type # 引用变量名称
       "ref_name": "response_content_type"
     }
   ],
-  "assertions": [
+  "validators": [
     {
       "testclass": "json",
       "field": "$.id",
@@ -46,4 +46,5 @@ ref_name: content_type # 引用变量名称
 }
 ```
 
-在上述示例中，我们从 HTTP 响应头中提取了 `Content-Type` 字段的值，并将其存储在变量 `response_content_type` 中，可以在后续的测试步骤中使用该变量。
+在上述示例中，我们从 HTTP 响应头中提取了 `Content-Type` 字段的值，并将其存储在变量 `response_content_type`
+中，可以在后续的测试步骤中使用该变量。

@@ -167,7 +167,7 @@ children:
       body:
         username: "testuser"
         password: "password123"
-    assertions:
+    validators:
       - testclass: json
         field: "$.code"
         expected: 200
@@ -179,7 +179,7 @@ children:
     extractors:
       - testclass: json
         field: "$.data.token"
-        refName: "userToken"
+        ref_name: "userToken"
 ```
 
 执行测试：
@@ -218,7 +218,7 @@ public class LoginTest {
           "password": "password123"
         }
       },
-      "assertions": [
+      "validators": [
         {
           "testclass": "json",
           "field": "$.code",
@@ -236,7 +236,7 @@ public class LoginTest {
         {
           "testclass": "json",
           "field": "$.data.token",
-          "refName": "userToken"
+          "ref_name": "userToken"
         }
       ]
     }
@@ -356,7 +356,7 @@ println "测试结果: ${result.success}"
           "Authorization": "Bearer ${userToken}"
         }
       },
-      "assertions": [
+      "validators": [
         {
           "testclass": "json",
           "field": "$.data.username",

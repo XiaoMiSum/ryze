@@ -36,7 +36,7 @@ strict: false # 是否严格验证，默认否：忽略大小写验证
       "password": "testpass"
     }
   },
-  "assertions": [
+  "validators": [
     {
       "testclass": "result",
       "expected": "响应消息内容",
@@ -58,7 +58,7 @@ strict: false # 是否严格验证，默认否：忽略大小写验证
     "password": "testpass",
     "sql": "UPDATE users SET name = 'updated_user' WHERE id = 123"
   },
-  "assertions": [
+  "validators": [
     {
       "testclass": "result",
       "expected": 1,
@@ -80,7 +80,7 @@ strict: false # 是否严格验证，默认否：忽略大小写验证
     "key": "order-123",
     "value": "{\"orderId\": 123, \"status\": \"created\"}"
   },
-  "assertions": [
+  "validators": [
     {
       "testclass": "result",
       "expected": true,

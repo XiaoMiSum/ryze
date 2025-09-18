@@ -145,11 +145,10 @@ export default defineConfig({
         {
           text: 'API',
           items: [
-            { text: '参考信息', link: '/developer/api' },
+            { text: '参考信息', link: '/developer/api/reference' },
             { text: '核心 API', link: '/developer/api/core' },
             { text: '协议 API', link: '/developer/api/protocol' },
             { text: '测试组件 API', link: '/developer/api/test-element' },
-            { text: '上下文 API', link: '/developer/api/context' },
             { text: '构建器 API', link: '/developer/api/builder' },
             { text: '断言与提取器 API', link: '/developer/api/builder' }
           ]

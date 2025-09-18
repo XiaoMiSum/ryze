@@ -17,18 +17,23 @@
 执行上下文包含以下主要组成部分：
 
 ### 变量管理
+
 存储测试过程中使用的各种变量，包括用户定义变量、系统变量和提取变量。
 
 ### 配置信息
+
 存储测试配置相关信息，如全局配置、协议配置等。
 
 ### 测试结果
+
 存储测试执行过程中的结果数据。
 
 ### 错误信息
+
 存储测试执行过程中产生的错误信息。
 
 ### 执行状态
+
 跟踪测试执行的当前状态。
 
 ## 变量管理
@@ -67,29 +72,14 @@ Ryze 提供了丰富的内置变量：
 
 ```yaml
 # 当前时间戳
-timestamp: "${__time()}"
+timestamp: "${timestamp()}"
 
 # 随机UUID
-uuid: "${__uuid()}"
+uuid: "${uuid()}"
 
 # 随机数字
-random_number: "${__random(1, 100)}"
+random_number: "${random(1, 100)}"
 
-# 当前迭代次数（在循环中使用）
-iteration: "${__iteration}"
-```
-
-### 上下文变量
-
-```yaml
-# 前一个请求的响应数据
-previous_response: "${prev.responseData}"
-
-# 前一个请求的响应时间
-previous_response_time: "${prev.responseTime}"
-
-# 测试开始时间
-test_start_time: "${ctx.startTime}"
 ```
 
 ## 变量函数
@@ -107,6 +97,7 @@ formatted_time: "${timestamp('yyyy-MM-dd HH:mm:ss')}"
 
 # 时间偏移
 future_time: "${time_shift('yyyy-MM-dd', 'P7D')}"  # 7天后
+
 past_time: "${time_shift('yyyy-MM-dd', '-P7D')}"   # 7天前
 ```
 
@@ -125,11 +116,6 @@ random_range: "${random(1, 100)}"
 # 随机字符串
 random_string: "${random_string(10)}"
 
-# 随机邮箱
-random_email: "${random_email()}"
-
-# 随机手机号
-random_phone: "${random_phone()}"
 ```
 
 ### 加密函数
@@ -170,14 +156,14 @@ fake_company: "${faker('company.name')}"
 title: "变量作用域示例"
 variables:
   global_var: "global_value"  # 全局变量
-  
+
 configelements:
   - testclass: http
     name: "HTTP配置"
     config:
       headers:
         X-Global-Var: "${global_var}"  # 可以访问全局变量
-        
+
 preprocessors:
   - testclass: http
     title: "前置处理"
@@ -188,8 +174,8 @@ preprocessors:
     extractors:
       - testclass: json
         field: "$.token"
-        refName: "extracted_token"  # 提取变量
-        
+        ref_name: "extracted_token"  # 提取变量
+
 children:
   - testclass: http
     title: "测试请求"
@@ -199,7 +185,7 @@ children:
         Authorization: "Bearer ${extracted_token}"  # 使用提取变量
         X-Local-Var: "${local_var}"  # 可以访问父级变量
         X-Global-Var: "${global_var}"  # 可以访问全局变量
-        
+
 postprocessors:
   - testclass: http
     title: "后置处理"
@@ -207,37 +193,6 @@ postprocessors:
       url: "https://api.example.com/cleanup"
       headers:
         X-Global-Var: "${global_var}"  # 可以访问全局变量
-```
-
-## 上下文API
-
-在自定义组件中，您可以通过上下文API访问和操作上下文数据：
-
-```java
-public class CustomComponent {
-    
-    public void process(Context context) {
-        // 获取变量
-        String variableValue = context.getVariable("variable_name");
-        
-        // 设置变量
-        context.setVariable("new_variable", "value");
-        
-        // 获取系统变量
-        String timestamp = context.getSystemVariable("timestamp");
-        
-        // 添加错误信息
-        context.addError("CustomComponent", new Exception("Something went wrong"));
-        
-        // 获取配置信息
-        Configure config = context.getConfigure();
-        
-        // 检查执行状态
-        if (context.isStopped()) {
-            // 处理停止状态
-        }
-    }
-}
 ```
 
 ## 变量处理顺序
@@ -252,6 +207,7 @@ public class CustomComponent {
 ## 最佳实践
 
 ### 1. 变量命名规范
+
 ```yaml
 # 推荐：清晰的命名
 variables:
@@ -267,6 +223,7 @@ variables:
 ```
 
 ### 2. 合理使用作用域
+
 ```yaml
 # 全局配置放在测试集合级别
 title: "API测试套件"
@@ -282,20 +239,22 @@ children:
 ```
 
 ### 3. 错误处理
+
 ```yaml
 # 为可能失败的提取设置默认值
 extractors:
   - testclass: json
     field: "$.optional_field"
-    refName: "optional_value"
+    ref_name: "optional_value"
     defaultValue: "default_value"
 ```
 
 ### 4. 动态数据生成
+
 ```yaml
 # 使用函数生成动态测试数据
 variables:
-  test_user_email: "${random_email()}"
+  test_user_id: "${random()}"
   test_user_name: "${faker('name.fullName')}"
   request_id: "${uuid()}"
   timestamp: "${timestamp('yyyyMMddHHmmss')}"
@@ -304,15 +263,19 @@ variables:
 ## 常见问题
 
 ### 1. 变量未解析
+
 检查变量名是否正确，确保变量在使用前已定义。
 
 ### 2. 变量作用域问题
+
 确认变量在当前作用域内是否可用。
 
 ### 3. 函数执行错误
+
 检查函数参数是否正确，函数名是否拼写正确。
 
 ### 4. 循环引用
+
 避免变量间的循环引用，这会导致解析错误。
 
 通过合理使用执行上下文和变量管理功能，您可以创建更加灵活和强大的测试用例，实现复杂的测试场景和数据驱动测试。

@@ -71,21 +71,23 @@ variables:
 
 # 配置元件（数据库连接、HTTP 配置等）
 configelements:
-  - testclass: jdbc_configure
-    driver: mysql
-    url: jdbc:mysql://localhost:3306/testdb
-    username: ${db_user}
-    password: ${db_password}
+  - testclass: jdbc
+    config:
+      url: jdbc:mysql://localhost:3306/testdb
+      username: ${db_user}
+      password: ${db_password}
 
 # 前置处理器
 preprocessors:
-  - testclass: sql_preprocessor
-    sql: "DELETE FROM temp_table WHERE created_at < NOW() - INTERVAL 1 DAY"
+  - testclass: jdbc
+    config:
+      sql: "DELETE FROM temp_table WHERE created_at < NOW() - INTERVAL 1 DAY"
 
 # 后置处理器
 postprocessors:
-  - testclass: cleanup_processor
-    cleanup_temp_files: true
+  - testclass: jdbc
+    config:
+      sql: "DELETE FROM temp_table WHERE created_at < NOW() - INTERVAL 1 DAY"
 
 # 子集合或测试步骤
 children:
@@ -131,33 +133,34 @@ variables:
 # 全局配置元件
 configelements:
   # 数据库连接配置
-  - testclass: jdbc_configure
-    driver: mysql
-    url: jdbc:mysql://${database.host}:${database.port}/${database.name}
-    username: ${db_user}
-    password: ${db_password}
-    max_active: 10
-    max_wait: 5000
+  - testclass: jdbc
+    config:
+      url: jdbc:mysql://${database.host}:${database.port}/${database.name}
+      username: ${db_user}
+      password: ${db_password}
+      max_active: 10
+      max_wait: 5000
 
   # HTTP 全局配置
-  - testclass: http_configure
-    protocol: https
-    host: ${base_url}
-    headers:
-      Content-Type: application/json
-      User-Agent: RyzeTestFramework/1.0
+  - testclass: http
+    config:
+      protocol: https
+      host: ${base_url}
+      headers:
+        Content-Type: application/json
+        User-Agent: RyzeTestFramework/1.0
 
 # 全局前置处理
 preprocessors:
-  - testclass: env_setup
-    description: 环境初始化
-    setup_test_data: true
+  - testclass: jdbc
+    config:
+      sql: "DELETE FROM temp_table WHERE created_at < NOW() - INTERVAL 1 DAY"
 
 # 全局后置处理
 postprocessors:
-  - testclass: cleanup
-    description: 清理测试数据
-    cleanup_temp_data: true
+  - testclass: jdbc
+    config:
+      sql: "DELETE FROM temp_table WHERE created_at < NOW() - INTERVAL 1 DAY"
 
 # 子模块
 children:
@@ -190,23 +193,24 @@ variables:
 # 模块级配置元件
 configelements:
   # 用户模块特定 HTTP 配置
-  - testclass: http_configure
-    path: ${user_api_prefix}
-    headers:
-      X-Module: UserManagement
-      Authorization: Bearer ${admin_token}
+  - testclass: http
+    config:
+      path: ${user_api_prefix}
+      headers:
+        X-Module: UserManagement
+        Authorization: Bearer ${admin_token}
 
 # 模块级前置处理
 preprocessors:
-  - testclass: user_data_setup
-    description: 初始化用户测试数据
-    create_test_users: true
+  - testclass: jdbc
+    config:
+      sql: "DELETE FROM temp_table WHERE created_at < NOW() - INTERVAL 1 DAY"
 
 # 模块级后置处理
 postprocessors:
-  - testclass: user_data_cleanup
-    description: 清理用户测试数据
-    cleanup_test_users: true
+  - testclass: jdbc
+    config:
+      sql: "DELETE FROM temp_table WHERE created_at < NOW() - INTERVAL 1 DAY"
 
 # 子用例
 children:
@@ -241,15 +245,15 @@ variables:
 
 # 用例级前置处理
 preprocessors:
-  - testclass: user_exists_check
-    description: 检查用户名是否已存在
-    username: ${new_user.username}
+  - testclass: jdbc
+    config:
+      sql: "DELETE FROM temp_table WHERE created_at < NOW() - INTERVAL 1 DAY"
 
 # 用例级后置处理
 postprocessors:
-  - testclass: user_verification
-    description: 验证用户创建结果
-    verify_in_database: true
+  - testclass: jdbc
+    config:
+      sql: "DELETE FROM temp_table WHERE created_at < NOW() - INTERVAL 1 DAY"
 
 # 具体测试步骤
 children:
@@ -263,7 +267,7 @@ children:
     extractors:
       - { testclass: json, field: '$.data.user_id', ref_name: created_user_id }
       - { testclass: json, field: '$.data.token', ref_name: user_token }
-    assertions:
+    validators:
       - { testclass: json, field: '$.status', expected: ${ expected_result.status }, rule: '==' }
       - { testclass: http, field: 'status', expected: ${ expected_result.code }, rule: '==' }
 
@@ -275,7 +279,7 @@ children:
       path: /${created_user_id}
       headers:
         Authorization: Bearer ${user_token}
-    assertions:
+    validators:
       - { testclass: json, field: '$.data.username', expected: ${ new_user.username }, rule: '==' }
       - { testclass: json, field: '$.data.email', expected: ${ new_user.email }, rule: '==' }
 
@@ -283,9 +287,8 @@ children:
   - title: "数据库验证用户信息"
     testclass: jdbc
     config:
-      sql: "SELECT username, email, status FROM users WHERE id = ?"
-      parameters: [ ${ created_user_id } ]
-    assertions:
+      sql: "SELECT username, email, status FROM users WHERE id = ${created_user_id}"
+    validators:
       - { testclass: result, expected: ${ new_user.username }, rule: 'contains' }
 ```
 

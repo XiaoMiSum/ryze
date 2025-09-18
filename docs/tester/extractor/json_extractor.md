@@ -12,11 +12,11 @@ ref_name: status # 变量名称
 
 ## 参数说明
 
-| 参数 | 必填 | 说明 |
-|------|------|------|
-| testclass | 是 | 提取器类型，固定值为 `json` |
-| field | 是 | JSONPath 表达式，用于定位要提取的字段 |
-| ref_name | 是 | 提取值存储的变量名称 |
+| 参数        | 必填 | 说明                      |
+|-----------|----|-------------------------|
+| testclass | 是  | 提取器类型，固定值为 `json`       |
+| field     | 是  | JSONPath 表达式，用于定位要提取的字段 |
+| ref_name  | 是  | 提取值存储的变量名称              |
 
 ## 使用示例
 
@@ -44,7 +44,7 @@ ref_name: status # 变量名称
       "ref_name": "user_id"
     }
   ],
-  "assertions": [
+  "validators": [
     {
       "testclass": "http",
       "field": "status",
@@ -55,4 +55,5 @@ ref_name: status # 变量名称
 }
 ```
 
-在上述示例中，我们从 JSON 响应体中提取了 token 和用户 ID，并将它们分别存储在变量 `auth_token` 和 `user_id` 中，可以在后续的测试步骤中使用这些变量。
+在上述示例中，我们从 JSON 响应体中提取了 token 和用户 ID，并将它们分别存储在变量 `auth_token` 和 `user_id`
+中，可以在后续的测试步骤中使用这些变量。

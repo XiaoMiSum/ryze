@@ -358,7 +358,7 @@ config:
   method: POST
   url: "https://api.example.com/users"
 
-assertions:
+validators:
   - testclass: json
     jsonpath: "$.user.id"
     expected: 123

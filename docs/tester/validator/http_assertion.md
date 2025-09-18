@@ -38,7 +38,7 @@ strict: false # 是否严格验证，默认否：忽略大小写验证
       "password": "testpass"
     }
   },
-  "assertions": [
+  "validators": [
     {
       "testclass": "http",
       "field": "status",
@@ -59,7 +59,7 @@ strict: false # 是否严格验证，默认否：忽略大小写验证
     "method": "GET",
     "url": "https://api.example.com/files/document.pdf"
   },
-  "assertions": [
+  "validators": [
     {
       "testclass": "http",
       "field": "header[0].Content-Type",
@@ -80,7 +80,7 @@ strict: false # 是否严格验证，默认否：忽略大小写验证
     "method": "GET",
     "url": "https://api.example.com/users/123"
   },
-  "assertions": [
+  "validators": [
     {
       "testclass": "http",
       "field": "body",
