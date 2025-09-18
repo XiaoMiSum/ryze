@@ -92,7 +92,6 @@ public abstract class AbstractExtractor implements Extractor, ExtractorConstants
     @JSONField(name = REF_NAME)
     protected String refName;
 
-
     /**
      * 构造一个新的抽象提取器实例
      * <p>初始化所有字段为默认值，需要通过setter方法或构建器进行配置。</p>
@@ -153,16 +152,14 @@ public abstract class AbstractExtractor implements Extractor, ExtractorConstants
             if (StringUtils.isBlank(result.getResponse().bytesAsString()) && defaultValue == null) {
                 throw new IllegalArgumentException("待提取的字符串为 null 或空白");
             }
-            Object value;
+            Object value = null;
             try {
                 value = extract(result);
-                value = value == null ? defaultValue : value;
-            } catch (Exception e) {
-                if (defaultValue == null) {    // 提取发生异常，且设置了默认值，则使用默认值
-                    throw new RuntimeException(e);
-                }
-                value = defaultValue;
+            } catch (RuntimeException e) {
+                if (defaultValue == null)
+                    throw e;
             }
+            value = value == null ? defaultValue : value;
             if (value == null) {
                 throw new IllegalArgumentException("目标字符串没有匹配的数据 %s，目标字符串：\n%s".formatted(field, result.getResponse().bytesAsString()));
             }
