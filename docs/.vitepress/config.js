@@ -72,7 +72,7 @@ export default defineConfig({
         {
           text: '扩展机制',
           items: [
-            { text: '自定义断言', link: '/guide/extending/assertion' },
+            { text: '自定义验证器', link: '/guide/extending/validator' },
             { text: '自定义提取器', link: '/guide/extending/extractor' },
             { text: '自定义函数', link: '/guide/extending/function' },
             { text: '自定义协议', link: '/guide/extending/protocol' }

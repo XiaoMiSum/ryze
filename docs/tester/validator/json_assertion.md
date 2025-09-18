@@ -154,8 +154,8 @@ JSON 验证器支持以下验证规则：
 | `any_contains` | 包含任意一个 | `field: $.data, expected: [success, false], rule: "any_contains"`  |
 | `not_contains` | 不包含    | `field: $.data, expected: "error", rule: "not_contains"`           |
 | `regex`        | 正则匹配   | `field: $.data, expected: "^\\d{4}-\\d{2}-\\d{2}$", rule: "regex"` |
-| `isNotEmpty`   | 非空     | `field: $.data, rule: "isNotEmpty"`                                |
-| `isEmpty`      | 为空     | `field: $.data,  rule: "isEmpty"`                                  |
+| `is_not_empty` | 非空     | `field: header.Content-Type, rule: "is_not_empty"`                 |
+| `is_empty`     | 为空     | `field: header.Content-Type,  rule: "is_empty"`                    |
 | `same_object`  | 对象匹配   | `field: $.data, expected: {}, rule: "same_object"`                 |
 
 ## JSONPath 语法说明

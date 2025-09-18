@@ -63,36 +63,60 @@ public abstract class AbstractAssertion implements Assertion, AssertionConstants
 ### JSON 断言
 
 ```java
-@KW({"jsonpath", "json", "jp"})
+
+@KW({"JSONAssertion", "json_assertion", "json"})
 public class JSONAssertion extends AbstractAssertion {
 
-    private String jsonPath;
 
-    @Override
-    protected Object extractActualValue(SampleResult result) {
-        String jsonString = result.getResponseDataAsString();
-        Object document = Configuration.defaultConfiguration().jsonProvider().parse(jsonString);
-        return JsonPath.read(document, jsonPath);
+    /**
+     * 创建JSON断言构建器
+     *
+     * @return JSON断言构建器
+     */
+    public static Builder builder() {
+        return new Builder();
     }
 
+    /**
+     * 初始化断言期望值，从JSON响应中提取指定字段的值
+     *
+     * <p>该方法使用field属性作为JSONPath表达式从响应中提取实际值。</p>
+     *
+     * @param result 取样结果对象
+     * @return 断言期望值对象
+     */
+    @Override
+    protected Object extractActualValue(SampleResult result) {
+        var target = result.getResponse().bytesAsString();
+        return JSONPath.extract(target, field);
+    }
+
+    /**
+     * 验证断言配置的有效性
+     *
+     * <p>该方法检查field字段是否为空，如果为空则返回验证失败结果。</p>
+     *
+     * @return 验证结果
+     */
     @Override
     public ValidateResult validate() {
         ValidateResult result = new ValidateResult();
-        if (StringUtils.isBlank(jsonPath)) {
-            result.append("JSON Path 表达式不能为空");
+        if (StringUtils.isBlank(field)) {
+            result.append("\n提取表达式 %s 字段值缺失或为空，当前值：%s", field, toString());
         }
-        result.append(super.validate());
         return result;
     }
 
+    /**
+     * JSON断言构建器类
+     */
     public static class Builder extends AbstractAssertion.Builder<Builder, JSONAssertion> {
+
+        /**
+         * 构造函数，创建JSON断言构建器
+         */
         public Builder() {
             super(new JSONAssertion());
-        }
-
-        public Builder jsonPath(String jsonPath) {
-            assertion.jsonPath = jsonPath;
-            return self;
         }
     }
 }
@@ -114,7 +138,7 @@ Ryze 框架使用 Hamcrest 匹配器作为验证规则的核心实现。每个�
 public abstract class ProxyMatcher extends BaseMatcher<Object> {
     protected boolean strict;        // 严格匹配标志
     protected Object expectedValue;  // 期望值
-    
+
     public ProxyMatcher(Object expectedValue, boolean strict) {
         this.expectedValue = expectedValue;
         this.strict = strict;
@@ -127,27 +151,28 @@ public abstract class ProxyMatcher extends BaseMatcher<Object> {
 以下是一个自定义匹配器的开发示例：
 
 ```java
+
 @KW({"email", "isEmail", "validEmail"})
 public class EmailMatcher extends ProxyMatcher {
-    
+
     private static final Pattern EMAIL_PATTERN = Pattern.compile(
-        "^[A-Za-z0-9+_.-]+@([A-Za-z0-9.-]+\\.[A-Za-z]{2,})$"
+            "^[A-Za-z0-9+_.-]+@([A-Za-z0-9.-]+\\.[A-Za-z]{2,})$"
     );
-    
+
     public EmailMatcher(Object expectedValue) {
         this(expectedValue, false);
     }
-    
+
     public EmailMatcher(Object expectedValue, boolean strict) {
         super(expectedValue, strict);
     }
-    
+
     @Override
     public boolean matches(Object actualValue) {
         if (actualValue == null) return false;
         return EMAIL_PATTERN.matcher(actualValue.toString()).matches();
     }
-    
+
     @Override
     public void describeTo(Description description) {
         description.appendText("a valid email address");
@@ -162,13 +187,14 @@ public class EmailMatcher extends ProxyMatcher {
 支持的关键字：equals, equal, qe, is, =, ==, ===, 等于, 相等
 
 ```java
+
 @KW({"equals", "equal", "qe", "is", "=", "==", "===", "等于", "相等"})
 public class EqualsMatcher extends ProxyMatcher {
     @Override
     public boolean matches(Object actualValue) {
         return Comparator.areEqual(actualValue, expectedValue, !strict);
     }
-    
+
     @Override
     public void describeTo(Description description) {
         // 实现细节...
@@ -181,13 +207,14 @@ public class EqualsMatcher extends ProxyMatcher {
 支持的关键字：contains, ct, 包含, ⊆, contain
 
 ```java
+
 @KW({"contains", "ct", "包含", "⊆", "contain"})
 public class ContainsMatcher extends ProxyMatcher {
     @Override
     public boolean matches(Object actualValue) {
         return Comparator.contains(actualValue, expectedValue, !strict);
     }
-    
+
     @Override
     public void describeTo(Description description) {
         // 实现细节...
@@ -200,24 +227,25 @@ public class ContainsMatcher extends ProxyMatcher {
 支持的关键字：regex, rx, 正则, 正则表达式
 
 ```java
+
 @KW({"regex", "rx", "正则", "正则表达式"})
 public class RegexMatcher extends ProxyMatcher {
     private final Pattern pattern;
-    
+
     public RegexMatcher(Object expected, boolean strict) {
         super(strict);
         this.pattern = Pattern.compile(expected.toString(), !strict ? Pattern.CASE_INSENSITIVE : 0);
     }
-    
+
     @Override
     public boolean matches(Object actualValue) {
         return pattern.matcher((String) actualValue).matches();
     }
-    
+
     @Override
     public void describeTo(Description description) {
         description.appendText("matches regex: ").appendValue(pattern.pattern())
-                   .appendText(strict ? "" : " (ignore case)");
+                .appendText(strict ? "" : " (ignore case)");
     }
 }
 ```
@@ -228,7 +256,8 @@ public class RegexMatcher extends ProxyMatcher {
 
 #### 断言注册
 
-断言通过 SPI 机制注册，需要在 `src/main/resources/META-INF/services/io.github.xiaomisum.ryze.assertion.Assertion` 文件中添加断言类的全限定名：
+断言通过 SPI 机制注册，需要在 `src/main/resources/META-INF/services/io.github.xiaomisum.ryze.assertion.Assertion`
+文件中添加断言类的全限定名：
 
 ```
 io.github.xiaomisum.ryze.assertion.builtin.JSONAssertion
@@ -261,6 +290,7 @@ io.github.xiaomisum.ryze.assertion.builtin.matcher.SameObjectMatcher
 例如，EqualsMatcher 类使用了以下注解：
 
 ```java
+
 @KW({"equals", "equal", "qe", "is", "=", "==", "===", "等于", "相等"})
 public class EqualsMatcher extends ProxyMatcher {
     // ...
@@ -298,24 +328,25 @@ public static Matcher<Object> createMatcher(String rule, Object expected, boolea
 ### 在 Java API 中使用
 
 ```java
-    @Test
-    @RyzeTest
-    public void testWithValidators() {
-        MagicBox.http("验证器测试", http -> {
-            http.config(config -> config
-                    .method("POST")
-                    .url("https://api.example.com/users")
-            );
 
-            http.assertions(assertions ->
-                    assertions.json("$.user.id", 123, "equals")
-                            .json("$.user.name", "John", "contains")
-                            .json("$.user.email", "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", "regex")
-                            .json("$.user.age", 18, ">")
-                            .json("$.user.tags", new String[]{"vip", "premium"}, "any_contains")
-            );
-        });
-    }
+@Test
+@RyzeTest
+public void testWithValidators() {
+    MagicBox.http("验证器测试", http -> {
+        http.config(config -> config
+                .method("POST")
+                .url("https://api.example.com/users")
+        );
+
+        http.assertions(assertions ->
+                assertions.json("$.user.id", 123, "equals")
+                        .json("$.user.name", "John", "contains")
+                        .json("$.user.email", "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", "regex")
+                        .json("$.user.age", 18, ">")
+                        .json("$.user.tags", new String[]{"vip", "premium"}, "any_contains")
+        );
+    });
+}
 ```
 
 ### 在 YAML 中使用
@@ -346,7 +377,7 @@ assertions:
     rule: ">"
   - testclass: json
     jsonpath: "$.user.tags"
-    expected: ["vip", "premium"]
+    expected: [ "vip", "premium" ]
     rule: "any_contains"
 ```
 
