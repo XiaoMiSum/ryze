@@ -25,8 +25,6 @@
 
 package io.github.xiaomisum.ryze.protocol.http.assertion;
 
-import com.alibaba.fastjson2.JSON;
-import com.alibaba.fastjson2.JSONPath;
 import io.github.xiaomisum.ryze.assertion.AbstractAssertion;
 import io.github.xiaomisum.ryze.protocol.http.RealHTTPResponse;
 import io.github.xiaomisum.ryze.testelement.KW;
@@ -95,7 +93,7 @@ public class HTTPResponseAssertion extends AbstractAssertion {
     /**
      * 响应头字段名匹配模式
      */
-    private static final Pattern PATTERN = Pattern.compile("^header(\\[\\d+])?(\\.\\w+.?)?");
+    private static final Pattern PATTERN = Pattern.compile("^header(\\[(\\d+)])?\\.(.+)?");
 
     /**
      * 创建HTTP响应断言构建器
@@ -126,8 +124,10 @@ public class HTTPResponseAssertion extends AbstractAssertion {
         field = StringUtils.isBlank(field) ? BODY : field;
         var matcher = PATTERN.matcher(field);
         if (matcher.find()) {
-            var path = "$" + (matcher.group(1) == null ? "[0]" : matcher.group(1)) + matcher.group(2);
-            return JSONPath.extract(JSON.toJSONString(response.headers()), path);
+            var index = matcher.group(1) == null || matcher.group(2) == null ? 0 : Integer.parseInt(matcher.group(2));
+            var headerName = matcher.group(3);
+            return response.headers().stream().filter(header -> header.getName().equalsIgnoreCase(headerName))
+                    .toList().get(index).getValue();
         } else {
             return STATUS.contains(field.toLowerCase()) ? response.statusCode() : response.bytesAsString();
         }
