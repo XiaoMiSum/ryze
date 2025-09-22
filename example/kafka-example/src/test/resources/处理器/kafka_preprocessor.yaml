@@ -1,5 +1,0 @@
-testclass: kafka_preprocessor # kafka 后置处理器类型
-config: # 处理器配置
-  message: # 发送的消息，ProducerRecord中的 value, 可以是任意json对象、字符串、数字等
-    name: ryze.test.processor
-    value: kafka_preprocessor

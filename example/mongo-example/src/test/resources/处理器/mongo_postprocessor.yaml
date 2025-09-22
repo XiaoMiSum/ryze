@@ -1,5 +1,0 @@
-testclass: mongo_postprocessor # mongo 后置处理器类型
-title: mongo_postprocessor 删除数据
-config: # 处理器配置
-  action: delete  # 操作类型：find、insert、update、delete
-  data: { } # 条件，非空

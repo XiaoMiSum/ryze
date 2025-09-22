@@ -1,8 +1,0 @@
-testclass: http_preprocessor  # http前置处理器 类型
-config: # 处理器配置
-  method: PUT
-  path: '/user'
-  body:
-    id: 1
-    name: "ryze_http_preprocessor"
-    age: 0

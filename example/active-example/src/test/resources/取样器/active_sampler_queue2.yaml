@@ -1,8 +1,0 @@
-title: activemq_sampler_queue2
-testclass: active  # 取样器类型
-config: # 取样器配置
-  username: artemis # activemq 用户名
-  password: artemis # activemq 密码
-  queue: ryze.queue # 订阅模式 优先级高于 topic，根据实际选择使用
-  broker.url: 'tcp://127.0.0.1:61616'
-  message: queue_2

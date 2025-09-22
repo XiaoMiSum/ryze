@@ -1,9 +1,0 @@
-title: htt_sampler # 包含配置原件、前置处理器、后置处理器、多个取样器（执行步骤）
-testclass: http_sampler
-configelements:
-  - !include '配置元件/http_defaults.yaml'
-config:
-  method: get
-  path: '/user/2'
-validators:
-  - { testclass: json_assertion, field: '$.data.name', expected: 'name_2' }

@@ -1,6 +1,0 @@
-# mongo 默认配置，各配置项的优先级为：取样器 > 默认配置
-testclass: mongo_defaults # 配置元件类型
-config:
-  url: 'mongodb://root:123456@127.0.0.1:27017/?authSource=admin' # 可空，空值时,使用 datasource 中的 url
-  database: 'demo' # 数据库名称，可空，空值时，使用 datasource 中的 database
-  collection: 'book' # 表名，可空，空值时，使用 datasource 中的 collection

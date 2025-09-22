@@ -1,4 +1,0 @@
-testclass: jdbc_postprocessor # jdbc 后置处理器类型
-config: # 处理器配置
-  datasource: jdbc_source
-  sql: 'truncate table t_001;'

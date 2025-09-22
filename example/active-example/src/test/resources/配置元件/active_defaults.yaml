@@ -1,7 +1,0 @@
-# activemq 默认配置，各配置项的优先级为：取样器 > 默认配置
-testclass: active  # 取样器类型
-config:
-  username: artemis # activemq 用户名
-  password: artemis # activemq 密码
-  topic: ryze.topic
-  broker.url: 'tcp://127.0.0.1:61616'

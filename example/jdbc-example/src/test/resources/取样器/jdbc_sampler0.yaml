@@ -1,7 +1,0 @@
-title: jdbc_sampler_0
-testclass: jdbc # 取样器类型
-configelements:
-  - !include '配置元件/jdbc_defaults.yaml'
-config: # 取样器配置
-  datasource: jdbc_source
-  sql: 'insert into t_001 (id, tick, name) values (2, "test", "jdbc_sampler_0");'  # sql语句

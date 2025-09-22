@@ -1,9 +1,0 @@
-title: jdbc_sampler_5
-testclass: jdbc # 取样器类型
-configelements:
-  - !include '配置元件/jdbc_defaults.yaml'
-config: # 取样器配置
-  datasource: jdbc_source
-  sql: 'select * from t_001  where id = 2;'  # sql语句
-validators:
-  - { testclass: result, rule: isNull }

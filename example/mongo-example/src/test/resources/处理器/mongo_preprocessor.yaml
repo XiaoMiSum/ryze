@@ -1,5 +1,0 @@
-testclass: mongo_preprocessor # mongo 前置处理器类型
-title: mongo_preprocessor 插入数据
-config: # 处理器配置
-  action: insert  # 操作类型：find、insert、update、delete
-  data: { name: '${name}', author: 'ryze', isbn: '${random(10)}' } # 条件，非空
