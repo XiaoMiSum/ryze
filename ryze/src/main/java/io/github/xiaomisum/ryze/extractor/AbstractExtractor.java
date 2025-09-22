@@ -149,18 +149,19 @@ public abstract class AbstractExtractor implements Extractor, ExtractorConstants
             return;
         }
         if (context.getTestResult() instanceof SampleResult result) {
-            if (StringUtils.isBlank(result.getResponse().bytesAsString()) && defaultValue == null) {
+            var defaultValueIsBlank = defaultValue == null || StringUtils.isBlank(defaultValue.toString());
+            if (StringUtils.isBlank(result.getResponse().bytesAsString()) && defaultValueIsBlank) {
                 throw new IllegalArgumentException("待提取的字符串为 null 或空白");
             }
             Object value = null;
             try {
                 value = extract(result);
             } catch (RuntimeException e) {
-                if (defaultValue == null)
+                if (defaultValueIsBlank)
                     throw e;
             }
-            value = value == null ? defaultValue : value;
-            if (value == null) {
+            value = value == null || StringUtils.isBlank(value.toString()) ? defaultValue : value;
+            if (value == null || StringUtils.isBlank(value.toString())) {
                 throw new IllegalArgumentException("目标字符串没有匹配的数据 %s，目标字符串：\n%s".formatted(field, result.getResponse().bytesAsString()));
             }
             context.getLocalVariablesWrapper().put(refName, value);
