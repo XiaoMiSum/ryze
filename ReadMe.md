@@ -55,16 +55,29 @@ Ryze 是一个基于 Java 21 开发的现代化测试框架，专为多协议测
 ## 📋 目录
 
 - [📖 项目简介](#project-introduction)
-- [📋 用户手册](https://xiaomisum.github.io/ryze)
+- [📋 用户手册](#documentation-center)
 - [🏗️ 系统架构](#system-architecture)
 - [🚀 快速开始](#quick-start)
 - [💡 使用示例](#usage-examples)
-- [📁 文档中心](#documentation-center)
 - [🧩 模块说明](#module-description)
 - [🛠️ 开发指南](#development-guide)
 - [🤝 贡献指南](#contribution-guide)
 - [📄 许可证](#license)
 - [🙏 鸣谢](#acknowledgements)
+
+## 📁 文档中心
+
+<a name="documentation-center"></a>
+框架提供了完整的文档体系，帮助您更好地使用和扩展 Ryze：
+
+### 🌐 在线文档
+
+我们提供了基于 VitePress 的在线文档站点，您可以通过以下链接访问：
+
+- [在线文档](https://xiaomisum.github.io/ryze)
+- [中国大陆](https://ryze-rr7xp0ri.maozi.io)
+
+在线文档包含了框架的所有功能介绍、使用指南和 API 参考，是学习和使用 Ryze 的最佳资源。
 
 ## 🏗️ 系统架构
 
@@ -368,20 +381,6 @@ println "测试结果: ${result.success}"
   ]
 }
 ```
-
-## 📁 文档中心
-
-<a name="documentation-center"></a>
-框架提供了完整的文档体系，帮助您更好地使用和扩展 Ryze：
-
-### 🌐 在线文档
-
-我们提供了基于 VitePress 的在线文档站点，您可以通过以下链接访问：
-
-- [在线文档](https://xiaomisum.github.io/ryze)
-- [中国大陆](https://ryze-rr7xp0ri.maozi.io)
-
-在线文档包含了框架的所有功能介绍、使用指南和 API 参考，是学习和使用 Ryze 的最佳资源。
 
 ## 📋 模板引擎和变量系统
 
