@@ -100,7 +100,7 @@ public class ValidateResult {
     }
 
     public boolean isValid() {
-        return !valid;
+        return valid;
     }
 
     public String getReason() {
