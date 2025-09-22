@@ -26,6 +26,7 @@
 package io.github.xiaomisum.ryze.protocol.http;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.hc.core5.http.Header;
 import xyz.migoo.simplehttp.Response;
 
 import java.util.Arrays;
@@ -67,6 +68,25 @@ public class RealHTTPResponse extends HTTPRealResult {
         version = response.version();
         message = response.message();
         headers = Arrays.stream(response.headers()).toList();
+    }
+
+    /**
+     * 通过直接设置属性的方式创建对象
+     * <p>
+     * 当前仅用于单元测试
+     *
+     * @param bytes   响应数据
+     * @param status  http状态码
+     * @param version http版本
+     * @param message http消息
+     * @param headers 响应头信息
+     */
+    public RealHTTPResponse(byte[] bytes, int status, String version, String message, Header... headers) {
+        super(bytes);
+        statusCode = status;
+        this.version = version;
+        this.message = message;
+        this.headers = Arrays.stream(headers).toList();
     }
 
 
