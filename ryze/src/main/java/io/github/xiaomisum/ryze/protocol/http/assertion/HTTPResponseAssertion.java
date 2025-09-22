@@ -28,7 +28,7 @@ package io.github.xiaomisum.ryze.protocol.http.assertion;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONPath;
 import io.github.xiaomisum.ryze.assertion.AbstractAssertion;
-import io.github.xiaomisum.ryze.protocol.http.RealHTTPRealResultResponse;
+import io.github.xiaomisum.ryze.protocol.http.RealHTTPResponse;
 import io.github.xiaomisum.ryze.testelement.KW;
 import io.github.xiaomisum.ryze.testelement.sampler.SampleResult;
 import org.apache.commons.lang3.StringUtils;
@@ -122,7 +122,7 @@ public class HTTPResponseAssertion extends AbstractAssertion {
      */
     @Override
     protected Object extractActualValue(SampleResult result) {
-        var response = (RealHTTPRealResultResponse) result.getResponse();
+        var response = (RealHTTPResponse) result.getResponse();
         field = StringUtils.isBlank(field) ? BODY : field;
         var matcher = PATTERN.matcher(field);
         if (matcher.find()) {

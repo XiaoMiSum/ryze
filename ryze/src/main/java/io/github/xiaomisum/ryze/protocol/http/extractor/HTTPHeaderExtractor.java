@@ -29,7 +29,7 @@ import com.alibaba.fastjson2.annotation.JSONField;
 import io.github.xiaomisum.ryze.extractor.AbstractExtractor;
 import io.github.xiaomisum.ryze.extractor.builtin.JSONExtractor;
 import io.github.xiaomisum.ryze.extractor.builtin.RegexExtractor;
-import io.github.xiaomisum.ryze.protocol.http.RealHTTPRealResultResponse;
+import io.github.xiaomisum.ryze.protocol.http.RealHTTPResponse;
 import io.github.xiaomisum.ryze.testelement.KW;
 import io.github.xiaomisum.ryze.testelement.sampler.SampleResult;
 
@@ -102,7 +102,7 @@ public class HTTPHeaderExtractor extends AbstractExtractor {
      */
     @Override
     protected Object extract(SampleResult result) {
-        var response = (RealHTTPRealResultResponse) result.getResponse();
+        var response = (RealHTTPResponse) result.getResponse();
         var headers = response.headers().stream().filter(header -> header.getName().equalsIgnoreCase(field)).toList();
         if (!headers.isEmpty()) {
             matchNum = (headers.size() < matchNum + 1) ? headers.size() - 1 : matchNum;

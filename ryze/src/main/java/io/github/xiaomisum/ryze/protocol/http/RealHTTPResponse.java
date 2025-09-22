@@ -40,7 +40,7 @@ import java.util.Objects;
  *
  * @author xiaomi
  */
-public class RealHTTPRealResultResponse extends HTTPRealResult {
+public class RealHTTPResponse extends HTTPRealResult {
 
     /**
      * HTTP状态码
@@ -58,7 +58,7 @@ public class RealHTTPRealResultResponse extends HTTPRealResult {
      *
      * @param response HTTP响应对象
      */
-    public RealHTTPRealResultResponse(Response response) {
+    public RealHTTPResponse(Response response) {
         super(Objects.isNull(response) ? new byte[0] : response.bytes());
         if (Objects.isNull(response)) {
             return;
