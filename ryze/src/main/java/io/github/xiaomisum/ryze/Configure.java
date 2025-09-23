@@ -152,12 +152,12 @@ public class Configure {
     }
 
     /**
-     * 获取内置拦截器列表
+     * 获取内置拦截器列表（拷贝）
      *
      * @return 内置拦截器列表
      */
     public InterceptorConfigureItem<RyzeInterceptor> getBuiltinInterceptors() {
-        return builtinRyzeInterceptors;
+        return builtinRyzeInterceptors.copy();
     }
 
     /**
@@ -165,7 +165,7 @@ public class Configure {
      *
      * @param builtinRyzeInterceptors 内置拦截器配置项
      */
-    public void setBuiltinInterceptors(InterceptorConfigureItem<RyzeInterceptor> builtinRyzeInterceptors) {
+    private void setBuiltinInterceptors(InterceptorConfigureItem<RyzeInterceptor> builtinRyzeInterceptors) {
         if (!isEnableAllureReport()) {
             builtinRyzeInterceptors.removeIf(AllureReportListener.class::isInstance);
         }
