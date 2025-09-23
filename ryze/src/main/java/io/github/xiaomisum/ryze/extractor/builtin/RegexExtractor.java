@@ -110,8 +110,10 @@ public class RegexExtractor extends AbstractExtractor {
         matchNum = Math.max(0, matchNum);
         int state = matchNum;
         while (state > -1 && matcher.find()) {
-            value = matcher.group(1);
-            state--;
+            if (state-- == 0) {
+                value = matcher.group(1);
+                break;
+            }
         }
         return StringUtils.isBlank(value) ? null : value;
     }
