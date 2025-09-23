@@ -117,10 +117,10 @@ public abstract class AbstractExtractor implements Extractor, ExtractorConstants
     public ValidateResult validate() {
         ValidateResult result = new ValidateResult();
         if (StringUtils.isBlank(refName)) {
-            result.append("\n提取引用名称 %s 字段值缺失或为空，当前值：%s", REF_NAME, toString());
+            result.append("\n提取引用名称 ref_name 字段值缺失或为空");
         }
         if (StringUtils.isBlank(field)) {
-            result.append("\n提取表达式 %s 字段值缺失或为空，当前值：%s", field, toString());
+            result.append("\n提取表达式 field 字段值缺失或为空");
         }
         return result;
     }
