@@ -85,14 +85,6 @@ docker ps | grep kafka
 
 ## 📊 预期结果
 
-测试成功执行后，您应该看到类似以下的输出：
-
-```
-测试执行状态: SUCCESS
-测试时长: 234ms
-子测试数量: 2
-```
-
 ### 执行结果验证
 
 Kafka 消费者控制台应该打印 Kafka Sampler 发送的 message：
