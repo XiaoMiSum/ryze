@@ -100,13 +100,16 @@ public class Collections {
         return map;
     }
 
-
     public static <K, V> Map<K, V> newHashMap(Map<K, V> map) {
         return new HashMap<>(map);
     }
 
     public static <K, V> Map<K, V> newHashMap() {
         return new HashMap<>();
+    }
+
+    public static Map<String, String> emptyMap() {
+        return java.util.Collections.emptyMap();
     }
 
     @SafeVarargs
