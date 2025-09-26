@@ -40,17 +40,20 @@ import io.github.xiaomisum.ryze.context.ContextWrapper;
 import io.github.xiaomisum.ryze.context.TestRunContext;
 import io.github.xiaomisum.ryze.extractor.Extractor;
 import io.github.xiaomisum.ryze.interceptor.RyzeInterceptor;
-import io.github.xiaomisum.ryze.testelement.AbstractTestElementExecutable;
-import io.github.xiaomisum.ryze.testelement.TestElement;
 import io.github.xiaomisum.ryze.support.Collections;
 import io.github.xiaomisum.ryze.support.Customizer;
 import io.github.xiaomisum.ryze.support.KryoUtil;
 import io.github.xiaomisum.ryze.support.groovy.Groovy;
+import io.github.xiaomisum.ryze.testelement.AbstractTestElementExecutable;
+import io.github.xiaomisum.ryze.testelement.TestElement;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+
+import static io.github.xiaomisum.ryze.TestStatus.broken;
+import static io.github.xiaomisum.ryze.TestStatus.failed;
 
 /**
  * Sampler 抽象实现类，是所有取样器的基类。
@@ -175,6 +178,7 @@ public abstract class AbstractSampler<SELF extends AbstractSampler<SELF, CONFIG,
         } catch (Throwable throwable) {
             // 1、sampler 执行异常 2、assertion 断言异常 3、extractor 提取异常
             result.setThrowable(throwable);
+            result.setStatus(throwable instanceof AssertionError ? failed : broken);
         } finally {
             // 最终处理
             chain.triggerAfterCompletion(context);
