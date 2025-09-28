@@ -52,9 +52,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import static io.github.xiaomisum.ryze.TestStatus.broken;
-import static io.github.xiaomisum.ryze.TestStatus.failed;
-
 /**
  * Sampler 抽象实现类，是所有取样器的基类。
  *
@@ -178,7 +175,6 @@ public abstract class AbstractSampler<SELF extends AbstractSampler<SELF, CONFIG,
         } catch (Throwable throwable) {
             // 1、sampler 执行异常 2、assertion 断言异常 3、extractor 提取异常
             result.setThrowable(throwable);
-            result.setStatus(throwable instanceof AssertionError ? failed : broken);
         } finally {
             // 最终处理
             chain.triggerAfterCompletion(context);

@@ -28,7 +28,6 @@
 
 package io.github.xiaomisum.ryze.interceptor.report;
 
-import io.github.xiaomisum.ryze.TestStatus;
 import io.github.xiaomisum.ryze.context.ContextWrapper;
 import io.github.xiaomisum.ryze.testelement.AbstractTestElement;
 import io.github.xiaomisum.ryze.testelement.sampler.SampleResult;
@@ -38,6 +37,8 @@ import io.qameta.allure.model.StepResult;
 import java.sql.Timestamp;
 import java.util.Objects;
 
+import static io.github.xiaomisum.ryze.TestStatus.broken;
+import static io.github.xiaomisum.ryze.TestStatus.failed;
 import static io.qameta.allure.util.ResultsUtils.getStatus;
 import static io.qameta.allure.util.ResultsUtils.getStatusDetails;
 
@@ -77,9 +78,7 @@ public interface AllureReportListener<T extends AbstractTestElement<?, ?, ?>> ex
                 .setStatus(getStatus(context.getTestResult().getThrowable()).orElse(context.getTestResult().getStatus().getAllureStatus()))
                 .setStatusDetails(getStatusDetails(context.getTestResult().getThrowable()).orElse(null));
         Allure.getLifecycle().startStep(uuid, step);
-        if (!Objects.isNull(context.getTestResult().getThrowable())) {
-            context.getTestResult().setStatus(context.getTestResult().getThrowable() instanceof AssertionError ? TestStatus.failed : TestStatus.broken);
-        }
+
     }
 
     /**
@@ -95,6 +94,9 @@ public interface AllureReportListener<T extends AbstractTestElement<?, ?, ?>> ex
         // 使用测试结果中的开始时间，如果为空则使用 startStep执行时的默认时间
         if (startTime != null) {
             Allure.getLifecycle().updateStep(context.getUuid(), step -> step.setStart(Timestamp.valueOf(startTime).getTime()));
+        }
+        if (!Objects.isNull(context.getTestResult().getThrowable())) {
+            context.getTestResult().setStatus(context.getTestResult().getThrowable() instanceof AssertionError ? failed : broken);
         }
         Allure.getLifecycle().stopStep(context.getUuid());
     }

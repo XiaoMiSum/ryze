@@ -70,14 +70,15 @@ public interface ReporterListener<T extends TestElement<?>> extends RyzeIntercep
             return;
         }
         log.error(throwable.getMessage(), throwable);
-        try {
-            if (SessionRunner.getSession().isRunInTestFrameworkSupport()) {
-                throw throwable;
+        if (SessionRunner.getSession().isRunInTestFrameworkSupport()) {
+            if (throwable instanceof AssertionError e) {
+                throw e;
             }
-        } catch (AssertionError | RuntimeException t) {
-            throw t;
-        } catch (Throwable e) {
-            throw new RuntimeException(e.getMessage(), e);
+            if (throwable instanceof RuntimeException e) {
+                throw e;
+            }
+            throw new RuntimeException(throwable.getMessage(), throwable);
         }
+
     }
 }
