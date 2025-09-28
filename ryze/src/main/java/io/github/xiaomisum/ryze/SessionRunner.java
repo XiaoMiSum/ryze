@@ -217,7 +217,7 @@ public class SessionRunner {
     public <T extends Result> T runTest(TestElement<T> element, boolean validate) {
         if (validate) {
             ValidateResult validateResult = element.validate();
-            if (validateResult.isValid()) {
+            if (!validateResult.isValid()) {
                 throw new RuntimeException(validateResult.getReason());
             }
         }
