@@ -25,15 +25,16 @@
 
 package io.github.xiaomisum.ryze.protocol.rabbit.config;
 
+import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.annotation.JSONField;
 import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
 import io.github.xiaomisum.ryze.config.ConfigureItem;
 import io.github.xiaomisum.ryze.context.ContextWrapper;
-import io.github.xiaomisum.ryze.testelement.AbstractTestElement;
 import io.github.xiaomisum.ryze.protocol.rabbit.RabbitConstantsInterface;
 import io.github.xiaomisum.ryze.support.Customizer;
 import io.github.xiaomisum.ryze.support.groovy.Groovy;
+import io.github.xiaomisum.ryze.testelement.AbstractTestElement;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;
@@ -317,8 +318,14 @@ public class RabbitConfigureItem implements ConfigureItem<RabbitConfigureItem>, 
      *
      * @return 消息内容
      */
-    public Object getMessage() {
-        return message;
+    public String getMessage() {
+        return switch (message) {
+            case Number number -> number.toString();
+            case Boolean bool -> bool.toString();
+            case String str -> str;
+            case null -> "";
+            default -> JSON.toJSONString(message);
+        };
     }
 
     /**
@@ -726,13 +733,13 @@ public class RabbitConfigureItem implements ConfigureItem<RabbitConfigureItem>, 
          */
         @JSONField(name = EXCHANGE_NAME)
         protected String name;
-        
+
         /**
          * 交换机类型
          */
         @JSONField(name = EXCHANGE_TYPE, ordinal = 1)
         protected String type;
-        
+
         /**
          * 路由键
          */
@@ -938,73 +945,73 @@ public class RabbitConfigureItem implements ConfigureItem<RabbitConfigureItem>, 
          */
         @JSONField(name = PROPS_CONTENT_TYPE)
         protected String contentType;
-        
+
         /**
          * 内容编码
          */
         @JSONField(name = PROPS_CONTENT_ENCODING, ordinal = 1)
         protected String contentEncoding;
-        
+
         /**
          * 头部信息
          */
         @JSONField(name = PROPS_HEADERS, ordinal = 2)
         protected Map<String, Object> headers;
-        
+
         /**
          * 传递模式
          */
         @JSONField(name = PROPS_DELIVERY_MODE, ordinal = 3)
         protected Integer deliveryMode;
-        
+
         /**
          * 优先级
          */
         @JSONField(name = PROPS_PRIORITY, ordinal = 4)
         protected Integer priority;
-        
+
         /**
          * 关联ID
          */
         @JSONField(name = PROPS_CORRELATION_ID, ordinal = 5)
         protected String correlationId;
-        
+
         /**
          * 回复地址
          */
         @JSONField(name = PROPS_REPLY_TO, ordinal = 6)
         protected String replyTo;
-        
+
         /**
          * 过期时间
          */
         @JSONField(name = PROPS_EXPIRATION, ordinal = 7)
         protected String expiration;
-        
+
         /**
          * 消息ID
          */
         @JSONField(name = PROPS_MESSAGE_ID, ordinal = 8)
         protected String messageId;
-        
+
         /**
          * 类型
          */
         @JSONField(name = PROPS_TIMESTAMP, ordinal = 9)
         protected String type;
-        
+
         /**
          * 用户ID
          */
         @JSONField(name = PROPS_USER_ID, ordinal = 11)
         protected String userId;
-        
+
         /**
          * 应用ID
          */
         @JSONField(name = PROPS_APP_ID, ordinal = 12)
         protected String appId;
-        
+
         /**
          * 集群ID
          */

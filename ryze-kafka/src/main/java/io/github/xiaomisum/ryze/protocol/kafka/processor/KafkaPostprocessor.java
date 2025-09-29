@@ -25,19 +25,18 @@
 
 package io.github.xiaomisum.ryze.protocol.kafka.processor;
 
-import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.annotation.JSONField;
 import io.github.xiaomisum.ryze.builder.DefaultExtractorsBuilder;
 import io.github.xiaomisum.ryze.context.ContextWrapper;
+import io.github.xiaomisum.ryze.protocol.kafka.Kafka;
+import io.github.xiaomisum.ryze.protocol.kafka.KafkaConstantsInterface;
+import io.github.xiaomisum.ryze.protocol.kafka.RealKafkaRequest;
+import io.github.xiaomisum.ryze.protocol.kafka.config.KafkaConfigureItem;
 import io.github.xiaomisum.ryze.testelement.KW;
 import io.github.xiaomisum.ryze.testelement.processor.AbstractProcessor;
 import io.github.xiaomisum.ryze.testelement.processor.Postprocessor;
 import io.github.xiaomisum.ryze.testelement.sampler.DefaultSampleResult;
 import io.github.xiaomisum.ryze.testelement.sampler.SampleResult;
-import io.github.xiaomisum.ryze.protocol.kafka.Kafka;
-import io.github.xiaomisum.ryze.protocol.kafka.KafkaConstantsInterface;
-import io.github.xiaomisum.ryze.protocol.kafka.RealKafkaRequest;
-import io.github.xiaomisum.ryze.protocol.kafka.config.KafkaConfigureItem;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;
@@ -150,12 +149,7 @@ public class KafkaPostprocessor extends AbstractProcessor<KafkaPostprocessor, Ka
         var ref = StringUtils.isBlank(localConfig.getRef()) ? DEF_REF_NAME_KEY : localConfig.getRef();
         var otherConfig = (KafkaConfigureItem) context.getLocalVariablesWrapper().get(ref);
         runtime.setConfig(localConfig.merge(otherConfig));
-        message = switch (config.getMessage()) {
-            case Number number -> number.toString();
-            case Boolean bool -> bool.toString();
-            case null -> "";
-            default -> JSON.toJSONString(config.getMessage());
-        };
+        message = runtime.getConfig().getMessage();
         result.setRequest(RealKafkaRequest.build(runtime.getConfig(), message));
     }
 
