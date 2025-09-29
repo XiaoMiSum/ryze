@@ -1,9 +1,10 @@
 package io.github.xiaomisum.ryze.rabbit.example.yaml;
 
 import io.github.xiaomisum.ryze.Ryze;
+import io.github.xiaomisum.ryze.protocol.rabbit.sampler.RabbitSampler;
+import io.github.xiaomisum.ryze.support.testng.annotation.RyzeTest;
 import io.github.xiaomisum.ryze.testelement.TestElement;
 import io.github.xiaomisum.ryze.testelement.TestSuite;
-import io.github.xiaomisum.ryze.support.testng.annotation.RyzeTest;
 import org.testng.annotations.Test;
 
 public class YamlTestCase {
@@ -29,21 +30,42 @@ public class YamlTestCase {
     }
 
     /**
-     * ryze-testng 环境下执行 ryze yaml模板测试用例
-     */
-    @RyzeTest
-    @Test
-    public void test4() {
-        Ryze.start("取样器/rabbit_sampler_queue1.yaml");
-    }
-
-    /**
      * 🚀 推荐使用方式
      * ryze-testng 环境下 自动执行 ryze yaml模板测试用例
      */
     @RyzeTest(value = "测试用例/rabbit.yaml", type = TestSuite.class)
     @Test
     public void test3(TestElement<?> element) {
+        // 无需像test2一样 编写执行代码 Ryze.start("取样器/rabbit_sampler_queue0.yaml");
+    }
+
+    /**
+     * 🚀 推荐使用方式
+     * ryze-testng 环境下 自动执行 ryze yaml模板测试用例
+     */
+    @RyzeTest(value = "取样器/rabbit_sampler_queue1.yaml", type = RabbitSampler.class)
+    @Test
+    public void test4(TestElement<?> element) {
+        // 无需像test2一样 编写执行代码 Ryze.start("取样器/rabbit_sampler_queue0.yaml");
+    }
+
+    /**
+     * 🚀 推荐使用方式
+     * ryze-testng 环境下 自动执行 ryze yaml模板测试用例
+     */
+    @RyzeTest(value = "取样器/rabbit_sampler_queue2.yaml", type = RabbitSampler.class)
+    @Test
+    public void test5(TestElement<?> element) {
+        // 无需像test2一样 编写执行代码 Ryze.start("取样器/rabbit_sampler_queue0.yaml");
+    }
+
+    /**
+     * 🚀 推荐使用方式
+     * ryze-testng 环境下 自动执行 ryze yaml模板测试用例
+     */
+    @RyzeTest(value = "取样器/rabbit_sampler_queue3.yaml", type = RabbitSampler.class)
+    @Test
+    public void test6(TestElement<?> element) {
         // 无需像test2一样 编写执行代码 Ryze.start("取样器/rabbit_sampler_queue0.yaml");
     }
 }
