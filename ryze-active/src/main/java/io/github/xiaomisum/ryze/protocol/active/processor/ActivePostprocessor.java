@@ -25,19 +25,18 @@
 
 package io.github.xiaomisum.ryze.protocol.active.processor;
 
-import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.annotation.JSONField;
 import io.github.xiaomisum.ryze.builder.DefaultExtractorsBuilder;
 import io.github.xiaomisum.ryze.context.ContextWrapper;
+import io.github.xiaomisum.ryze.protocol.active.Active;
+import io.github.xiaomisum.ryze.protocol.active.ActiveConstantsInterface;
+import io.github.xiaomisum.ryze.protocol.active.RealActiveRequest;
+import io.github.xiaomisum.ryze.protocol.active.config.ActiveConfigureItem;
 import io.github.xiaomisum.ryze.testelement.KW;
 import io.github.xiaomisum.ryze.testelement.processor.AbstractProcessor;
 import io.github.xiaomisum.ryze.testelement.processor.Postprocessor;
 import io.github.xiaomisum.ryze.testelement.sampler.DefaultSampleResult;
 import io.github.xiaomisum.ryze.testelement.sampler.SampleResult;
-import io.github.xiaomisum.ryze.protocol.active.Active;
-import io.github.xiaomisum.ryze.protocol.active.ActiveConstantsInterface;
-import io.github.xiaomisum.ryze.protocol.active.RealActiveRequest;
-import io.github.xiaomisum.ryze.protocol.active.config.ActiveConfigureItem;
 import jakarta.jms.ConnectionFactory;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.commons.lang3.StringUtils;
@@ -156,12 +155,7 @@ public class ActivePostprocessor extends AbstractProcessor<ActivePostprocessor, 
         runtime.setConfig(localConfig.merge(otherConfig));
         // 2. 创建ActiveMQ 连接池;
         factory = new ActiveMQConnectionFactory(runtime.getConfig().getUsername(), runtime.getConfig().getPassword(), runtime.getConfig().getBrokerUrl());
-        message = switch (config.getMessage()) {
-            case Number number -> number.toString();
-            case Boolean bool -> bool.toString();
-            case null -> "";
-            default -> JSON.toJSONString(config.getMessage());
-        };
+        message = runtime.getConfig().getMessage();
         result.setRequest(RealActiveRequest.build(runtime.getConfig(), message));
     }
 

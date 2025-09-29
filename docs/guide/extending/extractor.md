@@ -7,21 +7,17 @@ Ryze框架允许开发者创建自定义提取器来从响应中提取特定格�
 实现`Extractor`接口：
 
 ```java
+
+@KW({"CustomExtractor", "custom"})
 public class CustomExtractor implements Extractor {
     @Override
     public Object extract(Object source, String expression) {
         // 实现自定义提取逻辑
-        if (source instanceof String) {
-            String text = (String) source;
+        if (source instanceof String text) {
             // 自定义提取逻辑
             return text.substring(text.indexOf(expression));
         }
         return null;
-    }
-    
-    @Override
-    public String getName() {
-        return "custom";
     }
 }
 ```
@@ -39,7 +35,9 @@ com.example.CustomExtractor
 在测试中使用自定义提取器：
 
 ```java
-http.extractors(extractors -> extractors
-    .custom("customVariable", "$.data.customField")
+http.extractors(extractors ->extractors
+        .
+
+custom("customVariable","$.data.customField")
 );
 ```

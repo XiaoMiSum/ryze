@@ -61,7 +61,7 @@ public class ValidateResult {
         if (!Objects.isNull(validatable)) {
             var result = validatable.validate();
             // 任意一个失败，即为失败
-            if (result.isValid()) {
+            if (!result.isValid()) {
                 valid = false;
                 reason.append(result.getReason());
             }
@@ -100,7 +100,7 @@ public class ValidateResult {
     }
 
     public boolean isValid() {
-        return !valid;
+        return valid;
     }
 
     public String getReason() {

@@ -30,8 +30,8 @@ postprocessors: # 后置处理器
       query_type: select
       sql: 'select * from sys_user;'
 children: # 测试集合 或 测试用例列表，为了方便查看，可通过 @F(filepath) 将外部文件引入
-  - '测试用例/测试用例.yaml'
-  - '测试用例/测试用例.yaml'
+  - !include '测试用例/测试用例.yaml'
+  - !include '测试用例/测试用例.yaml'
 ```
 
 ## 参数说明

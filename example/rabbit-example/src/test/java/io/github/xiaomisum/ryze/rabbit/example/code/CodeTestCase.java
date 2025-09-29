@@ -8,7 +8,6 @@ import io.github.xiaomisum.ryze.protocol.rabbit.builder.RabbitSamplersBuilder;
 import io.github.xiaomisum.ryze.support.testng.annotation.RyzeTest;
 import org.testng.annotations.Test;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,10 +24,9 @@ public class CodeTestCase {
                     .rabbit(rabbit -> rabbit.config(config -> config.host("127.0.0.1").port("5672").username("guest").password("guest")))
             );
             suite.preprocessors(RabbitPreprocessorsBuilder.class, builder -> builder
-                    .rabbit(rabbit -> rabbit.config(config -> config.message(HashMap.class, message -> {
-                        message.put("username", "${tick}");
-                        message.put("age", 18);
-                    }).queue(queue -> queue.name("ryze.topic"))))
+                    .rabbit(rabbit -> rabbit.config(config -> config
+                            .message(Map.of("username", "${tick}", "age", 18))
+                            .queue(queue -> queue.name("ryze.topic"))))
             );
             suite.postprocessors(RabbitPostprocessorsBuilder.class, builder -> builder
                     .rabbit(rabbit -> rabbit.config(config -> config.message("test1: rabbit_postprocessor_test ")
@@ -55,10 +53,9 @@ public class CodeTestCase {
                     .rabbit(rabbit -> rabbit.config(config -> config.host("127.0.0.1").port("5672").username("guest").password("guest")))
             );
             sampler.preprocessors(RabbitPreprocessorsBuilder.class, builder -> builder
-                    .rabbit(rabbit -> rabbit.config(config -> config.message(HashMap.class, message -> {
-                        message.put("username", "${tick}");
-                        message.put("age", 18);
-                    }).queue(queue -> queue.name("ryze.topic"))))
+                    .rabbit(rabbit -> rabbit.config(config -> config
+                            .message(Map.of("username", "${tick}", "age", 18))
+                            .queue(queue -> queue.name("ryze.topic"))))
             );
             sampler.config(config -> config.message(123456).queue(queue -> queue.name("ryze.topic")));
         });

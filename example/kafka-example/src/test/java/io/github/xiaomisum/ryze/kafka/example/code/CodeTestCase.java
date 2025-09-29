@@ -8,7 +8,6 @@ import io.github.xiaomisum.ryze.protocol.kafka.builder.KafkaSamplersBuilder;
 import io.github.xiaomisum.ryze.support.testng.annotation.RyzeTest;
 import org.testng.annotations.Test;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,10 +24,9 @@ public class CodeTestCase {
                     .kafka(kafka -> kafka.config(config -> config.bootstrapServers("127.0.0.1:9092").topic("ryze.topic").key("ryze")))
             );
             suite.preprocessors(KafkaPreprocessorsBuilder.class, builder -> builder
-                    .kafka(kafka -> kafka.config(config -> config.message(HashMap.class, message -> {
-                        message.put("username", "${tick}");
-                        message.put("age", 18);
-                    })))
+                    .kafka(kafka -> kafka.config(config -> config
+                            .message(Map.of("username", "${tick}", "age", 18))
+                    ))
             );
             suite.postprocessors(KafkaPostprocessorsBuilder.class, builder -> builder
                     .kafka(kafka -> kafka.config(config -> config.message("test1: kafka_postprocessor_test ")))
@@ -52,10 +50,9 @@ public class CodeTestCase {
                     .kafka(kafka -> kafka.config(config -> config.bootstrapServers("127.0.0.1:9092").topic("ryze.topic").key("ryze")))
             );
             sampler.preprocessors(KafkaPreprocessorsBuilder.class, builder -> builder
-                    .kafka(kafka -> kafka.config(config -> config.message(HashMap.class, message -> {
-                        message.put("username", "${tick}");
-                        message.put("age", 18);
-                    })))
+                    .kafka(kafka -> kafka.config(config -> config
+                            .message(Map.of("username", "${tick}", "age", 18))
+                    ))
             );
             sampler.config(config -> config.message(123456));
         });

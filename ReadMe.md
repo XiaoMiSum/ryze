@@ -55,16 +55,29 @@ Ryze 是一个基于 Java 21 开发的现代化测试框架，专为多协议测
 ## 📋 目录
 
 - [📖 项目简介](#project-introduction)
-- [📋 用户手册](https://xiaomisum.github.io/ryze)
+- [📋 用户手册](#documentation-center)
 - [🏗️ 系统架构](#system-architecture)
 - [🚀 快速开始](#quick-start)
 - [💡 使用示例](#usage-examples)
-- [📁 文档中心](#documentation-center)
 - [🧩 模块说明](#module-description)
 - [🛠️ 开发指南](#development-guide)
 - [🤝 贡献指南](#contribution-guide)
 - [📄 许可证](#license)
 - [🙏 鸣谢](#acknowledgements)
+
+## 📁 文档中心
+
+<a name="documentation-center"></a>
+框架提供了完整的文档体系，帮助您更好地使用和扩展 Ryze：
+
+### 🌐 在线文档
+
+我们提供了基于 VitePress 的在线文档站点，您可以通过以下链接访问：
+
+- [在线文档](https://xiaomisum.github.io/ryze)
+- [中国大陆](https://ryze-rr7xp0ri.maozi.io)
+
+在线文档包含了框架的所有功能介绍、使用指南和 API 参考，是学习和使用 Ryze 的最佳资源。
 
 ## 🏗️ 系统架构
 
@@ -167,7 +180,7 @@ children:
       body:
         username: "testuser"
         password: "password123"
-    assertions:
+    validators:
       - testclass: json
         field: "$.code"
         expected: 200
@@ -179,7 +192,7 @@ children:
     extractors:
       - testclass: json
         field: "$.data.token"
-        refName: "userToken"
+        ref_name: "userToken"
 ```
 
 执行测试：
@@ -218,7 +231,7 @@ public class LoginTest {
           "password": "password123"
         }
       },
-      "assertions": [
+      "validators": [
         {
           "testclass": "json",
           "field": "$.code",
@@ -236,7 +249,7 @@ public class LoginTest {
         {
           "testclass": "json",
           "field": "$.data.token",
-          "refName": "userToken"
+          "ref_name": "userToken"
         }
       ]
     }
@@ -356,7 +369,7 @@ println "测试结果: ${result.success}"
           "Authorization": "Bearer ${userToken}"
         }
       },
-      "assertions": [
+      "validators": [
         {
           "testclass": "json",
           "field": "$.data.username",
@@ -368,20 +381,6 @@ println "测试结果: ${result.success}"
   ]
 }
 ```
-
-## 📁 文档中心
-
-<a name="documentation-center"></a>
-框架提供了完整的文档体系，帮助您更好地使用和扩展 Ryze：
-
-### 🌐 在线文档
-
-我们提供了基于 VitePress 的在线文档站点，您可以通过以下链接访问：
-
-- [在线文档](https://xiaomisum.github.io/ryze)
-- [中国大陆](https://ryze-docs.edgeone.app?eo_token=cf78b8cdf714a00fb5309a7d2c1f1fea&eo_time=1758069431)
-
-在线文档包含了框架的所有功能介绍、使用指南和 API 参考，是学习和使用 Ryze 的最佳资源。
 
 ## 📋 模板引擎和变量系统
 
@@ -739,12 +738,12 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 感谢以下开源项目和组织的支持：
 
 - **[JetBrains](https://www.jetbrains.com)** - 提供优秀的 IDE 工具
+- **[帽子云](https://www.maoziyun.com/)** - 提供免费的静态页面托管服务
 - **[FastJSON2](https://github.com/alibaba/fastjson2)** - JSON 序列化库
 - **[FreeMarker](https://freemarker.apache.org)** - 模板引擎
 - **[Apache Commons](https://commons.apache.org)** - 工具类库
 - **[TestNG](https://testng.org)**  - 测试框架
 - **[Allure](https://docs.qameta.io/allure/)** - 测试报告框架
-- **[Dubbo](https://dubbo.apache.org)** - RPC 框架
 
 ---
 

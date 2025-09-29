@@ -11,10 +11,10 @@ ref_name: status # 变量名称
 
 ## 参数说明
 
-| 参数 | 必填 | 说明 |
-|------|------|------|
-| testclass | 是 | 提取器类型，固定值为 `result` |
-| ref_name | 是 | 提取值存储的变量名称 |
+| 参数        | 必填 | 说明                  |
+|-----------|----|---------------------|
+| testclass | 是  | 提取器类型，固定值为 `result` |
+| ref_name  | 是  | 提取值存储的变量名称          |
 
 ## 使用示例
 
@@ -36,7 +36,7 @@ ref_name: status # 变量名称
       "ref_name": "login_result"
     }
   ],
-  "assertions": [
+  "validators": [
     {
       "testclass": "http",
       "field": "status",
@@ -52,6 +52,7 @@ ref_name: status # 变量名称
 ## 提取的内容
 
 结果提取器会提取整个测试步骤的执行结果，包括：
+
 - 响应状态
 - 响应头
 - 响应体

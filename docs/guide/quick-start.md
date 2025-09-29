@@ -374,9 +374,9 @@ mvn allure:serve
 {
   "title": "动态数据测试",
   "variables": {
-    "timestamp": "${__timestamp()}",
-    "randomId": "${__random(1000, 9999)}",
-    "randomString": "${__randomString(10)}"
+    "timestamp": "${timestamp()}",
+    "randomId": "${random(1000, 9999)}",
+    "randomString": "${randomString(10)}"
   },
   "children": [
     {

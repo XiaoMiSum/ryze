@@ -176,9 +176,9 @@ printStackTrace();
 ```json
 {
   "variables": {
-    "timestamp": "${__timestamp()}",
-    "randomId": "${__random(1000, 9999)}",
-    "uuid": "${__uuid()}"
+    "timestamp": "${timestamp()}",
+    "randomId": "${random(1000, 9999)}",
+    "uuid": "${uuid()}"
   }
 }
 ```
@@ -245,9 +245,8 @@ json("$.data.name","张三","==")    // 具体值
 {
   "testclass": "json",
   "field": "$.data.token",
-  "refName": "authToken",
-  "defaultValue": ""
-  // 设置默认值
+  "ref_name": "authToken",
+  "defaultValue": "" //设置默认值
 }
 ```
 
@@ -270,7 +269,7 @@ println("提取的 token: "+token);
 ```json
 {
   "testclass": "result",
-  "refName": "fullResponse"
+  "ref_name": "fullResponse"
 }
 ```
 

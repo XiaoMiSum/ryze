@@ -41,7 +41,7 @@
   # 取样器级变量
   extractors:
   # 数据提取器
-  assertions:
+  validators:
   # 结果断言
   interceptors:
   # 拦截器
@@ -101,7 +101,7 @@ children:
     extractors:
       # 提取新创建的用户ID
       - { testclass: json, field: '$.data.id', ref_name: new_user_id }
-    assertions:
+    validators:
       # 验证创建成功
       - { testclass: http, field: 'status', expected: 201, rule: '==' }
 
@@ -111,7 +111,7 @@ children:
     config:
       method: GET
       path: /users/${new_user_id}  # 使用上一步提取的ID
-    assertions:
+    validators:
       # 验证用户信息正确
       - { testclass: json, field: '$.data.name', expected: 'Test User', rule: '==' }
 
@@ -123,7 +123,7 @@ children:
       path: /users/${new_user_id}
       body:
         name: Updated User
-    assertions:
+    validators:
       # 验证更新成功
       - { testclass: http, field: 'status', expected: 200, rule: '==' }
 
@@ -133,7 +133,7 @@ children:
     config:
       method: DELETE
       path: /users/${new_user_id}
-    assertions:
+    validators:
       # 验证删除成功
       - { testclass: http, field: 'status', expected: 204, rule: '==' }
 ```
@@ -305,7 +305,7 @@ children:
     extractors:
       - { testclass: json, field: '$.data.id', ref_name: user_id }
       - { testclass: json, field: '$.data.token', ref_name: auth_token }
-    assertions:
+    validators:
       - { testclass: http, field: 'status', expected: 201, rule: '==' }
       - { testclass: json, field: '$.data.name', expected: '${user_name}', rule: '==' }
 
@@ -317,7 +317,7 @@ children:
       path: /api/v1/users/${user_id}
       headers:
         Authorization: Bearer ${auth_token}
-    assertions:
+    validators:
       - { testclass: http, field: 'status', expected: 200, rule: '==' }
       - { testclass: json, field: '$.data.email', expected: '${user_email}', rule: '==' }
 
@@ -331,7 +331,7 @@ children:
         Authorization: Bearer ${auth_token}
       body:
         name: Updated ${user_name}
-    assertions:
+    validators:
       - { testclass: http, field: 'status', expected: 200, rule: '==' }
 
   # 删除用户
@@ -342,7 +342,7 @@ children:
       path: /api/v1/users/${user_id}
       headers:
         Authorization: Bearer ${auth_token}
-    assertions:
+    validators:
       - { testclass: http, field: 'status', expected: 204, rule: '==' }
 ```
 
@@ -364,7 +364,7 @@ children:
         - ${timestamp()}
     extractors:
       - { testclass: result, ref_name: insert_result }
-    assertions:
+    validators:
       - { testclass: result, expected: 1, rule: '==' }  # 影响行数为1
 
   # 查询用户数据
@@ -376,7 +376,7 @@ children:
         - ${user_email}
     extractors:
       - { testclass: json, field: '$[0].id', ref_name: user_id }
-    assertions:
+    validators:
       - { testclass: json, field: '$[0].name', expected: '${user_name}', rule: '==' }
 
   # 更新用户数据
@@ -387,7 +387,7 @@ children:
       parameters:
         - "Updated ${user_name}"
         - ${user_id}
-    assertions:
+    validators:
       - { testclass: result, expected: 1, rule: '==' }  # 影响行数为1
 
   # 删除用户数据
@@ -397,7 +397,7 @@ children:
       sql: "DELETE FROM users WHERE id = ?"
       parameters:
         - ${user_id}
-    assertions:
+    validators:
       - { testclass: result, expected: 1, rule: '==' }  # 影响行数为1
 ```
 
@@ -419,7 +419,7 @@ children:
       topic: order-events
       key: order-created-${order_id}
       value: ${order_data}
-    assertions:
+    validators:
       - { testclass: result, expected: true, rule: '==' }  # 发送成功
 
   # 验证订单处理结果
@@ -433,7 +433,7 @@ children:
         - RetryInterceptor:
             max_attempts: 10
             retry_delay: 1000
-    assertions:
+    validators:
       - { testclass: http, field: 'status', expected: 200, rule: '==' }
       - { testclass: json, field: '$.data.status', expected: 'processed', rule: '==' }
 ```
@@ -457,7 +457,7 @@ children:
       key: session:${session_id}
       value: ${user_data}
       expire: 3600  # 1小时过期
-    assertions:
+    validators:
       - { testclass: result, expected: 'OK', rule: '==' }
 
   # 获取用户会话
@@ -468,7 +468,7 @@ children:
       key: session:${session_id}
     extractors:
       - { testclass: result, ref_name: retrieved_session }
-    assertions:
+    validators:
       - { testclass: result, expected: '${user_data}', rule: '==' }
 
   # 验证会话过期
@@ -487,7 +487,7 @@ children:
         config:
           command: GET
           key: session:${session_id}
-        assertions:
+        validators:
           - { testclass: result, expected: null, rule: '==' }  # 应该返回null
 ```
 
@@ -578,7 +578,7 @@ children:
         max_attempts: 5
         retry_delay: 2000
         retry_on_status: [ 404, 500, 502, 503 ]
-  assertions:
+  validators:
     - { testclass: http, field: 'status', expected: 200, rule: '==' }
 ```
 

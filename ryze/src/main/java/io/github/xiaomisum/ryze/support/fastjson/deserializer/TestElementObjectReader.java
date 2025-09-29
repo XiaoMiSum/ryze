@@ -93,9 +93,7 @@ public class TestElementObjectReader implements ObjectReader<TestElement> {
         JSONInterceptor interceptor = ApplicationConfig.getJsonInterceptorKeyMap().get(pair.getLeft());
         if (interceptor != null) {
             var config = interceptor.deserializeConfigureItem(elementMap.get(CONFIG));
-            if (config != null) {
-                elementMap.put(CONFIG, config);
-            }
+            elementMap.put(CONFIG, config != null ? config : elementMap.get(CONFIG));
         }
         return JSON.parseObject(JSON.toJSONString(elementMap), pair.getLeft());
     }

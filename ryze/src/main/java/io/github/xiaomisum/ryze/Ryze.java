@@ -31,6 +31,7 @@ package io.github.xiaomisum.ryze;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import io.github.xiaomisum.ryze.support.TestDataLoader;
+import io.github.xiaomisum.ryze.testelement.TestElement;
 
 import java.util.Map;
 
@@ -128,8 +129,7 @@ public class Ryze {
      */
     private Result runTest() {
         try {
-            var clazz = ApplicationConfig.getTestElementKeyMap().get(testcase.getString(TEST_CLASS));
-            return SessionRunner.getSessionIfNoneCreateNew().runTest(JSON.parseObject(testcase.toJSONString(), clazz));
+            return SessionRunner.getSessionIfNoneCreateNew().runTest(JSON.parseObject(testcase.toJSONString(), TestElement.class));
         } finally {
             SessionRunner.removeSession();
         }

@@ -5,6 +5,7 @@ Ryze框架支持通过SPI机制扩展新的协议支持。
 ## 核心接口
 
 ### Sampler
+
 取样器接口，定义协议的具体执行逻辑：
 
 ```java
@@ -18,36 +19,39 @@ public class CustomSampler implements Sampler {
 ```
 
 ### Preprocessor
+
 前置处理器接口：
 
 ```java
 public class CustomPreprocessor implements Preprocessor {
     @Override
-    public void process(Context context) {
+    public void process(ContextWrapper context) {
         // 实现前置处理逻辑
     }
 }
 ```
 
 ### Postprocessor
+
 后置处理器接口：
 
 ```java
 public class CustomPostprocessor implements Postprocessor {
     @Override
-    public void process(Context context) {
+    public void process(ContextWrapper context) {
         // 实现后置处理逻辑
     }
 }
 ```
 
 ### ConfigureElement
+
 配置元件接口：
 
 ```java
-public class CustomConfigureElement implements ConfigureElement {
+public class CustomConfigureElement implements ConfigureElement<TestSuiteResult> {
     @Override
-    public void apply(TestElement element) {
+    public TestSuiteResult process(ContextWrapper context) {
         // 实现配置应用逻辑
     }
 }

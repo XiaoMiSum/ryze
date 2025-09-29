@@ -5,8 +5,8 @@ import io.github.xiaomisum.ryze.builder.*;
 import io.github.xiaomisum.ryze.context.ContextWrapper;
 import io.github.xiaomisum.ryze.protocol.http.HTTPClient;
 import io.github.xiaomisum.ryze.protocol.http.HTTPConstantsInterface;
-import io.github.xiaomisum.ryze.protocol.http.RealHTTPRealResultRequest;
-import io.github.xiaomisum.ryze.protocol.http.RealHTTPRealResultResponse;
+import io.github.xiaomisum.ryze.protocol.http.RealHTTPRequest;
+import io.github.xiaomisum.ryze.protocol.http.RealHTTPResponse;
 import io.github.xiaomisum.ryze.protocol.http.config.HTTPConfigureItem;
 import io.github.xiaomisum.ryze.testelement.KW;
 import io.github.xiaomisum.ryze.testelement.sampler.AbstractSampler;
@@ -58,13 +58,13 @@ public class HTTPSampler extends AbstractSampler<HTTPSampler, HTTPConfigureItem,
         runtime.setConfig(localConfig.merge(otherConfig));
         // 2. 创建http对象
         request = HTTPClient.build(runtime.getConfig());
-        result.setRequest(new RealHTTPRealResultRequest(request));
+        result.setRequest(new RealHTTPRequest(request));
     }
 
     @Override
     protected void handleResponse(ContextWrapper context, DefaultSampleResult result) {
         super.handleResponse(context, result);
-        result.setResponse(new RealHTTPRealResultResponse(response));
+        result.setResponse(new RealHTTPResponse(response));
     }
 
     /**

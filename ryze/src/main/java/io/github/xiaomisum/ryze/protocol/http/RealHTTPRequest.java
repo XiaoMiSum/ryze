@@ -39,7 +39,7 @@ import java.util.Arrays;
  *
  * @author xiaomi
  */
-public class RealHTTPRealResultRequest extends HTTPRealResult {
+public class RealHTTPRequest extends HTTPRealResult {
 
     /**
      * 请求URL
@@ -67,7 +67,7 @@ public class RealHTTPRealResultRequest extends HTTPRealResult {
      *
      * @param request HTTP请求对象
      */
-    public RealHTTPRealResultRequest(Request request) {
+    public RealHTTPRequest(Request request) {
         super(new byte[0]);
         url = request.uri();
         method = request.method();

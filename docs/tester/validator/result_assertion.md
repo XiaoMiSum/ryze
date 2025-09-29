@@ -13,12 +13,12 @@ strict: false # 是否严格验证，默认否：忽略大小写验证
 
 ## 参数说明
 
-| 参数 | 必填 | 说明 |
-|------|------|------|
-| testclass | 是 | 验证器类型，固定值为 `result` |
-| expected | 是 | 期望值 |
-| rule | 是 | 验证规则，支持多种比较操作 |
-| strict | 否 | 是否严格验证，默认为 `false`（忽略大小写） |
+| 参数        | 必填 | 说明                        |
+|-----------|----|---------------------------|
+| testclass | 是  | 验证器类型，固定值为 `result`       |
+| expected  | 是  | 期望值                       |
+| rule      | 是  | 验证规则，支持多种比较操作             |
+| strict    | 否  | 是否严格验证，默认为 `false`（忽略大小写） |
 
 ## 使用示例
 
@@ -36,10 +36,10 @@ strict: false # 是否严格验证，默认否：忽略大小写验证
       "password": "testpass"
     }
   },
-  "assertions": [
+  "validators": [
     {
       "testclass": "result",
-      "expected": true,
+      "expected": "响应消息内容",
       "rule": "=="
     }
   ]
@@ -58,7 +58,7 @@ strict: false # 是否严格验证，默认否：忽略大小写验证
     "password": "testpass",
     "sql": "UPDATE users SET name = 'updated_user' WHERE id = 123"
   },
-  "assertions": [
+  "validators": [
     {
       "testclass": "result",
       "expected": 1,
@@ -80,7 +80,7 @@ strict: false # 是否严格验证，默认否：忽略大小写验证
     "key": "order-123",
     "value": "{\"orderId\": 123, \"status\": \"created\"}"
   },
-  "assertions": [
+  "validators": [
     {
       "testclass": "result",
       "expected": true,
@@ -94,39 +94,19 @@ strict: false # 是否严格验证，默认否：忽略大小写验证
 
 结果验证器支持以下验证规则：
 
-| 规则 | 说明 | 示例 |
-|------|------|------|
-| `==` | 相等 | `expected: true, rule: "=="` |
-| `!=` | 不相等 | `expected: false, rule: "!="` |
-| `>` | 大于 | `expected: 0, rule: ">"` |
-| `<` | 小于 | `expected: 10, rule: "<"` |
-| `>=` | 大于等于 | `expected: 1, rule: ">="` |
-| `<=` | 小于等于 | `expected: 5, rule: "<="` |
-| `isNotEmpty` | 非空 | `expected: "", rule: "isNotEmpty"` |
-| `isEmpty` | 为空 | `expected: "", rule: "isEmpty"` |
-
-## 验证内容说明
-
-结果验证器验证的内容根据不同的测试类型而有所不同：
-
-### HTTP测试
-验证HTTP请求是否成功执行，返回布尔值：
-- `true`：请求成功发送并收到响应
-- `false`：请求失败（如网络错误、超时等）
-
-### 数据库测试
-验证SQL执行影响的行数：
-- 对于SELECT语句，返回查询结果集的大小
-- 对于INSERT/UPDATE/DELETE语句，返回受影响的行数
-
-### 消息队列测试
-验证消息是否成功发送：
-- `true`：消息成功发送到队列
-- `false`：消息发送失败
-
-### Redis测试
-验证操作是否成功执行：
-- 对于读取操作，返回获取到的值或null
-- 对于写入操作，返回操作结果（如"OK"）
-
-通过结果验证器，可以确保整个测试步骤按预期执行，而不仅仅是验证响应内容的特定部分。
+| 规则             | 说明     | 示例                                                  |
+|----------------|--------|-----------------------------------------------------|
+| `==`           | 相等     | `expected: 200, rule: "=="`                         |
+| `eq_any`       | 任意一个相等 | `expected: [200, 300], rule: "eq_any"`              |
+| `!=`           | 不相等    | `expected: 404, rule: "!="`                         |
+| `>`            | 大于     | `expected: 0, rule: ">"`                            |
+| `<`            | 小于     | `expected: 10000, rule: "<"`                        |
+| `>=`           | 大于等于   | `expected: 0, rule: ">="`                           |
+| `<=`           | 小于等于   | `expected: 100, rule: "<="`                         |
+| `contains`     | 包含     | `expected: "success", rule: "contains"`             |
+| `any_contains` | 包含任意一个 | `expected: [success, false], rule: "any_contains"`  |
+| `not_contains` | 不包含    | `expected: "error", rule: "not_contains"`           |
+| `regex`        | 正则匹配   | `expected: "^\\d{4}-\\d{2}-\\d{2}$", rule: "regex"` |
+| `is_not_empty` | 非空     | `field: header.Content-Type, rule: "is_not_empty"`  |
+| `is_empty`     | 为空     | `field: header.Content-Type,  rule: "is_empty"`     |
+| `same_object`  | 对象匹配   | `expected: {}, rule: "same_object"`                 |

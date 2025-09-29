@@ -25,17 +25,11 @@
 
 package io.github.xiaomisum.ryze.protocol.rabbit.sampler;
 
-import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.annotation.JSONField;
 import com.rabbitmq.client.ConnectionFactory;
 import io.github.xiaomisum.ryze.builder.DefaultAssertionsBuilder;
 import io.github.xiaomisum.ryze.builder.DefaultExtractorsBuilder;
 import io.github.xiaomisum.ryze.context.ContextWrapper;
-import io.github.xiaomisum.ryze.testelement.KW;
-import io.github.xiaomisum.ryze.testelement.sampler.AbstractSampler;
-import io.github.xiaomisum.ryze.testelement.sampler.DefaultSampleResult;
-import io.github.xiaomisum.ryze.testelement.sampler.SampleResult;
-import io.github.xiaomisum.ryze.testelement.sampler.Sampler;
 import io.github.xiaomisum.ryze.protocol.rabbit.Rabbit;
 import io.github.xiaomisum.ryze.protocol.rabbit.RabbitConstantsInterface;
 import io.github.xiaomisum.ryze.protocol.rabbit.RealRabbitRequest;
@@ -43,6 +37,11 @@ import io.github.xiaomisum.ryze.protocol.rabbit.builder.RabbitConfigureElementsB
 import io.github.xiaomisum.ryze.protocol.rabbit.builder.RabbitPostprocessorsBuilder;
 import io.github.xiaomisum.ryze.protocol.rabbit.builder.RabbitPreprocessorsBuilder;
 import io.github.xiaomisum.ryze.protocol.rabbit.config.RabbitConfigureItem;
+import io.github.xiaomisum.ryze.testelement.KW;
+import io.github.xiaomisum.ryze.testelement.sampler.AbstractSampler;
+import io.github.xiaomisum.ryze.testelement.sampler.DefaultSampleResult;
+import io.github.xiaomisum.ryze.testelement.sampler.SampleResult;
+import io.github.xiaomisum.ryze.testelement.sampler.Sampler;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;
@@ -148,12 +147,7 @@ public class RabbitSampler extends AbstractSampler<RabbitSampler, RabbitConfigur
         runtime.setConfig(localConfig.merge(otherConfig));
         // 2. 创建Rabbit 连接池对象
         factory = Rabbit.handleRequest(runtime.getConfig());
-        message = switch (config.getMessage()) {
-            case Number number -> number.toString();
-            case Boolean bool -> bool.toString();
-            case null -> "";
-            default -> JSON.toJSONString(config.getMessage());
-        };
+        message = runtime.config.getMessage();
         result.setRequest(RealRabbitRequest.build(runtime.getConfig(), message));
     }
 

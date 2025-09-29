@@ -285,7 +285,7 @@ children:
         config:
           method: GET
           path: /orders/${order_id}
-        assertions:
+        validators:
           - { testclass: json, field: '$.data.status', expected: 'processed', rule: '==' }
 
       # 发送测试结果通知

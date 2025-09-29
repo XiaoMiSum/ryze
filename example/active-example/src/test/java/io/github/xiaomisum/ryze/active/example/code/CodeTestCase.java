@@ -8,7 +8,6 @@ import io.github.xiaomisum.ryze.protocol.active.builder.ActiveSamplersBuilder;
 import io.github.xiaomisum.ryze.support.testng.annotation.RyzeTest;
 import org.testng.annotations.Test;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,10 +24,9 @@ public class CodeTestCase {
                     .active(active -> active.config(config -> config.username("artemis").password("artemis").topic("ryze.topic").brokerUrl("tcp://127.0.0.1:61616")))
             );
             suite.preprocessors(ActivePreprocessorsBuilder.class, builder -> builder
-                    .active(active -> active.config(config -> config.message(HashMap.class, message -> {
-                        message.put("username", "${tick}");
-                        message.put("age", 18);
-                    })))
+                    .active(active -> active.config(config ->
+                            config.message(Map.of("username", "${tick}", "age", 18))
+                    ))
             );
             suite.postprocessors(ActivePostprocessorsBuilder.class, builder -> builder
                     .active(active -> active.config(config -> config.message("test1: active_postprocessor_test ")))
@@ -52,10 +50,9 @@ public class CodeTestCase {
                     .active(active -> active.config(config -> config.username("artemis").password("artemis").topic("ryze.topic").brokerUrl("tcp://127.0.0.1:61616")))
             );
             sampler.preprocessors(ActivePreprocessorsBuilder.class, builder -> builder
-                    .active(active -> active.config(config -> config.message(HashMap.class, message -> {
-                        message.put("username", "${tick}");
-                        message.put("age", 18);
-                    })))
+                    .active(active -> active.config(config ->
+                            config.message(Map.of("username", "${tick}", "age", 18))
+                    ))
             );
             sampler.config(config -> config.message(123456));
         });

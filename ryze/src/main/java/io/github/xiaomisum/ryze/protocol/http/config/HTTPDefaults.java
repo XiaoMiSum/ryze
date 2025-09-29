@@ -26,10 +26,10 @@
 package io.github.xiaomisum.ryze.protocol.http.config;
 
 import io.github.xiaomisum.ryze.context.ContextWrapper;
+import io.github.xiaomisum.ryze.protocol.http.HTTPConstantsInterface;
 import io.github.xiaomisum.ryze.testelement.KW;
 import io.github.xiaomisum.ryze.testelement.TestSuiteResult;
 import io.github.xiaomisum.ryze.testelement.configure.AbstractConfigureElement;
-import io.github.xiaomisum.ryze.protocol.http.HTTPConstantsInterface;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;
@@ -50,7 +50,7 @@ import java.util.Objects;
  *
  * @author xiaomi
  */
-@KW(value = {"http_defaults", "http"})
+@KW(value = {"http_defaults", "http", "https"})
 public class HTTPDefaults extends AbstractConfigureElement<HTTPDefaults, HTTPConfigureItem, TestSuiteResult> implements HTTPConstantsInterface {
 
     public HTTPDefaults() {

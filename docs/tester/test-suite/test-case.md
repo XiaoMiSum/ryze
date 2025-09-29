@@ -107,7 +107,7 @@ children: # 执行步骤
           "ref_name": "auth_token"
         }
       ],
-      "assertions": [
+      "validators": [
         {
           "testclass": "http",
           "field": "status",
@@ -126,7 +126,7 @@ children: # 执行步骤
           "Authorization": "Bearer ${auth_token}"
         }
       },
-      "assertions": [
+      "validators": [
         {
           "testclass": "http",
           "field": "status",

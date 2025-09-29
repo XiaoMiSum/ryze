@@ -25,12 +25,13 @@
 
 package io.github.xiaomisum.ryze.protocol.active.config;
 
+import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.annotation.JSONField;
 import io.github.xiaomisum.ryze.config.ConfigureItem;
 import io.github.xiaomisum.ryze.context.ContextWrapper;
-import io.github.xiaomisum.ryze.testelement.AbstractTestElement;
 import io.github.xiaomisum.ryze.protocol.active.ActiveConstantsInterface;
 import io.github.xiaomisum.ryze.support.Customizer;
+import io.github.xiaomisum.ryze.testelement.AbstractTestElement;
 import org.apache.activemq.ActiveMQConnection;
 import org.apache.commons.lang3.StringUtils;
 
@@ -73,37 +74,37 @@ public class ActiveConfigureItem implements ConfigureItem<ActiveConfigureItem>, 
      */
     @JSONField(name = BROKER_URL)
     protected String brokerUrl;
-    
+
     /**
      * 消息发送目标Topic
      */
     @JSONField(name = ACTIVEMQ_TOPIC, ordinal = 1)
     protected String topic;
-    
+
     /**
      * 消息发送目标Queue
      */
     @JSONField(name = ACTIVEMQ_QUEUE, ordinal = 2)
     protected String queue;
-    
+
     /**
      * 消息内容，支持多种数据类型
      */
     @JSONField(name = ACTIVEMQ_MESSAGE, ordinal = 3)
     protected Object message;
-    
+
     /**
      * 连接用户名
      */
     @JSONField(name = ACTIVEMQ_USERNAME, ordinal = 5)
     protected String username;
-    
+
     /**
      * 连接密码
      */
     @JSONField(name = ACTIVEMQ_PASSWORD, ordinal = 6)
     protected String password;
-    
+
     /**
      * 配置引用名称，用于配置合并和引用
      */
@@ -249,8 +250,14 @@ public class ActiveConfigureItem implements ConfigureItem<ActiveConfigureItem>, 
      *
      * @return 消息内容
      */
-    public Object getMessage() {
-        return message;
+    public String getMessage() {
+        return switch (message) {
+            case Number number -> number.toString();
+            case Boolean bool -> bool.toString();
+            case String str -> str;
+            case null -> "";
+            default -> JSON.toJSONString(message);
+        };
     }
 
     /**

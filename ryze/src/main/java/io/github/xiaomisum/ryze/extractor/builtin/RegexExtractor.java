@@ -108,11 +108,12 @@ public class RegexExtractor extends AbstractExtractor {
         var pattern = Pattern.compile(field);
         var matcher = pattern.matcher(target);
         matchNum = Math.max(0, matchNum);
-        int state = 0;
+        int state = matchNum;
         while (state > -1 && matcher.find()) {
-            state = matcher.groupCount() > 0 ? matchNum : state;
-            value = matcher.group(1);
-            state--;
+            if (state-- == 0) {
+                value = matcher.group(1);
+                break;
+            }
         }
         return StringUtils.isBlank(value) ? null : value;
     }
