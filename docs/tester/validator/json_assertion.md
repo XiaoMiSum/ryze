@@ -14,13 +14,13 @@ strict: false # 是否严格验证，默认否：忽略大小写验证
 
 ## 参数说明
 
-| 参数 | 必填 | 说明 |
-|------|------|------|
-| testclass | 是 | 验证器类型，固定值为 `json` |
-| field | 是 | JSONPath 表达式，用于定位要验证的字段 |
-| expected | 是 | 期望值 |
-| rule | 是 | 验证规则，支持多种比较操作 |
-| strict | 否 | 是否严格验证，默认为 `false`（忽略大小写） |
+| 参数        | 必填 | 说明                        |
+|-----------|----|---------------------------|
+| testclass | 是  | 验证器类型，固定值为 `json`         |
+| field     | 是  | JSONPath 表达式，用于定位要验证的字段   |
+| expected  | 是  | 期望值                       |
+| rule      | 是  | 验证规则，支持多种比较操作             |
+| strict    | 否  | 是否严格验证，默认为 `false`（忽略大小写） |
 
 ## 使用示例
 
@@ -38,7 +38,7 @@ strict: false # 是否严格验证，默认否：忽略大小写验证
       "password": "testpass"
     }
   },
-  "assertions": [
+  "validators": [
     {
       "testclass": "json",
       "field": "$.status",
@@ -71,7 +71,7 @@ strict: false # 是否严格验证，默认否：忽略大小写验证
     "method": "GET",
     "url": "https://api.example.com/users"
   },
-  "assertions": [
+  "validators": [
     {
       "testclass": "json",
       "field": "$.data.length()",
@@ -108,7 +108,7 @@ strict: false # 是否严格验证，默认否：忽略大小写验证
       "quantity": 2
     }
   },
-  "assertions": [
+  "validators": [
     {
       "testclass": "json",
       "field": "$.status",
@@ -141,34 +141,35 @@ strict: false # 是否严格验证，默认否：忽略大小写验证
 
 JSON 验证器支持以下验证规则：
 
-| 规则 | 说明 | 示例 |
-|------|------|------|
-| `==` | 相等 | `expected: 200, rule: "=="` |
-| `!=` | 不相等 | `expected: 404, rule: "!="` |
-| `>` | 大于 | `expected: 0, rule: ">"` |
-| `<` | 小于 | `expected: 10000, rule: "<"` |
-| `>=` | 大于等于 | `expected: 0, rule: ">="` |
-| `<=` | 小于等于 | `expected: 100, rule: "<="` |
-| `contains` | 包含 | `expected: "success", rule: "contains"` |
-| `notContains` | 不包含 | `expected: "error", rule: "notContains"` |
-| `startsWith` | 以...开始 | `expected: "http", rule: "startsWith"` |
-| `endsWith` | 以...结束 | `expected: ".com", rule: "endsWith"` |
-| `matches` | 正则匹配 | `expected: "^\\d{4}-\\d{2}-\\d{2}$", rule: "matches"` |
-| `isNotEmpty` | 非空 | `expected: "", rule: "isNotEmpty"` |
-| `isEmpty` | 为空 | `expected: "", rule: "isEmpty"` |
+| 规则             | 说明     | 示例                                                                 |
+|----------------|--------|--------------------------------------------------------------------|
+| `==`           | 相等     | `field: $.status, expected: 200, rule: "=="`                       |
+| `eq_any`       | 任意一个相等 | `field: $.status, expected: [200, 300], rule: "eq_any"`            |
+| `!=`           | 不相等    | `field: $.status, expected: 404, rule: "!="`                       |
+| `>`            | 大于     | `field: $.status, expected: 0, rule: ">"`                          |
+| `<`            | 小于     | `field: $.status, expected: 10000, rule: "<"`                      |
+| `>=`           | 大于等于   | `field: $.status, expected: 0, rule: ">="`                         |
+| `<=`           | 小于等于   | `field: $.status, expected: 100, rule: "<="`                       |
+| `contains`     | 包含     | `field: $.data, expected: "success", rule: "contains"`             |
+| `any_contains` | 包含任意一个 | `field: $.data, expected: [success, false], rule: "any_contains"`  |
+| `not_contains` | 不包含    | `field: $.data, expected: "error", rule: "not_contains"`           |
+| `regex`        | 正则匹配   | `field: $.data, expected: "^\\d{4}-\\d{2}-\\d{2}$", rule: "regex"` |
+| `is_not_empty` | 非空     | `field: header.Content-Type, rule: "is_not_empty"`                 |
+| `is_empty`     | 为空     | `field: header.Content-Type,  rule: "is_empty"`                    |
+| `same_object`  | 对象匹配   | `field: $.data, expected: {}, rule: "same_object"`                 |
 
 ## JSONPath 语法说明
 
 常用 JSONPath 表达式：
 
-| 表达式 | 说明 | 示例 |
-|--------|------|------|
-| `$` | 根节点 | `$.status` |
-| `.` | 子节点 | `$.data.user` |
-| `..` | 递归下降 | `$..name` |
-| `*` | 通配符 | `$.data.*` |
-| `[]` | 数组索引 | `$.data[0]` |
-| `[start:end]` | 数组切片 | `$.data[1:3]` |
-| `[?(expression)]` | 过滤表达式 | `$.data[?(@.price > 100)]` |
-| `()` | 脚本表达式 | `$.data[(@.length-1)]` |
-| `@` | 当前节点 | `$.data[?(@.name == 'test')]` |
+| 表达式               | 说明    | 示例                            |
+|-------------------|-------|-------------------------------|
+| `$`               | 根节点   | `$.status`                    |
+| `.`               | 子节点   | `$.data.user`                 |
+| `..`              | 递归下降  | `$..name`                     |
+| `*`               | 通配符   | `$.data.*`                    |
+| `[]`              | 数组索引  | `$.data[0]`                   |
+| `[start:end]`     | 数组切片  | `$.data[1:3]`                 |
+| `[?(expression)]` | 过滤表达式 | `$.data[?(@.price > 100)]`    |
+| `()`              | 脚本表达式 | `$.data[(@.length-1)]`        |
+| `@`               | 当前节点  | `$.data[?(@.name == 'test')]` |

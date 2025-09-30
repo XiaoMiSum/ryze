@@ -9,16 +9,16 @@ Ryze框架允许开发者创建自定义函数来扩展模板引擎的功能。
 ```java
 public class CustomFunction implements Function {
     @Override
-    public Object execute(Object... args) {
+    public Object execute(ContextWrapper context, Args args) {
         // 实现自定义函数逻辑
         if (args.length > 0) {
             return "Custom: " + args[0].toString();
         }
         return "Custom Function";
     }
-    
+
     @Override
-    public String getName() {
+    public String key() {
         return "custom";
     }
 }
@@ -37,5 +37,5 @@ com.example.CustomFunction
 在测试中使用自定义函数：
 
 ```java
-suite.variables("customValue", "${custom('inputValue')}");
+suite.variables("customValue","${custom('inputValue')}");
 ```

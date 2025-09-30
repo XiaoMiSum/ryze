@@ -7,16 +7,13 @@ Ryze框架允许开发者创建自定义断言来满足特定的验证需求。
 继承`AbstractAssertion`类并实现验证逻辑：
 
 ```java
+
+@KW({"CustomAssertion", "custom"})
 public class CustomAssertion extends AbstractAssertion {
     @Override
-    public boolean validate(Object actual, Object expected, String rule) {
-        // 实现自定义验证逻辑
-        return actual.toString().contains(expected.toString());
-    }
-    
-    @Override
-    public String getDescription() {
-        return "自定义包含断言";
+    protected Object extractActualValue(SampleResult result) {
+        // 自定义实现提取期望值
+        return result.getResponse().bytesAsString();
     }
 }
 ```
@@ -34,7 +31,9 @@ com.example.CustomAssertion
 在测试中使用自定义断言：
 
 ```java
-http.assertions(assertions -> assertions
-    .custom("自定义断言名称", "${actualValue}", "expectedValue")
+http.assertions(assertions ->assertions
+        .
+
+custom("自定义断言名称","${actualValue}","expectedValue")
 );
 ```

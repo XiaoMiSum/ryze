@@ -32,7 +32,7 @@ public abstract class AbstractExtractor implements Extractor, ExtractorConstants
     /**
      * 执行具体的提取逻辑，由子类实现
      */
-    protected abstract ExtractResult extract(SampleResult context);
+    protected abstract Object extract(SampleResult context);
 }
 ```
 
@@ -51,38 +51,35 @@ public class CSVExtractor extends AbstractExtractor {
     private int rowIndex = 0;
     private final String delimiter = ",";
 
-    @Override
-    protected ExtractResult extract(SampleResult result) {
-        var extractResult = new ExtractResult("CSV 提取: 列" + columnIndex + " 行" + rowIndex);
+    public static Builder builder() {
+        return new Builder();
+    }
 
+    @Override
+    protected Object extract(SampleResult result) {
         try {
             String csvContent = result.getResponse().bytesAsString();
             String[] lines = csvContent.split("\n");
 
-            if (rowIndex >= lines.length) {
-                extractResult.setStatus(TestStatus.failed);
-                extractResult.setMessage("行索引超出范围: " + rowIndex);
-                return extractResult;
+            if (rowIndex > lines.length) {
+                throw new RuntimeException("行索引超出范围: " + rowIndex);
             }
 
             String targetLine = lines[rowIndex + 1]; // 跳过标题行
             String[] columns = targetLine.split(delimiter);
 
             if (columnIndex >= columns.length) {
-                extractResult.setStatus(TestStatus.failed);
-                extractResult.setMessage("列索引超出范围: " + columnIndex);
-                return extractResult;
+                throw new RuntimeException("列索引超出范围: " + columnIndex);
             }
 
-            String value = columns[columnIndex].trim();
-            extractResult.setValue(value);
+            return columns[columnIndex].trim();
 
         } catch (Exception e) {
-            extractResult.setStatus(TestStatus.failed);
-            extractResult.setMessage("CSV 解析失败: " + e.getMessage());
+            if (e instanceof RuntimeException r) {
+                throw r;
+            }
+            throw new RuntimeException("CSV 解析失败 ", e);
         }
-
-        return extractResult;
     }
 
     @Override
@@ -94,6 +91,31 @@ public class CSVExtractor extends AbstractExtractor {
         result.append(super.validate());
         return result;
     }
+
+    public void setColumnIndex(int columnIndex) {
+        this.columnIndex = columnIndex;
+    }
+
+    public void setRowIndex(int rowIndex) {
+        this.rowIndex = rowIndex;
+    }
+
+    public static class Builder extends AbstractExtractor.Builder<Builder, CSVExtractor> {
+
+        public Builder() {
+            super(new CSVExtractor());
+        }
+
+        public Builder columnIndex(int columnIndex) {
+            extractor.columnIndex = columnIndex;
+            return self;
+        }
+
+        public Builder rowIndex(int rowIndex) {
+            extractor.rowIndex = rowIndex;
+            return self;
+        }
+    }
 }
 ```
 
@@ -104,10 +126,12 @@ public class CSVExtractor extends AbstractExtractor {
 @KW({"xpath_extractor", "xpath", "xml_extractor"})
 public class XPathExtractor extends AbstractExtractor {
 
-    @Override
-    protected ExtractResult extract(SampleResult result) {
-        var extractResult = new ExtractResult("XPath 提取: " + field);
+    public static Builder builder() {
+        return new Builder();
+    }
 
+    @Override
+    protected Object extract(SampleResult result) {
         try {
             String xmlContent = result.getResponse().bytesAsString();
 
@@ -119,20 +143,20 @@ public class XPathExtractor extends AbstractExtractor {
             XPath xpath = xPathFactory.newXPath();
             XPathExpression expression = xpath.compile(field);
 
-            String value = expression.evaluate(document);
-            extractResult.setValue(value);
-
-            if (StringUtils.isBlank(value)) {
-                extractResult.setStatus(TestStatus.failed);
-                extractResult.setMessage("XPath 表达式未匹配到数据: " + field);
-            }
-
+            return expression.evaluate(document);
         } catch (Exception e) {
-            extractResult.setStatus(TestStatus.failed);
-            extractResult.setMessage("XML 解析失败: " + e.getMessage());
+            if (e instanceof RuntimeException r) {
+                throw r;
+            }
+            throw new RuntimeException("XML 解析失败 ", e);
         }
+    }
 
-        return extractResult;
+    public static class Builder extends AbstractExtractor.Builder<Builder, XPathExtractor> {
+
+        public Builder() {
+            super(new XPathExtractor());
+        }
     }
 }
 ```
@@ -146,15 +170,17 @@ public class XPathExtractor extends AbstractExtractor {
 @KW({"multi_format_extractor", "multi"})
 public class MultiFormatExtractor extends AbstractExtractor {
 
-    private final String format = "json"; // json, xml, yaml, csv, regex
+    private String format = "json"; // json, xml, yaml, csv, regex
+
+    public static Builder builder() {
+        return new Builder();
+    }
 
     @Override
-    protected ExtractResult extract(SampleResult result) {
-        var extractResult = new ExtractResult("多格式提取: " + format + " - " + field);
-
+    protected Object extract(SampleResult result) {
         try {
             String content = result.getResponse().bytesAsString();
-            Object value = switch (format.toLowerCase()) {
+            return value = switch (format.toLowerCase()) {
                 case "json" -> extractFromJson(content, field);
                 case "xml" -> extractFromXml(content, field);
                 case "yaml", "yml" -> extractFromYaml(content, field);
@@ -162,15 +188,16 @@ public class MultiFormatExtractor extends AbstractExtractor {
                 case "regex" -> extractFromRegex(content, field);
                 default -> throw new IllegalArgumentException("不支持的格式: " + format);
             };
-
-            extractResult.setValue(value);
-
         } catch (Exception e) {
-            extractResult.setStatus(TestStatus.failed);
-            extractResult.setMessage(format + " 提取失败: " + e.getMessage());
+            if (e instanceof RuntimeException r) {
+                throw r;
+            }
+            throw new RuntimeException(format + " 提取失败 ", e);
         }
+    }
 
-        return extractResult;
+    public void setFormat(String format) {
+        this.format = format;
     }
 
     private Object extractFromJson(String content, String path) {
@@ -233,6 +260,18 @@ public class MultiFormatExtractor extends AbstractExtractor {
         }
 
         return matches.size() == 1 ? matches.get(0) : matches;
+    }
+
+    public static class Builder extends AbstractExtractor.Builder<Builder, MultiFormatExtractor> {
+
+        public Builder() {
+            super(new MultiFormatExtractor());
+        }
+
+        public Builder format(String format) {
+            extractor.format = format;
+            return self;
+        }
     }
 }
 ```

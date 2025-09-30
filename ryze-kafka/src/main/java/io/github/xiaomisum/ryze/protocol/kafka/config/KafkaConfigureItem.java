@@ -25,12 +25,13 @@
 
 package io.github.xiaomisum.ryze.protocol.kafka.config;
 
+import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.annotation.JSONField;
 import io.github.xiaomisum.ryze.config.ConfigureItem;
 import io.github.xiaomisum.ryze.context.ContextWrapper;
-import io.github.xiaomisum.ryze.testelement.AbstractTestElement;
 import io.github.xiaomisum.ryze.protocol.kafka.KafkaConstantsInterface;
 import io.github.xiaomisum.ryze.support.Customizer;
+import io.github.xiaomisum.ryze.testelement.AbstractTestElement;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
@@ -264,8 +265,14 @@ public class KafkaConfigureItem implements ConfigureItem<KafkaConfigureItem>, Ka
      *
      * @return Kafka消息内容
      */
-    public Object getMessage() {
-        return message;
+    public String getMessage() {
+        return switch (message) {
+            case Number number -> number.toString();
+            case Boolean bool -> bool.toString();
+            case String str -> str;
+            case null -> "";
+            default -> JSON.toJSONString(message);
+        };
     }
 
     /**

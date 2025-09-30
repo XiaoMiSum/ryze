@@ -412,7 +412,7 @@ preprocessors:
         username: testuser
         password: password123
     # 处理登录失败的情况
-    assertions:
+    validators:
       - { testclass: http, field: 'status', expected: 200, rule: '==' }
 ```
 

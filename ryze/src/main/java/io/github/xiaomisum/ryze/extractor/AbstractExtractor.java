@@ -92,7 +92,6 @@ public abstract class AbstractExtractor implements Extractor, ExtractorConstants
     @JSONField(name = REF_NAME)
     protected String refName;
 
-
     /**
      * 构造一个新的抽象提取器实例
      * <p>初始化所有字段为默认值，需要通过setter方法或构建器进行配置。</p>
@@ -118,10 +117,10 @@ public abstract class AbstractExtractor implements Extractor, ExtractorConstants
     public ValidateResult validate() {
         ValidateResult result = new ValidateResult();
         if (StringUtils.isBlank(refName)) {
-            result.append("\n提取引用名称 %s 字段值缺失或为空，当前值：%s", REF_NAME, toString());
+            result.append("\n提取引用名称 ref_name 字段值缺失或为空");
         }
         if (StringUtils.isBlank(field)) {
-            result.append("\n提取表达式 %s 字段值缺失或为空，当前值：%s", field, toString());
+            result.append("\n提取表达式 field 字段值缺失或为空");
         }
         return result;
     }
@@ -150,20 +149,19 @@ public abstract class AbstractExtractor implements Extractor, ExtractorConstants
             return;
         }
         if (context.getTestResult() instanceof SampleResult result) {
-            if (StringUtils.isBlank(result.getResponse().bytesAsString()) && defaultValue == null) {
+            var defaultValueIsBlank = defaultValue == null || StringUtils.isBlank(defaultValue.toString());
+            if (StringUtils.isBlank(result.getResponse().bytesAsString()) && defaultValueIsBlank) {
                 throw new IllegalArgumentException("待提取的字符串为 null 或空白");
             }
-            Object value;
+            Object value = null;
             try {
                 value = extract(result);
-                value = value == null ? defaultValue : value;
-            } catch (Exception e) {
-                if (defaultValue == null) {    // 提取发生异常，且设置了默认值，则使用默认值
-                    throw new RuntimeException(e);
-                }
-                value = defaultValue;
+            } catch (RuntimeException e) {
+                if (defaultValueIsBlank)
+                    throw e;
             }
-            if (value == null) {
+            value = value == null || StringUtils.isBlank(value.toString()) ? defaultValue : value;
+            if (value == null || StringUtils.isBlank(value.toString())) {
                 throw new IllegalArgumentException("目标字符串没有匹配的数据 %s，目标字符串：\n%s".formatted(field, result.getResponse().bytesAsString()));
             }
             context.getLocalVariablesWrapper().put(refName, value);

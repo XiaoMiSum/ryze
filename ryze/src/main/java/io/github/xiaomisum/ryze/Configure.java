@@ -37,7 +37,6 @@ import io.github.xiaomisum.ryze.template.TemplateEngine;
 import io.github.xiaomisum.ryze.template.freemarker.FreeMarkerTemplateEngine;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static io.github.xiaomisum.ryze.testelement.TestElementConstantsInterface.INTERCEPTORS;
 
@@ -115,16 +114,12 @@ public class Configure {
     public static Configure defaultConfigure() {
         var configure = new Configure();
         configure.setTemplateEngine(new FreeMarkerTemplateEngine());
-        var interceptors = new ArrayList<>(ApplicationConfig.getReporterListeners());
-        if (!configure.isEnableAllureReport()) {
-            interceptors.removeIf(AllureReportListener.class::isInstance);
-        }
         InterceptorConfigureItem<RyzeInterceptor> items = new InterceptorConfigureItem<>();
-        items.addAll(interceptors);
+        items.addAll(new ArrayList<>(ApplicationConfig.getReporterListeners()));
         configure.setBuiltinInterceptors(items);
         var globalContext = new GlobalContext(new GlobalConfigure());
         // todo 全局配置可以考虑固定位置存放全局变量
-        globalContext.getConfigGroup().put(INTERCEPTORS, items);
+        globalContext.getConfigGroup().put(INTERCEPTORS, configure.getBuiltinInterceptors());
         configure.setGlobalContext(globalContext);
         return configure;
     }
@@ -157,12 +152,12 @@ public class Configure {
     }
 
     /**
-     * 获取内置拦截器列表
+     * 获取内置拦截器列表（拷贝）
      *
      * @return 内置拦截器列表
      */
-    public List<RyzeInterceptor> getBuiltinInterceptors() {
-        return builtinRyzeInterceptors;
+    public InterceptorConfigureItem<RyzeInterceptor> getBuiltinInterceptors() {
+        return builtinRyzeInterceptors.copy();
     }
 
     /**
@@ -170,7 +165,10 @@ public class Configure {
      *
      * @param builtinRyzeInterceptors 内置拦截器配置项
      */
-    public void setBuiltinInterceptors(InterceptorConfigureItem<RyzeInterceptor> builtinRyzeInterceptors) {
+    private void setBuiltinInterceptors(InterceptorConfigureItem<RyzeInterceptor> builtinRyzeInterceptors) {
+        if (!isEnableAllureReport()) {
+            builtinRyzeInterceptors.removeIf(AllureReportListener.class::isInstance);
+        }
         this.builtinRyzeInterceptors = builtinRyzeInterceptors;
     }
 

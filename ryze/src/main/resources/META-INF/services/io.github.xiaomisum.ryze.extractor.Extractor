@@ -28,6 +28,7 @@
 io.github.xiaomisum.ryze.extractor.builtin.JSONExtractor
 io.github.xiaomisum.ryze.extractor.builtin.RegexExtractor
 io.github.xiaomisum.ryze.extractor.builtin.ResultExtractor
+io.github.xiaomisum.ryze.protocol.http.extractor.HTTPHeaderExtractor
 
 
 

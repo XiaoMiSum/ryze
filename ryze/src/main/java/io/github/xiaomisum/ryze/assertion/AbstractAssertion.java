@@ -29,7 +29,6 @@ import com.alibaba.fastjson2.annotation.JSONField;
 import io.github.xiaomisum.ryze.builder.IBuilder;
 import io.github.xiaomisum.ryze.context.ContextWrapper;
 import io.github.xiaomisum.ryze.testelement.sampler.SampleResult;
-import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.Matcher;
 import org.hamcrest.MatcherAssert;
 
@@ -122,10 +121,7 @@ public abstract class AbstractAssertion implements Assertion, AssertionConstants
                 proxy.strict = strict;
                 proxy.expectedValue = expected;
             }
-            if (matcher == null) {
-                rule = StringUtils.isBlank(rule) ? "==" : rule;
-                matcher = Matchers.createMatcher(rule, expected, strict);
-            }
+            matcher = matcher == null ? Matchers.createMatcher(rule, expected, strict) : matcher;
             MatcherAssert.assertThat(actualValue, matcher);
         }
     }

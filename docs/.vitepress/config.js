@@ -4,7 +4,7 @@ export default defineConfig({
   title: 'RYZE',
   description: '强大的多协议测试框架，让测试变得简单而优雅',
   
-  base: '/',
+  base: '/ryze',
   
   // 忽略死链接检查
   ignoreDeadLinks: true,
@@ -14,8 +14,9 @@ export default defineConfig({
       { text: '首页', link: '/' },
       { text: '文档', link: '/guide/introduction' },
       { text: '测试人员', link: '/tester/test-suite/test-suite-project' },
-      { text: '开发者', link: '/developer' },
-      { text: 'FAQ', link: '/faq' }
+      { text: '开发者', link: '/developer/style' },
+      { text: 'FAQ', link: '/faq/same' },
+      { text: '6.0.4' }
     ],
     
     sidebar: {
@@ -72,7 +73,7 @@ export default defineConfig({
         {
           text: '扩展机制',
           items: [
-            { text: '自定义断言', link: '/guide/extending/assertion' },
+            { text: '自定义验证器', link: '/guide/extending/validator' },
             { text: '自定义提取器', link: '/guide/extending/extractor' },
             { text: '自定义函数', link: '/guide/extending/function' },
             { text: '自定义协议', link: '/guide/extending/protocol' }
@@ -100,10 +101,10 @@ export default defineConfig({
             },
             {
               text: '提取器', items: [
-                { text: 'HTTP响应头提取器', link: '/tester/template/extractor/http_header_extractor' },
-                { text: 'JSON 提取器', link: '/tester/template/extractor/json_extractor' },
-                { text: '正则表达式提取器', link: '/tester/template/extractor/regex_extractor' },
-                { text: '响应结果提取器', link: '/tester/template/extractor/result_extractor' }
+                { text: 'HTTP响应头提取器', link: '/tester/extractor/http_header_extractor' },
+                { text: 'JSON 提取器', link: '/tester/extractor/json_extractor' },
+                { text: '正则表达式提取器', link: '/tester/extractor/regex_extractor' },
+                { text: '响应结果提取器', link: '/tester/extractor/result_extractor' }
               ]
             },
             {
@@ -122,7 +123,7 @@ export default defineConfig({
             text: '变量与函数', items: [
                 { text: '变量', link: '/tester/variable/variables' },
                 { text: '函数', link: '/tester/variable/functions' }
-                ]
+              ]
             },
             { text: '常见问题', link: '/faq' }
           ]
@@ -133,7 +134,7 @@ export default defineConfig({
         {
           text: '开发者指南',
           items: [
-            { text: '编码规范', link: '/developer' },
+            { text: '编码规范', link: '/developer/style' },
             { text: '架构设计', link: '/developer/architecture' },
             { text: '新协议', link: '/developer/NewProtocol' },
             { text: '拦截器', link: '/developer/interceptor' },
@@ -145,11 +146,10 @@ export default defineConfig({
         {
           text: 'API',
           items: [
-            { text: '参考信息', link: '/developer/api' },
+            { text: '参考信息', link: '/developer/api/reference' },
             { text: '核心 API', link: '/developer/api/core' },
             { text: '协议 API', link: '/developer/api/protocol' },
             { text: '测试组件 API', link: '/developer/api/test-element' },
-            { text: '上下文 API', link: '/developer/api/context' },
             { text: '构建器 API', link: '/developer/api/builder' },
             { text: '断言与提取器 API', link: '/developer/api/builder' }
           ]
@@ -158,7 +158,7 @@ export default defineConfig({
       '/faq/': [
         {
           text: 'FAQ',
-          link: '/faq'
+          link: '/faq/same'
         }
       ]
     },

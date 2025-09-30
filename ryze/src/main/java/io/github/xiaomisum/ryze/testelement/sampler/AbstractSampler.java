@@ -40,12 +40,12 @@ import io.github.xiaomisum.ryze.context.ContextWrapper;
 import io.github.xiaomisum.ryze.context.TestRunContext;
 import io.github.xiaomisum.ryze.extractor.Extractor;
 import io.github.xiaomisum.ryze.interceptor.RyzeInterceptor;
-import io.github.xiaomisum.ryze.testelement.AbstractTestElementExecutable;
-import io.github.xiaomisum.ryze.testelement.TestElement;
 import io.github.xiaomisum.ryze.support.Collections;
 import io.github.xiaomisum.ryze.support.Customizer;
 import io.github.xiaomisum.ryze.support.KryoUtil;
 import io.github.xiaomisum.ryze.support.groovy.Groovy;
+import io.github.xiaomisum.ryze.testelement.AbstractTestElementExecutable;
+import io.github.xiaomisum.ryze.testelement.TestElement;
 
 import java.util.ArrayList;
 import java.util.List;

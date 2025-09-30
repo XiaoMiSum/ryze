@@ -97,23 +97,22 @@ rule：验证规则，默认 ==
 
 验证规则默认为 ==，验证 实际值是否与期望值一致，详细规则如下：
 
-| 引用                                                                    | 描述                                |
-|-----------------------------------------------------------------------|-----------------------------------|
-| ==、===、eq、equal、equals、is                                             | 验证实际值是否与期望值一致，数字 1.0 等同于 1        |
-| EqualsAny、any、eqa、equalAny、eq_any                                     | 验证实际值是否与期望值中的任意一个值一致，数字 1.0 等同于 1 |
-| equalsIgnoreCase、ignoreCase                                           | 验证实际值是否与期望值一致（忽略大小写）              |
-| equalsAnyIgnoreCase、AnyIgnoreCase                                     | 验证实际值是否与期望值中的任意一个值一致（忽略大小写）       |
-| contains、contain、ct、⊆                                                 | 验证实际值是否包含期望值                      |
-| ContainsAny、containAny、ct_any、cta                                     | 验证实际值是否包含期望值中的任意一个值               |
-| notContain、notContains、nc、doesNotContains、doesNotContain、⊈            | 验证实际值是否不包含期望值                     |
-| !=、!==、     not     、<>                                               | 验证实际值是否与期望值不一致                    |
-| >、   greater、     greaterThan、    gt                                  | 验证实际值是否大于期望值（用于比较数字）              |
-| >=、           GreaterThanOrEquals                                     | 验证实际值是否大于等于期望值（用于比较数字）            |
-| isEmpty、      isNull        、empty       、blank                       | 验证实际值是否为空                         |
-| isNotEmpty、  isNotNull     、isNotBlank    、notEmpty 、notNull、notBlank | 验证实际值是否非空                         |
-| <       、less     、lessThan       、lt                                 | 验证实际值是否小于期望值  （用于比较数字）            |
-| <=       、LessThanOrEquals                                            | 验证实际值是否小于等于期望值  （用于比较数字）          |
-| regex、rx                                                              | 验证实际值是否与正则表达式相匹配                  |
+| 规则             | 说明     | 示例                                                                              |
+|----------------|--------|---------------------------------------------------------------------------------|
+| `==`           | 相等     | `field: status, expected: 200, rule: "=="`                                      |
+| `eq_any`       | 任意一个相等 | `field: status, expected: [200, 300], rule: "eq_any"`                           |
+| `!=`           | 不相等    | `field: status, expected: 404, rule: "!="`                                      |
+| `>`            | 大于     | `field: status, expected: 0, rule: ">"`                                         |
+| `<`            | 小于     | `field: status, expected: 10000, rule: "<"`                                     |
+| `>=`           | 大于等于   | `field: status, expected: 0, rule: ">="`                                        |
+| `<=`           | 小于等于   | `field: status, expected: 100, rule: "<="`                                      |
+| `contains`     | 包含     | `field: header.Content-Type, expected: "success", rule: "contains"`             |
+| `any_contains` | 包含任意一个 | `field: header.Content-Type, expected: [success, false], rule: "any_contains"`  |
+| `not_contains` | 不包含    | `field: header.Content-Type, expected: "error", rule: "not_contains"`           |
+| `regex`        | 正则匹配   | `field: header.Content-Type, expected: "^\\d{4}-\\d{2}-\\d{2}$", rule: "regex"` |
+| `is_not_empty` | 非空     | `field: header.Content-Type, rule: "is_not_empty"`                              |
+| `is_empty`     | 为空     | `field: header.Content-Type,  rule: "is_empty"`                                 |
+| `same_object`  | 对象匹配   | `field: body, expected: {}, rule: "same_object"`                                |
 
 ## 💡 扩展功能
 

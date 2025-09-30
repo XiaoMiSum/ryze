@@ -29,9 +29,11 @@ import com.alibaba.fastjson2.annotation.JSONField;
 import io.github.xiaomisum.ryze.extractor.AbstractExtractor;
 import io.github.xiaomisum.ryze.extractor.builtin.JSONExtractor;
 import io.github.xiaomisum.ryze.extractor.builtin.RegexExtractor;
-import io.github.xiaomisum.ryze.protocol.http.RealHTTPRealResultResponse;
+import io.github.xiaomisum.ryze.protocol.http.RealHTTPResponse;
+import io.github.xiaomisum.ryze.support.ValidateResult;
 import io.github.xiaomisum.ryze.testelement.KW;
 import io.github.xiaomisum.ryze.testelement.sampler.SampleResult;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * HTTP响应头提取器，专门用于从HTTP响应头中提取数据
@@ -84,6 +86,18 @@ public class HTTPHeaderExtractor extends AbstractExtractor {
         return new Builder();
     }
 
+    @Override
+    public ValidateResult validate() {
+        ValidateResult result = new ValidateResult();
+        if (StringUtils.isBlank(refName)) {
+            result.append("\n提取引用名称 ref_name 字段值缺失或为空");
+        }
+        if (StringUtils.isBlank(field)) {
+            result.append("\n提取请求头 field 字段值缺失或为空");
+        }
+        return result;
+    }
+
     /**
      * 执行HTTP响应头数据提取
      *
@@ -102,7 +116,7 @@ public class HTTPHeaderExtractor extends AbstractExtractor {
      */
     @Override
     protected Object extract(SampleResult result) {
-        var response = (RealHTTPRealResultResponse) result.getResponse();
+        var response = (RealHTTPResponse) result.getResponse();
         var headers = response.headers().stream().filter(header -> header.getName().equalsIgnoreCase(field)).toList();
         if (!headers.isEmpty()) {
             matchNum = (headers.size() < matchNum + 1) ? headers.size() - 1 : matchNum;

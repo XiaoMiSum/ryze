@@ -32,7 +32,6 @@ import com.alibaba.fastjson2.annotation.JSONField;
 import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
 import io.github.xiaomisum.ryze.Result;
-import io.github.xiaomisum.ryze.SessionRunner;
 import io.github.xiaomisum.ryze.TestStatus;
 import io.github.xiaomisum.ryze.builder.ExtensibleChildrenBuilder;
 import io.github.xiaomisum.ryze.builder.ExtensibleConfigureElementsBuilder;
@@ -40,11 +39,11 @@ import io.github.xiaomisum.ryze.builder.ExtensiblePostprocessorsBuilder;
 import io.github.xiaomisum.ryze.builder.ExtensiblePreprocessorsBuilder;
 import io.github.xiaomisum.ryze.config.ConfigureItem;
 import io.github.xiaomisum.ryze.context.ContextWrapper;
-import io.github.xiaomisum.ryze.testelement.sampler.Sampler;
 import io.github.xiaomisum.ryze.support.Collections;
 import io.github.xiaomisum.ryze.support.Customizer;
 import io.github.xiaomisum.ryze.support.ValidateResult;
 import io.github.xiaomisum.ryze.support.groovy.Groovy;
+import io.github.xiaomisum.ryze.testelement.sampler.Sampler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -136,10 +135,7 @@ public abstract class TestContainerExecutable<SELF extends TestContainerExecutab
             }
             chain.applyPostHandle(context, runtime);
         } catch (Throwable throwable) {
-            context.getTestResult().setStatus(throwable instanceof AssertionError ? TestStatus.failed : TestStatus.broken);
-            if (SessionRunner.getSession().isRunInTestFrameworkSupport()) {
-                throw throwable;
-            }
+            context.getTestResult().setThrowable(throwable);
         } finally {
             // 最终处理
             chain.triggerAfterCompletion(context);
@@ -214,15 +210,15 @@ public abstract class TestContainerExecutable<SELF extends TestContainerExecutab
      * 支持配置项、前置处理器、后置处理器等组件的配置，同时扩展了子元素配置功能。
      * </p>
      *
-     * @param <ELE>                   容器类型，必须是TestContainerExecutable的子类
-     * @param <SELF>                  自己的类型，用于支持链式调用
-     * @param <CONFIG>                容器配置类型，必须是ConfigureItem的子类
-     * @param <CONFIGURE_BUILDER>     容器配置类型构建器，必须是ConfigureBuilder的子类
-     * @param <CONFIGURES_BUILDER>    配置元素构建器，必须是ExtensibleConfigureElementsBuilder的子类
-     * @param <PREPROCESSORS_BUILDER> 前置处理器构建器，必须是ExtensiblePreprocessorsBuilder的子类
+     * @param <ELE>                                                                  容器类型，必须是TestContainerExecutable的子类
+     * @param <SELF>                                                                 自己的类型，用于支持链式调用
+     * @param <CONFIG>                                                               容器配置类型，必须是ConfigureItem的子类
+     * @param <CONFIGURE_BUILDER>                                                    容器配置类型构建器，必须是ConfigureBuilder的子类
+     * @param <CONFIGURES_BUILDER>                                                   配置元素构建器，必须是ExtensibleConfigureElementsBuilder的子类
+     * @param <PREPROCESSORS_BUILDER>                                                前置处理器构建器，必须是ExtensiblePreprocessorsBuilder的子类
      * @param <POSTPROCESSORS_BUILDER>后置处理器构建器，必须是ExtensiblePostprocessorsBuilder的子类
-     * @param <CHILDREN_BUILDER>      子元素构建器，必须是ExtensibleChildrenBuilder的子类
-     * @param <R>                     处理结果类型，必须是Result的子类
+     * @param <CHILDREN_BUILDER>                                                     子元素构建器，必须是ExtensibleChildrenBuilder的子类
+     * @param <R>                                                                    处理结果类型，必须是Result的子类
      */
     public static abstract class Builder<ELE extends TestContainerExecutable<ELE, CONFIG, R>,
             SELF extends Builder<ELE, SELF, CONFIG, CONFIGURE_BUILDER, CONFIGURES_BUILDER, PREPROCESSORS_BUILDER, POSTPROCESSORS_BUILDER, CHILDREN_BUILDER, R>,
