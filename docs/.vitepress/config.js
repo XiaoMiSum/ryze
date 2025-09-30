@@ -4,8 +4,8 @@ export default defineConfig({
   title: 'RYZE',
   description: '强大的多协议测试框架，让测试变得简单而优雅',
   
-  base: '/ryze',
-  
+  base: '/',
+
   // 忽略死链接检查
   ignoreDeadLinks: true,
   
