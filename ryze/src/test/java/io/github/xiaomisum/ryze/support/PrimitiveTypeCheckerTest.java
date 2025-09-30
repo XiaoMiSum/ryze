@@ -75,15 +75,15 @@ public class PrimitiveTypeCheckerTest {
         Assert.assertTrue(PrimitiveTypeChecker.isWrapperType(1.0d));
         Assert.assertTrue(PrimitiveTypeChecker.isWrapperType("test"));
 
-        // 测试基本类型（应该返回false）
-        Assert.assertFalse(PrimitiveTypeChecker.isWrapperType(true));
-        Assert.assertFalse(PrimitiveTypeChecker.isWrapperType((byte) 1));
-        Assert.assertFalse(PrimitiveTypeChecker.isWrapperType('a'));
-        Assert.assertFalse(PrimitiveTypeChecker.isWrapperType((short) 1));
-        Assert.assertFalse(PrimitiveTypeChecker.isWrapperType(1));
-        Assert.assertFalse(PrimitiveTypeChecker.isWrapperType(1L));
-        Assert.assertFalse(PrimitiveTypeChecker.isWrapperType(1.0f));
-        Assert.assertFalse(PrimitiveTypeChecker.isWrapperType(1.0d));
+        // 测试基本类型
+        Assert.assertTrue(PrimitiveTypeChecker.isWrapperType(true));
+        Assert.assertTrue(PrimitiveTypeChecker.isWrapperType((byte) 1));
+        Assert.assertTrue(PrimitiveTypeChecker.isWrapperType('a'));
+        Assert.assertTrue(PrimitiveTypeChecker.isWrapperType((short) 1));
+        Assert.assertTrue(PrimitiveTypeChecker.isWrapperType(1));
+        Assert.assertTrue(PrimitiveTypeChecker.isWrapperType(1L));
+        Assert.assertTrue(PrimitiveTypeChecker.isWrapperType(1.0f));
+        Assert.assertTrue(PrimitiveTypeChecker.isWrapperType(1.0d));
 
         // 测试非包装类型
         Assert.assertFalse(PrimitiveTypeChecker.isWrapperType(new Object()));
