@@ -32,37 +32,6 @@ import org.testng.annotations.Test;
 public class PrimitiveTypeCheckerTest {
 
     @Test
-    public void testIsPrimitiveType() {
-        // 测试基本类型
-        Assert.assertTrue(PrimitiveTypeChecker.isPrimitiveType(true));
-        Assert.assertTrue(PrimitiveTypeChecker.isPrimitiveType((byte) 1));
-        Assert.assertTrue(PrimitiveTypeChecker.isPrimitiveType('a'));
-        Assert.assertTrue(PrimitiveTypeChecker.isPrimitiveType((short) 1));
-        Assert.assertTrue(PrimitiveTypeChecker.isPrimitiveType(1));
-        Assert.assertTrue(PrimitiveTypeChecker.isPrimitiveType(1L));
-        Assert.assertTrue(PrimitiveTypeChecker.isPrimitiveType(1.0f));
-        Assert.assertTrue(PrimitiveTypeChecker.isPrimitiveType(1.0d));
-        Assert.assertTrue(PrimitiveTypeChecker.isPrimitiveType("test"));
-
-        // 测试包装类型（应该返回false）
-        Assert.assertFalse(PrimitiveTypeChecker.isPrimitiveType(Boolean.TRUE));
-        Assert.assertFalse(PrimitiveTypeChecker.isPrimitiveType((byte) 1));
-        Assert.assertFalse(PrimitiveTypeChecker.isPrimitiveType('a'));
-        Assert.assertFalse(PrimitiveTypeChecker.isPrimitiveType((short) 1));
-        Assert.assertFalse(PrimitiveTypeChecker.isPrimitiveType(1));
-        Assert.assertFalse(PrimitiveTypeChecker.isPrimitiveType(1L));
-        Assert.assertFalse(PrimitiveTypeChecker.isPrimitiveType(1.0f));
-        Assert.assertFalse(PrimitiveTypeChecker.isPrimitiveType(1.0d));
-
-        // 测试非基本类型
-        Assert.assertFalse(PrimitiveTypeChecker.isPrimitiveType(new Object()));
-        Assert.assertFalse(PrimitiveTypeChecker.isPrimitiveType(new int[]{1, 2, 3}));
-
-        // 测试null
-        Assert.assertFalse(PrimitiveTypeChecker.isPrimitiveType(null));
-    }
-
-    @Test
     public void testIsWrapperType() {
         // 测试包装类型
         Assert.assertTrue(PrimitiveTypeChecker.isWrapperType(Boolean.TRUE));

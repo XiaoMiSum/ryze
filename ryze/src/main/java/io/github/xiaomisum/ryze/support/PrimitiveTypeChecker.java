@@ -94,19 +94,6 @@ public class PrimitiveTypeChecker {
     }
 
     /**
-     * 判断对象是否为原始基本类型
-     *
-     * <p>检查给定对象是否为Java的基本数据类型实例，如int、boolean等。
-     * 注意：此方法检查的是对象的运行时类型，而非对象本身。</p>
-     *
-     * @param obj 待检查的对象，可以为null
-     * @return 如果对象是基本类型实例返回true，否则返回false
-     */
-    public static boolean isPrimitiveType(Object obj) {
-        return obj != null && PRIMITIVE_TYPES.contains(obj.getClass());
-    }
-
-    /**
      * 判断对象是否为包装类型
      *
      * <p>检查给定对象是否为Java基本数据类型的包装类实例，
