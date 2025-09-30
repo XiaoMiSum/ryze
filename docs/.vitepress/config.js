@@ -4,7 +4,7 @@ export default defineConfig({
   title: 'RYZE',
   description: '强大的多协议测试框架，让测试变得简单而优雅',
   
-  base: '/ryze/',
+  base: '/ryze',
   
   // 忽略死链接检查
   ignoreDeadLinks: true,
@@ -15,7 +15,8 @@ export default defineConfig({
       { text: '文档', link: '/guide/introduction' },
       { text: '测试人员', link: '/tester/test-suite/test-suite-project' },
       { text: '开发者', link: '/developer/style' },
-      { text: 'FAQ', link: '/faq/same' }
+      { text: 'FAQ', link: '/faq/same' },
+      { text: '6.0.4' }
     ],
     
     sidebar: {
@@ -122,7 +123,7 @@ export default defineConfig({
             text: '变量与函数', items: [
                 { text: '变量', link: '/tester/variable/variables' },
                 { text: '函数', link: '/tester/variable/functions' }
-                ]
+              ]
             },
             { text: '常见问题', link: '/faq' }
           ]

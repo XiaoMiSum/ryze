@@ -74,8 +74,8 @@ Ryze 是一个基于 Java 21 开发的现代化测试框架，专为多协议测
 
 我们提供了基于 VitePress 的在线文档站点，您可以通过以下链接访问：
 
-- [在线文档](https://xiaomisum.github.io/ryze)
-- [中国大陆](https://ryze-rr7xp0ri.maozi.io)
+- 在线文档：[GitHub Pages](https://xiaomisum.github.io/ryze)
+- 中国大陆：[帽子云](https://ryze-rr7xp0ri.maozi.io)  [AtomGit Pages](https://xiaomisum.atomgit.net/ryze/)
 
 在线文档包含了框架的所有功能介绍、使用指南和 API 参考，是学习和使用 Ryze 的最佳资源。
 
@@ -137,16 +137,16 @@ graph TB
     <version>${version}</version>
 </dependency>
 
-        <!-- HTTP 协议支持 (已内置在核心模块) -->
+<!-- HTTP 协议支持 (已内置在核心模块) -->
 
-        <!-- Dubbo 协议支持 -->
+<!-- Dubbo 协议支持 -->
 <dependency>
-<groupId>io.github.xiaomisum</groupId>
-<artifactId>ryze-dubbo</artifactId>
-<version>${version}</version>
+    <groupId>io.github.xiaomisum</groupId>
+    <artifactId>ryze-dubbo</artifactId>
+    <version>${version}</version>
 </dependency>
 
-        <!-- 其他协议模块根据需要添加 -->
+<!-- 其他协议模块根据需要添加 -->
 ```
 
 ### Gradle 引入
