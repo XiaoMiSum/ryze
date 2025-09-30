@@ -16,7 +16,7 @@ export default defineConfig({
       { text: '测试人员', link: '/tester/test-suite/test-suite-project' },
       { text: '开发者', link: '/developer/style' },
       { text: 'FAQ', link: '/faq/same' },
-      { text: '6.0.4' }
+      { text: '6.0.4', link: 'https://github.com/XiaoMiSum/ryze' }
     ],
     
     sidebar: {
@@ -125,7 +125,7 @@ export default defineConfig({
                 { text: '函数', link: '/tester/variable/functions' }
               ]
             },
-            { text: '常见问题', link: '/faq' }
+            { text: '常见问题', link: '/faq/same' }
           ]
         }
       ],
