@@ -28,7 +28,7 @@
 
 package io.github.xiaomisum.ryze.support.testng.dataprovider;
 
-import io.github.xiaomisum.ryze.support.TestDataLoader;
+import io.github.xiaomisum.ryze.support.dataloader.TestDataLoaderChain;
 import io.github.xiaomisum.ryze.support.testng.TestNGConstantsInterface;
 import io.github.xiaomisum.ryze.support.testng.annotation.AnnotationUtils;
 import io.github.xiaomisum.ryze.support.testng.annotation.Datasource;
@@ -87,7 +87,7 @@ public class RyzeDatasource implements TestNGConstantsInterface {
         }
         // 动态设置数据源类型
         Type type = TypeFactory.parameterizedClass(List.class, datasource.type());
-        List<?> data = TestDataLoader.toJavaObject(datasource.value(), type);
+        List<?> data = TestDataLoaderChain.loadTestData(datasource.value(), type);
         // 数据过滤
         return Objects.isNull(data) || data.isEmpty() ? EMPTY_DATA :
                 data.stream().map(obj -> new Object[]{obj}).toArray(Object[][]::new);

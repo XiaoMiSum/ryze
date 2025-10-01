@@ -30,7 +30,7 @@ package io.github.xiaomisum.ryze;
 
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
-import io.github.xiaomisum.ryze.support.TestDataLoader;
+import io.github.xiaomisum.ryze.support.dataloader.TestDataLoaderChain;
 import io.github.xiaomisum.ryze.testelement.TestElement;
 
 import java.util.Map;
@@ -76,7 +76,7 @@ public class Ryze {
      * @return 测试执行结果
      */
     public static Result start(String filePath) {
-        JSONObject testcase = TestDataLoader.toJavaObject(filePath, JSONObject.class);
+        JSONObject testcase = TestDataLoaderChain.loadTestData(filePath, JSONObject.class);
         return start(testcase);
     }
 
