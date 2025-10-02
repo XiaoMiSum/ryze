@@ -25,6 +25,4 @@
 #  */
 #
 
-io.github.xiaomisum.ryze.protocol.http.config.HTTPJSONInterceptor
-io.github.xiaomisum.ryze.protocol.jdbc.config.JDBCJSONInterceptor
-io.github.xiaomisum.ryze.protocol.redis.config.RedisJSONInterceptor
+io.github.xiaomisum.ryze.protocol.dubbo.config.DubboJSONInterceptor

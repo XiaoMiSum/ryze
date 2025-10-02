@@ -26,14 +26,14 @@
  *
  */
 
-package io.github.xiaomisum.ryze.protocol.http.config;
+package io.github.xiaomisum.ryze.protocol.dubbo.config;
 
 import com.alibaba.fastjson2.JSON;
 import io.github.xiaomisum.ryze.config.ConfigureItem;
-import io.github.xiaomisum.ryze.protocol.http.HTTPConstantsInterface;
-import io.github.xiaomisum.ryze.protocol.http.processor.HTTPPostprocessor;
-import io.github.xiaomisum.ryze.protocol.http.processor.HTTPPreprocessor;
-import io.github.xiaomisum.ryze.protocol.http.sampler.HTTPSampler;
+import io.github.xiaomisum.ryze.protocol.dubbo.DubboConstantsInterface;
+import io.github.xiaomisum.ryze.protocol.dubbo.processor.DubboPostprocessor;
+import io.github.xiaomisum.ryze.protocol.dubbo.processor.DubboPreprocessor;
+import io.github.xiaomisum.ryze.protocol.dubbo.sampler.DubboSampler;
 import io.github.xiaomisum.ryze.support.fastjson.interceptor.JSONInterceptor;
 import org.apache.commons.lang3.StringUtils;
 
@@ -42,15 +42,15 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * HTTP协议JSON拦截器
+ * Dubbo协议JSON拦截器
  * <p>
- * 该类用于处理HTTP协议相关测试元件的JSON反序列化过程。
- * 主要功能是将JSON配置转换为对应的HTTP配置项对象，并处理配置项的兼容性问题。
+ * 该类用于处理Dubbo协议相关测试元件的JSON反序列化过程。
+ * 主要功能是将JSON配置转换为对应的Dubbo配置项对象，并处理配置项的兼容性问题。
  * </p>
  *
  * <p>主要功能：
  * <ul>
- *   <li>支持HTTP取样器、数据源、前置/后置处理器的反序列化</li>
+ *   <li>支持Dubbo取样器、数据源、前置/后置处理器的反序列化</li>
  *   <li>处理旧版本配置项的兼容性转换（如statement转sql）</li>
  * </ul>
  * </p>
@@ -59,17 +59,17 @@ import java.util.Objects;
  * @since 2025/7/21 22:25
  */
 @SuppressWarnings({"rawtypes", "unchecked"})
-public class HTTPJSONInterceptor implements JSONInterceptor, HTTPConstantsInterface {
+public class DubboJSONInterceptor implements JSONInterceptor, DubboConstantsInterface {
 
     /**
      * 获取支持的类列表
      * <p>
      * 返回该拦截器支持处理的类列表，包括：
      * <ul>
-     *   <li>HTTPSampler - HTTP取样器</li>
-     *   <li>HTTPDefaults - HTTP数据源</li>
-     *   <li>HTTPPreprocessor - HTTP前置处理器</li>
-     *   <li>HTTPPostprocessor - HTTP后置处理器</li>
+     *   <li>DubboSampler - Dubbo取样器</li>
+     *   <li>DubboDefaults - Dubbo数据源</li>
+     *   <li>DubboPreprocessor - Dubbo前置处理器</li>
+     *   <li>DubboPostprocessor - Dubbo后置处理器</li>
      * </ul>
      * </p>
      *
@@ -77,28 +77,29 @@ public class HTTPJSONInterceptor implements JSONInterceptor, HTTPConstantsInterf
      */
     @Override
     public List<Class<?>> getSupportedClasses() {
-        return List.of(HTTPSampler.class, HTTPDefaults.class, HTTPPreprocessor.class, HTTPPostprocessor.class);
+        return List.of(DubboSampler.class, DubboDefaults.class, DubboPreprocessor.class, DubboPostprocessor.class);
     }
 
     /**
      * 反序列化配置项
      * <p>
-     * 将JSON对象转换为HTTP配置项对象。处理旧版本配置项的兼容性问题，
-     * 将废弃的"api"字段转换为"path"字段。
+     * 将JSON对象转换为Dubbo配置项对象。处理旧版本配置项的兼容性问题，
+     * 将废弃的"PROTOCOL"字段转换为"ADDRESS"字段。
      * </p>
      *
      * @param value JSON对象
-     * @return HTTP配置项对象
+     * @return Dubbo配置项对象
      */
     @Override
     public ConfigureItem<?> deserializeConfigureItem(Object value) {
         if (value instanceof Map configure) {
-            var path = configure.remove(API);
-            if (Objects.nonNull(path) && StringUtils.isNotBlank(path.toString())) {
-                configure.put(PATH, path);
+            var registry = (Map<String, Object>) configure.get(REGISTRY);
+            var protocol = registry.remove(PROTOCOL);
+            if (Objects.nonNull(protocol) && StringUtils.isNotBlank(protocol.toString())) {
+                registry.put(ADDRESS, protocol + "://" + registry.get(ADDRESS));
             }
             var rawData = JSON.toJSONString(configure);
-            return JSON.parseObject(rawData, HTTPConfigureItem.class);
+            return JSON.parseObject(rawData, DubboConfigureItem.class);
         }
         return null;
     }

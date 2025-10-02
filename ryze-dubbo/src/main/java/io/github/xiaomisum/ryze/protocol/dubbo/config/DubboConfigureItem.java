@@ -38,7 +38,10 @@ import io.github.xiaomisum.ryze.support.Collections;
 import io.github.xiaomisum.ryze.testelement.AbstractTestElement;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 import static io.github.xiaomisum.ryze.support.groovy.Groovy.call;
@@ -389,17 +392,6 @@ public class DubboConfigureItem implements ConfigureItem<DubboConfigureItem>, Du
     public static class Registry implements ConfigureItem<Registry> {
 
         /**
-         * 协议配置（已过时）
-         * <p>
-         * 用于指定注册中心的协议类型。<br>
-         * 此配置项已被标记为过时，建议使用address配置项替代，因为address已包含协议信息。<br>
-         * 格式示例：zookeeper、nacos等
-         * </p>
-         */
-        @JSONField(name = PROTOCOL)
-        protected String protocol;
-
-        /**
          * 地址配置
          * <p>
          * 用于指定注册中心的完整地址信息。<br>
@@ -495,7 +487,6 @@ public class DubboConfigureItem implements ConfigureItem<DubboConfigureItem>, Du
             }
             var localOther = other.copy();
             var self = copy();
-            self.protocol = StringUtils.isBlank(self.protocol) ? localOther.protocol : self.protocol;
             self.address = StringUtils.isBlank(self.address) ? localOther.address : self.address;
             self.username = StringUtils.isBlank(self.username) ? localOther.username : self.username;
             self.password = StringUtils.isBlank(self.password) ? localOther.password : self.password;
@@ -517,36 +508,12 @@ public class DubboConfigureItem implements ConfigureItem<DubboConfigureItem>, Du
          */
         @Override
         public Registry evaluate(ContextWrapper context) {
-            protocol = (String) context.evaluate(protocol);
             address = (String) context.evaluate(address);
             username = (String) context.evaluate(username);
             password = (String) context.evaluate(password);
             group = (String) context.evaluate(group);
             version = (String) context.evaluate(version);
             return this;
-        }
-
-        /**
-         * 获取协议配置（小写）
-         * <p>
-         * 获取协议配置并转换为小写格式。<br>
-         * 如果协议配置为空，则返回空字符串。<br>
-         * 该方法确保协议配置的一致性，避免大小写敏感问题。
-         * </p>
-         *
-         * @return 协议配置（小写），可能为空字符串
-         */
-        public String getProtocol() {
-            return StringUtils.isNotBlank(protocol) ? protocol.toLowerCase(Locale.ROOT) : "";
-        }
-
-        /**
-         * 设置协议配置
-         *
-         * @param protocol 协议配置
-         */
-        public void setProtocol(String protocol) {
-            this.protocol = protocol;
         }
 
         /**
@@ -650,24 +617,6 @@ public class DubboConfigureItem implements ConfigureItem<DubboConfigureItem>, Du
         public static class Builder extends AbstractTestElement.ConfigureBuilder<Builder, Registry> {
 
             private Registry registry = new Registry();
-
-            /**
-             * 设置协议配置（已过时）
-             * <p>
-             * 设置注册中心的协议类型。<br>
-             * 此方法已被标记为过时，建议使用address方法替代。<br>
-             * 格式示例：zookeeper、nacos等
-             * </p>
-             *
-             * @param protocol 协议配置
-             * @return 构建器实例，支持链式调用
-             * @deprecated 自6.0.0版本起，建议使用address方法替代
-             */
-            @Deprecated(since = "6.0.0")
-            public Builder protocol(String protocol) {
-                registry.protocol = protocol;
-                return self;
-            }
 
             /**
              * 设置地址配置
