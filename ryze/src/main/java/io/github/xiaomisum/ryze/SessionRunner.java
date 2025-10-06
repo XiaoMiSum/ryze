@@ -146,10 +146,13 @@ public class SessionRunner {
      *
      * @param configure 配置对象
      */
-    public static void newTestFrameworkSession(Configure configure) {
-        var session = new SessionRunner(configure);
-        session.runInTestFrameworkSupport = true;
-        HOLDER.set(session);
+    public static void newTestFrameworkSessionIfNone(Configure configure) {
+        var sessionRunner = HOLDER.get();
+        if (Objects.isNull(sessionRunner)) {
+            var session = new SessionRunner(configure);
+            session.runInTestFrameworkSupport = true;
+            HOLDER.set(session);
+        }
     }
 
     /**
