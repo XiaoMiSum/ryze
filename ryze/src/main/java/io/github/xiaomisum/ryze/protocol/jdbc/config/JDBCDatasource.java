@@ -62,7 +62,7 @@ public class JDBCDatasource extends AbstractConfigureElement<JDBCDatasource, JDB
      * <p>用于管理数据库连接池</p>
      */
     @JSONField(serialize = false)
-    private final DruidDataSource dataSource = new DruidDataSource();
+    private final DruidDataSource datasource = new DruidDataSource();
 
     /**
      * 默认构造函数
@@ -106,16 +106,16 @@ public class JDBCDatasource extends AbstractConfigureElement<JDBCDatasource, JDB
     public ValidateResult validate() {
         var result = super.validate();
         if (StringUtils.isBlank(refName)) {
-            result.append("\n数据源引用名称 %s 字段值缺失或为空，当前值：%s", REF_NAME, toString());
+            result.append("\n数据源引用名称 %s 字段值缺失", REF_NAME);
         }
-        if (StringUtils.isBlank(config.url)) {
-            result.append("\n数据源连接 %s 字段值缺失或为空，当前值：%s", URL, toString());
+        if (StringUtils.isBlank(config.getUrl())) {
+            result.append("\n数据源连接 %s 字段值缺失", URL);
         }
-        if (StringUtils.isBlank(config.username)) {
-            result.append("\n数据源用户名 %s 字段值缺失或为空，当前值：%s", USERNAME, toString());
+        if (StringUtils.isBlank(config.getUsername())) {
+            result.append("\n数据源用户名 %s 字段值缺失", USERNAME);
         }
-        if (StringUtils.isBlank(config.password)) {
-            result.append("\n数据源密码 %s 字段值缺失或为空，当前值：%s", PASSWORD, toString());
+        if (StringUtils.isBlank(config.getPassword())) {
+            result.append("\n数据源密码 %s 字段值缺失", PASSWORD);
         }
         return result;
     }
@@ -132,18 +132,17 @@ public class JDBCDatasource extends AbstractConfigureElement<JDBCDatasource, JDB
     protected void doProcess(ContextWrapper context) {
         try {
             // 兼容 没有使用 SPI 的 JDBC驱动
-            if (StringUtils.isNotBlank(runtime.getConfig().driver)) {
-                Class.forName(runtime.getConfig().driver);
+            if (StringUtils.isNotBlank(runtime.getConfig().getDriver())) {
+                Class.forName(runtime.getConfig().getDriver());
             }
         } catch (Exception ignored) {
         }
-        dataSource.setUrl(runtime.getConfig().url);
-        dataSource.setUsername(runtime.getConfig().username);
-        dataSource.setPassword(runtime.getConfig().password);
-        // 使用getter 获取数值，因为在这里面做了数值判断
-        dataSource.setMaxActive(runtime.getConfig().getMaxActive());
-        dataSource.setMaxWait(runtime.getConfig().getMaxWait());
-        context.getLocalVariablesWrapper().put(refName, dataSource);
+        datasource.setUrl(runtime.getConfig().getUrl());
+        datasource.setUsername(runtime.getConfig().getUsername());
+        datasource.setPassword(runtime.getConfig().getPassword());
+        datasource.setMaxActive(runtime.getConfig().getMaxActive());
+        datasource.setMaxWait(runtime.getConfig().getMaxWait());
+        context.getLocalVariablesWrapper().put(refName, datasource);
     }
 
     /**
@@ -162,7 +161,7 @@ public class JDBCDatasource extends AbstractConfigureElement<JDBCDatasource, JDB
      */
     @Override
     public void close() {
-        dataSource.close();
+        datasource.close();
     }
 
     /**
