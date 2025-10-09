@@ -108,7 +108,7 @@ public class RedisDatasource extends AbstractConfigureElement<RedisDatasource, R
         poolConfig.setMaxTotal(runtime.getConfig().getMaxTotal());
         poolConfig.setMaxIdle(runtime.getConfig().getMaxIdle());
         poolConfig.setMinIdle(runtime.getConfig().getMinIdle());
-        var uri = URI.create(runtime.getConfig().url);
+        var uri = URI.create(runtime.getConfig().getUrl());
         var username = JedisURIHelper.getUser(uri);
         var password = JedisURIHelper.getPassword(uri);
         var database = JedisURIHelper.getDBIndex(uri);
