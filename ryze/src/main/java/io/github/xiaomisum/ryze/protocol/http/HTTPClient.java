@@ -35,7 +35,6 @@ import io.github.xiaomisum.ryze.protocol.http.config.HTTPConfigureItem;
 import io.github.xiaomisum.ryze.support.PrimitiveTypeChecker;
 import io.github.xiaomisum.ryze.testelement.sampler.DefaultSampleResult;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.Strings;
 import org.apache.hc.client5.http.impl.cookie.BasicClientCookie;
 import org.apache.hc.core5.http.NameValuePair;
 import org.apache.hc.core5.http.message.BasicNameValuePair;
@@ -92,9 +91,7 @@ public class HTTPClient extends Request implements HTTPConstantsInterface {
      * @return HTTP请求对象
      */
     public static HTTPClient build(HTTPConfigureItem config) {
-        var port = StringUtils.isNotBlank(config.getPort()) ? ":" + config.getPort() : "";
-        var path = Strings.CS.startsWith(config.getPath(), "/") ? config.getPath() : "/" + config.getPath();
-        var url = "%s://%s%s%s".formatted(config.getProtocol(), config.getHost(), port, path);
+        var url = "%s://%s%s%s".formatted(config.getProtocol(), config.getHost(), config.getFullPort(), config.getPath());
         // bytes body data(binary) 不会同时出现
         return (HTTPClient) new HTTPClient(config.getMethod(), url)
                 .headers(config.getHeaders())

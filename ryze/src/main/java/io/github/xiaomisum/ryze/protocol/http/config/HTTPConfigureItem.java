@@ -38,6 +38,7 @@ import io.github.xiaomisum.ryze.support.Collections;
 import io.github.xiaomisum.ryze.support.Customizer;
 import io.github.xiaomisum.ryze.testelement.AbstractTestElement;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -319,13 +320,17 @@ public class HTTPConfigureItem implements ConfigureItem<HTTPConfigureItem>, HTTP
         this.port = port;
     }
 
+    public String getFullPort() {
+        return StringUtils.isBlank(port) ? "" : ":" + port;
+    }
+
     /**
      * 获取路径
      *
      * @return 路径，默认为"/"
      */
     public String getPath() {
-        return StringUtils.isBlank(path) ? "/" : path;
+        return StringUtils.isBlank(path) ? "/" : Strings.CS.startsWith(path, "/") ? path : "/" + path;
     }
 
     /**
