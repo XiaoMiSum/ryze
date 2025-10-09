@@ -26,10 +26,10 @@
 package io.github.xiaomisum.ryze.protocol.active.config;
 
 import io.github.xiaomisum.ryze.context.ContextWrapper;
+import io.github.xiaomisum.ryze.protocol.active.ActiveConstantsInterface;
 import io.github.xiaomisum.ryze.testelement.KW;
 import io.github.xiaomisum.ryze.testelement.TestSuiteResult;
 import io.github.xiaomisum.ryze.testelement.configure.AbstractConfigureElement;
-import io.github.xiaomisum.ryze.protocol.active.ActiveConstantsInterface;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;
@@ -110,11 +110,11 @@ public class ActiveDefaults extends AbstractConfigureElement<ActiveDefaults, Act
         refName = StringUtils.isBlank(refName) ? DEF_REF_NAME_KEY : refName;
         var localConfig = runtime.getConfig();
         var otherRefName = StringUtils.isBlank(localConfig.getRef()) ? DEF_REF_NAME_KEY : localConfig.getRef();
-        var config = (ActiveConfigureItem) context.getSessionRunner().getContext().getLocalVariablesWrapper().get(otherRefName);
+        var config = (ActiveConfigureItem) context.getLocalVariablesWrapper().get(otherRefName);
         if (Objects.nonNull(config)) {
             runtime.setConfig(localConfig = localConfig.merge(config));
         }
-        context.getSessionRunner().getContext().getLocalVariablesWrapper().put(refName, localConfig);
+        context.getLocalVariablesWrapper().put(refName, localConfig);
     }
 
 

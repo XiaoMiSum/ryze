@@ -26,10 +26,10 @@
 package io.github.xiaomisum.ryze.protocol.kafka.config;
 
 import io.github.xiaomisum.ryze.context.ContextWrapper;
+import io.github.xiaomisum.ryze.protocol.kafka.KafkaConstantsInterface;
 import io.github.xiaomisum.ryze.testelement.KW;
 import io.github.xiaomisum.ryze.testelement.TestSuiteResult;
 import io.github.xiaomisum.ryze.testelement.configure.AbstractConfigureElement;
-import io.github.xiaomisum.ryze.protocol.kafka.KafkaConstantsInterface;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;
@@ -58,9 +58,9 @@ import java.util.Objects;
  * </p>
  *
  * @author xiaomi
- * @since 2021/11/11 11:06
  * @see AbstractConfigureElement
  * @see KafkaConstantsInterface
+ * @since 2021/11/11 11:06
  */
 @KW({"kafka_defaults", "KafkaDefault", "Kafka_Default", "kafka"})
 public class KafkaDefaults extends AbstractConfigureElement<KafkaDefaults, KafkaConfigureItem, TestSuiteResult> implements KafkaConstantsInterface {
@@ -100,11 +100,11 @@ public class KafkaDefaults extends AbstractConfigureElement<KafkaDefaults, Kafka
         refName = StringUtils.isBlank(refName) ? DEF_REF_NAME_KEY : refName;
         var localConfig = runtime.getConfig();
         var otherRefName = StringUtils.isBlank(localConfig.getRef()) ? DEF_REF_NAME_KEY : localConfig.getRef();
-        var config = (KafkaConfigureItem) context.getSessionRunner().getContext().getLocalVariablesWrapper().get(otherRefName);
+        var config = (KafkaConfigureItem) context.getLocalVariablesWrapper().get(otherRefName);
         if (Objects.nonNull(config)) {
             runtime.setConfig(localConfig = localConfig.merge(config));
         }
-        context.getSessionRunner().getContext().getLocalVariablesWrapper().put(refName, localConfig);
+        context.getLocalVariablesWrapper().put(refName, localConfig);
     }
 
 

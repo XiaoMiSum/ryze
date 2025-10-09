@@ -54,7 +54,7 @@ public class DebugDefaults extends AbstractConfigureElement<DebugDefaults, Debug
     @Override
     protected void doProcess(ContextWrapper context) {
         refName = StringUtils.isBlank(refName) ? DEF_REF_NAME_KEY : refName;
-        context.getSessionRunner().getContext().getLocalVariablesWrapper().put(refName, config);
+        context.getLocalVariablesWrapper().put(refName, config);
     }
 
     @Override

@@ -28,12 +28,12 @@ package io.github.xiaomisum.ryze.protocol.jdbc.config;
 import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.fastjson2.annotation.JSONField;
 import io.github.xiaomisum.ryze.context.ContextWrapper;
-import io.github.xiaomisum.ryze.testelement.KW;
-import io.github.xiaomisum.ryze.testelement.TestSuiteResult;
-import io.github.xiaomisum.ryze.testelement.configure.AbstractConfigureElement;
 import io.github.xiaomisum.ryze.protocol.jdbc.JDBCConstantsInterface;
 import io.github.xiaomisum.ryze.support.Closeable;
 import io.github.xiaomisum.ryze.support.ValidateResult;
+import io.github.xiaomisum.ryze.testelement.KW;
+import io.github.xiaomisum.ryze.testelement.TestSuiteResult;
+import io.github.xiaomisum.ryze.testelement.configure.AbstractConfigureElement;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -143,7 +143,7 @@ public class JDBCDatasource extends AbstractConfigureElement<JDBCDatasource, JDB
         // 使用getter 获取数值，因为在这里面做了数值判断
         dataSource.setMaxActive(runtime.getConfig().getMaxActive());
         dataSource.setMaxWait(runtime.getConfig().getMaxWait());
-        context.getSessionRunner().getContext().getLocalVariablesWrapper().put(refName, dataSource);
+        context.getLocalVariablesWrapper().put(refName, dataSource);
     }
 
     /**

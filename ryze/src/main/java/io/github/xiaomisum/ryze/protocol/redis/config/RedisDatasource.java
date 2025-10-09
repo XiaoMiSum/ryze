@@ -27,11 +27,11 @@ package io.github.xiaomisum.ryze.protocol.redis.config;
 
 import com.alibaba.fastjson2.annotation.JSONField;
 import io.github.xiaomisum.ryze.context.ContextWrapper;
+import io.github.xiaomisum.ryze.protocol.redis.RedisConstantsInterface;
+import io.github.xiaomisum.ryze.support.Closeable;
 import io.github.xiaomisum.ryze.testelement.KW;
 import io.github.xiaomisum.ryze.testelement.TestSuiteResult;
 import io.github.xiaomisum.ryze.testelement.configure.AbstractConfigureElement;
-import io.github.xiaomisum.ryze.protocol.redis.RedisConstantsInterface;
-import io.github.xiaomisum.ryze.support.Closeable;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
@@ -113,7 +113,7 @@ public class RedisDatasource extends AbstractConfigureElement<RedisDatasource, R
         var password = JedisURIHelper.getPassword(uri);
         var database = JedisURIHelper.getDBIndex(uri);
         jedisPool = new JedisPool(poolConfig, uri.getHost(), uri.getPort(), runtime.getConfig().getTimeout(), username, password, database);
-        context.getSessionRunner().getContext().getLocalVariablesWrapper().put(refName, this);
+        context.getLocalVariablesWrapper().put(refName, this);
     }
 
     /**
