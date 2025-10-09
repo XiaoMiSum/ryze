@@ -33,13 +33,14 @@ import io.github.xiaomisum.ryze.Result;
 import io.github.xiaomisum.ryze.config.ConfigureItem;
 import io.github.xiaomisum.ryze.context.ContextWrapper;
 import io.github.xiaomisum.ryze.testelement.AbstractTestElement;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * 抽象配置元件类，提供配置元件的通用实现
- * 
+ *
  * <p>配置元件是Ryze框架中用于配置测试环境的特殊测试元件，
  * 它们在测试执行前初始化测试环境，如数据库连接、HTTP客户端等。</p>
- * 
+ *
  * <p>配置元件的主要特点：
  * <ul>
  *   <li>在测试执行前进行初始化</li>
@@ -47,7 +48,7 @@ import io.github.xiaomisum.ryze.testelement.AbstractTestElement;
  *   <li>支持通过引用名称在上下文中标识和访问</li>
  *   <li>可以实现Closeable接口以支持资源清理</li>
  * </ul></p>
- * 
+ *
  * <p>配置元件的执行流程：
  * <ol>
  *   <li>检查是否已初始化，如未初始化则进行初始化</li>
@@ -56,9 +57,9 @@ import io.github.xiaomisum.ryze.testelement.AbstractTestElement;
  *   <li>返回测试结果</li>
  * </ol></p>
  *
- * @param <SELF> 实际的配置元件类型，用于实现流畅的构建器模式
+ * @param <SELF>   实际的配置元件类型，用于实现流畅的构建器模式
  * @param <CONFIG> 配置项类型，用于存储协议相关的配置信息
- * @param <R> 测试结果类型，表示执行结果的具体实现
+ * @param <R>      测试结果类型，表示执行结果的具体实现
  * @author xiaomi
  * Created at 2025/7/19 15:47
  */
@@ -77,7 +78,7 @@ public abstract class AbstractConfigureElement<SELF extends AbstractConfigureEle
 
     /**
      * 基于构建器的构造函数
-     * 
+     *
      * @param builder 构建器实例
      */
     public AbstractConfigureElement(Builder<SELF, ?, CONFIG, ?, R> builder) {
@@ -94,7 +95,7 @@ public abstract class AbstractConfigureElement<SELF extends AbstractConfigureEle
 
     /**
      * 处理配置元件的执行逻辑
-     * 
+     *
      * <p>该方法实现了配置元件的通用执行流程：
      * <ol>
      *   <li>检查是否已初始化，如未初始化则进行初始化</li>
@@ -102,7 +103,7 @@ public abstract class AbstractConfigureElement<SELF extends AbstractConfigureEle
      *   <li>调用抽象方法doProcess执行具体的配置逻辑</li>
      *   <li>返回测试结果</li>
      * </ol></p>
-     * 
+     *
      * @param context 测试上下文
      * @return 测试结果
      */
@@ -119,17 +120,17 @@ public abstract class AbstractConfigureElement<SELF extends AbstractConfigureEle
 
     /**
      * 执行具体的配置逻辑，由子类实现
-     * 
+     *
      * <p>每个具体的配置元件实现类都需要实现此方法来定义其特定的配置逻辑，
      * 如初始化连接、设置参数等。</p>
-     * 
+     *
      * @param context 测试上下文
      */
     protected abstract void doProcess(ContextWrapper context);
 
     /**
      * 获取引用名称
-     * 
+     *
      * @return 引用名称
      */
     public String getRefName() {
@@ -138,23 +139,27 @@ public abstract class AbstractConfigureElement<SELF extends AbstractConfigureEle
 
     /**
      * 设置引用名称
-     * 
+     *
      * @param refName 引用名称
      */
     public void setRefName(String refName) {
         this.refName = refName;
     }
 
+    public String getRefName(String defaultRefName) {
+        return StringUtils.isBlank(refName) ? defaultRefName : refName;
+    }
+
     /**
      * 配置元件构建器抽象类
-     * 
+     *
      * <p>提供构建配置元件实例的通用方法，具体配置元件的构建器应继承此类。</p>
      *
-     * @param <ELE> 实际的配置元件类型
-     * @param <SELF> 构建器自身类型，用于实现流畅的构建器模式
-     * @param <CONFIG> 配置项类型
+     * @param <ELE>               实际的配置元件类型
+     * @param <SELF>              构建器自身类型，用于实现流畅的构建器模式
+     * @param <CONFIG>            配置项类型
      * @param <CONFIGURE_BUILDER> 配置项构建器类型
-     * @param <R> 测试结果类型
+     * @param <R>                 测试结果类型
      */
     public static abstract class Builder<ELE extends AbstractConfigureElement<ELE, CONFIG, R>,
             SELF extends Builder<ELE, SELF, CONFIG, CONFIGURE_BUILDER, R>,
@@ -170,7 +175,7 @@ public abstract class AbstractConfigureElement<SELF extends AbstractConfigureEle
 
         /**
          * 设置引用名称
-         * 
+         *
          * @param refName 引用名称
          * @return 构建器实例
          */

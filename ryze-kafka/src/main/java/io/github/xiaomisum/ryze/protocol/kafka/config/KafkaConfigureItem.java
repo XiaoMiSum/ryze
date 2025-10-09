@@ -194,7 +194,7 @@ public class KafkaConfigureItem implements ConfigureItem<KafkaConfigureItem>, Ka
      * @return 配置引用名称
      */
     public String getRef() {
-        return ref;
+        return StringUtils.isBlank(ref) ? DEF_REF_NAME_KEY : ref;
     }
 
     /**

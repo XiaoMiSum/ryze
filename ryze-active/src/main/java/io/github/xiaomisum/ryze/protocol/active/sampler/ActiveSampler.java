@@ -43,7 +43,6 @@ import io.github.xiaomisum.ryze.testelement.sampler.SampleResult;
 import io.github.xiaomisum.ryze.testelement.sampler.Sampler;
 import jakarta.jms.ConnectionFactory;
 import org.apache.activemq.ActiveMQConnectionFactory;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;
 
@@ -153,8 +152,7 @@ public class ActiveSampler extends AbstractSampler<ActiveSampler, ActiveConfigur
         super.handleRequest(context, result);
         // 1. 合并配置项
         var localConfig = Objects.isNull(runtime.getConfig()) ? new ActiveConfigureItem() : runtime.getConfig();
-        var ref = StringUtils.isBlank(localConfig.getRef()) ? DEF_REF_NAME_KEY : localConfig.getRef();
-        var otherConfig = (ActiveConfigureItem) context.getLocalVariablesWrapper().get(ref);
+        var otherConfig = (ActiveConfigureItem) context.getLocalVariablesWrapper().get(localConfig.getRef());
         runtime.setConfig(localConfig.merge(otherConfig));
         // 2. 创建ActiveMQ 连接池;
         factory = new ActiveMQConnectionFactory(runtime.config.getUsername(), runtime.config.getPassword(), runtime.config.getBrokerUrl());

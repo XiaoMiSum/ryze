@@ -199,7 +199,7 @@ public class RabbitConfigureItem implements ConfigureItem<RabbitConfigureItem>, 
      * @return 引用名称
      */
     public String getRef() {
-        return ref;
+        return StringUtils.isBlank(ref) ? DEF_REF_NAME_KEY : ref;
     }
 
     /**
