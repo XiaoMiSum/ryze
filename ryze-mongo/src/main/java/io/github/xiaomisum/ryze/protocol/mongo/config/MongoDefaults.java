@@ -30,7 +30,6 @@ import io.github.xiaomisum.ryze.protocol.mongo.MongoConstantsInterface;
 import io.github.xiaomisum.ryze.testelement.KW;
 import io.github.xiaomisum.ryze.testelement.TestSuiteResult;
 import io.github.xiaomisum.ryze.testelement.configure.AbstractConfigureElement;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;
 
@@ -94,14 +93,12 @@ public class MongoDefaults extends AbstractConfigureElement<MongoDefaults, Mongo
      */
     @Override
     protected void doProcess(ContextWrapper context) {
-        refName = StringUtils.isBlank(refName) ? DEF_REF_NAME_KEY : refName;
         var localConfig = runtime.getConfig();
-        var otherRefName = StringUtils.isBlank(localConfig.ref) ? DEF_REF_NAME_KEY : localConfig.ref;
-        var config = (MongoConfigItem) context.getLocalVariablesWrapper().get(otherRefName);
+        var config = (MongoConfigItem) context.getLocalVariablesWrapper().get(localConfig.getRef());
         if (Objects.nonNull(config)) {
             runtime.setConfig(localConfig = localConfig.merge(config));
         }
-        context.getLocalVariablesWrapper().put(refName, localConfig);
+        context.getLocalVariablesWrapper().put(getRefName(DEF_REF_NAME_KEY), localConfig);
     }
 
     /**

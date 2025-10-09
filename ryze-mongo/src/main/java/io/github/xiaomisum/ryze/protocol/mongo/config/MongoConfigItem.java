@@ -33,10 +33,10 @@ import com.alibaba.fastjson2.annotation.JSONField;
 import groovy.lang.Closure;
 import io.github.xiaomisum.ryze.config.ConfigureItem;
 import io.github.xiaomisum.ryze.context.ContextWrapper;
-import io.github.xiaomisum.ryze.testelement.AbstractTestElement;
 import io.github.xiaomisum.ryze.protocol.mongo.MongoConstantsInterface;
 import io.github.xiaomisum.ryze.support.Collections;
 import io.github.xiaomisum.ryze.support.Customizer;
+import io.github.xiaomisum.ryze.testelement.AbstractTestElement;
 import org.apache.commons.lang3.StringUtils;
 import org.codehaus.groovy.runtime.DefaultGroovyMethods;
 
@@ -72,37 +72,37 @@ public class MongoConfigItem implements ConfigureItem<MongoConfigItem>, MongoCon
      */
     @JSONField(name = REF)
     protected String ref;
-    
+
     /**
      * 连接地址
      */
     @JSONField(name = URL, ordinal = 1)
     protected String url;
-    
+
     /**
      * 数据库名称
      */
     @JSONField(name = DATABASE, ordinal = 2)
     protected String database;
-    
+
     /**
      * 集合名称
      */
     @JSONField(name = COLLECTION, ordinal = 3)
     protected String collection;
-    
+
     /**
      * 操作类型
      */
     @JSONField(name = ACTION, ordinal = 4)
     protected String action;
-    
+
     /**
      * 操作数据
      */
     @JSONField(name = DATA, ordinal = 5)
     protected Object data;
-    
+
     /**
      * 操作条件
      */
@@ -179,7 +179,7 @@ public class MongoConfigItem implements ConfigureItem<MongoConfigItem>, MongoCon
      * @return 引用名称
      */
     public String getRef() {
-        return ref;
+        return StringUtils.isBlank(ref) ? DEF_REF_NAME_KEY : ref;
     }
 
     /**
