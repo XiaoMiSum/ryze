@@ -1338,6 +1338,88 @@ public class DubboConfigureItem implements ConfigureItem<DubboConfigureItem>, Du
         }
 
         /**
+         * 设置参数类型列表（通过Consumer函数式接口）
+         * <p>
+         * 通过Consumer函数式接口配置参数值列表。<br>
+         * 该方法提供了一种函数式编程的方式来配置参数值，适用于Java 8及以上版本。<br>
+         * 例如：parameterTypes(list -> list.add("com.example.User"))
+         * </p>
+         *
+         * @param consumer 参数值列表的Consumer函数式接口
+         * @return 构建器实例，支持链式调用
+         */
+        public Builder parameterTypes(Consumer<List<String>> consumer) {
+            List<String> types = Collections.newArrayList();
+            consumer.accept(types);
+            return parameterTypes(types);
+        }
+
+        /**
+         * 设置参数类型列表（通过Groovy闭包）
+         * <p>
+         * 通过Groovy闭包配置参数值列表。<br>
+         * 该方法提供了一种Groovy DSL的方式来配置参数值，适用于支持Groovy的环境。<br>
+         * 例如：parameterTypes { add "com.example.User" }
+         * </p>
+         *
+         * @param closure Groovy闭包
+         * @return 构建器实例，支持链式调用
+         */
+        public Builder parameterTypes(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = List.class) Closure<?> closure) {
+            List<String> types = Collections.newArrayList();
+            call(closure, types);
+            return parameterTypes(types);
+        }
+
+        /**
+         * 设置参数类型列表（通过可变参数数组）
+         *
+         * @param types 参数类型数组
+         * @return 构建器实例，支持链式调用
+         */
+        public Builder parameterTypes(String... types) {
+            return parameters(Arrays.asList(types));
+        }
+
+        /**
+         * 设置参数类型列表（通过可变参数数组）
+         *
+         * @param types 参数类型数组
+         * @return 构建器实例，支持链式调用
+         */
+        public Builder parameterTypes(Class<?>... types) {
+            return parameterTypes(Arrays.stream(types).map(Class::getName).toList());
+        }
+
+        /**
+         * 设置参数类型列表
+         * <p>
+         * 设置方法调用时的实际参数类型列表。<br>
+         * 如果已存在参数值列表，则进行合并。
+         * </p>
+         *
+         * @param types 参数值列表
+         * @return 构建器实例，支持链式调用
+         */
+        public Builder parameterTypes(List<String> types) {
+            configure.parameterTypes = Collections.addAllIfNonNull(configure.parameterTypes, types);
+            return self;
+        }
+
+        /**
+         * 设置单个参数类型
+         * <p>
+         * 设置单个方法调用时的参数值。<br>
+         * </p>
+         *
+         * @param type 参数类型
+         * @return 构建器实例，支持链式调用
+         */
+        public Builder parameterTypes(String type) {
+            return parameterTypes(Collections.newArrayList(type));
+        }
+
+        /**
          * 设置参数值列表（通过Consumer函数式接口）
          * <p>
          * 通过Consumer函数式接口配置参数值列表。<br>
@@ -1386,7 +1468,6 @@ public class DubboConfigureItem implements ConfigureItem<DubboConfigureItem>, Du
          * <p>
          * 设置方法调用时的实际参数值列表。<br>
          * 参数值会按照顺序传递给对应的方法参数。<br>
-         * 同时会自动推导参数类型列表，简化配置。<br>
          * 如果已存在参数值列表，则进行合并。
          * </p>
          *
@@ -1395,13 +1476,6 @@ public class DubboConfigureItem implements ConfigureItem<DubboConfigureItem>, Du
          */
         public Builder parameters(List<Object> parameters) {
             configure.parameters = Collections.addAllIfNonNull(configure.parameters, parameters);
-            if (Objects.nonNull(parameters) && !parameters.isEmpty()) {
-                List<String> parameterTypes = Collections.newArrayList();
-                for (Object parameter : parameters) {
-                    parameterTypes.add(parameter.getClass().getName());
-                }
-                configure.parameterTypes = Collections.addAllIfNonNull(configure.parameterTypes, Collections.newArrayList(parameterTypes));
-            }
             return self;
         }
 
@@ -1409,8 +1483,6 @@ public class DubboConfigureItem implements ConfigureItem<DubboConfigureItem>, Du
          * 设置单个参数值
          * <p>
          * 设置单个方法调用时的参数值。<br>
-         * 该方法会将参数值包装成列表进行处理。<br>
-         * 同时会自动推导参数类型，简化配置。
          * </p>
          *
          * @param parameter 参数值
