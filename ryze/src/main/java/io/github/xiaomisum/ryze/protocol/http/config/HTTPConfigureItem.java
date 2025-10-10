@@ -216,6 +216,7 @@ public class HTTPConfigureItem implements ConfigureItem<HTTPConfigureItem>, HTTP
      */
     @Override
     public HTTPConfigureItem evaluate(ContextWrapper context) {
+        ref = (String) context.evaluate(ref);
         protocol = (String) context.evaluate(protocol);
         host = (String) context.evaluate(host);
         port = (String) context.evaluate(port);

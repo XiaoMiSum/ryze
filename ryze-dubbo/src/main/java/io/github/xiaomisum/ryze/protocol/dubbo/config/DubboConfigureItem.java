@@ -216,6 +216,7 @@ public class DubboConfigureItem implements ConfigureItem<DubboConfigureItem>, Du
      */
     @Override
     public DubboConfigureItem evaluate(ContextWrapper context) {
+        ref = (String) context.evaluate(ref);
         registry = (Registry) context.evaluate(registry);
         reference = (Reference) context.evaluate(reference);
         interfaceName = (String) context.evaluate(interfaceName);

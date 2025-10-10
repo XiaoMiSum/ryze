@@ -164,6 +164,7 @@ public class MongoConfigItem implements ConfigureItem<MongoConfigItem>, MongoCon
      */
     @Override
     public MongoConfigItem evaluate(ContextWrapper context) {
+        ref = (String) context.evaluate(ref);
         url = (String) context.evaluate(url);
         database = (String) context.evaluate(database);
         collection = (String) context.evaluate(collection);
