@@ -58,7 +58,7 @@ import java.util.Objects;
  * @author xiaomi
  * @since 2025/7/21 22:25
  */
-@SuppressWarnings({"rawtypes", "unchecked"})
+@SuppressWarnings({"rawtypes", "unchecked", "removal"})
 public class RedisJSONInterceptor implements JSONInterceptor, RedisConstantsInterface {
 
     /**
@@ -114,11 +114,19 @@ public class RedisJSONInterceptor implements JSONInterceptor, RedisConstantsInte
         if (StringUtils.isNotBlank((String) testElementMap.get(URL))) {
             return;
         }
+        var oldKeyValue = testElementMap.remove(SEND);
+        if (oldKeyValue != null) {
+            testElementMap.put(ARGS, oldKeyValue);
+        }
         var host = testElementMap.remove(HOST);
         var port = testElementMap.remove(PORT);
         var username = testElementMap.remove(USERNAME);
         var password = testElementMap.remove(PASSWORD);
         var database = testElementMap.remove(DATABASE);
+        var rowArgs = testElementMap.remove(ARGS);
+        if (rowArgs instanceof String args) {
+            testElementMap.put(ARGS, args.split(","));
+        }
         var url = REDIS_URL_TEMPLATE +
                 (Objects.isNull(username) ? "" : username) +
                 (Objects.isNull(password) ? "" : ":" + password + "@") +
