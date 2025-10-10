@@ -123,7 +123,7 @@ public class RedisJSONInterceptor implements JSONInterceptor, RedisConstantsInte
         var username = testElementMap.remove(USERNAME);
         var password = testElementMap.remove(PASSWORD);
         var database = testElementMap.remove(DATABASE);
-        var rowArgs = testElementMap.remove(ARGS);
+        var rowArgs = testElementMap.get(ARGS);
         if (rowArgs instanceof String args) {
             testElementMap.put(ARGS, args.split(","));
         }
