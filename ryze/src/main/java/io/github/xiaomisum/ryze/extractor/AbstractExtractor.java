@@ -149,6 +149,7 @@ public abstract class AbstractExtractor implements Extractor, ExtractorConstants
             return;
         }
         if (context.getTestResult() instanceof SampleResult result) {
+            defaultValue = context.evaluate(defaultValue);
             var defaultValueIsBlank = defaultValue == null || StringUtils.isBlank(defaultValue.toString());
             if (StringUtils.isBlank(result.getResponse().bytesAsString()) && defaultValueIsBlank) {
                 throw new IllegalArgumentException("待提取的字符串为 null 或空白");
@@ -160,11 +161,11 @@ public abstract class AbstractExtractor implements Extractor, ExtractorConstants
                 if (defaultValueIsBlank)
                     throw e;
             }
-            value = value == null || StringUtils.isBlank(value.toString()) ? defaultValue : value;
-            if (value == null || StringUtils.isBlank(value.toString())) {
+            var valueIsBlank = value == null || StringUtils.isBlank(value.toString());
+            if (valueIsBlank && defaultValueIsBlank) {
                 throw new IllegalArgumentException("目标字符串没有匹配的数据 %s，目标字符串：\n%s".formatted(field, result.getResponse().bytesAsString()));
             }
-            context.getLocalVariablesWrapper().put(refName, value);
+            context.getLocalVariablesWrapper().put(refName, valueIsBlank ? defaultValue : value);
             return;
         }
         throw new RuntimeException("不支持提取的测试组件: " + context.getTestElement().getClass());
