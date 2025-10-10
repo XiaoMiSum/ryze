@@ -41,10 +41,10 @@ import java.util.regex.Pattern;
 
 /**
  * FreeMarker 模板引擎实现类
- * 
+ *
  * <p>该类是框架的模板引擎实现，基于FreeMarker模板引擎提供表达式计算功能。
  * 它支持变量替换、函数调用、条件判断等模板操作。</p>
- * 
+ *
  * <p>主要功能包括：
  * <ul>
  *   <li>表达式计算：支持变量引用、函数调用等表达式计算</li>
@@ -52,7 +52,7 @@ import java.util.regex.Pattern;
  *   <li>类型处理：支持返回原始类型或字符串类型的结果</li>
  *   <li>函数适配：将框架内置函数适配到模板引擎中</li>
  * </ul></p>
- * 
+ *
  * <p>执行流程：
  * <ol>
  *   <li>检查表达式是否需要计算，不需要则直接返回</li>
@@ -70,7 +70,7 @@ public class FreeMarkerTemplateEngine implements TemplateEngine {
      * FreeMarker表达式匹配模式，用于识别${variable}形式的表达式
      */
     private static final Pattern FREEMARKER_EXPRESSION = Pattern.compile("^\\$\\{([a-zA-Z\\u4e00-\\u9fff$_][a-zA-Z\\u4e00-\\u9fff0-9$_]*)}$");
-    
+
     /**
      * 简单表达式匹配模式，用于识别${...}形式的表达式
      */
@@ -85,17 +85,17 @@ public class FreeMarkerTemplateEngine implements TemplateEngine {
 
     /**
      * 基于模型和表达式进行计算
-     * 
+     *
      * <p>该方法使用提供的模型数据对表达式进行计算，支持变量替换和函数调用。</p>
      *
-     * @param model 表达式计算所需的模型数据
+     * @param model      表达式计算所需的模型数据
      * @param expression 待计算的表达式
      * @return 表达式计算结果
      */
     @Override
     public Object evaluate(Map<String, Object> model, String expression) {
         if (expression == null) {
-            return "null";
+            return null;
         }
         // 没有表达式时无需计算，直接返回
         if (TemplateEngine.noneExpression(expression)) {
@@ -125,7 +125,7 @@ public class FreeMarkerTemplateEngine implements TemplateEngine {
 
     /**
      * 判断表达式是否应该返回原始类型
-     * 
+     *
      * <p>对于简单的变量引用表达式，应该返回原始类型而不是字符串类型。</p>
      *
      * @param template 待判断的表达式
@@ -148,17 +148,17 @@ public class FreeMarkerTemplateEngine implements TemplateEngine {
 
     /**
      * 基于上下文和表达式进行计算
-     * 
+     *
      * <p>该方法使用提供的上下文对表达式进行计算，会自动注册内置函数和变量。</p>
      *
-     * @param context 测试上下文
+     * @param context    测试上下文
      * @param expression 待计算的表达式
      * @return 表达式计算结果
      */
     @Override
     public Object evaluate(ContextWrapper context, String expression) {
         if (expression == null) {
-            return "null";
+            return null;
         }
         // 没有表达式时无需计算，直接返回
         if (!TemplateEngine.hasExpression(expression)) {
@@ -217,7 +217,7 @@ public class FreeMarkerTemplateEngine implements TemplateEngine {
 
     /**
      * 模板对象处理器，用于获取模板计算结果的原始对象
-     * 
+     *
      * <p>由于FreeMarker没有直接获取原始对象的API，通过该处理器以取巧的方式获取计算结果的原始对象。</p>
      */
     protected static class TemplateObjectHandler implements TemplateMethodModelEx {
@@ -226,7 +226,7 @@ public class FreeMarkerTemplateEngine implements TemplateEngine {
          * 处理器名称
          */
         protected static final String NAME = "ryze_object_handler";
-        
+
         /**
          * 存储处理结果的对象
          */
