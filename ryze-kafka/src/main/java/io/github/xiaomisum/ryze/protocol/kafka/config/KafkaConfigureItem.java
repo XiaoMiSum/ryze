@@ -290,7 +290,7 @@ public class KafkaConfigureItem implements ConfigureItem<KafkaConfigureItem>, Ka
      * @return 键序列化器类名
      */
     public String getKeySerializer() {
-        return StringUtils.isBlank(keySerializer) ? "org.apache.kafka.common.serialization.StringSerializer" : valueSerializer;
+        return StringUtils.isBlank(keySerializer) ? "org.apache.kafka.common.serialization.StringSerializer" : keySerializer;
     }
 
     /**
