@@ -32,7 +32,6 @@ import io.github.xiaomisum.ryze.context.ContextWrapper;
 import io.github.xiaomisum.ryze.protocol.active.ActiveConstantsInterface;
 import io.github.xiaomisum.ryze.support.Customizer;
 import io.github.xiaomisum.ryze.testelement.AbstractTestElement;
-import org.apache.activemq.ActiveMQConnection;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
@@ -197,7 +196,7 @@ public class ActiveConfigureItem implements ConfigureItem<ActiveConfigureItem>, 
      * @return Broker URL
      */
     public String getBrokerUrl() {
-        return StringUtils.isBlank(brokerUrl) ? ActiveMQConnection.DEFAULT_BROKER_URL : brokerUrl;
+        return StringUtils.isBlank(brokerUrl) ? ACTIVEMQ_DEFAULT_BROKER_URL : brokerUrl;
     }
 
     /**
@@ -278,7 +277,7 @@ public class ActiveConfigureItem implements ConfigureItem<ActiveConfigureItem>, 
      * @return 用户名
      */
     public String getUsername() {
-        return StringUtils.isBlank(username) ? ActiveMQConnection.DEFAULT_USER : username;
+        return StringUtils.isBlank(username) ? ACTIVEMQ_DEFAULT_USERNAME : username;
     }
 
     /**
@@ -299,7 +298,7 @@ public class ActiveConfigureItem implements ConfigureItem<ActiveConfigureItem>, 
      * @return 密码
      */
     public String getPassword() {
-        return StringUtils.isBlank(password) ? ActiveMQConnection.DEFAULT_PASSWORD : password;
+        return StringUtils.isBlank(password) ? ACTIVEMQ_DEFAULT_PASSWORD : password;
 
     }
 

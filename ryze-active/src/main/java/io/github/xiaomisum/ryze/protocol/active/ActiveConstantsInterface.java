@@ -26,6 +26,7 @@
 package io.github.xiaomisum.ryze.protocol.active;
 
 import io.github.xiaomisum.ryze.testelement.TestElementConstantsInterface;
+import org.apache.activemq.ActiveMQConnection;
 
 /**
  * ActiveMQ协议相关常量接口
@@ -93,5 +94,30 @@ public interface ActiveConstantsInterface extends TestElementConstantsInterface 
      * </p>
      */
     String ACTIVEMQ_QUEUE = "queue";
+
+    /**
+     * ActiveMQ默认Broker URL
+     * <p>
+     * 用于在配置中指定ActiveMQ的默认Broker URL
+     * </p>
+     */
+    String ACTIVEMQ_DEFAULT_BROKER_URL = ActiveMQConnection.DEFAULT_BROKER_URL;
+
+    /**
+     * ActiveMQ默认用户名
+     * <p>
+     * 用于在配置中指定ActiveMQ的默认用户名
+     * </p>
+     */
+    String ACTIVEMQ_DEFAULT_USERNAME = ActiveMQConnection.DEFAULT_USER;
+
+    /**
+     * ActiveMQ默认用户名
+     * <p>
+     * 用于在配置中指定ActiveMQ的默认用户名
+     * </p>
+     */
+    String ACTIVEMQ_DEFAULT_PASSWORD = ActiveMQConnection.DEFAULT_PASSWORD;
+
 
 }
