@@ -32,11 +32,7 @@ import groovy.lang.DelegatesTo;
 import io.github.xiaomisum.ryze.config.ConfigureItem;
 import io.github.xiaomisum.ryze.context.ContextWrapper;
 import io.github.xiaomisum.ryze.protocol.redis.RedisConstantsInterface;
-import io.github.xiaomisum.ryze.protocol.redis.processor.RedisPostprocessor;
-import io.github.xiaomisum.ryze.protocol.redis.processor.RedisPreprocessor;
-import io.github.xiaomisum.ryze.protocol.redis.sampler.RedisSampler;
 import io.github.xiaomisum.ryze.testelement.AbstractTestElement;
-import io.github.xiaomisum.ryze.testelement.sampler.DefaultSampleResult;
 import org.apache.commons.lang3.StringUtils;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.Protocol;
@@ -153,10 +149,10 @@ public class RedisConfigureItem implements ConfigureItem<RedisConfigureItem>, Re
         self.url = StringUtils.isBlank(self.url) ? localOther.url : self.url;
         self.command = StringUtils.isBlank(self.command) ? localOther.command : self.command;
         self.args = StringUtils.isBlank(self.args) ? localOther.args : self.args;
-        self.timeout = (self.timeout = self.timeout > 0 ? localOther.timeout : self.timeout) > 0 ? self.timeout : 10000;
-        self.maxTotal = (self.maxTotal = self.maxTotal > 0 ? localOther.maxTotal : self.maxTotal) > 0 ? self.maxTotal : 10;
-        self.maxIdle = (self.maxIdle = self.maxIdle > 0 ? localOther.maxIdle : self.maxIdle) > 0 ? self.maxIdle : 5;
-        self.minIdle = (self.minIdle = self.minIdle > 0 ? localOther.minIdle : self.minIdle) > 0 ? self.minIdle : 1;
+        self.timeout = (self.timeout = self.timeout > 0 ? self.timeout : localOther.timeout) > 0 ? self.timeout : 10000;
+        self.maxTotal = (self.maxTotal = self.maxTotal > 0 ? self.maxTotal : localOther.maxTotal) > 0 ? self.maxTotal : 10;
+        self.maxIdle = (self.maxIdle = self.maxIdle > 0 ? self.maxIdle : localOther.maxIdle) > 0 ? self.maxIdle : 5;
+        self.minIdle = (self.minIdle = self.minIdle > 0 ? self.minIdle : localOther.minIdle) > 0 ? self.minIdle : 1;
         return self;
     }
 

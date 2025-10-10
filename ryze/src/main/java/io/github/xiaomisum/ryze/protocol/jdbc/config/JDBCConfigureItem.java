@@ -28,8 +28,8 @@ package io.github.xiaomisum.ryze.protocol.jdbc.config;
 import com.alibaba.fastjson2.annotation.JSONField;
 import io.github.xiaomisum.ryze.config.ConfigureItem;
 import io.github.xiaomisum.ryze.context.ContextWrapper;
-import io.github.xiaomisum.ryze.testelement.AbstractTestElement;
 import io.github.xiaomisum.ryze.protocol.jdbc.JDBCConstantsInterface;
+import io.github.xiaomisum.ryze.testelement.AbstractTestElement;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -137,8 +137,8 @@ public class JDBCConfigureItem implements ConfigureItem<JDBCConfigureItem>, JDBC
         self.username = StringUtils.isBlank(self.username) ? localOther.username : self.username;
         self.password = StringUtils.isBlank(self.password) ? localOther.password : self.password;
         self.sql = StringUtils.isBlank(self.sql) ? localOther.sql : self.sql;
-        self.maxActive = (self.maxActive = self.maxActive > 0 ? localOther.maxActive : self.maxActive) > 0 ? self.maxActive : 10;
-        self.maxWait = (self.maxWait = self.maxWait > 0 ? localOther.maxWait : self.maxWait) > 0 ? self.maxWait : 5000;
+        self.maxActive = (self.maxActive = self.maxActive > 0 ? self.maxActive : localOther.maxActive) > 0 ? self.maxActive : 10;
+        self.maxWait = (self.maxWait = self.maxWait > 0 ? self.maxWait : localOther.maxWait) > 0 ? self.maxWait : 5000;
         return self;
     }
 
