@@ -1,9 +1,9 @@
 package io.github.xiaomisum.ryze.redis.example.yaml;
 
 import io.github.xiaomisum.ryze.Ryze;
+import io.github.xiaomisum.ryze.support.testng.annotation.RyzeTest;
 import io.github.xiaomisum.ryze.testelement.TestElement;
 import io.github.xiaomisum.ryze.testelement.TestSuite;
-import io.github.xiaomisum.ryze.support.testng.annotation.RyzeTest;
 import org.testng.annotations.Test;
 
 public class YamlTestCase {
@@ -25,6 +25,7 @@ public class YamlTestCase {
     @RyzeTest
     @Test
     public void test2() {
+        Ryze.start("取样器/redis_sampler0.yaml");
         Ryze.start("取样器/redis_sampler5.yaml");
     }
 

@@ -13,12 +13,12 @@ children: # 执行步骤
     config:
       datasource: redis_source
       command: set
-      args: test_case,ryze
+      args: [ test_case,ryze ]
   - title: 步骤2
     testclass: redis
     config:
       datasource: redis_source
       command: get
-      args: test_case
+      args: [ test_case ]
     validators:
       - { testclass: result_assertion, expected: ryze }

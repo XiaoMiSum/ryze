@@ -5,4 +5,4 @@ configelements:
 config: # 取样器配置
   datasource: redis_source
   command: hset
-  args: test_hash,item1,redis_sampler_2
+  args: [ test_hash,item1,redis_sampler_2 ]

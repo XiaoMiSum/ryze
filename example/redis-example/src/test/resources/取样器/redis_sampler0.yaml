@@ -5,4 +5,4 @@ configelements:
 config: # 取样器配置
   datasource: redis_source
   command: set
-  args: test_key,redis_sampler_0
+  args: [ test_key,redis_sampler_0 ]

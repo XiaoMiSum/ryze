@@ -5,4 +5,4 @@ configelements:
 config: # 取样器配置
   datasource: redis_source
   command: lpush
-  args: test_list,redis_sampler_4
+  args: [ test_list,redis_sampler_4 ]
