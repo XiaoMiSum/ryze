@@ -1,6 +1,6 @@
-import { defineConfig } from 'vitepress'
+import { withMermaid } from "vitepress-plugin-mermaid";
 
-export default defineConfig({
+export default withMermaid({
   title: 'RYZE',
   description: '强大的多协议测试框架，让测试变得简单而优雅',
   
