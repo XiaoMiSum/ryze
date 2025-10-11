@@ -32,6 +32,7 @@ import com.alibaba.fastjson2.annotation.JSONField;
 import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
 import io.github.xiaomisum.ryze.SessionRunner;
+import io.github.xiaomisum.ryze.TestStatus;
 import io.github.xiaomisum.ryze.builder.ExtensibleExtractorsBuilder;
 import io.github.xiaomisum.ryze.config.ConfigureItem;
 import io.github.xiaomisum.ryze.context.ContextWrapper;
@@ -118,7 +119,7 @@ public abstract class AbstractProcessor<SELF extends AbstractProcessor<SELF, CON
      * @param session 会话运行器
      * @return 初始化完成的上下文包装器
      */
-    protected ContextWrapper _initialized(SessionRunner session) {
+    protected ContextWrapper initialized(SessionRunner session) {
         validate().valid();
         super.initialized();
         var localContext = new ContextWrapper(session);
@@ -152,7 +153,7 @@ public abstract class AbstractProcessor<SELF extends AbstractProcessor<SELF, CON
      */
     @Override
     public void process(ContextWrapper context) {
-        var localContext = _initialized(context.getSessionRunner());
+        var localContext = initialized(context.getSessionRunner());
         var result = (R) localContext.getTestResult();
         try {
             // 执行前置处理
@@ -166,19 +167,17 @@ public abstract class AbstractProcessor<SELF extends AbstractProcessor<SELF, CON
                 // 执行后置处理
                 chain.applyPostHandle(localContext, runtime);
                 Optional.ofNullable(extractors).orElse(Collections.emptyList()).forEach(extractor -> extractor.process(localContext));
-                //  context 与 localContext 中的 lastContext 是同一对象，无需再进行变量合并
-                //  context.getLocalVariablesWrapper().getLastVariables().merge(localContext.getLocalVariablesWrapper().getLastVariables());
             }
         } catch (Throwable throwable) {
             // 1、processor 执行异常 2、extractor 提取异常  设置父级执行异常
-            localContext.getTestResult().setThrowable(throwable);
+            result.setThrowable(throwable);
+            result.setStatus(TestStatus.broken);
             context.getTestResult().setThrowable(throwable);
         } finally {
             // 最终处理
             chain.triggerAfterCompletion(localContext);
-            var status = localContext.getTestResult().getStatus();
-            if (status.isBroken() || status.isFailed()) {
-                context.getTestResult().setStatus(localContext.getTestResult().getStatus());
+            if (result.getStatus().isBroken() || result.getStatus().isFailed()) {
+                context.getTestResult().setStatus(result.getStatus());
             }
         }
     }
