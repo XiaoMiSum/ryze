@@ -85,6 +85,9 @@ public class TestElementObjectReader implements ObjectReader<TestElement> {
         for (Map.Entry<String, Object> entry : testElementMap.entrySet()) {
             elementMap.put(entry.getKey().toLowerCase(), entry.getValue());
         }
+        if (!elementMap.containsKey(TEST_CLASS)) {
+            elementMap.put(TEST_CLASS, TESTSUITE);
+        }
         var pair = checkTestElement(elementMap);
         // 兼容旧版本测试容器配置
         if (elementMap.containsKey(CHILD)) {
