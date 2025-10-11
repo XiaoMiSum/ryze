@@ -93,6 +93,7 @@ public class TestElementObjectReader implements ObjectReader<TestElement> {
         if (elementMap.containsKey(CHILD)) {
             elementMap.put(CHILDREN, elementMap.remove(CHILD));
         }
+        // 通过拦截器重新获取 config，以支持协议组件个性化处理 config (主要用于兼容旧版本的过期配置项)
         JSONInterceptor interceptor = ApplicationConfig.getJsonInterceptorKeyMap().get(pair.getLeft());
         if (interceptor != null) {
             var config = interceptor.deserializeConfigureItem(elementMap.get(CONFIG));

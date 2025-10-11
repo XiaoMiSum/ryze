@@ -34,6 +34,7 @@ import com.alibaba.fastjson2.JSONObject;
 import com.alibaba.fastjson2.JSONReader;
 import com.alibaba.fastjson2.reader.ObjectReader;
 import io.github.xiaomisum.ryze.ApplicationConfig;
+import io.github.xiaomisum.ryze.support.fastjson.interceptor.JSONInterceptor;
 import io.github.xiaomisum.ryze.testelement.TestElementConstantsInterface;
 import io.github.xiaomisum.ryze.testelement.processor.Processor;
 import org.apache.commons.lang3.tuple.Pair;
@@ -85,6 +86,12 @@ public abstract class ProcessorObjectReader implements ObjectReader<Processor>, 
         }
         var pair = checkTestElement(elementMap, fieldName);
         standardizeConfig(elementMap, pair.getRight());
+        // 通过拦截器重新获取 config，以支持协议组件个性化处理 config (主要用于兼容旧版本的过期配置项)
+        JSONInterceptor interceptor = ApplicationConfig.getJsonInterceptorKeyMap().get(pair.getLeft());
+        if (interceptor != null) {
+            var config = interceptor.deserializeConfigureItem(elementMap.get(CONFIG));
+            elementMap.put(CONFIG, config != null ? config : elementMap.get(CONFIG));
+        }
         return JSON.parseObject(JSON.toJSONString(elementMap), pair.getLeft());
     }
 
