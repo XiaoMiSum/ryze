@@ -152,9 +152,8 @@ public abstract class AbstractProcessor<SELF extends AbstractProcessor<SELF, CON
      */
     @Override
     public void process(ContextWrapper context) {
-        var localContext = initialized ? context : _initialized(context.getSessionRunner());
+        var localContext = _initialized(context.getSessionRunner());
         var result = (R) localContext.getTestResult();
-        runtime.config = (CONFIG) context.evaluate(runtime.config);
         try {
             // 执行前置处理
             if (chain.applyPreHandle(localContext, runtime)) {
@@ -178,7 +177,7 @@ public abstract class AbstractProcessor<SELF extends AbstractProcessor<SELF, CON
             // 最终处理
             chain.triggerAfterCompletion(localContext);
             var status = localContext.getTestResult().getStatus();
-            if (context != localContext && (status.isBroken() || status.isFailed())) {
+            if (status.isBroken() || status.isFailed()) {
                 context.getTestResult().setStatus(localContext.getTestResult().getStatus());
             }
         }

@@ -25,6 +25,7 @@
 
 package io.github.xiaomisum.ryze.context.variables;
 
+import com.alibaba.fastjson2.JSON;
 import io.github.xiaomisum.ryze.config.RyzeVariables;
 import io.github.xiaomisum.ryze.context.Context;
 import io.github.xiaomisum.ryze.context.TestRunContext;
@@ -194,15 +195,9 @@ public abstract class AbstractVariablesWrapper implements VariablesWrapper, Test
         return lastContextVariables;
     }
 
-    /**
-     * 返回合并后的变量的字符串表示
-     *
-     * @return 合并后的变量的字符串表示
-     * @see #mergeVariables()
-     */
     @Override
     public String toString() {
-        return mergeVariables().toString();
+        return JSON.toJSONString(this);
     }
 
 }

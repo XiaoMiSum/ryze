@@ -38,13 +38,14 @@ import io.github.xiaomisum.ryze.config.RyzeVariables;
 import io.github.xiaomisum.ryze.context.Context;
 import io.github.xiaomisum.ryze.context.ContextWrapper;
 import io.github.xiaomisum.ryze.context.TestSuiteContext;
-import io.github.xiaomisum.ryze.support.*;
+import io.github.xiaomisum.ryze.support.Closeable;
 import io.github.xiaomisum.ryze.support.Collections;
+import io.github.xiaomisum.ryze.support.Customizer;
+import io.github.xiaomisum.ryze.support.KryoUtil;
 import io.github.xiaomisum.ryze.support.groovy.Groovy;
 import io.github.xiaomisum.ryze.testelement.configure.ConfigureElement;
 import io.github.xiaomisum.ryze.testelement.processor.Postprocessor;
 import io.github.xiaomisum.ryze.testelement.processor.Preprocessor;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -125,36 +126,14 @@ public abstract class AbstractTestElementExecutable<SELF extends AbstractTestEle
      */
     protected List<Context> getContextChain(List<Context> parentContext) {
         List<Context> contextChain = new ArrayList<>(parentContext);
-
-        TestSuiteContext context = new TestSuiteContext();
         if (Objects.isNull(variables)) {
             variables = new RyzeVariables();
         }
         runtime.configGroup.put(VARIABLES, variables.merge(parentContext.getLast().getConfigGroup().getVariables()));
+        TestSuiteContext context = new TestSuiteContext();
         context.setConfigGroup(runtime.getConfigGroup());
         contextChain.add(context);
         return contextChain;
-    }
-
-
-    /**
-     * 计算并应用配置到上下文中
-     *
-     * <p>该方法处理当前测试元件的变量和配置项，将它们应用到执行上下文中。
-     * 注意：只会计算当前元件的配置，不会处理父级元件的配置。</p>
-     *
-     * @param context 执行上下文包装器
-     */
-    protected void evalConfig(ContextWrapper context) {
-        // 变量与config
-        RyzeVariables item;
-        if (runtime.variables != null && (item = runtime.configGroup.getVariables()) != null) {
-            context.evaluate(item);
-        }
-        CONFIG config;
-        if (runtime.config != null && (config = runtime.configGroup.get(CONFIG)) != null) {
-            context.evaluate(config);
-        }
     }
 
     /**
@@ -223,7 +202,6 @@ public abstract class AbstractTestElementExecutable<SELF extends AbstractTestEle
         // 另一方面，该对象不是对象状态表示，只是一个临时对象，没有必要使用成员变量
         ContextWrapper context = new ContextWrapper(session);
         context.setTestElement(this);
-
         session.setContext(context);
         return context;
     }
@@ -239,26 +217,6 @@ public abstract class AbstractTestElementExecutable<SELF extends AbstractTestEle
     private void restoreCurrentContextInfo(SessionRunner session, Snapshot snapshotData) {
         session.setContextChain(snapshotData.parentContextChain);
         session.setContext(snapshotData.previousContextWrapper);
-    }
-
-    /**
-     * 验证执行类测试元件
-     * <p>
-     * 验证执行类测试元件的数据有效性，确保测试可以正常执行。
-     * </p>
-     *
-     * @return 验证结果
-     */
-    @Override
-    public ValidateResult validate() {
-        var result = super.validate();
-        if (StringUtils.isBlank(title)) {
-            result.append("测试描述 %s 字段值缺失或为空", TITLE);
-        }
-        if (config == null) {
-            result.append("执行类测试元件 %s 字段值缺失或为空", CONFIG);
-        }
-        return result;
     }
 
     /**
@@ -279,7 +237,14 @@ public abstract class AbstractTestElementExecutable<SELF extends AbstractTestEle
      */
     protected void internalRun(ContextWrapper context) {
         // 模板计算：当前元件的变量配置项（不会计算父级元件）
-        evalConfig(context);
+        RyzeVariables item;
+        if (runtime.variables != null && (item = runtime.configGroup.getVariables()) != null) {
+            context.evaluate(item);
+        }
+        CONFIG config;
+        if (runtime.config != null && (config = runtime.configGroup.get(CONFIG)) != null) {
+            context.evaluate(config);
+        }
         // 处理配置元件
         Optional.ofNullable(configureElements).orElse(Collections.emptyList()).forEach(ele -> ele.process(context));
         // 执行前置动作
