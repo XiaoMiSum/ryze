@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--<configuration debug="true">-->
+<configuration>
+    <contextName>ryze</contextName>
+    <property name="pattern"
+              value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level: %msg %n"/>
+    <property name="pattern.color"
+              value="%yellow(%d{yyyy-MM-dd HH:mm:ss.SSS}) [%thread] %highlight(%-5level) %green(:) %highlight(%msg) %n"/>
+    <property name="log.home" value="logs"/>
+    <property name="app.name" value="ryze"/>
+
+    <!-- 控制台输出-带颜色 -->
+    <appender name="CONSOLE-WITH-COLOR" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${pattern.color}</pattern>
+        </encoder>
+    </appender>
+
+    <root level="info">
+        <!--<appender-ref ref="CONSOLE"/>-->
+        <appender-ref ref="CONSOLE-WITH-COLOR"/>
+    </root>
+</configuration>

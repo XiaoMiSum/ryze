@@ -30,3 +30,4 @@ io.github.xiaomisum.ryze.support.testng.RyzeDatasourceFilterInterceptor
 io.github.xiaomisum.ryze.support.testng.RyzeAnnotationTransformer
 io.github.xiaomisum.ryze.support.testng.RyzeInvokedMethodListener
 io.github.xiaomisum.ryze.support.testng.RyzeTestcaseAutoRunListener
+io.github.xiaomisum.ryze.support.testng.RyzeTestCaseLogListener
