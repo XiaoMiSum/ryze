@@ -318,6 +318,9 @@ public abstract class AbstractAssertion implements Assertion, AssertionConstants
          */
         @Override
         public ASSERTION build() {
+            if (assertion.rule == null) {
+                assertion.rule = "==";
+            }
             return assertion;
         }
     }
