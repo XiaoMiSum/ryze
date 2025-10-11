@@ -168,4 +168,37 @@ public class ValidateResultTest {
         Assert.assertFalse(result.isValid());
         Assert.assertEquals(result.getReason(), "Starting validationValidation failedError code: 500");
     }
+    
+    @Test
+    public void testValidWithValidResult() {
+        ValidateResult result = new ValidateResult();
+        
+        // 对于有效的验证结果，valid()方法不应该抛出异常
+        result.valid(); // 不应该抛出异常
+        Assert.assertTrue(result.isValid());
+    }
+    
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testValidWithInvalidResult() {
+        ValidateResult result = new ValidateResult();
+        
+        // 使验证结果无效
+        result.append("Validation failed");
+        
+        // 验证结果为无效时，valid()方法应该抛出IllegalArgumentException
+        result.valid();
+    }
+    
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testValidWithMultipleFailureReasons() {
+        ValidateResult result = new ValidateResult();
+        
+        // 添加多个失败原因
+        result.append("First error");
+        result.append("Second error");
+        result.append("Third error");
+        
+        // 验证结果为无效时，valid()方法应该抛出IllegalArgumentException
+        result.valid();
+    }
 }

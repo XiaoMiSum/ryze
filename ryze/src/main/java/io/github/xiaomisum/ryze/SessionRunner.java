@@ -29,7 +29,6 @@ import io.github.xiaomisum.ryze.config.RyzeVariables;
 import io.github.xiaomisum.ryze.context.Context;
 import io.github.xiaomisum.ryze.context.ContextWrapper;
 import io.github.xiaomisum.ryze.context.SessionContext;
-import io.github.xiaomisum.ryze.support.ValidateResult;
 import io.github.xiaomisum.ryze.testelement.TestElement;
 import io.github.xiaomisum.ryze.testelement.TestElementConfigureGroup;
 import io.github.xiaomisum.ryze.testelement.TestElementConstantsInterface;
@@ -219,10 +218,7 @@ public class SessionRunner {
      */
     public <T extends Result> T runTest(TestElement<T> element, boolean validate) {
         if (validate) {
-            ValidateResult validateResult = element.validate();
-            if (!validateResult.isValid()) {
-                throw new RuntimeException(validateResult.getReason());
-            }
+            element.validate().valid();
         }
         return element.run(this);
     }

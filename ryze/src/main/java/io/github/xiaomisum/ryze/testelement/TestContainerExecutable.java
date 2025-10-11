@@ -44,6 +44,7 @@ import io.github.xiaomisum.ryze.support.Customizer;
 import io.github.xiaomisum.ryze.support.ValidateResult;
 import io.github.xiaomisum.ryze.support.groovy.Groovy;
 import io.github.xiaomisum.ryze.testelement.sampler.Sampler;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -104,10 +105,6 @@ public abstract class TestContainerExecutable<SELF extends TestContainerExecutab
      * @param context 上下文包装器，提供执行环境和变量管理
      */
     protected void executeChildren(ContextWrapper context) {
-        if (children == null) {
-            return;
-        }
-
         try {
             // 执行前置处理
             if (!chain.applyPreHandle(context, runtime)) {
@@ -118,7 +115,7 @@ public abstract class TestContainerExecutable<SELF extends TestContainerExecutab
                 if (Objects.isNull(child)) {
                     continue;
                 }
-                R result = context.getSessionRunner().runTest(child);
+                R result = context.getSessionRunner().runTest(child, false);
                 if (context.getTestResult() instanceof TestSuiteResult suiteResult) {
                     suiteResult.addChild(result);
                 }
@@ -153,14 +150,15 @@ public abstract class TestContainerExecutable<SELF extends TestContainerExecutab
      */
     @Override
     public ValidateResult validate() {
-        ValidateResult result = super.validate();
-        if (children == null) {
-            result.append("\n容器类测试元件 %s 字段值缺失或为空，当前值：%s", CHILDREN, toString());
+        var result = super.validate();
+        if (StringUtils.isBlank(title)) {
+            result.append("测试描述 %s 字段值缺失或为空", TITLE);
+        }
+        if (children == null || children.isEmpty()) {
+            result.append("容器类测试元件 %s 字段值缺失或为空", CHILDREN);
             return result;
         }
-        for (TestElement<?> child : children) {
-            result.append(child);
-        }
+        children.forEach(child -> result.append(child));
         return result;
     }
 

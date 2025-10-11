@@ -32,6 +32,7 @@ import com.alibaba.fastjson2.annotation.JSONField;
 import io.github.xiaomisum.ryze.Result;
 import io.github.xiaomisum.ryze.config.ConfigureItem;
 import io.github.xiaomisum.ryze.context.ContextWrapper;
+import io.github.xiaomisum.ryze.support.ValidateResult;
 import io.github.xiaomisum.ryze.testelement.AbstractTestElement;
 import org.apache.commons.lang3.StringUtils;
 
@@ -108,6 +109,7 @@ public abstract class AbstractConfigureElement<SELF extends AbstractConfigureEle
      * @return 测试结果
      */
     public R process(ContextWrapper context) {
+        validate().valid();
         if (!initialized) {
             initialized();
         }
@@ -117,6 +119,22 @@ public abstract class AbstractConfigureElement<SELF extends AbstractConfigureEle
         return result;
     }
 
+    /**
+     * 验证配置类测试元件
+     * <p>
+     * 验证配置类测试元件的数据有效性，确保测试可以正常执行。
+     * </p>
+     *
+     * @return 验证结果
+     */
+    @Override
+    public ValidateResult validate() {
+        var result = super.validate();
+        if (config == null) {
+            result.append("执行类测试元件 %s 字段值缺失或为空", CONFIG);
+        }
+        return result;
+    }
 
     /**
      * 执行具体的配置逻辑，由子类实现

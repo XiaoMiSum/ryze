@@ -37,13 +37,14 @@ import io.github.xiaomisum.ryze.config.ConfigureItem;
 import io.github.xiaomisum.ryze.context.ContextWrapper;
 import io.github.xiaomisum.ryze.extractor.Extractor;
 import io.github.xiaomisum.ryze.interceptor.RyzeInterceptor;
+import io.github.xiaomisum.ryze.support.Collections;
+import io.github.xiaomisum.ryze.support.Customizer;
+import io.github.xiaomisum.ryze.support.ValidateResult;
+import io.github.xiaomisum.ryze.support.groovy.Groovy;
 import io.github.xiaomisum.ryze.testelement.AbstractTestElement;
 import io.github.xiaomisum.ryze.testelement.TestElement;
 import io.github.xiaomisum.ryze.testelement.TestElementConstantsInterface;
 import io.github.xiaomisum.ryze.testelement.sampler.SampleResult;
-import io.github.xiaomisum.ryze.support.Collections;
-import io.github.xiaomisum.ryze.support.Customizer;
-import io.github.xiaomisum.ryze.support.groovy.Groovy;
 
 import java.util.List;
 import java.util.Optional;
@@ -118,6 +119,7 @@ public abstract class AbstractProcessor<SELF extends AbstractProcessor<SELF, CON
      * @return 初始化完成的上下文包装器
      */
     protected ContextWrapper _initialized(SessionRunner session) {
+        validate().valid();
         super.initialized();
         var localContext = new ContextWrapper(session);
         localContext.setTestResult(getTestResult());
@@ -180,6 +182,23 @@ public abstract class AbstractProcessor<SELF extends AbstractProcessor<SELF, CON
                 context.getTestResult().setStatus(localContext.getTestResult().getStatus());
             }
         }
+    }
+
+    /**
+     * 验证测试执行元件
+     * <p>
+     * 验证测试执行元件的数据有效性，确保测试可以正常执行。
+     * </p>
+     *
+     * @return 验证结果
+     */
+    @Override
+    public ValidateResult validate() {
+        var result = super.validate();
+        if (config == null) {
+            result.append("执行类测试元件 %s 字段值缺失或为空", CONFIG);
+        }
+        return result;
     }
 
     /**

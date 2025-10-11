@@ -38,14 +38,13 @@ import io.github.xiaomisum.ryze.config.RyzeVariables;
 import io.github.xiaomisum.ryze.context.Context;
 import io.github.xiaomisum.ryze.context.ContextWrapper;
 import io.github.xiaomisum.ryze.context.TestSuiteContext;
-import io.github.xiaomisum.ryze.support.Closeable;
+import io.github.xiaomisum.ryze.support.*;
 import io.github.xiaomisum.ryze.support.Collections;
-import io.github.xiaomisum.ryze.support.Customizer;
-import io.github.xiaomisum.ryze.support.KryoUtil;
 import io.github.xiaomisum.ryze.support.groovy.Groovy;
 import io.github.xiaomisum.ryze.testelement.configure.ConfigureElement;
 import io.github.xiaomisum.ryze.testelement.processor.Postprocessor;
 import io.github.xiaomisum.ryze.testelement.processor.Preprocessor;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -158,7 +157,6 @@ public abstract class AbstractTestElementExecutable<SELF extends AbstractTestEle
         }
     }
 
-
     /**
      * 执行测试元素的主要入口方法
      *
@@ -241,6 +239,26 @@ public abstract class AbstractTestElementExecutable<SELF extends AbstractTestEle
     private void restoreCurrentContextInfo(SessionRunner session, Snapshot snapshotData) {
         session.setContextChain(snapshotData.parentContextChain);
         session.setContext(snapshotData.previousContextWrapper);
+    }
+
+    /**
+     * 验证执行类测试元件
+     * <p>
+     * 验证执行类测试元件的数据有效性，确保测试可以正常执行。
+     * </p>
+     *
+     * @return 验证结果
+     */
+    @Override
+    public ValidateResult validate() {
+        var result = super.validate();
+        if (StringUtils.isBlank(title)) {
+            result.append("测试描述 %s 字段值缺失或为空", TITLE);
+        }
+        if (config == null) {
+            result.append("执行类测试元件 %s 字段值缺失或为空", CONFIG);
+        }
+        return result;
     }
 
     /**

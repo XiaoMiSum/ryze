@@ -115,12 +115,12 @@ public abstract class AbstractExtractor implements Extractor, ExtractorConstants
      */
     @Override
     public ValidateResult validate() {
-        ValidateResult result = new ValidateResult();
+        var result = new ValidateResult();
         if (StringUtils.isBlank(refName)) {
-            result.append("\n提取引用名称 ref_name 字段值缺失或为空");
+            result.append("提取引用名称 ref_name 字段值缺失或为空");
         }
         if (StringUtils.isBlank(field)) {
-            result.append("\n提取表达式 field 字段值缺失或为空");
+            result.append("提取表达式 field 字段值缺失或为空");
         }
         return result;
     }
@@ -149,6 +149,7 @@ public abstract class AbstractExtractor implements Extractor, ExtractorConstants
             return;
         }
         if (context.getTestResult() instanceof SampleResult result) {
+            validate().valid();
             defaultValue = context.evaluate(defaultValue);
             var defaultValueIsBlank = defaultValue == null || StringUtils.isBlank(defaultValue.toString());
             if (StringUtils.isBlank(result.getResponse().bytesAsString()) && defaultValueIsBlank) {
