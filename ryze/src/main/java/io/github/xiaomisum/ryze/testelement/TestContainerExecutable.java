@@ -111,7 +111,7 @@ public abstract class TestContainerExecutable<SELF extends TestContainerExecutab
                 return;
             }
             // 业务处理
-            for (TestElement<R> child : children) {
+            for (TestElement<R> child : runtime.children) {
                 if (Objects.isNull(child)) {
                     continue;
                 }
@@ -132,7 +132,6 @@ public abstract class TestContainerExecutable<SELF extends TestContainerExecutab
             }
             chain.applyPostHandle(context, runtime);
         } catch (Throwable throwable) {
-            context.getTestResult().setStatus(TestStatus.broken);
             context.getTestResult().setThrowable(throwable);
         } finally {
             // 最终处理

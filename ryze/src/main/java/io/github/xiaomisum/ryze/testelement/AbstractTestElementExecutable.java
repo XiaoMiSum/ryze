@@ -246,9 +246,9 @@ public abstract class AbstractTestElementExecutable<SELF extends AbstractTestEle
             context.evaluate(config);
         }
         // 处理配置元件
-        Optional.ofNullable(configureElements).orElse(Collections.emptyList()).forEach(ele -> ele.process(context));
+        Optional.ofNullable(runtime.configureElements).orElse(Collections.emptyList()).forEach(ele -> ele.process(context));
         // 执行前置动作
-        Optional.ofNullable(preprocessors).orElse(Collections.emptyList())
+        Optional.ofNullable(runtime.preprocessors).orElse(Collections.emptyList())
                 .stream().filter(preprocessor -> !preprocessor.isDisabled())
                 .forEach(preprocessor -> preprocessor.process(context));
         if (context.getTestResult().getStatus().isFailed() || context.getTestResult().getStatus().isBroken()) {
@@ -257,11 +257,11 @@ public abstract class AbstractTestElementExecutable<SELF extends AbstractTestEle
         }
         // 执行请求
         execute(context, (R) context.getTestResult());
-        Optional.ofNullable(postprocessors).orElse(Collections.emptyList())
+        Optional.ofNullable(runtime.postprocessors).orElse(Collections.emptyList())
                 .stream().filter(postprocessor -> !postprocessor.isDisabled())
                 .forEach(postprocessor -> postprocessor.process(context));
         // 关闭配置元件
-        Optional.ofNullable(configureElements).orElse(Collections.emptyList()).stream()
+        Optional.ofNullable(runtime.configureElements).orElse(Collections.emptyList()).stream()
                 .filter(ele -> ele instanceof Closeable)
                 .forEach(ele -> ((Closeable) ele).close());
     }

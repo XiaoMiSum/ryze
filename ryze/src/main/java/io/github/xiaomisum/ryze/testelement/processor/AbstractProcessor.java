@@ -32,7 +32,6 @@ import com.alibaba.fastjson2.annotation.JSONField;
 import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
 import io.github.xiaomisum.ryze.SessionRunner;
-import io.github.xiaomisum.ryze.TestStatus;
 import io.github.xiaomisum.ryze.builder.ExtensibleExtractorsBuilder;
 import io.github.xiaomisum.ryze.config.ConfigureItem;
 import io.github.xiaomisum.ryze.context.ContextWrapper;
@@ -169,16 +168,11 @@ public abstract class AbstractProcessor<SELF extends AbstractProcessor<SELF, CON
                 Optional.ofNullable(extractors).orElse(Collections.emptyList()).forEach(extractor -> extractor.process(localContext));
             }
         } catch (Throwable throwable) {
-            // 1、processor 执行异常 2、extractor 提取异常  设置父级执行异常
             result.setThrowable(throwable);
-            result.setStatus(TestStatus.broken);
             context.getTestResult().setThrowable(throwable);
         } finally {
             // 最终处理
             chain.triggerAfterCompletion(localContext);
-            if (result.getStatus().isBroken() || result.getStatus().isFailed()) {
-                context.getTestResult().setStatus(result.getStatus());
-            }
         }
     }
 

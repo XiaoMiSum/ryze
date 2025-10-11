@@ -171,8 +171,8 @@ public abstract class AbstractSampler<SELF extends AbstractSampler<SELF, CONFIG,
                 handleResponse(context, result);
                 // 执行后置处理
                 chain.applyPostHandle(context, runtime);
-                Optional.ofNullable(assertions).orElse(Collections.emptyList()).forEach(assertion -> assertion.assertThat(context));
-                Optional.ofNullable(extractors).orElse(Collections.emptyList()).forEach(extractor -> extractor.process(context));
+                Optional.ofNullable(runtime.assertions).orElse(Collections.emptyList()).forEach(assertion -> assertion.assertThat(context));
+                Optional.ofNullable(runtime.extractors).orElse(Collections.emptyList()).forEach(extractor -> extractor.process(context));
             }
         } catch (Throwable throwable) {
             // 1、sampler 执行异常 2、assertion 断言异常 3、extractor 提取异常
