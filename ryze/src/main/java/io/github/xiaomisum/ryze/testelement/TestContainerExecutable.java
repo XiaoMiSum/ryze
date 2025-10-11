@@ -132,6 +132,7 @@ public abstract class TestContainerExecutable<SELF extends TestContainerExecutab
             }
             chain.applyPostHandle(context, runtime);
         } catch (Throwable throwable) {
+            context.getTestResult().setStatus(TestStatus.broken);
             context.getTestResult().setThrowable(throwable);
         } finally {
             // 最终处理
