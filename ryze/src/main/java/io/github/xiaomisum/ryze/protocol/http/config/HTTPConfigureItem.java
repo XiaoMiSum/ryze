@@ -321,6 +321,7 @@ public class HTTPConfigureItem implements ConfigureItem<HTTPConfigureItem>, HTTP
         this.port = port;
     }
 
+    @JSONField(serialize = false, deserialize = false)
     public String getFullPort() {
         return StringUtils.isBlank(port) ? "" : ":" + port;
     }
