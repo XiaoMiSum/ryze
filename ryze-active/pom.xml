@@ -43,6 +43,12 @@
     <dependencies>
 
         <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
             <groupId>io.github.xiaomisum</groupId>
             <artifactId>ryze</artifactId>
             <scope>provided</scope>

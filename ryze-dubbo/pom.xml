@@ -42,7 +42,13 @@
 
     <dependencies>
 
-        <!-- 不传递此组件的ryze依赖，需求方自行引入ryze 或 ryze -->
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- 不传递此组件的ryze依赖，需求方自行引入ryze -->
         <dependency>
             <groupId>io.github.xiaomisum</groupId>
             <artifactId>ryze</artifactId>
