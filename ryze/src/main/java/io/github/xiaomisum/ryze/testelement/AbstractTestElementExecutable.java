@@ -241,10 +241,6 @@ public abstract class AbstractTestElementExecutable<SELF extends AbstractTestEle
         if (runtime.variables != null && (item = runtime.configGroup.getVariables()) != null) {
             context.evaluate(item);
         }
-        CONFIG config;
-        if (runtime.config != null && (config = runtime.configGroup.get(CONFIG)) != null) {
-            context.evaluate(config);
-        }
         // 处理配置元件
         Optional.ofNullable(runtime.configureElements).orElse(Collections.emptyList()).forEach(ele -> ele.process(context));
         // 执行前置动作
@@ -278,6 +274,7 @@ public abstract class AbstractTestElementExecutable<SELF extends AbstractTestEle
     public SELF copy() {
         SELF self = super.copy();
         self.variables = KryoUtil.copy(variables);
+        self.configureElements = KryoUtil.copy(configureElements);
         self.preprocessors = KryoUtil.copy(preprocessors);
         self.postprocessors = KryoUtil.copy(postprocessors);
         return self;

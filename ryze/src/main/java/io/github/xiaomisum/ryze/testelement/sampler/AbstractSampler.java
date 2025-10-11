@@ -161,6 +161,10 @@ public abstract class AbstractSampler<SELF extends AbstractSampler<SELF, CONFIG,
             return;
         }
         try {
+            CONFIG config;
+            if (runtime.config != null && (config = runtime.configGroup.get(CONFIG)) != null) {
+                context.evaluate(config);
+            }
             // 执行前置处理
             if (chain.applyPreHandle(context, runtime)) {
                 // 业务处理
