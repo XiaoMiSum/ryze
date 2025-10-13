@@ -39,8 +39,8 @@
         </discriminator>
 
         <sift>
-            <appender name="FILE-${testcaseId}" class="ch.qos.logback.core.FileAppender">
-                <file>${log.home}/case/${testcaseId}.log</file>
+            <appender name="FILE-${traceId}" class="ch.qos.logback.core.FileAppender">
+                <file>${log.home}/case/${traceId}.log</file>
                 <append>false</append>
                 <encoder>
                     <pattern>${pattern}</pattern>
