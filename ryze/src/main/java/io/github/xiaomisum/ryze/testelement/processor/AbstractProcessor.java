@@ -49,6 +49,8 @@ import io.github.xiaomisum.ryze.testelement.sampler.SampleResult;
 import java.util.List;
 import java.util.Optional;
 
+import static io.github.xiaomisum.ryze.TestStatus.broken;
+
 /**
  * 处理器抽象基类，实现了处理器的核心处理逻辑
  * <p>
@@ -170,6 +172,7 @@ public abstract class AbstractProcessor<SELF extends AbstractProcessor<SELF, CON
         } catch (Throwable throwable) {
             result.setThrowable(throwable);
             context.getTestResult().setThrowable(throwable);
+            context.getTestResult().setStatus(broken);
         } finally {
             // 最终处理
             chain.triggerAfterCompletion(localContext);
