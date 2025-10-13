@@ -30,6 +30,7 @@ import io.github.xiaomisum.ryze.protocol.http.HTTPConstantsInterface;
 import io.github.xiaomisum.ryze.testelement.KW;
 import io.github.xiaomisum.ryze.testelement.TestSuiteResult;
 import io.github.xiaomisum.ryze.testelement.configure.AbstractConfigureElement;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;
 
@@ -82,7 +83,7 @@ public class HTTPDefaults extends AbstractConfigureElement<HTTPDefaults, HTTPCon
 
     @Override
     protected TestSuiteResult getTestResult() {
-        return new TestSuiteResult("HTTP 默认配置");
+        return new TestSuiteResult("HTTP 默认配置" + (StringUtils.isBlank(refName) ? "" : "：" + runtime.getRefName()));
     }
 
     /**

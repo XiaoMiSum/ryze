@@ -143,7 +143,7 @@ public class JDBCDatasource extends AbstractConfigureElement<JDBCDatasource, JDB
         ((JDBCDatasource) runtime).datasource.setPassword(runtime.getConfig().getPassword());
         ((JDBCDatasource) runtime).datasource.setMaxActive(runtime.getConfig().getMaxActive());
         ((JDBCDatasource) runtime).datasource.setMaxWait(runtime.getConfig().getMaxWait());
-        context.getLocalVariablesWrapper().put(runtime.getRefName(), datasource);
+        context.getLocalVariablesWrapper().put(runtime.getRefName(), ((JDBCDatasource) runtime).datasource);
     }
 
     /**
@@ -153,7 +153,7 @@ public class JDBCDatasource extends AbstractConfigureElement<JDBCDatasource, JDB
      */
     @Override
     protected TestSuiteResult getTestResult() {
-        return new TestSuiteResult("JDBC数据源配置：" + refName);
+        return new TestSuiteResult("JDBC数据源配置：" + runtime.getRefName());
     }
 
     /**

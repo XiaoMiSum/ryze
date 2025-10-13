@@ -30,6 +30,7 @@ import io.github.xiaomisum.ryze.protocol.active.ActiveConstantsInterface;
 import io.github.xiaomisum.ryze.testelement.KW;
 import io.github.xiaomisum.ryze.testelement.TestSuiteResult;
 import io.github.xiaomisum.ryze.testelement.configure.AbstractConfigureElement;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;
 
@@ -122,7 +123,7 @@ public class ActiveDefaults extends AbstractConfigureElement<ActiveDefaults, Act
      */
     @Override
     protected TestSuiteResult getTestResult() {
-        return new TestSuiteResult("Active MQ 默认配置");
+        return new TestSuiteResult("Active MQ 默认配置" + (StringUtils.isBlank(refName) ? "" : "：" + runtime.getRefName()));
     }
 
     /**

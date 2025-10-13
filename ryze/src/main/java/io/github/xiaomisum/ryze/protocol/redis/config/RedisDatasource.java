@@ -123,7 +123,7 @@ public class RedisDatasource extends AbstractConfigureElement<RedisDatasource, R
      */
     @Override
     protected TestSuiteResult getTestResult() {
-        return new TestSuiteResult("Redis数据源配置：" + refName);
+        return new TestSuiteResult("Redis数据源配置：" + runtime.getRefName());
     }
 
     /**
@@ -145,7 +145,7 @@ public class RedisDatasource extends AbstractConfigureElement<RedisDatasource, R
      * @return Redis连接实例
      */
     public Jedis getConnection() {
-        return jedisPool.getResource();
+        return ((RedisDatasource) runtime).jedisPool.getResource();
     }
 
     /**

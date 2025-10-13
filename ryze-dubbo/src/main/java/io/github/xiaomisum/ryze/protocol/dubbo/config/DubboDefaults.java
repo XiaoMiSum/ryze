@@ -30,6 +30,7 @@ import io.github.xiaomisum.ryze.protocol.dubbo.DubboConstantsInterface;
 import io.github.xiaomisum.ryze.testelement.KW;
 import io.github.xiaomisum.ryze.testelement.TestSuiteResult;
 import io.github.xiaomisum.ryze.testelement.configure.AbstractConfigureElement;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;
 
@@ -110,7 +111,7 @@ public class DubboDefaults extends AbstractConfigureElement<DubboDefaults, Dubbo
      */
     @Override
     protected TestSuiteResult getTestResult() {
-        return new TestSuiteResult("Dubbo 默认配置");
+        return new TestSuiteResult("Dubbo 默认配置" + (StringUtils.isBlank(refName) ? "" : "：" + runtime.getRefName()));
     }
 
     /**

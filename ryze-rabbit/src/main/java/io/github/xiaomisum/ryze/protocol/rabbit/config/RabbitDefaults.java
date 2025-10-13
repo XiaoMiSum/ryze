@@ -30,6 +30,7 @@ import io.github.xiaomisum.ryze.protocol.rabbit.RabbitConstantsInterface;
 import io.github.xiaomisum.ryze.testelement.KW;
 import io.github.xiaomisum.ryze.testelement.TestSuiteResult;
 import io.github.xiaomisum.ryze.testelement.configure.AbstractConfigureElement;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;
 
@@ -104,7 +105,7 @@ public class RabbitDefaults extends AbstractConfigureElement<RabbitDefaults, Rab
      */
     @Override
     protected TestSuiteResult getTestResult() {
-        return new TestSuiteResult("Rabbit MQ 默认配置");
+        return new TestSuiteResult("Rabbit MQ 默认配置" + (StringUtils.isBlank(refName) ? "" : "：" + runtime.getRefName()));
     }
 
     /**

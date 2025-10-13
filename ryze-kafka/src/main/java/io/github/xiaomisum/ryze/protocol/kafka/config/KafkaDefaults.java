@@ -30,6 +30,7 @@ import io.github.xiaomisum.ryze.protocol.kafka.KafkaConstantsInterface;
 import io.github.xiaomisum.ryze.testelement.KW;
 import io.github.xiaomisum.ryze.testelement.TestSuiteResult;
 import io.github.xiaomisum.ryze.testelement.configure.AbstractConfigureElement;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;
 
@@ -112,7 +113,7 @@ public class KafkaDefaults extends AbstractConfigureElement<KafkaDefaults, Kafka
      */
     @Override
     protected TestSuiteResult getTestResult() {
-        return new TestSuiteResult("Kafka 默认配置");
+        return new TestSuiteResult("Kafka 默认配置" + (StringUtils.isBlank(refName) ? "" : "：" + runtime.getRefName()));
     }
 
     /**
