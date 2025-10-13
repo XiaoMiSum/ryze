@@ -25,6 +25,7 @@
 
 package io.github.xiaomisum.ryze.assertion.builtin.matcher;
 
+import com.alibaba.fastjson2.JSON;
 import io.github.xiaomisum.ryze.assertion.ProxyMatcher;
 import io.github.xiaomisum.ryze.support.Comparator;
 import io.github.xiaomisum.ryze.testelement.KW;
@@ -86,6 +87,10 @@ public class IsEmpty extends ProxyMatcher {
      */
     @Override
     public boolean matches(Object actualValue) {
+        if (actualValue instanceof String string) {
+            var isJson = (string.startsWith("{") && string.endsWith("}")) || (string.startsWith("[") && string.endsWith("]"));
+            actualValue = isJson ? JSON.parse(string) : actualValue;
+        }
         return Comparator.isEmpty(actualValue);
     }
 

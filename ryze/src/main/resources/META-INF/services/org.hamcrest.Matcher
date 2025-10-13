@@ -31,6 +31,8 @@ io.github.xiaomisum.ryze.assertion.builtin.matcher.ContainsMatcher
 io.github.xiaomisum.ryze.assertion.builtin.matcher.EqualsMatcher
 io.github.xiaomisum.ryze.assertion.builtin.matcher.GreaterMatcher
 io.github.xiaomisum.ryze.assertion.builtin.matcher.GreaterOrEqualsMatcher
+io.github.xiaomisum.ryze.assertion.builtin.matcher.IsEmpty
+io.github.xiaomisum.ryze.assertion.builtin.matcher.IsNotEmpty
 io.github.xiaomisum.ryze.assertion.builtin.matcher.LessMatcher
 io.github.xiaomisum.ryze.assertion.builtin.matcher.LessOrEqualsMatcher
 io.github.xiaomisum.ryze.assertion.builtin.matcher.NotContainsMatcher
