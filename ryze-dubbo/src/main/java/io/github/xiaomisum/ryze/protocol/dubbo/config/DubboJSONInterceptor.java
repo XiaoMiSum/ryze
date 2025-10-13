@@ -94,9 +94,11 @@ public class DubboJSONInterceptor implements JSONInterceptor, DubboConstantsInte
     public ConfigureItem<?> deserializeConfigureItem(Object value) {
         if (value instanceof Map configure) {
             var registry = (Map<String, Object>) configure.get(REGISTRY);
-            var protocol = registry.remove(PROTOCOL);
-            if (Objects.nonNull(protocol) && StringUtils.isNotBlank(protocol.toString())) {
-                registry.put(ADDRESS, protocol + "://" + registry.get(ADDRESS));
+            if (Objects.nonNull(registry)) {
+                var protocol = registry.remove(PROTOCOL);
+                if (Objects.nonNull(protocol) && StringUtils.isNotBlank(protocol.toString())) {
+                    registry.put(ADDRESS, protocol + "://" + registry.get(ADDRESS));
+                }
             }
             var rawData = JSON.toJSONString(configure);
             return JSON.parseObject(rawData, DubboConfigureItem.class);
