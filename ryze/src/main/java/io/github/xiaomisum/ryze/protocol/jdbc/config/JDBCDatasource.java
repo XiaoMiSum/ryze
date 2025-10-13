@@ -106,16 +106,16 @@ public class JDBCDatasource extends AbstractConfigureElement<JDBCDatasource, JDB
     public ValidateResult validate() {
         var result = super.validate();
         if (StringUtils.isBlank(refName)) {
-            result.append("\n数据源引用名称 %s 字段值缺失", REF_NAME);
+            result.append("数据源引用名称 %s 字段值缺失", REF_NAME);
         }
         if (StringUtils.isBlank(config.getUrl())) {
-            result.append("\n数据源连接 %s 字段值缺失", URL);
+            result.append("数据源连接 %s 字段值缺失", URL);
         }
         if (StringUtils.isBlank(config.getUsername())) {
-            result.append("\n数据源用户名 %s 字段值缺失", USERNAME);
+            result.append("数据源用户名 %s 字段值缺失", USERNAME);
         }
         if (StringUtils.isBlank(config.getPassword())) {
-            result.append("\n数据源密码 %s 字段值缺失", PASSWORD);
+            result.append("数据源密码 %s 字段值缺失", PASSWORD);
         }
         return result;
     }

@@ -164,7 +164,7 @@ public abstract class AbstractExtractor implements Extractor, ExtractorConstants
             }
             var valueIsBlank = value == null || StringUtils.isBlank(value.toString());
             if (valueIsBlank && defaultValueIsBlank) {
-                throw new IllegalArgumentException("目标字符串没有匹配的数据 %s，目标字符串：\n%s".formatted(field, result.getResponse().bytesAsString()));
+                throw new IllegalArgumentException("目标字符串没有匹配的数据 %s，目标字符串：%s".formatted(field, result.getResponse().bytesAsString()));
             }
             context.getLocalVariablesWrapper().put(refName, valueIsBlank ? defaultValue : value);
             return;

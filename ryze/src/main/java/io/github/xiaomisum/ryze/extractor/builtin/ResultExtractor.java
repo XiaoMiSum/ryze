@@ -83,7 +83,7 @@ public class ResultExtractor extends AbstractExtractor {
     public ValidateResult validate() {
         ValidateResult result = new ValidateResult();
         if (StringUtils.isBlank(refName)) {
-            result.append("\n提取变量引用名称 ref_name 字段值缺失或为空");
+            result.append("提取变量引用名称 ref_name 字段值缺失或为空");
         }
         return result;
     }
