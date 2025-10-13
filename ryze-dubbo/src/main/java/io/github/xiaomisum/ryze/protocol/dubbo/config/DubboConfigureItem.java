@@ -369,7 +369,7 @@ public class DubboConfigureItem implements ConfigureItem<DubboConfigureItem>, Du
      * @return 配置引用名称，可能为null或空字符串
      */
     public String getRef() {
-        return ref;
+        return StringUtils.isBlank(ref) ? DEF_REF_NAME_KEY : ref;
     }
 
     /**

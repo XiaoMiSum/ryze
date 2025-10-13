@@ -111,7 +111,7 @@ public class ActiveDefaults extends AbstractConfigureElement<ActiveDefaults, Act
         if (Objects.nonNull(config)) {
             runtime.setConfig(localConfig = localConfig.merge(config));
         }
-        context.getLocalVariablesWrapper().put(getRefName(DEF_REF_NAME_KEY), localConfig);
+        context.getLocalVariablesWrapper().put(runtime.getRefName(DEF_REF_NAME_KEY), localConfig);
     }
 
 
@@ -124,7 +124,7 @@ public class ActiveDefaults extends AbstractConfigureElement<ActiveDefaults, Act
     protected TestSuiteResult getTestResult() {
         return new TestSuiteResult("Active MQ 默认配置");
     }
-    
+
     /**
      * ActiveDefaults构建器类
      * <p>

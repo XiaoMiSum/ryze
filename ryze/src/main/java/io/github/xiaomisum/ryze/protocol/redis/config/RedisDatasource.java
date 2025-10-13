@@ -112,8 +112,8 @@ public class RedisDatasource extends AbstractConfigureElement<RedisDatasource, R
         var username = JedisURIHelper.getUser(uri);
         var password = JedisURIHelper.getPassword(uri);
         var database = JedisURIHelper.getDBIndex(uri);
-        jedisPool = new JedisPool(poolConfig, uri.getHost(), uri.getPort(), runtime.getConfig().getTimeout(), username, password, database);
-        context.getLocalVariablesWrapper().put(refName, this);
+        ((RedisDatasource) runtime).jedisPool = new JedisPool(poolConfig, uri.getHost(), uri.getPort(), runtime.getConfig().getTimeout(), username, password, database);
+        context.getLocalVariablesWrapper().put(runtime.getRefName(), this);
     }
 
     /**
@@ -132,10 +132,11 @@ public class RedisDatasource extends AbstractConfigureElement<RedisDatasource, R
      */
     @Override
     public void close() {
-        if (Objects.isNull(jedisPool)) {
+        if (Objects.isNull(((RedisDatasource) runtime).jedisPool)) {
             return;
         }
-        jedisPool.close();
+        ((RedisDatasource) runtime).jedisPool.close();
+        ((RedisDatasource) runtime).jedisPool = null;
     }
 
     /**

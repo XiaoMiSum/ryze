@@ -100,7 +100,7 @@ public abstract class AbstractConfigureElement<SELF extends AbstractConfigureEle
      * <p>该方法实现了配置元件的通用执行流程：
      * <ol>
      *   <li>检查是否已初始化，如未初始化则进行初始化</li>
-     *   <li>对配置项进行表达式计算</li>
+     *   <li>对配置项、引用名称进行表达式计算</li>
      *   <li>调用抽象方法doProcess执行具体的配置逻辑</li>
      *   <li>返回测试结果</li>
      * </ol></p>
@@ -114,6 +114,7 @@ public abstract class AbstractConfigureElement<SELF extends AbstractConfigureEle
             initialized();
         }
         runtime.config = (CONFIG) context.evaluate(runtime.config);
+        runtime.refName = (String) context.evaluate(runtime.refName);
         var result = getTestResult();
         doProcess(context);
         return result;
@@ -134,6 +135,13 @@ public abstract class AbstractConfigureElement<SELF extends AbstractConfigureEle
             result.append("执行类测试元件 %s 字段值缺失或为空", CONFIG);
         }
         return result;
+    }
+
+    @Override
+    public SELF copy() {
+        var self = super.copy();
+        self.refName = refName;
+        return (SELF) self;
     }
 
     /**

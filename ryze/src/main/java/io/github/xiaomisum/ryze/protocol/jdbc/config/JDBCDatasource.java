@@ -62,7 +62,7 @@ public class JDBCDatasource extends AbstractConfigureElement<JDBCDatasource, JDB
      * <p>用于管理数据库连接池</p>
      */
     @JSONField(serialize = false)
-    private final DruidDataSource datasource = new DruidDataSource();
+    private DruidDataSource datasource;
 
     /**
      * 默认构造函数
@@ -137,12 +137,13 @@ public class JDBCDatasource extends AbstractConfigureElement<JDBCDatasource, JDB
             }
         } catch (Exception ignored) {
         }
-        datasource.setUrl(runtime.getConfig().getUrl());
-        datasource.setUsername(runtime.getConfig().getUsername());
-        datasource.setPassword(runtime.getConfig().getPassword());
-        datasource.setMaxActive(runtime.getConfig().getMaxActive());
-        datasource.setMaxWait(runtime.getConfig().getMaxWait());
-        context.getLocalVariablesWrapper().put(refName, datasource);
+        ((JDBCDatasource) runtime).datasource = new DruidDataSource();
+        ((JDBCDatasource) runtime).datasource.setUrl(runtime.getConfig().getUrl());
+        ((JDBCDatasource) runtime).datasource.setUsername(runtime.getConfig().getUsername());
+        ((JDBCDatasource) runtime).datasource.setPassword(runtime.getConfig().getPassword());
+        ((JDBCDatasource) runtime).datasource.setMaxActive(runtime.getConfig().getMaxActive());
+        ((JDBCDatasource) runtime).datasource.setMaxWait(runtime.getConfig().getMaxWait());
+        context.getLocalVariablesWrapper().put(runtime.getRefName(), datasource);
     }
 
     /**
@@ -161,7 +162,8 @@ public class JDBCDatasource extends AbstractConfigureElement<JDBCDatasource, JDB
      */
     @Override
     public void close() {
-        datasource.close();
+        ((JDBCDatasource) runtime).datasource.close();
+        ((JDBCDatasource) runtime).datasource = null;
     }
 
     /**
