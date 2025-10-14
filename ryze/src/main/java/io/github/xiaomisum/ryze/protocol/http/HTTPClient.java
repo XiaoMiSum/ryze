@@ -157,7 +157,7 @@ public class HTTPClient extends Request implements HTTPConstantsInterface {
             super.body(RequestEntity.json(stringBody));
         } else if (PrimitiveTypeChecker.isPrimitiveOrWrapper(body)) {
             super.body(RequestEntity.text(body.toString()));
-        } else {
+        } else if (Objects.nonNull(body)) {
             super.body(RequestEntity.json(JSON.toJSONString(body)));
         }
         return this;
