@@ -130,10 +130,10 @@ public class HTTPClient extends Request implements HTTPConstantsInterface {
      */
     public HTTPClient bytes(byte[] bytes, Map<String, String> headers) {
         if (Objects.nonNull(bytes) && bytes.length > 0) {
-            if (Objects.isNull(headers) || headers.isEmpty() || StringUtils.isBlank(headers.get("Content-Type"))) {
-                throw new IllegalArgumentException("使用bytes作为请求数据时， 请求头必须添加 Content-Type");
+            if (Objects.isNull(headers) || headers.isEmpty() || StringUtils.isBlank(headers.get(HEADER_CONTENT_TYPE))) {
+                throw new IllegalArgumentException("使用bytes作为请求数据时， 请求头必须添加 %s".formatted(HEADER_CONTENT_TYPE));
             }
-            super.body(RequestEntity.bytes(bytes, headers.get("Content-Type")));
+            super.body(RequestEntity.bytes(bytes, headers.get(HEADER_CONTENT_TYPE)));
         }
         return this;
     }
