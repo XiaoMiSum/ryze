@@ -1,9 +1,8 @@
 package io.github.xiaomisum.ryze.http.example.yaml;
 
 import io.github.xiaomisum.ryze.Ryze;
-import io.github.xiaomisum.ryze.testelement.TestElement;
-import io.github.xiaomisum.ryze.testelement.TestSuite;
 import io.github.xiaomisum.ryze.support.testng.annotation.RyzeTest;
+import io.github.xiaomisum.ryze.testelement.TestElement;
 import org.testng.annotations.Test;
 
 public class YamlTestCase {
@@ -32,7 +31,7 @@ public class YamlTestCase {
      * 🚀 推荐使用方式
      * ryze-testng 环境下 自动执行 ryze yaml模板测试用例
      */
-    @RyzeTest(value = "测试用例/http.yaml", type = TestSuite.class)
+    @RyzeTest(value = "测试用例/http.yaml")
     @Test
     public void test3(TestElement<?> element) {
         // 无需像test2一样 编写执行代码 Ryze.start("取样器/http_sampler.yaml");

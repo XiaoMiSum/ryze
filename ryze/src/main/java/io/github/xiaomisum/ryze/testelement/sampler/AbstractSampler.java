@@ -166,7 +166,7 @@ public abstract class AbstractSampler<SELF extends AbstractSampler<SELF, CONFIG,
                 context.evaluate(config);
             }
             // 执行前置处理
-            if (chain.applyPreHandle(context, runtime)) {
+            if (runtime.chain.applyPreHandle(context, runtime)) {
                 // 业务处理
                 handleRequest(context, result);
                 result.sampleStart();
@@ -174,7 +174,7 @@ public abstract class AbstractSampler<SELF extends AbstractSampler<SELF, CONFIG,
                 result.sampleEnd();
                 handleResponse(context, result);
                 // 执行后置处理
-                chain.applyPostHandle(context, runtime);
+                runtime.chain.applyPostHandle(context, runtime);
                 Optional.ofNullable(runtime.assertions).orElse(Collections.emptyList()).forEach(assertion -> assertion.assertThat(context));
                 Optional.ofNullable(runtime.extractors).orElse(Collections.emptyList()).forEach(extractor -> extractor.process(context));
             }
@@ -183,7 +183,7 @@ public abstract class AbstractSampler<SELF extends AbstractSampler<SELF, CONFIG,
             result.setThrowable(throwable);
         } finally {
             // 最终处理
-            chain.triggerAfterCompletion(context);
+            runtime.chain.triggerAfterCompletion(context);
         }
     }
 

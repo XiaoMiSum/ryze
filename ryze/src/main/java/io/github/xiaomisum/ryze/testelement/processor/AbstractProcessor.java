@@ -158,7 +158,7 @@ public abstract class AbstractProcessor<SELF extends AbstractProcessor<SELF, CON
         var result = (R) localContext.getTestResult();
         try {
             // 执行前置处理
-            if (chain.applyPreHandle(localContext, runtime)) {
+            if (runtime.chain.applyPreHandle(localContext, runtime)) {
                 // 业务处理
                 handleRequest(localContext, result);
                 result.sampleStart();
@@ -166,7 +166,7 @@ public abstract class AbstractProcessor<SELF extends AbstractProcessor<SELF, CON
                 result.sampleEnd();
                 handleResponse(localContext, result);
                 // 执行后置处理
-                chain.applyPostHandle(localContext, runtime);
+                runtime.chain.applyPostHandle(localContext, runtime);
                 Optional.ofNullable(extractors).orElse(Collections.emptyList()).forEach(extractor -> extractor.process(localContext));
             }
         } catch (Throwable throwable) {
@@ -175,7 +175,7 @@ public abstract class AbstractProcessor<SELF extends AbstractProcessor<SELF, CON
             context.getTestResult().setStatus(broken);
         } finally {
             // 最终处理
-            chain.triggerAfterCompletion(localContext);
+            runtime.chain.triggerAfterCompletion(localContext);
         }
     }
 

@@ -46,12 +46,6 @@ import io.github.xiaomisum.ryze.extractor.builtin.RegexExtractor;
 import io.github.xiaomisum.ryze.extractor.builtin.ResultExtractor;
 import io.github.xiaomisum.ryze.interceptor.HandlerExecutionChain;
 import io.github.xiaomisum.ryze.interceptor.RyzeInterceptor;
-import io.github.xiaomisum.ryze.testelement.configure.AbstractConfigureElement;
-import io.github.xiaomisum.ryze.testelement.configure.ConfigureElement;
-import io.github.xiaomisum.ryze.testelement.processor.AbstractProcessor;
-import io.github.xiaomisum.ryze.testelement.processor.Postprocessor;
-import io.github.xiaomisum.ryze.testelement.processor.Preprocessor;
-import io.github.xiaomisum.ryze.testelement.processor.builtin.SyncTimer;
 import io.github.xiaomisum.ryze.protocol.debug.config.DebugDefaults;
 import io.github.xiaomisum.ryze.protocol.debug.processer.DebugPostprocessor;
 import io.github.xiaomisum.ryze.protocol.debug.processer.DebugPreprocessor;
@@ -74,6 +68,12 @@ import io.github.xiaomisum.ryze.support.Collections;
 import io.github.xiaomisum.ryze.support.Customizer;
 import io.github.xiaomisum.ryze.support.KryoUtil;
 import io.github.xiaomisum.ryze.support.groovy.Groovy;
+import io.github.xiaomisum.ryze.testelement.configure.AbstractConfigureElement;
+import io.github.xiaomisum.ryze.testelement.configure.ConfigureElement;
+import io.github.xiaomisum.ryze.testelement.processor.AbstractProcessor;
+import io.github.xiaomisum.ryze.testelement.processor.Postprocessor;
+import io.github.xiaomisum.ryze.testelement.processor.Preprocessor;
+import io.github.xiaomisum.ryze.testelement.processor.builtin.SyncTimer;
 
 import java.util.*;
 
@@ -208,14 +208,14 @@ public abstract class AbstractTestElement<SELF extends AbstractTestElement<SELF,
      * @param context 上下文包装器
      */
     protected void handleFilterInterceptors(ContextWrapper context) {
-        interceptors = Collections.addAllIfNonNull(interceptors, context.getConfigGroup().get(INTERCEPTORS));
-        if (Objects.isNull(interceptors) || interceptors.isEmpty()) {
+        runtime.interceptors = Collections.addAllIfNonNull(runtime.interceptors, context.getConfigGroup().get(INTERCEPTORS));
+        if (Objects.isNull(runtime.interceptors) || runtime.interceptors.isEmpty()) {
             return;
         }
         //
-        var runtimeInterceptors = interceptors.stream().filter(interceptor -> interceptor.supports(context)).distinct()
+        var runtimeInterceptors = runtime.interceptors.stream().filter(interceptor -> interceptor.supports(context)).distinct()
                 .sorted(Comparator.comparingInt(RyzeInterceptor::getOrder)).toList();
-        chain = new HandlerExecutionChain(runtimeInterceptors);
+        runtime.chain = new HandlerExecutionChain(runtimeInterceptors);
     }
 
     /**

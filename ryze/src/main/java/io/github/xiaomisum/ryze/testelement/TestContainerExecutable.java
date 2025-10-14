@@ -107,7 +107,7 @@ public abstract class TestContainerExecutable<SELF extends TestContainerExecutab
     protected void executeChildren(ContextWrapper context) {
         try {
             // 执行前置处理
-            if (!chain.applyPreHandle(context, runtime)) {
+            if (!runtime.chain.applyPreHandle(context, runtime)) {
                 return;
             }
             // 业务处理
@@ -130,12 +130,12 @@ public abstract class TestContainerExecutable<SELF extends TestContainerExecutab
             if (hasFailedChildren) {
                 context.getTestResult().setStatus(TestStatus.failed);
             }
-            chain.applyPostHandle(context, runtime);
+            runtime.chain.applyPostHandle(context, runtime);
         } catch (Throwable throwable) {
             context.getTestResult().setThrowable(throwable);
         } finally {
             // 最终处理
-            chain.triggerAfterCompletion(context);
+            runtime.chain.triggerAfterCompletion(context);
         }
 
     }
