@@ -32,10 +32,13 @@ import io.github.xiaomisum.ryze.context.ContextWrapper;
 import io.github.xiaomisum.ryze.testelement.AbstractTestElement;
 import io.github.xiaomisum.ryze.testelement.sampler.SampleResult;
 import io.qameta.allure.Allure;
+import io.qameta.allure.model.StatusDetails;
 import io.qameta.allure.model.StepResult;
+import org.apache.commons.lang3.StringUtils;
 
 import java.sql.Timestamp;
 import java.util.Objects;
+import java.util.StringJoiner;
 
 import static io.github.xiaomisum.ryze.TestStatus.broken;
 import static io.github.xiaomisum.ryze.TestStatus.failed;
@@ -76,9 +79,22 @@ public interface AllureReportListener<T extends AbstractTestElement<?, ?, ?>> ex
         var uuid = context.getUuid();
         var step = new StepResult().setName(name)
                 .setStatus(getStatus(context.getTestResult().getThrowable()).orElse(context.getTestResult().getStatus().getAllureStatus()))
-                .setStatusDetails(getStatusDetails(context.getTestResult().getThrowable()).orElse(null));
+                .setStatusDetails(getStatusDetails(context.getTestResult().getThrowable()).orElse(new StatusDetails()));
+        if (context.getTestResult() instanceof SampleResult result) {
+            var details = step.getStatusDetails() != null ? step.getStatusDetails() : new StatusDetails();
+            var joiner = new StringJoiner("\n\n");
+            if (StringUtils.isNotBlank(details.getMessage())) {
+                joiner.add(step.getStatusDetails().getMessage());
+            }
+            if (result.getRequest() != null) {
+                joiner.add(result.getRequest().format());
+            }
+            if (result.getResponse() != null) {
+                joiner.add(result.getResponse().format());
+            }
+            step.getStatusDetails().setMessage(joiner.toString());
+        }
         Allure.getLifecycle().startStep(uuid, step);
-
     }
 
     /**
