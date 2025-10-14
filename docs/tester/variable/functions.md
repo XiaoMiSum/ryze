@@ -290,6 +290,59 @@ variables:
   decoded_param: ${url_decode('%E6%B5%8B%E8%AF%95%E5%8F%82%E6%95%B0')}
 ```
 
+#### base64_encode
+
+对字符串进行 Base64 编码。
+
+**参数**：
+
+| 参数        | 类型     | 说明          |
+|-----------|--------|-------------|
+| `content` | String | 待编码的字符串（必填） |
+
+**使用示例**：
+
+```yaml
+variables:
+  encoded_param: ${base64_encode(Hello World)}
+```
+
+#### base64_decode
+
+对字符串进行 Base64 解码。
+
+**参数**：
+
+| 参数        | 类型     | 说明          |
+|-----------|--------|-------------|
+| `content` | String | 待解码的字符串（必填） |
+
+**使用示例**：
+
+```yaml
+variables:
+  decoded_param: ${base64_decode(SGVsbG8gV29ybGQ=)}
+```
+
+#### property
+
+获取系统属性。
+
+**参数**：
+
+| 参数              | 类型     | 说明       |
+|-----------------|--------|----------|
+| `property_name` | String | 属性名称（必填） |
+| `default_value` | String | 默认值（选填）  |
+
+**使用示例**：
+
+```yaml
+variables:
+  java_version: ${property('java.version')}
+  ryze_version: ${property('ryze.version', '6.5.0')}
+```
+
 ### 🎭 模拟数据函数
 
 #### faker
