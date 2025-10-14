@@ -35,6 +35,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static io.github.xiaomisum.ryze.protocol.dubbo.DubboConstantsInterface.DEF_REF_NAME_KEY;
+
 public class DubboConfigureItemTest {
 
     @Test
@@ -261,7 +263,7 @@ public class DubboConfigureItemTest {
         DubboConfigureItem item = new DubboConfigureItem();
 
         // Test default values
-        Assert.assertNull(item.getRef());
+        Assert.assertEquals(item.getRef(), DEF_REF_NAME_KEY);
         Assert.assertNull(item.getInterfaceName());
         Assert.assertNull(item.getMethod());
         Assert.assertNull(item.getParameterTypes());

@@ -58,7 +58,7 @@ public class ValidateResultTest {
         result.appendDescription(" and more information");
 
         // 验证原因包含所有描述信息
-        Assert.assertEquals(result.getReason(), "This is a test description and more information");
+        Assert.assertEquals(result.getReason(), "This is a test description\n and more information");
 
         // 添加空描述信息不应该改变结果
         result.appendDescription(null);
@@ -66,7 +66,7 @@ public class ValidateResultTest {
         result.appendDescription("   ");
 
         // 验证结果不变
-        Assert.assertEquals(result.getReason(), "This is a test description and more information");
+        Assert.assertEquals(result.getReason(), "This is a test description\n and more information");
     }
 
     @Test
@@ -122,7 +122,7 @@ public class ValidateResultTest {
         result.append(" and more details");
 
         // 验证原因包含所有失败原因
-        Assert.assertEquals(result.getReason(), "This is a failure reason and more details");
+        Assert.assertEquals(result.getReason(), "This is a failure reason\n and more details");
 
         // 添加空原因不应该改变结果
         result.append((String) null);
@@ -130,7 +130,7 @@ public class ValidateResultTest {
         result.append("   ");
 
         // 验证结果不变
-        Assert.assertEquals(result.getReason(), "This is a failure reason and more details");
+        Assert.assertEquals(result.getReason(), "This is a failure reason\n and more details");
     }
 
     @Test
@@ -165,7 +165,7 @@ public class ValidateResultTest {
                 .append("Error code: %s", 500);
         // 验证最终结果
         Assert.assertFalse(result.isValid());
-        Assert.assertEquals(result.getReason(), "Starting validationValidation failedError code: 500");
+        Assert.assertEquals(result.getReason(), "Starting validation\nValidation failed\nError code: 500");
     }
 
     @Test

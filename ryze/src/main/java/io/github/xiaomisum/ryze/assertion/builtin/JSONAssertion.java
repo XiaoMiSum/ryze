@@ -90,7 +90,7 @@ public class JSONAssertion extends AbstractAssertion {
     public ValidateResult validate() {
         var result = super.validate();
         if (StringUtils.isBlank(field)) {
-            result.append("提取表达式 %s 字段值缺失或为空，当前值：%s", FIELD);
+            result.append("提取表达式 %s 字段值缺失或为空", FIELD);
         }
         return result;
     }
