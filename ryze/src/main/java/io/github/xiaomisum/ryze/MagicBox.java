@@ -31,16 +31,16 @@ package io.github.xiaomisum.ryze;
 import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
 import io.github.xiaomisum.ryze.builder.DefaultChildrenBuilder;
-import io.github.xiaomisum.ryze.testelement.AbstractTestElement;
-import io.github.xiaomisum.ryze.testelement.TestElement;
-import io.github.xiaomisum.ryze.testelement.TestSuite;
-import io.github.xiaomisum.ryze.testelement.TestSuiteResult;
 import io.github.xiaomisum.ryze.protocol.debug.sampler.DebugSampler;
 import io.github.xiaomisum.ryze.protocol.http.sampler.HTTPSampler;
 import io.github.xiaomisum.ryze.protocol.jdbc.sampler.JDBCSampler;
 import io.github.xiaomisum.ryze.protocol.redis.sampler.RedisSampler;
 import io.github.xiaomisum.ryze.support.Customizer;
 import io.github.xiaomisum.ryze.support.groovy.Groovy;
+import io.github.xiaomisum.ryze.testelement.AbstractTestElement;
+import io.github.xiaomisum.ryze.testelement.TestElement;
+import io.github.xiaomisum.ryze.testelement.TestSuite;
+import io.github.xiaomisum.ryze.testelement.TestSuiteResult;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -525,8 +525,8 @@ public class MagicBox {
      * @see TestElement
      */
     public static <R extends Result> R runTest(String title, TestElement<R> testElement) {
-        if (testElement instanceof AbstractTestElement<?, ?, R> && StringUtils.isNotBlank(title)) {
-            ((AbstractTestElement<?, ?, R>) testElement).setTitle(title);
+        if (testElement instanceof AbstractTestElement<?, ?, R> ele && StringUtils.isNotBlank(title)) {
+            ele.setTitle(title);
         }
         return SessionRunner.getSession().runTest(testElement);
     }
