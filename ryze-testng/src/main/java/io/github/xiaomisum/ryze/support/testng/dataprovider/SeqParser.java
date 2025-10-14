@@ -179,10 +179,10 @@ public class SeqParser {
      * 会验证边界值的有效性并处理边界情况。
      * </p>
      *
-     * @param left    左边界（包含）
-     * @param right   右边界（包含）
-     * @param size    数据总大小
-     * @param rawSeq  原始序列字符串，用于错误信息
+     * @param left   左边界（包含）
+     * @param right  右边界（包含）
+     * @param size   数据总大小
+     * @param rawSeq 原始序列字符串，用于错误信息
      * @return 序列列表
      * @throws RuntimeException 当范围非法时抛出
      */
@@ -193,7 +193,7 @@ public class SeqParser {
         right = Math.min(right, size);
         // 边界值验证
         if (left > right) {
-            throw new RuntimeException(String.format("序列范围非法，左边界应不大于右边界，数据集大小：%d，当前区间：%s", size, rawSeq));
+            throw new RuntimeException(String.format("序列范围非法，左边界应不大于右边界，数据集大小：%s，当前区间：%s", size, rawSeq));
         }
         var seqList = new ArrayList<Integer>();
         // 计算序列列表
