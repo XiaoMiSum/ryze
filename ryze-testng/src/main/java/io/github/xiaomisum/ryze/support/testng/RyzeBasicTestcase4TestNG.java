@@ -40,8 +40,41 @@ import java.util.Objects;
 import static io.github.xiaomisum.ryze.support.testng.TestNGConstantsInterface.RYZE_TEST_CLASS;
 import static io.github.xiaomisum.ryze.support.testng.TestNGConstantsInterface.RYZE_TEST_METHOD;
 
+/**
+ * Ryze测试基础类，用于TestNG框架集成
+ * <p>
+ * 该类提供了TestNG测试的基础支持，包括:
+ * <ul>
+ *   <li>在测试方法执行前自动创建Ryze会话</li>
+ *   <li>根据注解标记识别Ryze测试方法</li>
+ *   <li>在测试方法执行后清理会话资源</li>
+ * </ul>
+ * </p>
+ *
+ * @author mi_xiao@qq.com
+ * @see AnnotationUtils#isRyzeTest(java.lang.reflect.Method)
+ * @see SessionRunner#newTestFrameworkSessionIfNone(Configure)
+ * @see SessionRunner#removeSession()
+ */
 public abstract class RyzeBasicTestcase4TestNG {
 
+    /**
+     * 测试方法执行前的准备工作
+     * <p>
+     * 主要功能包括:
+     * <ol>
+     *   <li>检测当前方法是否为测试方法</li>
+     *   <li>检查方法是否有RyzeTest注解，并设置相应标识</li>
+     *   <li>为测试类设置标识以避免重复创建会话</li>
+     *   <li>创建测试框架专用的Ryze会话</li>
+     * </ol>
+     * </p>
+     *
+     * @param result TestNG测试结果对象，用于获取当前测试方法信息
+     * @see TestNGConstantsInterface#RYZE_TEST_CLASS
+     * @see TestNGConstantsInterface#RYZE_TEST_METHOD
+     * @see SessionRunner#newTestFrameworkSessionIfNone(Configure)
+     */
     @BeforeMethod(alwaysRun = true)
     public void beforeMethod(ITestResult result) {
         if (!result.getMethod().isTest()) {
@@ -58,6 +91,22 @@ public abstract class RyzeBasicTestcase4TestNG {
     }
 
 
+    /**
+     * 测试方法执行后的清理工作
+     * <p>
+     * 主要功能包括:
+     * <ol>
+     *   <li>检测当前方法是否为测试方法</li>
+     *   <li>验证是否为Ryze测试类和测试方法</li>
+     *   <li>移除测试会话以释放资源</li>
+     * </ol>
+     * </p>
+     *
+     * @param result TestNG测试结果对象，用于获取当前测试方法信息
+     * @see TestNGConstantsInterface#RYZE_TEST_CLASS
+     * @see TestNGConstantsInterface#RYZE_TEST_METHOD
+     * @see SessionRunner#removeSession()
+     */
     @AfterMethod(alwaysRun = true)
     public void afterMethod(ITestResult result) {
         if (!result.getMethod().isTest()) {
