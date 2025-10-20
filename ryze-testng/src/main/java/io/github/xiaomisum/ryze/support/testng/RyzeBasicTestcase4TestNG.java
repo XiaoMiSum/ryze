@@ -47,13 +47,12 @@ public abstract class RyzeBasicTestcase4TestNG {
         if (!result.getMethod().isTest()) {
             return;
         }
-        if (!AnnotationUtils.isRyzeTest(result.getMethod().getConstructorOrMethod().getMethod())) {
-            return;
+        if (AnnotationUtils.isRyzeTest(result.getMethod().getConstructorOrMethod().getMethod())) {
+            // 添加 ryze test method 标识，以便监听器自动执行测试时的判断
+            result.setAttribute(RYZE_TEST_METHOD, true);
         }
         // 添加 ryze test clazz 标识，以便监听器执行时不再创建 session
         result.setAttribute(RYZE_TEST_CLASS, true);
-        // 添加 ryze test method 标识，以便监听器自动执行测试时的判断
-        result.setAttribute(RYZE_TEST_METHOD, true);
         // 创建一个 在测试框架中运行时使用的 session
         SessionRunner.newTestFrameworkSessionIfNone(Configure.defaultConfigure());
     }

@@ -70,8 +70,8 @@ public class RyzeInvokedMethodListener implements IInvokedMethodListener, TestNG
         if (!method.isTestMethod()) {
             return;
         }
-        if (Objects.equals(result.getAttribute(RYZE_TEST_CLASS), true)) {
-            // 如果是 RyzeBasicTestcase4TestNG 继承的类，则不在监听器中创建 session
+        if (Objects.equals(result.getAttribute(RYZE_TEST_METHOD), true)) {
+            // 已存在 ryze test method 标识，则不在监听器中创建 session
             return;
         }
         if (!AnnotationUtils.isRyzeTest(result.getMethod().getConstructorOrMethod().getMethod())) {

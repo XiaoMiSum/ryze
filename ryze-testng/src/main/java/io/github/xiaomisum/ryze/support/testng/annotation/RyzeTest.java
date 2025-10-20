@@ -84,7 +84,7 @@ public @interface RyzeTest {
     boolean parallel() default false;
 
     /**
-     * 测试用例的分片，默认为空，表示不分片
+     * 测试用例的参数类型，默认为 {@link TestElement} 类型
      *
      * @return 测试用例类型
      * @see Datasource
