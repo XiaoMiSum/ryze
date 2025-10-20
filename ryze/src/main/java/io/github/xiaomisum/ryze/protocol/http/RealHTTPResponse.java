@@ -26,6 +26,7 @@
 package io.github.xiaomisum.ryze.protocol.http;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.text.StringEscapeUtils;
 import org.apache.hc.core5.http.Header;
 import xyz.migoo.simplehttp.Response;
 
@@ -134,7 +135,7 @@ public class RealHTTPResponse extends HTTPRealResult {
         buf.append(version).append(" ").append(statusCode).append(" ").append(message);
         header(buf);
         if (StringUtils.isNotBlank(bytesAsString())) {
-            buf.append("\n").append("Response body: ").append(bytesAsString());
+            buf.append("\n").append("Response body: ").append(StringEscapeUtils.unescapeHtml4(bytesAsString()));
         }
         return buf.toString();
     }
