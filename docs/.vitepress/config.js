@@ -16,7 +16,7 @@ export default withMermaid({
       { text: '测试人员', link: '/tester/test-suite/test-suite-project' },
       { text: '开发者', link: '/developer/style' },
       { text: 'FAQ', link: '/faq/same' },
-      { text: '6.0.5', link: 'https://github.com/XiaoMiSum/ryze' }
+      { text: '6.0.6', link: 'https://github.com/XiaoMiSum/ryze' }
     ],
     
     sidebar: {
