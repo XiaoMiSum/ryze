@@ -92,7 +92,6 @@ public interface AllureReportListener<T extends AbstractTestElement<?, ?, ?>> ex
             if (result.getResponse() != null) {
                 joiner.add(result.getResponse().format());
             }
-            joiner.add(result.getRequest().format() + "\n\n" + result.getResponse().format());
             step.getStatusDetails().setMessage(joiner.toString());
         }
         Allure.getLifecycle().startStep(uuid, step);
