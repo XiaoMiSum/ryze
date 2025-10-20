@@ -176,7 +176,7 @@ title: 数据库查询取样器
 testclass: jdbc
 config:
   sql: "SELECT * FROM users WHERE id = ?"
-  parameters:
+  args:
     - 12345
 ```
 
@@ -358,7 +358,7 @@ children:
     testclass: jdbc
     config:
       sql: "INSERT INTO users (name, email, created_at) VALUES (?, ?, ?)"
-      parameters:
+      args:
         - ${user_name}
         - ${user_email}
         - ${timestamp()}
@@ -372,7 +372,7 @@ children:
     testclass: jdbc
     config:
       sql: "SELECT id, name, email FROM users WHERE email = ?"
-      parameters:
+      args:
         - ${user_email}
     extractors:
       - { testclass: json, field: '$[0].id', ref_name: user_id }
@@ -384,7 +384,7 @@ children:
     testclass: jdbc
     config:
       sql: "UPDATE users SET name = ? WHERE id = ?"
-      parameters:
+      args:
         - "Updated ${user_name}"
         - ${user_id}
     validators:
@@ -395,7 +395,7 @@ children:
     testclass: jdbc
     config:
       sql: "DELETE FROM users WHERE id = ?"
-      parameters:
+      args:
         - ${user_id}
     validators:
       - { testclass: result, expected: 1, rule: '==' }  # 影响行数为1
