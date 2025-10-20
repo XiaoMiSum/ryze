@@ -29,15 +29,15 @@ import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.fastjson2.annotation.JSONField;
 import io.github.xiaomisum.ryze.builder.*;
 import io.github.xiaomisum.ryze.context.ContextWrapper;
+import io.github.xiaomisum.ryze.protocol.jdbc.JDBC;
+import io.github.xiaomisum.ryze.protocol.jdbc.JDBCConstantsInterface;
+import io.github.xiaomisum.ryze.protocol.jdbc.RealJDBCRequest;
+import io.github.xiaomisum.ryze.protocol.jdbc.config.JDBCConfigureItem;
 import io.github.xiaomisum.ryze.testelement.KW;
 import io.github.xiaomisum.ryze.testelement.sampler.AbstractSampler;
 import io.github.xiaomisum.ryze.testelement.sampler.DefaultSampleResult;
 import io.github.xiaomisum.ryze.testelement.sampler.SampleResult;
 import io.github.xiaomisum.ryze.testelement.sampler.Sampler;
-import io.github.xiaomisum.ryze.protocol.jdbc.JDBC;
-import io.github.xiaomisum.ryze.protocol.jdbc.JDBCConstantsInterface;
-import io.github.xiaomisum.ryze.protocol.jdbc.RealJDBCRequest;
-import io.github.xiaomisum.ryze.protocol.jdbc.config.JDBCConfigureItem;
 
 /**
  * JDBC取样器
@@ -113,11 +113,11 @@ public class JDBCSampler extends AbstractSampler<JDBCSampler, JDBCConfigureItem,
      * <p>调用JDBC.execute方法执行SQL语句</p>
      *
      * @param context 测试上下文包装器
-     * @param result 采样结果对象
+     * @param result  采样结果对象
      */
     @Override
     protected void sample(ContextWrapper context, DefaultSampleResult result) {
-        bytes = JDBC.execute(datasource, runtime.getConfig().getSql(), result);
+        bytes = JDBC.execute(datasource, runtime.getConfig().getSql(), runtime.getConfig().getArgs(), result);
     }
 
     /**
@@ -125,13 +125,13 @@ public class JDBCSampler extends AbstractSampler<JDBCSampler, JDBCConfigureItem,
      * <p>设置请求数据源和SQL语句信息</p>
      *
      * @param context 测试上下文包装器
-     * @param result 采样结果对象
+     * @param result  采样结果对象
      */
     @Override
     protected void handleRequest(ContextWrapper context, DefaultSampleResult result) {
         super.handleRequest(context, result);
         datasource = (DruidDataSource) context.getAllVariablesWrapper().get(runtime.config.getDatasource());
-        result.setRequest(new RealJDBCRequest(datasource.getUrl(), datasource.getUsername(), datasource.getPassword(), runtime.config.getSql()));
+        result.setRequest(new RealJDBCRequest(datasource.getUrl(), datasource.getUsername(), datasource.getPassword(), runtime.config.getSql(), runtime.getConfig().getArgs()));
     }
 
     /**
@@ -139,7 +139,7 @@ public class JDBCSampler extends AbstractSampler<JDBCSampler, JDBCConfigureItem,
      * <p>设置响应结果</p>
      *
      * @param context 测试上下文包装器
-     * @param result 采样结果对象
+     * @param result  采样结果对象
      */
     @Override
     protected void handleResponse(ContextWrapper context, DefaultSampleResult result) {

@@ -33,8 +33,11 @@ import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import io.github.xiaomisum.ryze.testelement.sampler.DefaultSampleResult;
 
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * JDBC协议执行器
@@ -42,7 +45,7 @@ import java.sql.Statement;
  * 该类负责执行JDBC SQL语句，支持查询和更新操作。使用Druid连接池管理数据库连接，
  * 提供SQL执行时间统计和结果格式化功能。
  * </p>
- * 
+ *
  * <p>主要功能：
  * <ul>
  *   <li>通过Druid连接池执行SQL语句</li>
@@ -68,17 +71,24 @@ public class JDBC {
      * </p>
      *
      * @param datasource 数据源，使用Druid连接池
-     * @param sql 要执行的SQL语句
-     * @param result 采样结果对象，用于记录执行时间
+     * @param sql        要执行的SQL语句
+     * @param result     采样结果对象，用于记录执行时间
      * @return SQL执行结果的字节数组形式
      * @throws RuntimeException 当SQL执行过程中发生异常时抛出
      */
-    public static byte[] execute(DruidDataSource datasource, String sql, DefaultSampleResult result) {
+    public static byte[] execute(DruidDataSource datasource, String sql, List<Object> args, DefaultSampleResult result) {
         result.sampleStart();
-        try (var conn = datasource.getConnection(); var statement = conn.createStatement()) {
-            var hasResultSet = statement.execute(sql);
-            return (hasResultSet ? toJSONBytes(statement) : "Affected rows: " + statement.getUpdateCount()).getBytes();
-        } catch (Exception e) {
+        try (var conn = datasource.getConnection(); var statement = Objects.isNull(args) || args.isEmpty() ?
+                conn.createStatement() : conn.prepareStatement(sql)) {
+            if (statement instanceof PreparedStatement pre) {
+                for (int i = 0; i < args.size(); i++) {
+                    pre.setObject(i + 1, args.get(i));
+                }
+            }
+            var hasResultSet = statement instanceof PreparedStatement pre ? pre.execute() : statement.execute(sql);
+            return (hasResultSet ? toJSONString(statement) : "Affected rows: " + statement.getUpdateCount()).getBytes();
+        } catch (SQLException e) {
+            e.printStackTrace();
             throw new RuntimeException(e);
         } finally {
             result.sampleEnd();
@@ -90,16 +100,16 @@ public class JDBC {
      * <p>
      * 该方法将ResultSet中的数据转换为JSON格式：
      * <ul>
- *     <li>当结果只有一行时，返回单个JSON对象</li>
- *     <li>当结果有多行时，返回JSON数组</li>
- *   </ul>
+     *     <li>当结果只有一行时，返回单个JSON对象</li>
+     *     <li>当结果有多行时，返回JSON数组</li>
+     *   </ul>
      * </p>
      *
      * @param statement 执行完查询的Statement对象
      * @return JSON格式的结果字符串
      * @throws SQLException 当处理结果集时发生SQL异常
      */
-    private static String toJSONBytes(Statement statement) throws SQLException {
+    private static String toJSONString(Statement statement) throws SQLException {
         try (var result = statement.getResultSet()) {
             var results = new JSONArray();
             var meta = result.getMetaData();
