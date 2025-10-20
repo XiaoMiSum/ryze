@@ -2,4 +2,4 @@ testclass: redis # redis 后置处理器类型
 config: # 处理器配置
   datasource: redis_source
   command: keys
-  args: '*'
+  args: [ '*' ]

@@ -31,6 +31,7 @@ import io.github.xiaomisum.ryze.context.ContextWrapper;
 import io.github.xiaomisum.ryze.testelement.KW;
 import io.github.xiaomisum.ryze.testelement.processor.AbstractProcessor;
 import io.github.xiaomisum.ryze.testelement.processor.Postprocessor;
+import io.github.xiaomisum.ryze.testelement.processor.Preprocessor;
 import io.github.xiaomisum.ryze.testelement.sampler.DefaultSampleResult;
 import org.apache.commons.lang3.StringUtils;
 
@@ -39,7 +40,7 @@ import org.apache.commons.lang3.StringUtils;
  * @since 2021/4/7 19:49
  */
 @KW({"SyncTimer", "Timer", "sync_timer", "def_timer", "defTimer"})
-public class SyncTimer extends AbstractProcessor<SyncTimer, SyncTimer.TimerConfigureItem, DefaultSampleResult> implements Postprocessor {
+public class SyncTimer extends AbstractProcessor<SyncTimer, SyncTimer.TimerConfigureItem, DefaultSampleResult> implements Preprocessor, Postprocessor {
 
     public SyncTimer(Builder builder) {
         super(builder);
@@ -61,13 +62,12 @@ public class SyncTimer extends AbstractProcessor<SyncTimer, SyncTimer.TimerConfi
 
     @Override
     protected void sample(ContextWrapper context, DefaultSampleResult result) {
-        if (config.timeout > 0) {
-            synchronized (this) {
-                try {
-                    this.wait(config.timeout * 1000L);
-                } catch (InterruptedException e) {
-                    this.notify();
-                }
+        config.timeout = config.timeout > 0 ? config.timeout : 1;
+        synchronized (this) {
+            try {
+                this.wait(config.timeout * 1000L);
+            } catch (InterruptedException e) {
+                this.notify();
             }
         }
     }
@@ -90,7 +90,7 @@ public class SyncTimer extends AbstractProcessor<SyncTimer, SyncTimer.TimerConfi
         public void setTimeout(int timeout) {
             this.timeout = timeout;
         }
-        
+
         @Override
         public TimerConfigureItem merge(TimerConfigureItem other) {
             // 无需合并，返回当前对象的拷贝

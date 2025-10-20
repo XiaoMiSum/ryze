@@ -138,8 +138,7 @@ public class RabbitPreprocessor extends AbstractProcessor<RabbitPreprocessor, Ra
         super.handleRequest(context, result);
         // 1. 合并配置项
         var localConfig = Objects.isNull(runtime.getConfig()) ? new RabbitConfigureItem() : runtime.getConfig();
-        var ref = StringUtils.isBlank(localConfig.getRef()) ? DEF_REF_NAME_KEY : localConfig.getRef();
-        var otherConfig = (RabbitConfigureItem) context.getLocalVariablesWrapper().get(ref);
+        var otherConfig = (RabbitConfigureItem) context.getLocalVariablesWrapper().get(localConfig.getRef());
         runtime.setConfig(localConfig.merge(otherConfig));
         // 2. 创建Rabbit 连接池对象
         factory = Rabbit.handleRequest(runtime.getConfig());

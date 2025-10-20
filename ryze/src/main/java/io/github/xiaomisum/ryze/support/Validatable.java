@@ -37,7 +37,7 @@ public interface Validatable {
      *
      * <p><br>约定：
      * <li>如果 valid 为 false，必须填入 reason（不能为 null 或空）。</li>
-     * <li>reason 的填写格式："\n" + 数据非法原因。</li>
+     * <li>reason 的填写格式：数据非法原因。</li>
      *
      * @return 验证结果
      */

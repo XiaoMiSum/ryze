@@ -30,10 +30,8 @@ import io.github.xiaomisum.ryze.extractor.AbstractExtractor;
 import io.github.xiaomisum.ryze.extractor.builtin.JSONExtractor;
 import io.github.xiaomisum.ryze.extractor.builtin.RegexExtractor;
 import io.github.xiaomisum.ryze.protocol.http.RealHTTPResponse;
-import io.github.xiaomisum.ryze.support.ValidateResult;
 import io.github.xiaomisum.ryze.testelement.KW;
 import io.github.xiaomisum.ryze.testelement.sampler.SampleResult;
-import org.apache.commons.lang3.StringUtils;
 
 /**
  * HTTP响应头提取器，专门用于从HTTP响应头中提取数据
@@ -84,18 +82,6 @@ public class HTTPHeaderExtractor extends AbstractExtractor {
      */
     public static Builder builder() {
         return new Builder();
-    }
-
-    @Override
-    public ValidateResult validate() {
-        ValidateResult result = new ValidateResult();
-        if (StringUtils.isBlank(refName)) {
-            result.append("\n提取引用名称 ref_name 字段值缺失或为空");
-        }
-        if (StringUtils.isBlank(field)) {
-            result.append("\n提取请求头 field 字段值缺失或为空");
-        }
-        return result;
     }
 
     /**

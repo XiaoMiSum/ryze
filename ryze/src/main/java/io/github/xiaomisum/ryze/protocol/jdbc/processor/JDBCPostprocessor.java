@@ -29,15 +29,15 @@ import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.fastjson2.annotation.JSONField;
 import io.github.xiaomisum.ryze.builder.DefaultExtractorsBuilder;
 import io.github.xiaomisum.ryze.context.ContextWrapper;
+import io.github.xiaomisum.ryze.protocol.jdbc.JDBC;
+import io.github.xiaomisum.ryze.protocol.jdbc.JDBCConstantsInterface;
+import io.github.xiaomisum.ryze.protocol.jdbc.RealJDBCRequest;
+import io.github.xiaomisum.ryze.protocol.jdbc.config.JDBCConfigureItem;
 import io.github.xiaomisum.ryze.testelement.KW;
 import io.github.xiaomisum.ryze.testelement.processor.AbstractProcessor;
 import io.github.xiaomisum.ryze.testelement.processor.Postprocessor;
 import io.github.xiaomisum.ryze.testelement.sampler.DefaultSampleResult;
 import io.github.xiaomisum.ryze.testelement.sampler.SampleResult;
-import io.github.xiaomisum.ryze.protocol.jdbc.JDBC;
-import io.github.xiaomisum.ryze.protocol.jdbc.JDBCConstantsInterface;
-import io.github.xiaomisum.ryze.protocol.jdbc.RealJDBCRequest;
-import io.github.xiaomisum.ryze.protocol.jdbc.config.JDBCConfigureItem;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -119,7 +119,7 @@ public class JDBCPostprocessor extends AbstractProcessor<JDBCPostprocessor, JDBC
      */
     @Override
     protected void sample(ContextWrapper context, DefaultSampleResult result) {
-        bytes = JDBC.execute(datasource, runtime.getConfig().getSql(), result);
+        bytes = JDBC.execute(datasource, runtime.getConfig().getSql(), runtime.getConfig().getArgs(), result);
     }
 
     /**
@@ -133,7 +133,7 @@ public class JDBCPostprocessor extends AbstractProcessor<JDBCPostprocessor, JDBC
     protected void handleRequest(ContextWrapper context, DefaultSampleResult result) {
         super.handleRequest(context, result);
         datasource = (DruidDataSource) context.getLocalVariablesWrapper().get(runtime.getConfig().getDatasource());
-        result.setRequest(new RealJDBCRequest(datasource.getUrl(), datasource.getUsername(), datasource.getPassword(), runtime.getConfig().getSql()));
+        result.setRequest(new RealJDBCRequest(datasource.getUrl(), datasource.getUsername(), datasource.getPassword(), runtime.getConfig().getSql(), runtime.getConfig().getArgs()));
     }
 
     /**

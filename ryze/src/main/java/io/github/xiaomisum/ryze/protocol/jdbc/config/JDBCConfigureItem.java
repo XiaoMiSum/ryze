@@ -28,9 +28,14 @@ package io.github.xiaomisum.ryze.protocol.jdbc.config;
 import com.alibaba.fastjson2.annotation.JSONField;
 import io.github.xiaomisum.ryze.config.ConfigureItem;
 import io.github.xiaomisum.ryze.context.ContextWrapper;
-import io.github.xiaomisum.ryze.testelement.AbstractTestElement;
 import io.github.xiaomisum.ryze.protocol.jdbc.JDBCConstantsInterface;
+import io.github.xiaomisum.ryze.support.Collections;
+import io.github.xiaomisum.ryze.testelement.AbstractTestElement;
 import org.apache.commons.lang3.StringUtils;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * JDBC协议配置项类
@@ -41,6 +46,7 @@ import org.apache.commons.lang3.StringUtils;
  *
  * @author xiaomi
  */
+@SuppressWarnings("unchecked")
 public class JDBCConfigureItem implements ConfigureItem<JDBCConfigureItem>, JDBCConstantsInterface {
 
     /**
@@ -100,6 +106,13 @@ public class JDBCConfigureItem implements ConfigureItem<JDBCConfigureItem>, JDBC
     protected String sql;
 
     /**
+     * 预编译SQL参数
+     * <p>要执行的SQL语句参数</p>
+     */
+    @JSONField(name = ARGS, ordinal = 8)
+    protected List<Object> args;
+
+    /**
      * 默认构造函数
      */
     public JDBCConfigureItem() {
@@ -137,8 +150,9 @@ public class JDBCConfigureItem implements ConfigureItem<JDBCConfigureItem>, JDBC
         self.username = StringUtils.isBlank(self.username) ? localOther.username : self.username;
         self.password = StringUtils.isBlank(self.password) ? localOther.password : self.password;
         self.sql = StringUtils.isBlank(self.sql) ? localOther.sql : self.sql;
-        self.maxActive = (self.maxActive = self.maxActive > 0 ? localOther.maxActive : self.maxActive) > 0 ? self.maxActive : 10;
-        self.maxWait = (self.maxWait = self.maxWait > 0 ? localOther.maxWait : self.maxWait) > 0 ? self.maxWait : 5000;
+        self.args = Objects.isNull(self.args) || self.args.isEmpty() ? localOther.args : self.args;
+        self.maxActive = (self.maxActive = self.maxActive > 0 ? self.maxActive : localOther.maxActive) > 0 ? self.maxActive : 10;
+        self.maxWait = (self.maxWait = self.maxWait > 0 ? self.maxWait : localOther.maxWait) > 0 ? self.maxWait : 5000;
         return self;
     }
 
@@ -159,6 +173,7 @@ public class JDBCConfigureItem implements ConfigureItem<JDBCConfigureItem>, JDBC
         username = (String) context.evaluate(username);
         password = (String) context.evaluate(password);
         sql = (String) context.evaluate(sql);
+        args = (List<Object>) context.evaluate(args);
         return this;
     }
 
@@ -309,6 +324,24 @@ public class JDBCConfigureItem implements ConfigureItem<JDBCConfigureItem>, JDBC
     }
 
     /**
+     * 获取SQL参数
+     *
+     * @return SQL参数
+     */
+    public List<Object> getArgs() {
+        return args;
+    }
+
+    /**
+     * 设置SQL参数
+     *
+     * @param args SQL参数
+     */
+    public void setArgs(List<Object> args) {
+        this.args = args;
+    }
+
+    /**
      * JDBC 协议配置项构建类
      * <p>
      * 提供链式调用方式创建JDBC配置项实例，支持设置所有JDBC相关配置参数。
@@ -404,6 +437,27 @@ public class JDBCConfigureItem implements ConfigureItem<JDBCConfigureItem>, JDBC
         public Builder sql(String sql) {
             configure.sql = sql;
             return self;
+        }
+
+        /**
+         * 设置SQL参数
+         *
+         * @param args SQL参数
+         * @return 构建器实例
+         */
+        public Builder args(List<Object> args) {
+            configure.args = Collections.addAllIfNonNull(configure.args, args);
+            return self;
+        }
+
+        /**
+         * 设置SQL参数
+         *
+         * @param args SQL参数
+         * @return 构建器实例
+         */
+        public Builder args(Object... args) {
+            return args(Arrays.stream(args).toList());
         }
 
         /**

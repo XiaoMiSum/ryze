@@ -39,6 +39,7 @@ import io.github.xiaomisum.ryze.TestStatus;
  *
  * @author xiaomi
  */
+@Deprecated(since = "6.0.5")
 public class ProcessResult {
 
     /**

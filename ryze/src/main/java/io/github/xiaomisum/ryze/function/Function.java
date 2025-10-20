@@ -78,7 +78,7 @@ public interface Function {
      */
     default void checkMethodArgCount(Args args, int minCnt, int maxCnt) throws RuntimeException {
         if (args.size() < minCnt || args.size() > maxCnt) {
-            throw new RuntimeException("函数 " + key() + " 参数数量错误, 期望参数数量为  " + minCnt + " ~ " + maxCnt + ", 实际为 " + args.size());
+            throw new IllegalArgumentException("函数 " + key() + " 参数数量错误, 期望参数数量为  " + minCnt + " ~ " + maxCnt + ", 实际为 " + args.size());
         }
     }
 

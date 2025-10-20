@@ -6,7 +6,7 @@
     <parent>
         <groupId>io.github.xiaomisum</groupId>
         <artifactId>ryze-parent</artifactId>
-        <version>6.0.4</version>
+        <version>6.0.6</version>
     </parent>
 
     <artifactId>ryze-mongo</artifactId>
@@ -18,10 +18,17 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
             <groupId>org.mongodb</groupId>
             <artifactId>mongodb-driver-sync</artifactId>
         </dependency>
 
+        <!-- 不传递此组件的ryze依赖，需求方自行引入ryze -->
         <dependency>
             <groupId>io.github.xiaomisum</groupId>
             <artifactId>ryze</artifactId>

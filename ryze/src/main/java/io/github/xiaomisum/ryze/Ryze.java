@@ -30,13 +30,10 @@ package io.github.xiaomisum.ryze;
 
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
-import io.github.xiaomisum.ryze.support.TestDataLoader;
+import io.github.xiaomisum.ryze.support.dataloader.TestDataLoaderChain;
 import io.github.xiaomisum.ryze.testelement.TestElement;
 
 import java.util.Map;
-
-import static io.github.xiaomisum.ryze.testelement.TestElementConstantsInterface.TESTSUITE;
-import static io.github.xiaomisum.ryze.testelement.TestElementConstantsInterface.TEST_CLASS;
 
 /**
  * Ryze测试框架入口类
@@ -53,14 +50,14 @@ import static io.github.xiaomisum.ryze.testelement.TestElementConstantsInterface
 public class Ryze {
 
 
-    private final JsonTree testcase;
+    private final Map<String, Object> testcase;
 
     /**
      * 构造函数，初始化测试用例
      *
      * @param testcase 标准化后的测试用例对象
      */
-    public Ryze(JsonTree testcase) {
+    public Ryze(Map<String, Object> testcase) {
         this.testcase = testcase;
     }
 
@@ -76,7 +73,7 @@ public class Ryze {
      * @return 测试执行结果
      */
     public static Result start(String filePath) {
-        JSONObject testcase = TestDataLoader.toJavaObject(filePath, JSONObject.class);
+        JSONObject testcase = TestDataLoaderChain.loadTestData(filePath, JSONObject.class);
         return start(testcase);
     }
 
@@ -92,27 +89,6 @@ public class Ryze {
      * @return 测试执行结果
      */
     public static Result start(Map<String, Object> testcase) {
-        if (!testcase.containsKey(TEST_CLASS)) {
-            testcase.put(TEST_CLASS, TESTSUITE);
-        }
-        return start(new JsonTree(testcase));
-    }
-
-    /**
-     * 通过JsonTree对象启动测试执行
-     * <p>
-     * 执行流程：
-     * 1. 创建Ryze实例并执行测试
-     * 2. 测试执行完成后清理会话资源
-     * </p>
-     *
-     * @param testcase 标准化后的测试用例对象
-     * @return 测试执行结果
-     */
-    public static Result start(JsonTree testcase) {
-        if (!testcase.containsKey(TEST_CLASS)) {
-            testcase.put(TEST_CLASS, TESTSUITE);
-        }
         return new Ryze(testcase).runTest();
     }
 
@@ -129,7 +105,8 @@ public class Ryze {
      */
     private Result runTest() {
         try {
-            return SessionRunner.getSessionIfNoneCreateNew().runTest(JSON.parseObject(testcase.toJSONString(), TestElement.class));
+            var json = JSON.toJSONString(testcase);
+            return SessionRunner.getSessionIfNoneCreateNew().runTest(JSON.parseObject(json, TestElement.class));
         } finally {
             SessionRunner.removeSession();
         }

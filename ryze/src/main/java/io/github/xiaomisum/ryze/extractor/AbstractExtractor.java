@@ -115,12 +115,12 @@ public abstract class AbstractExtractor implements Extractor, ExtractorConstants
      */
     @Override
     public ValidateResult validate() {
-        ValidateResult result = new ValidateResult();
+        var result = new ValidateResult();
         if (StringUtils.isBlank(refName)) {
-            result.append("\n提取引用名称 ref_name 字段值缺失或为空");
+            result.append("提取引用名称 ref_name 字段值缺失或为空");
         }
         if (StringUtils.isBlank(field)) {
-            result.append("\n提取表达式 field 字段值缺失或为空");
+            result.append("提取表达式 field 字段值缺失或为空");
         }
         return result;
     }
@@ -149,6 +149,8 @@ public abstract class AbstractExtractor implements Extractor, ExtractorConstants
             return;
         }
         if (context.getTestResult() instanceof SampleResult result) {
+            validate().valid();
+            defaultValue = context.evaluate(defaultValue);
             var defaultValueIsBlank = defaultValue == null || StringUtils.isBlank(defaultValue.toString());
             if (StringUtils.isBlank(result.getResponse().bytesAsString()) && defaultValueIsBlank) {
                 throw new IllegalArgumentException("待提取的字符串为 null 或空白");
@@ -160,11 +162,11 @@ public abstract class AbstractExtractor implements Extractor, ExtractorConstants
                 if (defaultValueIsBlank)
                     throw e;
             }
-            value = value == null || StringUtils.isBlank(value.toString()) ? defaultValue : value;
-            if (value == null || StringUtils.isBlank(value.toString())) {
-                throw new IllegalArgumentException("目标字符串没有匹配的数据 %s，目标字符串：\n%s".formatted(field, result.getResponse().bytesAsString()));
+            var valueIsBlank = value == null || StringUtils.isBlank(value.toString());
+            if (valueIsBlank && defaultValueIsBlank) {
+                throw new IllegalArgumentException("目标字符串没有匹配的数据 %s，目标字符串：%s".formatted(field, result.getResponse().bytesAsString()));
             }
-            context.getLocalVariablesWrapper().put(refName, value);
+            context.getLocalVariablesWrapper().put(refName, valueIsBlank ? defaultValue : value);
             return;
         }
         throw new RuntimeException("不支持提取的测试组件: " + context.getTestElement().getClass());

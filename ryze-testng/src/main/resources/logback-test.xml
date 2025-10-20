@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--<configuration debug="true">-->
+<configuration>
+    <contextName>ryze</contextName>
+    <property name="pattern"
+              value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level: %msg %n"/>
+    <property name="pattern.color"
+              value="%yellow(%d{yyyy-MM-dd HH:mm:ss.SSS}) [%thread] %highlight(%-5level) %green(:) %highlight(%msg) %n"/>
+    <property name="log.home" value="logs"/>
+    <property name="app.name" value="ryze"/>
+
+    <!-- 控制台输出-带颜色 -->
+    <appender name="CONSOLE-WITH-COLOR" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${pattern.color}</pattern>
+        </encoder>
+    </appender>
+
+
+    <!-- 文件输出 -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${log.home}/all/${app.name}.%d.%i.log</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${pattern}</pattern>
+        </encoder>
+    </appender>
+
+
+    <appender name="SIFT" class="ch.qos.logback.classic.sift.SiftingAppender">
+        <discriminator>
+            <key>traceId</key>
+            <defaultValue>unknown</defaultValue>
+        </discriminator>
+
+        <sift>
+            <appender name="FILE-${traceId}" class="ch.qos.logback.core.FileAppender">
+                <file>${log.home}/case/${traceId}.log</file>
+                <append>false</append>
+                <encoder>
+                    <pattern>${pattern}</pattern>
+                </encoder>
+            </appender>
+        </sift>
+    </appender>
+
+
+    <root level="info">
+        <!--<appender-ref ref="CONSOLE"/>-->
+        <appender-ref ref="CONSOLE-WITH-COLOR"/>
+        <appender-ref ref="SIFT"/>
+        <appender-ref ref="FILE"/>
+    </root>
+</configuration>

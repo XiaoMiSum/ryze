@@ -5,6 +5,6 @@ configelements:
 config: # 取样器配置
   datasource: redis_source
   command: get
-  args: test_key
+  args: [ test_key ]
 validators:
   - { testclass: result_assertion, expected: redis_sampler_0 }

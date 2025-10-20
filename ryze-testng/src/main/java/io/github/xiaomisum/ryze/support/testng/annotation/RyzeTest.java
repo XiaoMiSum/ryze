@@ -28,11 +28,12 @@
 
 package io.github.xiaomisum.ryze.support.testng.annotation;
 
+import io.github.xiaomisum.ryze.testelement.TestElement;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import java.util.Map;
 
 /**
  * ryze 框架支持，标记一个TestNg测试方法需支持ryze框架
@@ -83,12 +84,12 @@ public @interface RyzeTest {
     boolean parallel() default false;
 
     /**
-     * 测试用例的分片，默认为空，表示不分片
+     * 测试用例的参数类型，默认为 {@link TestElement} 类型
      *
      * @return 测试用例类型
      * @see Datasource
      */
-    Class<?> type() default Map.class;
+    Class<?> type() default TestElement.class;
 
     /**
      * 测试用例的分片，默认为空，表示不分片

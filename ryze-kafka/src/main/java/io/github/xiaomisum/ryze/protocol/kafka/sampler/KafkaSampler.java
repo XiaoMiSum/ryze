@@ -41,7 +41,6 @@ import io.github.xiaomisum.ryze.testelement.sampler.AbstractSampler;
 import io.github.xiaomisum.ryze.testelement.sampler.DefaultSampleResult;
 import io.github.xiaomisum.ryze.testelement.sampler.SampleResult;
 import io.github.xiaomisum.ryze.testelement.sampler.Sampler;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;
 
@@ -151,8 +150,7 @@ public class KafkaSampler extends AbstractSampler<KafkaSampler, KafkaConfigureIt
         super.handleRequest(context, result);
         // 1. 合并配置项
         var localConfig = Objects.isNull(runtime.getConfig()) ? new KafkaConfigureItem() : runtime.getConfig();
-        var ref = StringUtils.isBlank(localConfig.getRef()) ? DEF_REF_NAME_KEY : localConfig.getRef();
-        var otherConfig = (KafkaConfigureItem) context.getLocalVariablesWrapper().get(ref);
+        var otherConfig = (KafkaConfigureItem) context.getLocalVariablesWrapper().get(localConfig.getRef());
         runtime.setConfig(localConfig.merge(otherConfig));
         message = runtime.config.getMessage();
         result.setRequest(RealKafkaRequest.build(runtime.getConfig(), message));

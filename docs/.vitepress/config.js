@@ -1,6 +1,6 @@
-import { defineConfig } from 'vitepress'
+import { withMermaid } from "vitepress-plugin-mermaid";
 
-export default defineConfig({
+export default withMermaid({
   title: 'RYZE',
   description: '强大的多协议测试框架，让测试变得简单而优雅',
   
@@ -16,7 +16,7 @@ export default defineConfig({
       { text: '测试人员', link: '/tester/test-suite/test-suite-project' },
       { text: '开发者', link: '/developer/style' },
       { text: 'FAQ', link: '/faq/same' },
-      { text: '6.0.4', link: 'https://github.com/XiaoMiSum/ryze' }
+      { text: '6.0.6', link: 'https://github.com/XiaoMiSum/ryze' }
     ],
     
     sidebar: {
@@ -120,12 +120,17 @@ export default defineConfig({
               ]
             },
             {
-            text: '变量与函数', items: [
+              text: '变量与函数', items: [
                 { text: '变量', link: '/tester/variable/variables' },
                 { text: '函数', link: '/tester/variable/functions' }
               ]
             },
-            { text: '常见问题', link: '/faq/same' }
+            {
+              text: '其他事项', items: [
+                 { text: 'Gitlab集成',link: '/tester/other/gitlab' },
+                 { text: '常见问题',link: '/faq/same' }
+              ]
+            }
           ]
         }
       ],

@@ -84,9 +84,7 @@ public class HTTPPostprocessor extends AbstractProcessor<HTTPPostprocessor, HTTP
         super.handleRequest(context, result);
         // 1. 合并配置项
         var localConfig = Objects.isNull(runtime.getConfig()) ? new HTTPConfigureItem() : runtime.getConfig();
-        var datasource = StringUtils.isBlank(localConfig.getRef()) ?
-                DEF_REF_NAME_KEY : localConfig.getRef();
-        var otherConfig = (HTTPConfigureItem) context.getLocalVariablesWrapper().get(datasource);
+        var otherConfig = (HTTPConfigureItem) context.getLocalVariablesWrapper().get(localConfig.getRef());
         runtime.setConfig(localConfig.merge(otherConfig));
         // 2. 创建http对象
         request = HTTPClient.build(runtime.getConfig());

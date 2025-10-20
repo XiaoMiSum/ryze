@@ -34,6 +34,7 @@ import com.alibaba.fastjson2.JSONObject;
 import com.alibaba.fastjson2.JSONReader;
 import com.alibaba.fastjson2.reader.ObjectReader;
 import io.github.xiaomisum.ryze.ApplicationConfig;
+import io.github.xiaomisum.ryze.support.fastjson.interceptor.JSONInterceptor;
 import io.github.xiaomisum.ryze.testelement.configure.ConfigureElement;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -42,8 +43,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import static io.github.xiaomisum.ryze.testelement.TestElementConstantsInterface.CONFIG;
-import static io.github.xiaomisum.ryze.testelement.TestElementConstantsInterface.TEST_CLASS;
+import static io.github.xiaomisum.ryze.testelement.TestElementConstantsInterface.*;
 import static io.github.xiaomisum.ryze.testelement.configure.ConfigureElementConstantsInterface.REF_NAME;
 import static io.github.xiaomisum.ryze.testelement.configure.ConfigureElementConstantsInterface.VARIABLE_NAME;
 
@@ -90,6 +90,12 @@ public class ConfigureElementObjectReader implements ObjectReader<ConfigureEleme
         }
         var pair = checkTestElement(elementMap);
         standardizeConfig(elementMap, pair.getRight());
+        // 通过拦截器重新获取 config，以支持协议组件个性化处理 config (主要用于兼容旧版本的过期配置项)
+        JSONInterceptor interceptor = ApplicationConfig.getJsonInterceptorKeyMap().get(pair.getLeft());
+        if (interceptor != null) {
+            var config = interceptor.deserializeConfigureItem(elementMap.get(CONFIG));
+            elementMap.put(CONFIG, config != null ? config : elementMap.get(CONFIG));
+        }
         var rawData = JSON.toJSONString(elementMap);
         return JSON.parseObject(rawData, pair.getLeft());
     }
@@ -126,8 +132,9 @@ public class ConfigureElementObjectReader implements ObjectReader<ConfigureEleme
      */
     private void standardizeConfig(Map<String, Object> elementMap, String key) {
         elementMap.remove(TEST_CLASS); // 删除测试类
-        var variableName = elementMap.remove(VARIABLE_NAME);
-        var refName = Objects.isNull(variableName) ? elementMap.remove(REF_NAME) : variableName;
+        elementMap.remove(VARIABLES); // 删除可能存在的变量
+        var variableName = elementMap.remove(VARIABLE_NAME); // 删除可能存在的旧配置
+        var refName = Objects.isNull(variableName) ? elementMap.remove(REF_NAME) : variableName; // 删除可能存在的引用名称
         // 删除 TestElement 的 config 或创建一个新的 config
         var _config = elementMap.containsKey(CONFIG) ? new JSONObject((Map) elementMap.remove(CONFIG)) : new JSONObject();
         if (_config.isEmpty()) {

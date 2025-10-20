@@ -28,12 +28,12 @@ package io.github.xiaomisum.ryze.protocol.jdbc.config;
 import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.fastjson2.annotation.JSONField;
 import io.github.xiaomisum.ryze.context.ContextWrapper;
-import io.github.xiaomisum.ryze.testelement.KW;
-import io.github.xiaomisum.ryze.testelement.TestSuiteResult;
-import io.github.xiaomisum.ryze.testelement.configure.AbstractConfigureElement;
 import io.github.xiaomisum.ryze.protocol.jdbc.JDBCConstantsInterface;
 import io.github.xiaomisum.ryze.support.Closeable;
 import io.github.xiaomisum.ryze.support.ValidateResult;
+import io.github.xiaomisum.ryze.testelement.KW;
+import io.github.xiaomisum.ryze.testelement.TestSuiteResult;
+import io.github.xiaomisum.ryze.testelement.configure.AbstractConfigureElement;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -62,7 +62,7 @@ public class JDBCDatasource extends AbstractConfigureElement<JDBCDatasource, JDB
      * <p>用于管理数据库连接池</p>
      */
     @JSONField(serialize = false)
-    private final DruidDataSource dataSource = new DruidDataSource();
+    private DruidDataSource datasource;
 
     /**
      * 默认构造函数
@@ -106,16 +106,16 @@ public class JDBCDatasource extends AbstractConfigureElement<JDBCDatasource, JDB
     public ValidateResult validate() {
         var result = super.validate();
         if (StringUtils.isBlank(refName)) {
-            result.append("\n数据源引用名称 %s 字段值缺失或为空，当前值：%s", REF_NAME, toString());
+            result.append("数据源引用名称 %s 字段值缺失", REF_NAME);
         }
-        if (StringUtils.isBlank(config.url)) {
-            result.append("\n数据源连接 %s 字段值缺失或为空，当前值：%s", URL, toString());
+        if (StringUtils.isBlank(config.getUrl())) {
+            result.append("数据源连接 %s 字段值缺失", URL);
         }
-        if (StringUtils.isBlank(config.username)) {
-            result.append("\n数据源用户名 %s 字段值缺失或为空，当前值：%s", USERNAME, toString());
+        if (StringUtils.isBlank(config.getUsername())) {
+            result.append("数据源用户名 %s 字段值缺失", USERNAME);
         }
-        if (StringUtils.isBlank(config.password)) {
-            result.append("\n数据源密码 %s 字段值缺失或为空，当前值：%s", PASSWORD, toString());
+        if (StringUtils.isBlank(config.getPassword())) {
+            result.append("数据源密码 %s 字段值缺失", PASSWORD);
         }
         return result;
     }
@@ -132,18 +132,18 @@ public class JDBCDatasource extends AbstractConfigureElement<JDBCDatasource, JDB
     protected void doProcess(ContextWrapper context) {
         try {
             // 兼容 没有使用 SPI 的 JDBC驱动
-            if (StringUtils.isNotBlank(runtime.getConfig().driver)) {
-                Class.forName(runtime.getConfig().driver);
+            if (StringUtils.isNotBlank(runtime.getConfig().getDriver())) {
+                Class.forName(runtime.getConfig().getDriver());
             }
         } catch (Exception ignored) {
         }
-        dataSource.setUrl(runtime.getConfig().url);
-        dataSource.setUsername(runtime.getConfig().username);
-        dataSource.setPassword(runtime.getConfig().password);
-        // 使用getter 获取数值，因为在这里面做了数值判断
-        dataSource.setMaxActive(runtime.getConfig().getMaxActive());
-        dataSource.setMaxWait(runtime.getConfig().getMaxWait());
-        context.getSessionRunner().getContext().getLocalVariablesWrapper().put(refName, dataSource);
+        ((JDBCDatasource) runtime).datasource = new DruidDataSource();
+        ((JDBCDatasource) runtime).datasource.setUrl(runtime.getConfig().getUrl());
+        ((JDBCDatasource) runtime).datasource.setUsername(runtime.getConfig().getUsername());
+        ((JDBCDatasource) runtime).datasource.setPassword(runtime.getConfig().getPassword());
+        ((JDBCDatasource) runtime).datasource.setMaxActive(runtime.getConfig().getMaxActive());
+        ((JDBCDatasource) runtime).datasource.setMaxWait(runtime.getConfig().getMaxWait());
+        context.getLocalVariablesWrapper().put(runtime.getRefName(), ((JDBCDatasource) runtime).datasource);
     }
 
     /**
@@ -153,7 +153,7 @@ public class JDBCDatasource extends AbstractConfigureElement<JDBCDatasource, JDB
      */
     @Override
     protected TestSuiteResult getTestResult() {
-        return new TestSuiteResult("JDBC数据源配置：" + refName);
+        return new TestSuiteResult("JDBC数据源配置：" + runtime.getRefName());
     }
 
     /**
@@ -162,7 +162,8 @@ public class JDBCDatasource extends AbstractConfigureElement<JDBCDatasource, JDB
      */
     @Override
     public void close() {
-        dataSource.close();
+        ((JDBCDatasource) runtime).datasource.close();
+        ((JDBCDatasource) runtime).datasource = null;
     }
 
     /**

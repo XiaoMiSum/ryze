@@ -125,8 +125,8 @@ public class RealHTTPRequest extends HTTPRealResult {
         if (StringUtils.isNotBlank(query)) {
             buf.append("\n").append("Request Query:").append(query);
         }
-        if (body != null && body.length > 0) {
-            buf.append("\n").append("Request Body:").append(bytesAsString());
+        if (body != null && body.length > 0 && !new String(body).equals("null")) {
+            buf.append("\n").append("Request Body:").append(new String(body));
         }
         return buf.toString();
     }

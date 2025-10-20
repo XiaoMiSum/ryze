@@ -25,9 +25,8 @@
 
 package io.github.xiaomisum.ryze.protocol.dubbo;
 
-import io.github.xiaomisum.ryze.testelement.sampler.DefaultSampleResult;
 import io.github.xiaomisum.ryze.protocol.dubbo.config.DubboConfigureItem;
-import org.apache.commons.lang3.StringUtils;
+import io.github.xiaomisum.ryze.testelement.sampler.DefaultSampleResult;
 import org.apache.dubbo.config.ApplicationConfig;
 import org.apache.dubbo.config.ReferenceConfig;
 import org.apache.dubbo.config.RegistryConfig;
@@ -88,9 +87,7 @@ public class Dubbo {
         request.setInterface(config.getInterfaceName());
         // 设置注册中心配置
         var registry = new RegistryConfig();
-        // 如果配置了协议，则构建完整的注册中心地址，否则直接使用地址
-        registry.setAddress(StringUtils.isBlank(registryConfig.getProtocol()) ? registryConfig.getAddress()
-                : registryConfig.getProtocol() + "://" + registryConfig.getAddress());
+        registry.setAddress(registryConfig.getAddress());
         registry.setGroup(registryConfig.getGroup());
         registry.setUsername(registryConfig.getUsername());
         registry.setPassword(registryConfig.getPassword());

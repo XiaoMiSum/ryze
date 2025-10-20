@@ -27,9 +27,9 @@ package io.github.xiaomisum.ryze.assertion.builtin;
 
 import com.alibaba.fastjson2.JSONPath;
 import io.github.xiaomisum.ryze.assertion.AbstractAssertion;
+import io.github.xiaomisum.ryze.support.ValidateResult;
 import io.github.xiaomisum.ryze.testelement.KW;
 import io.github.xiaomisum.ryze.testelement.sampler.SampleResult;
-import io.github.xiaomisum.ryze.support.ValidateResult;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -88,9 +88,9 @@ public class JSONAssertion extends AbstractAssertion {
      */
     @Override
     public ValidateResult validate() {
-        ValidateResult result = new ValidateResult();
+        var result = super.validate();
         if (StringUtils.isBlank(field)) {
-            result.append("\n提取表达式 %s 字段值缺失或为空，当前值：%s", field, toString());
+            result.append("提取表达式 %s 字段值缺失或为空", FIELD);
         }
         return result;
     }

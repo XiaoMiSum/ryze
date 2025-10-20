@@ -150,8 +150,7 @@ public class ActivePreprocessor extends AbstractProcessor<ActivePreprocessor, Ac
         super.handleRequest(context, result);
         // 1. 合并配置项
         var localConfig = Objects.isNull(runtime.getConfig()) ? new ActiveConfigureItem() : runtime.getConfig();
-        var ref = StringUtils.isBlank(localConfig.getRef()) ? DEF_REF_NAME_KEY : localConfig.getRef();
-        var otherConfig = (ActiveConfigureItem) context.getLocalVariablesWrapper().get(ref);
+        var otherConfig = (ActiveConfigureItem) context.getLocalVariablesWrapper().get(localConfig.getRef());
         runtime.setConfig(localConfig.merge(otherConfig));
         // 2. 创建ActiveMQ 连接池;
         factory = new ActiveMQConnectionFactory(runtime.getConfig().getUsername(), runtime.getConfig().getPassword(), runtime.getConfig().getBrokerUrl());

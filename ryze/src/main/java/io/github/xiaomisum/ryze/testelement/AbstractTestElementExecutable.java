@@ -126,38 +126,15 @@ public abstract class AbstractTestElementExecutable<SELF extends AbstractTestEle
      */
     protected List<Context> getContextChain(List<Context> parentContext) {
         List<Context> contextChain = new ArrayList<>(parentContext);
-
-        TestSuiteContext context = new TestSuiteContext();
         if (Objects.isNull(variables)) {
             variables = new RyzeVariables();
         }
         runtime.configGroup.put(VARIABLES, variables.merge(parentContext.getLast().getConfigGroup().getVariables()));
+        TestSuiteContext context = new TestSuiteContext();
         context.setConfigGroup(runtime.getConfigGroup());
         contextChain.add(context);
         return contextChain;
     }
-
-
-    /**
-     * 计算并应用配置到上下文中
-     *
-     * <p>该方法处理当前测试元件的变量和配置项，将它们应用到执行上下文中。
-     * 注意：只会计算当前元件的配置，不会处理父级元件的配置。</p>
-     *
-     * @param context 执行上下文包装器
-     */
-    protected void evalConfig(ContextWrapper context) {
-        // 变量与config
-        RyzeVariables item;
-        if (runtime.variables != null && (item = runtime.configGroup.getVariables()) != null) {
-            context.evaluate(item);
-        }
-        CONFIG config;
-        if (runtime.config != null && (config = runtime.configGroup.get(CONFIG)) != null) {
-            context.evaluate(config);
-        }
-    }
-
 
     /**
      * 执行测试元素的主要入口方法
@@ -225,7 +202,6 @@ public abstract class AbstractTestElementExecutable<SELF extends AbstractTestEle
         // 另一方面，该对象不是对象状态表示，只是一个临时对象，没有必要使用成员变量
         ContextWrapper context = new ContextWrapper(session);
         context.setTestElement(this);
-
         session.setContext(context);
         return context;
     }
@@ -261,11 +237,14 @@ public abstract class AbstractTestElementExecutable<SELF extends AbstractTestEle
      */
     protected void internalRun(ContextWrapper context) {
         // 模板计算：当前元件的变量配置项（不会计算父级元件）
-        evalConfig(context);
+        RyzeVariables item;
+        if (runtime.variables != null && (item = runtime.configGroup.getVariables()) != null) {
+            context.evaluate(item);
+        }
         // 处理配置元件
-        Optional.ofNullable(configureElements).orElse(Collections.emptyList()).forEach(ele -> ele.process(context));
+        Optional.ofNullable(runtime.configureElements).orElse(Collections.emptyList()).forEach(ele -> ele.process(context));
         // 执行前置动作
-        Optional.ofNullable(preprocessors).orElse(Collections.emptyList())
+        Optional.ofNullable(runtime.preprocessors).orElse(Collections.emptyList())
                 .stream().filter(preprocessor -> !preprocessor.isDisabled())
                 .forEach(preprocessor -> preprocessor.process(context));
         if (context.getTestResult().getStatus().isFailed() || context.getTestResult().getStatus().isBroken()) {
@@ -274,11 +253,11 @@ public abstract class AbstractTestElementExecutable<SELF extends AbstractTestEle
         }
         // 执行请求
         execute(context, (R) context.getTestResult());
-        Optional.ofNullable(postprocessors).orElse(Collections.emptyList())
+        Optional.ofNullable(runtime.postprocessors).orElse(Collections.emptyList())
                 .stream().filter(postprocessor -> !postprocessor.isDisabled())
                 .forEach(postprocessor -> postprocessor.process(context));
         // 关闭配置元件
-        Optional.ofNullable(configureElements).orElse(Collections.emptyList()).stream()
+        Optional.ofNullable(runtime.configureElements).orElse(Collections.emptyList()).stream()
                 .filter(ele -> ele instanceof Closeable)
                 .forEach(ele -> ((Closeable) ele).close());
     }
@@ -295,6 +274,7 @@ public abstract class AbstractTestElementExecutable<SELF extends AbstractTestEle
     public SELF copy() {
         SELF self = super.copy();
         self.variables = KryoUtil.copy(variables);
+        self.configureElements = KryoUtil.copy(configureElements);
         self.preprocessors = KryoUtil.copy(preprocessors);
         self.postprocessors = KryoUtil.copy(postprocessors);
         return self;

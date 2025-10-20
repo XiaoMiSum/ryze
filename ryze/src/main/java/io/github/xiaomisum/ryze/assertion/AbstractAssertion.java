@@ -28,7 +28,9 @@ package io.github.xiaomisum.ryze.assertion;
 import com.alibaba.fastjson2.annotation.JSONField;
 import io.github.xiaomisum.ryze.builder.IBuilder;
 import io.github.xiaomisum.ryze.context.ContextWrapper;
+import io.github.xiaomisum.ryze.support.ValidateResult;
 import io.github.xiaomisum.ryze.testelement.sampler.SampleResult;
+import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.Matcher;
 import org.hamcrest.MatcherAssert;
 
@@ -97,6 +99,23 @@ public abstract class AbstractAssertion implements Assertion, AssertionConstants
     @JSONField(serialize = false, deserialize = false)
     protected Matcher<Object> matcher;
 
+
+    /**
+     * 验证断言配置的有效性
+     *
+     * <p>该方法检查rule字段是否为空，如果为空则返回验证失败结果。</p>
+     *
+     * @return 验证结果
+     */
+    @Override
+    public ValidateResult validate() {
+        ValidateResult result = new ValidateResult();
+        if (StringUtils.isBlank(rule)) {
+            result.append("验证规则 %s 字段值缺失或为空", RULE);
+        }
+        return result;
+    }
+
     /**
      * 执行断言验证逻辑
      *
@@ -115,6 +134,7 @@ public abstract class AbstractAssertion implements Assertion, AssertionConstants
     @Override
     public void assertThat(ContextWrapper context) {
         if (context.getTestResult() instanceof SampleResult result) {
+            validate().valid();
             expected = context.evaluate(expected);
             actualValue = extractActualValue(result);
             if (matcher != null && (matcher instanceof ProxyMatcher proxy)) {
@@ -298,6 +318,9 @@ public abstract class AbstractAssertion implements Assertion, AssertionConstants
          */
         @Override
         public ASSERTION build() {
+            if (assertion.rule == null) {
+                assertion.rule = "==";
+            }
             return assertion;
         }
     }

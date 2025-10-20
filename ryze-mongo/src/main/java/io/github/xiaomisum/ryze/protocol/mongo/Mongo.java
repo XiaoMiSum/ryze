@@ -32,9 +32,9 @@ import com.alibaba.fastjson2.JSON;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
-import io.github.xiaomisum.ryze.testelement.sampler.DefaultSampleResult;
 import io.github.xiaomisum.ryze.protocol.mongo.config.MongoConfigItem;
 import io.github.xiaomisum.ryze.support.Collections;
+import io.github.xiaomisum.ryze.testelement.sampler.DefaultSampleResult;
 import org.bson.Document;
 
 import java.nio.charset.StandardCharsets;
@@ -79,7 +79,6 @@ public class Mongo {
      * @return 操作结果的字节数组表示
      */
     public static byte[] execute(MongoClientSettings settings, MongoConfigItem config, DefaultSampleResult result) {
-
         try (var client = MongoClients.create(settings)) {
             var database = client.getDatabase(config.getDatabase());
             var collection = database.getCollection(config.getCollection());

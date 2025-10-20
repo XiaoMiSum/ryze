@@ -58,7 +58,7 @@ public class ValidateResultTest {
         result.appendDescription(" and more information");
 
         // 验证原因包含所有描述信息
-        Assert.assertEquals(result.getReason(), "This is a test description and more information");
+        Assert.assertEquals(result.getReason(), "This is a test description\n and more information");
 
         // 添加空描述信息不应该改变结果
         result.appendDescription(null);
@@ -66,7 +66,7 @@ public class ValidateResultTest {
         result.appendDescription("   ");
 
         // 验证结果不变
-        Assert.assertEquals(result.getReason(), "This is a test description and more information");
+        Assert.assertEquals(result.getReason(), "This is a test description\n and more information");
     }
 
     @Test
@@ -122,7 +122,7 @@ public class ValidateResultTest {
         result.append(" and more details");
 
         // 验证原因包含所有失败原因
-        Assert.assertEquals(result.getReason(), "This is a failure reason and more details");
+        Assert.assertEquals(result.getReason(), "This is a failure reason\n and more details");
 
         // 添加空原因不应该改变结果
         result.append((String) null);
@@ -130,7 +130,7 @@ public class ValidateResultTest {
         result.append("   ");
 
         // 验证结果不变
-        Assert.assertEquals(result.getReason(), "This is a failure reason and more details");
+        Assert.assertEquals(result.getReason(), "This is a failure reason\n and more details");
     }
 
     @Test
@@ -138,7 +138,7 @@ public class ValidateResultTest {
         ValidateResult result = new ValidateResult();
 
         // 添加带模板的失败原因
-        result.append("Error code: %d, message: %s", 404, "Not Found");
+        result.append("Error code: %s, message: %s", 404, "Not Found");
 
         // 验证结果变为无效
         Assert.assertFalse(result.isValid());
@@ -162,10 +162,42 @@ public class ValidateResultTest {
         // 测试链式调用
         result.appendDescription("Starting validation")
                 .append("Validation failed")
-                .append("Error code: %d", 500);
-
+                .append("Error code: %s", 500);
         // 验证最终结果
         Assert.assertFalse(result.isValid());
-        Assert.assertEquals(result.getReason(), "Starting validationValidation failedError code: 500");
+        Assert.assertEquals(result.getReason(), "Starting validation\nValidation failed\nError code: 500");
+    }
+
+    @Test
+    public void testValidWithValidResult() {
+        ValidateResult result = new ValidateResult();
+
+        // 对于有效的验证结果，valid()方法不应该抛出异常
+        result.valid(); // 不应该抛出异常
+        Assert.assertTrue(result.isValid());
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testValidWithInvalidResult() {
+        ValidateResult result = new ValidateResult();
+
+        // 使验证结果无效
+        result.append("Validation failed");
+
+        // 验证结果为无效时，valid()方法应该抛出IllegalArgumentException
+        result.valid();
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testValidWithMultipleFailureReasons() {
+        ValidateResult result = new ValidateResult();
+
+        // 添加多个失败原因
+        result.append("First error");
+        result.append("Second error");
+        result.append("Third error");
+
+        // 验证结果为无效时，valid()方法应该抛出IllegalArgumentException
+        result.valid();
     }
 }

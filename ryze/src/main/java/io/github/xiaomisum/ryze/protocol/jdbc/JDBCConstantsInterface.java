@@ -87,6 +87,12 @@ public interface JDBCConstantsInterface extends TestElementConstantsInterface {
     String SQL = "sql";
 
     /**
+     * 预编译SQL参数键名
+     * <p>预编译SQL参数</p>
+     */
+    String ARGS = "args";
+
+    /**
      * 废弃属性，请使用 sql @see {@link #SQL}
      * <p>旧版本中使用的SQL语句键名，现已废弃</p>
      */

@@ -85,11 +85,15 @@ public class TestElementObjectReader implements ObjectReader<TestElement> {
         for (Map.Entry<String, Object> entry : testElementMap.entrySet()) {
             elementMap.put(entry.getKey().toLowerCase(), entry.getValue());
         }
+        if (!elementMap.containsKey(TEST_CLASS)) {
+            elementMap.put(TEST_CLASS, TESTSUITE);
+        }
         var pair = checkTestElement(elementMap);
         // 兼容旧版本测试容器配置
         if (elementMap.containsKey(CHILD)) {
             elementMap.put(CHILDREN, elementMap.remove(CHILD));
         }
+        // 通过拦截器重新获取 config，以支持协议组件个性化处理 config (主要用于兼容旧版本的过期配置项)
         JSONInterceptor interceptor = ApplicationConfig.getJsonInterceptorKeyMap().get(pair.getLeft());
         if (interceptor != null) {
             var config = interceptor.deserializeConfigureItem(elementMap.get(CONFIG));

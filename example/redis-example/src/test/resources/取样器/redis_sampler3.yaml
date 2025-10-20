@@ -5,6 +5,6 @@ configelements:
 config: # 取样器配置
   datasource: redis_source
   command: hget
-  args: test_hash,item1
+  args: [ test_hash,item1 ]
 validators:
   - { testclass: result_assertion, expected: redis_sampler_2 }

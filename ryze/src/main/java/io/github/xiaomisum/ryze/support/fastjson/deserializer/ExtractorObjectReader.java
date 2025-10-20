@@ -90,9 +90,8 @@ public class ExtractorObjectReader implements ObjectReader<Extractor> {
         }
         var testClass = elementMap.get(TEST_CLASS);
         if (Objects.isNull(testClass) || StringUtils.isBlank(testClass.toString())) {
-            testClass = JSONExtractor.class.getSimpleName().toLowerCase(Locale.ROOT);
+            elementMap.put(TEST_CLASS, JSONExtractor.class.getSimpleName().toLowerCase(Locale.ROOT));
         }
-        elementMap.put(TEST_CLASS, testClass);
         var variableName = elementMap.remove(VARIABLE_NAME);
         elementMap.put(REF_NAME, Objects.isNull(variableName) ? elementMap.remove(REF_NAME) : variableName);
         var pair = checkTestElement(elementMap);

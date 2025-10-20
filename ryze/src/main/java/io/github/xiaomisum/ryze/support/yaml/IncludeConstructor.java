@@ -28,7 +28,7 @@
 
 package io.github.xiaomisum.ryze.support.yaml;
 
-import io.github.xiaomisum.ryze.support.TestDataLoader;
+import io.github.xiaomisum.ryze.support.dataloader.TestDataLoaderChain;
 import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.constructor.AbstractConstruct;
 import org.yaml.snakeyaml.constructor.Constructor;
@@ -111,7 +111,7 @@ public class IncludeConstructor extends Constructor {
                 String filename = constructScalar(scalarNode);
                 String path = Paths.get(filename).isAbsolute() ? filename : basePath == null ? filename : new File(basePath, filename).getAbsolutePath();
                 try {
-                    return TestDataLoader.toJavaObject(path, Object.class);
+                    return TestDataLoaderChain.loadTestData(path, Object.class);
                 } catch (Exception e) {
                     throw new RuntimeException("加载 !include\\!import YAML文件错误: " + path, e);
                 }

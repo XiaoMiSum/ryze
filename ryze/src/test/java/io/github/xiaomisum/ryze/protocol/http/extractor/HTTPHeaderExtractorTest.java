@@ -151,7 +151,7 @@ public class HTTPHeaderExtractorTest {
                 .build();
 
         Assert.assertFalse(extractor.validate().isValid());
-        Assert.assertTrue(extractor.validate().getReason().contains("提取请求头"));
+        Assert.assertTrue(extractor.validate().getReason().contains("提取表达式"));
     }
 
     @Test

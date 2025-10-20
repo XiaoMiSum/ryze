@@ -25,12 +25,11 @@
 
 package io.github.xiaomisum.ryze.config;
 
-import com.alibaba.fastjson2.JSON;
-import io.github.xiaomisum.ryze.testelement.TestElementConstantsInterface;
 import io.github.xiaomisum.ryze.support.Cloneable;
 import io.github.xiaomisum.ryze.support.Mergeable;
 import io.github.xiaomisum.ryze.support.Validatable;
 import io.github.xiaomisum.ryze.support.ValidateResult;
+import io.github.xiaomisum.ryze.testelement.TestElementConstantsInterface;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -76,10 +75,10 @@ public interface ConfigureGroup extends Validatable, Map<String, ConfigureItem>,
      *
      * <p>使用示例：
      * <pre>
-     * HttpConfig config = configGroup.get("http");
+     * HttpConfig config = configGroup.get("config");
      * </pre></p>
      *
-     * @param key 配置项的键，如"http"、"jdbc"等
+     * @param key 配置项的键，如"config"、"variables"等
      * @param <T> 配置项对象的类型，如HttpConfig、JdbcConfig等
      * @return 配置项对象，如果不存在则返回null
      */
@@ -115,30 +114,6 @@ public interface ConfigureGroup extends Validatable, Map<String, ConfigureItem>,
     }
 
     /**
-     * 获取指定键的配置项并转换为指定类型
-     *
-     * <p>与 {@link ConfigureGroup#get(String)}方法类似，
-     * 但显式指定返回类型，提供更强的类型安全性。</p>
-     *
-     * @param key   配置项的键
-     * @param clazz 配置项对象的类型Class
-     * @param <T>   配置项对象的类型
-     * @return 指定类型的配置项对象，如果不存在则返回null
-     */
-    default <T extends ConfigureItem<T>> T get(String key, Class<T> clazz) {
-        var v = get(key);
-        if (Objects.isNull(v)) {
-            return null;
-        }
-        if (clazz.isAssignableFrom(v.getClass())) {
-            return (T) v;
-        }
-        T t = JSON.parseObject(JSON.toJSONBytes(v), clazz);
-        put(key, t);
-        return t;
-    }
-
-    /**
      * 验证配置组中的所有配置项
      *
      * <p>遍历配置组中的所有配置项，依次调用它们的验证方法，
@@ -162,6 +137,6 @@ public interface ConfigureGroup extends Validatable, Map<String, ConfigureItem>,
      * @return RyzeVariables对象，包含所有变量配置
      */
     default RyzeVariables getVariables() {
-        return get(VARIABLES, RyzeVariables.class);
+        return get(VARIABLES);
     }
 }

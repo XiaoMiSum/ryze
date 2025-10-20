@@ -25,8 +25,8 @@
 
 package io.github.xiaomisum.ryze.protocol.redis;
 
-import io.github.xiaomisum.ryze.testelement.sampler.DefaultSampleResult;
 import io.github.xiaomisum.ryze.protocol.redis.config.RedisDatasource;
+import io.github.xiaomisum.ryze.testelement.sampler.DefaultSampleResult;
 import redis.clients.jedis.Protocol;
 
 import java.util.List;
@@ -58,15 +58,15 @@ public class Redis {
      * </p>
      *
      * @param datasource Redis数据源配置
-     * @param command Redis命令名称
-     * @param args Redis命令参数，以逗号分隔的字符串
-     * @param result 采样结果对象，用于记录执行时间
+     * @param command    Redis命令名称
+     * @param args       Redis命令参数
+     * @param result     采样结果对象，用于记录执行时间
      * @return Redis命令执行结果的字节数组形式
      */
-    public static byte[] execute(RedisDatasource datasource, String command, String args, DefaultSampleResult result) {
+    public static byte[] execute(RedisDatasource datasource, String command, List<String> args, DefaultSampleResult result) {
         result.sampleStart();
         try (var jedis = datasource.getConnection()) {
-            var response = jedis.sendCommand(Protocol.Command.valueOf(command), args.split(","));
+            var response = jedis.sendCommand(Protocol.Command.valueOf(command), args.toArray(new String[0]));
             return toBytes(response);
         } finally {
             result.sampleEnd();

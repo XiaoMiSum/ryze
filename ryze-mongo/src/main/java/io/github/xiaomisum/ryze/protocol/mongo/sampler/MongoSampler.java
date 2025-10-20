@@ -34,10 +34,6 @@ import com.mongodb.MongoClientSettings;
 import io.github.xiaomisum.ryze.builder.DefaultAssertionsBuilder;
 import io.github.xiaomisum.ryze.builder.DefaultExtractorsBuilder;
 import io.github.xiaomisum.ryze.context.ContextWrapper;
-import io.github.xiaomisum.ryze.testelement.KW;
-import io.github.xiaomisum.ryze.testelement.sampler.AbstractSampler;
-import io.github.xiaomisum.ryze.testelement.sampler.DefaultSampleResult;
-import io.github.xiaomisum.ryze.testelement.sampler.SampleResult;
 import io.github.xiaomisum.ryze.protocol.mongo.Mongo;
 import io.github.xiaomisum.ryze.protocol.mongo.MongoConstantsInterface;
 import io.github.xiaomisum.ryze.protocol.mongo.MongoRealRequest;
@@ -45,6 +41,10 @@ import io.github.xiaomisum.ryze.protocol.mongo.builder.MongoConfigureElementsBui
 import io.github.xiaomisum.ryze.protocol.mongo.builder.MongoPostprocessorsBuilder;
 import io.github.xiaomisum.ryze.protocol.mongo.builder.MongoPreprocessorsBuilder;
 import io.github.xiaomisum.ryze.protocol.mongo.config.MongoConfigItem;
+import io.github.xiaomisum.ryze.testelement.KW;
+import io.github.xiaomisum.ryze.testelement.sampler.AbstractSampler;
+import io.github.xiaomisum.ryze.testelement.sampler.DefaultSampleResult;
+import io.github.xiaomisum.ryze.testelement.sampler.SampleResult;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;
@@ -151,8 +151,7 @@ public class MongoSampler extends AbstractSampler<MongoSampler, MongoConfigItem,
         super.handleRequest(context, result);
         // 1. 合并配置项
         var localConfig = Objects.isNull(runtime.getConfig()) ? new MongoConfigItem() : runtime.getConfig();
-        var datasource = StringUtils.isBlank(localConfig.getRef()) ? DEF_REF_NAME_KEY : localConfig.getRef();
-        var otherConfig = (MongoConfigItem) context.getLocalVariablesWrapper().get(datasource);
+        var otherConfig = (MongoConfigItem) context.getLocalVariablesWrapper().get(localConfig.getRef());
         runtime.setConfig(localConfig.merge(otherConfig));
         settings = MongoClientSettings.builder().applyConnectionString(new ConnectionString(runtime.getConfig().getUrl())).retryWrites(true).build();
         result.setRequest(MongoRealRequest.build(runtime.getConfig()));

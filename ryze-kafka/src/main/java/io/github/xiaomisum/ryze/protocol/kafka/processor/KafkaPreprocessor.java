@@ -146,8 +146,7 @@ public class KafkaPreprocessor extends AbstractProcessor<KafkaPreprocessor, Kafk
         super.handleRequest(context, result);
         // 1. 合并配置项
         var localConfig = Objects.isNull(runtime.getConfig()) ? new KafkaConfigureItem() : runtime.getConfig();
-        var ref = StringUtils.isBlank(localConfig.getRef()) ? DEF_REF_NAME_KEY : localConfig.getRef();
-        var otherConfig = (KafkaConfigureItem) context.getLocalVariablesWrapper().get(ref);
+        var otherConfig = (KafkaConfigureItem) context.getLocalVariablesWrapper().get(localConfig.getRef());
         runtime.setConfig(localConfig.merge(otherConfig));
         message = runtime.getConfig().getMessage();
         result.setRequest(RealKafkaRequest.build(runtime.getConfig(), message));

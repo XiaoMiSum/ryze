@@ -51,7 +51,7 @@ config: # 可简化填写，无需config关键字，直接将配置内容至于�
 testclass: jdbc  # jdbc 前置处理器类型
 config: # 处理器配置
   datasource: JDBCDataSource_var  # 数据源，必须先定义数据源
-  statement: 'select * from sys_user where id = 1;'  # sql语句
+  sql: 'select * from sys_user where id = 1;'  # sql语句
 ```
 
 ### 后置处理器
@@ -60,7 +60,7 @@ config: # 处理器配置
 testclass: jdbc_postprocessor  # jdbc 后置处理器类型
 config: # 处理器配置
   datasource: JDBCDataSource_var  # 数据源，必须先定义数据源
-  statement: 'select * from sys_user where id = 1;'  # sql语句
+  sql: 'select * from sys_user where id = 1;'  # sql语句
 ```
 
 ## 📊 取样器
@@ -72,7 +72,7 @@ title: 标准jdbc取样器
 testclass: jdbc  # 取样器类型
 config: # 取样器配置
   datasource: JDBCDataSource_var  # 数据源，必须先定义数据源
-  statement: 'select * from sys_user where id = 1;'  # sql语句
+  sql: 'select * from sys_user where id = 1;'  # sql语句
 ```
 
 ## 💻 Java API 示例
@@ -406,7 +406,7 @@ public void transactionTest() {
                     .config(config -> config
                             .datasource("jdbc_source")
                             .sql("INSERT INTO users (name, email) VALUES (?, ?)")
-                            .parameters("事务用户1", "tx1@test.com")
+                            .args("事务用户1", "tx1@test.com")
                     )
             );
 
@@ -415,7 +415,7 @@ public void transactionTest() {
                     .config(config -> config
                             .datasource("jdbc_source")
                             .sql("INSERT INTO users (name, email) VALUES (?, ?)")
-                            .parameters("事务用户2", "tx2@test.com")
+                            .args("事务用户2", "tx2@test.com")
                     )
             );
 
@@ -446,7 +446,7 @@ public void parameterizedQuery() {
         jdbc.config(config -> config
                 .datasource("jdbc_source")
                 .sql("SELECT * FROM users WHERE id = ? AND status = ?")
-                .parameters("${userId}", "${status}")
+                .args("${userId}", "${status}")
         );
         jdbc.assertions(assertions -> assertions
                 .json("$[0].id", "${userId}")
@@ -487,7 +487,7 @@ Ryze JDBC 支持所有兼容 JDBC 标准的数据库：
     - 通过 SQL 语句 `START TRANSACTION`、`COMMIT`、`ROLLBACK` 控制事务。
 
 3. **如何处理 SQL 注入问题？**
-    - 使用参数化查询，通过 `parameters` 配置传递参数值。
+    - 使用参数化查询，通过 `args` 配置传递参数值。
 
 4. **如何验证查询结果？**
     - 使用 `validators` 和 `assertions` 对查询结果进行 JSON 路径验证。

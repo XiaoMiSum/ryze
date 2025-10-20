@@ -18,7 +18,7 @@ public interface TestNGConstantsInterface {
      * </p>
      */
     String DATASOURCE_PROVIDER = "__ryze_testng_data_provider__";
-    
+
     /**
      * 并行数据提供者名称
      * <p>
@@ -34,4 +34,12 @@ public interface TestNGConstantsInterface {
      * </p>
      */
     String RYZE_TEST_METHOD = "__ryze_test_method_in_testng__";
+
+    /**
+     * Ryze测试方法标识属性名
+     * <p>
+     * 用于在TestNG测试结果中标识该方法是否为Ryze测试方法。
+     * </p>
+     */
+    String RYZE_TEST_CLASS = "__ryze_test_class_in_testng__";
 }

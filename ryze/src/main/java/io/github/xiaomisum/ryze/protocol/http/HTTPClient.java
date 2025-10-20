@@ -35,7 +35,6 @@ import io.github.xiaomisum.ryze.protocol.http.config.HTTPConfigureItem;
 import io.github.xiaomisum.ryze.support.PrimitiveTypeChecker;
 import io.github.xiaomisum.ryze.testelement.sampler.DefaultSampleResult;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.Strings;
 import org.apache.hc.client5.http.impl.cookie.BasicClientCookie;
 import org.apache.hc.core5.http.NameValuePair;
 import org.apache.hc.core5.http.message.BasicNameValuePair;
@@ -92,9 +91,7 @@ public class HTTPClient extends Request implements HTTPConstantsInterface {
      * @return HTTP请求对象
      */
     public static HTTPClient build(HTTPConfigureItem config) {
-        var port = StringUtils.isNotBlank(config.getPort()) ? ":" + config.getPort() : "";
-        var path = Strings.CS.startsWith(config.getPath(), "/") ? config.getPath() : "/" + config.getPath();
-        var url = "%s://%s%s%s".formatted(config.getProtocol(), config.getHost(), port, path);
+        var url = "%s://%s%s%s".formatted(config.getProtocol(), config.getHost(), config.getFullPort(), config.getPath());
         // bytes body data(binary) 不会同时出现
         return (HTTPClient) new HTTPClient(config.getMethod(), url)
                 .headers(config.getHeaders())
@@ -133,10 +130,10 @@ public class HTTPClient extends Request implements HTTPConstantsInterface {
      */
     public HTTPClient bytes(byte[] bytes, Map<String, String> headers) {
         if (Objects.nonNull(bytes) && bytes.length > 0) {
-            if (Objects.isNull(headers) || headers.isEmpty() || StringUtils.isBlank(headers.get("Content-Type"))) {
-                throw new IllegalArgumentException("使用bytes作为请求数据时， 请求头必须添加 Content-Type");
+            if (Objects.isNull(headers) || headers.isEmpty() || StringUtils.isBlank(headers.get(HEADER_CONTENT_TYPE))) {
+                throw new IllegalArgumentException("使用bytes作为请求数据时， 请求头必须添加 %s".formatted(HEADER_CONTENT_TYPE));
             }
-            super.body(RequestEntity.bytes(bytes, headers.get("Content-Type")));
+            super.body(RequestEntity.bytes(bytes, headers.get(HEADER_CONTENT_TYPE)));
         }
         return this;
     }
@@ -160,7 +157,7 @@ public class HTTPClient extends Request implements HTTPConstantsInterface {
             super.body(RequestEntity.json(stringBody));
         } else if (PrimitiveTypeChecker.isPrimitiveOrWrapper(body)) {
             super.body(RequestEntity.text(body.toString()));
-        } else {
+        } else if (Objects.nonNull(body)) {
             super.body(RequestEntity.json(JSON.toJSONString(body)));
         }
         return this;

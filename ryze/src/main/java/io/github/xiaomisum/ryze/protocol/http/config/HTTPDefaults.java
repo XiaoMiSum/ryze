@@ -73,19 +73,17 @@ public class HTTPDefaults extends AbstractConfigureElement<HTTPDefaults, HTTPCon
      */
     @Override
     protected void doProcess(ContextWrapper context) {
-        refName = StringUtils.isBlank(refName) ? DEF_REF_NAME_KEY : refName;
         var localConfig = runtime.getConfig();
-        var otherRefName = StringUtils.isBlank(localConfig.ref) ? DEF_REF_NAME_KEY : localConfig.ref;
-        var config = (HTTPConfigureItem) context.getSessionRunner().getContext().getLocalVariablesWrapper().get(otherRefName);
+        var config = (HTTPConfigureItem) context.getLocalVariablesWrapper().get(localConfig.getRef());
         if (Objects.nonNull(config)) {
             runtime.setConfig(localConfig = localConfig.merge(config));
         }
-        context.getSessionRunner().getContext().getLocalVariablesWrapper().put(refName, localConfig);
+        context.getLocalVariablesWrapper().put(runtime.getRefName(DEF_REF_NAME_KEY), localConfig);
     }
 
     @Override
     protected TestSuiteResult getTestResult() {
-        return new TestSuiteResult("HTTP 默认配置");
+        return new TestSuiteResult("HTTP 默认配置" + (StringUtils.isBlank(refName) ? "" : "：" + runtime.getRefName()));
     }
 
     /**

@@ -43,9 +43,11 @@ import io.github.xiaomisum.ryze.interceptor.RyzeInterceptor;
 import io.github.xiaomisum.ryze.support.Collections;
 import io.github.xiaomisum.ryze.support.Customizer;
 import io.github.xiaomisum.ryze.support.KryoUtil;
+import io.github.xiaomisum.ryze.support.ValidateResult;
 import io.github.xiaomisum.ryze.support.groovy.Groovy;
 import io.github.xiaomisum.ryze.testelement.AbstractTestElementExecutable;
 import io.github.xiaomisum.ryze.testelement.TestElement;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -132,6 +134,7 @@ public abstract class AbstractSampler<SELF extends AbstractSampler<SELF, CONFIG,
             variables = new RyzeVariables();
         }
         runtime.configGroup.put(VARIABLES, variables.merge(context.getConfigGroup().getVariables()));
+        runtime.configGroup.put(CONFIG, runtime.config);
         if (context instanceof TestRunContext testRunContext) {
             testRunContext.setConfigGroup(runtime.configGroup);
         }
@@ -157,10 +160,13 @@ public abstract class AbstractSampler<SELF extends AbstractSampler<SELF, CONFIG,
             // 前置处理器可能执行失败，无需执行测试步骤
             return;
         }
-        runtime.config = (CONFIG) context.evaluate(runtime.config);
         try {
+            CONFIG config;
+            if (runtime.config != null && (config = runtime.configGroup.get(CONFIG)) != null) {
+                context.evaluate(config);
+            }
             // 执行前置处理
-            if (chain.applyPreHandle(context, runtime)) {
+            if (runtime.chain.applyPreHandle(context, runtime)) {
                 // 业务处理
                 handleRequest(context, result);
                 result.sampleStart();
@@ -168,17 +174,37 @@ public abstract class AbstractSampler<SELF extends AbstractSampler<SELF, CONFIG,
                 result.sampleEnd();
                 handleResponse(context, result);
                 // 执行后置处理
-                chain.applyPostHandle(context, runtime);
-                Optional.ofNullable(assertions).orElse(Collections.emptyList()).forEach(assertion -> assertion.assertThat(context));
-                Optional.ofNullable(extractors).orElse(Collections.emptyList()).forEach(extractor -> extractor.process(context));
+                runtime.chain.applyPostHandle(context, runtime);
+                Optional.ofNullable(runtime.assertions).orElse(Collections.emptyList()).forEach(assertion -> assertion.assertThat(context));
+                Optional.ofNullable(runtime.extractors).orElse(Collections.emptyList()).forEach(extractor -> extractor.process(context));
             }
         } catch (Throwable throwable) {
             // 1、sampler 执行异常 2、assertion 断言异常 3、extractor 提取异常
             result.setThrowable(throwable);
         } finally {
             // 最终处理
-            chain.triggerAfterCompletion(context);
+            runtime.chain.triggerAfterCompletion(context);
         }
+    }
+
+    /**
+     * 验证取样器测试元件
+     * <p>
+     * 验证取样器测试元件的数据有效性，确保测试可以正常执行。
+     * </p>
+     *
+     * @return 验证结果
+     */
+    @Override
+    public ValidateResult validate() {
+        var result = super.validate();
+        if (StringUtils.isBlank(title)) {
+            result.append("测试描述 %s 字段值缺失或为空", TITLE);
+        }
+        if (config == null) {
+            result.append("取样器配置 %s 字段值缺失或为空", CONFIG);
+        }
+        return result;
     }
 
 

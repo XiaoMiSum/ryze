@@ -31,6 +31,9 @@ package io.github.xiaomisum.ryze.protocol.jdbc;
 import io.github.xiaomisum.ryze.testelement.sampler.SampleResult;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.List;
+import java.util.Objects;
+
 /**
  * JDBC请求实体类
  * <p>
@@ -59,18 +62,24 @@ public class RealJDBCRequest extends SampleResult.Real implements JDBCConstantsI
     private final String password;
 
     /**
+     * SQL参数
+     */
+    private final List<Object> args;
+
+    /**
      * 构造JDBC请求对象
      *
-     * @param url 数据库连接URL
+     * @param url      数据库连接URL
      * @param username 数据库用户名
      * @param password 数据库密码
-     * @param sql 要执行的SQL语句
+     * @param sql      要执行的SQL语句
      */
-    public RealJDBCRequest(String url, String username, String password, String sql) {
+    public RealJDBCRequest(String url, String username, String password, String sql, List<Object> args) {
         super(sql.getBytes());
         this.url = url;
         this.username = username;
         this.password = password;
+        this.args = args;
     }
 
     /**
@@ -94,7 +103,8 @@ public class RealJDBCRequest extends SampleResult.Real implements JDBCConstantsI
         return url + "\n" +
                 USERNAME + ": " + username + "\n" +
                 PASSWORD + ": " + password +
-                (StringUtils.isNotBlank(bytesAsString()) ? "\n\n" + bytesAsString() : "");
+                (StringUtils.isBlank(bytesAsString()) ? "" : "\n\nSQL: " + bytesAsString()) +
+                (Objects.isNull(args) || args.isEmpty() ? "" : "\n\nARGS: " + String.join(", ", ARGS));
     }
 
 }

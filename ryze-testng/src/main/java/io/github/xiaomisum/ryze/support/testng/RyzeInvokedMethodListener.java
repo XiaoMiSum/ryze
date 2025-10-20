@@ -63,20 +63,24 @@ public class RyzeInvokedMethodListener implements IInvokedMethodListener, TestNG
      * 2. 创建一个新的测试框架会话
      * </p>
      *
-     * @param method     被调用的方法
-     * @param testResult 测试结果
+     * @param method 被调用的方法
+     * @param result 测试结果
      */
-    public void beforeInvocation(IInvokedMethod method, ITestResult testResult) {
+    public void beforeInvocation(IInvokedMethod method, ITestResult result) {
         if (!method.isTestMethod()) {
             return;
         }
-        if (!AnnotationUtils.isRyzeTest(testResult.getMethod().getConstructorOrMethod().getMethod())) {
+        if (Objects.equals(result.getAttribute(RYZE_TEST_METHOD), true)) {
+            // 已存在 ryze test method 标识，则不在监听器中创建 session
+            return;
+        }
+        if (!AnnotationUtils.isRyzeTest(result.getMethod().getConstructorOrMethod().getMethod())) {
             return;
         }
         // 添加 ryze test method 标识
-        testResult.setAttribute(RYZE_TEST_METHOD, true);
+        result.setAttribute(RYZE_TEST_METHOD, true);
         // 创建一个 在测试框架中运行时使用的 session
-        SessionRunner.newTestFrameworkSession(Configure.defaultConfigure());
+        SessionRunner.newTestFrameworkSessionIfNone(Configure.defaultConfigure());
     }
 
     /**
@@ -85,12 +89,19 @@ public class RyzeInvokedMethodListener implements IInvokedMethodListener, TestNG
      * 该方法会判断当前执行的方法是否为Ryze测试方法，如果是则移除测试会话
      * </p>
      *
-     * @param method     被调用的方法
-     * @param testResult 测试结果
+     * @param method 被调用的方法
+     * @param result 测试结果
      */
-    public void afterInvocation(IInvokedMethod method, ITestResult testResult) {
-        if (!method.isTestMethod() || (Objects.nonNull(testResult.getAttribute(RYZE_TEST_METHOD)) &&
-                !(boolean) testResult.getAttribute(RYZE_TEST_METHOD))) {
+    public void afterInvocation(IInvokedMethod method, ITestResult result) {
+        if (!method.isTestMethod()) {
+            return;
+        }
+        if (Objects.equals(result.getAttribute(RYZE_TEST_CLASS), true)) {
+            // 如果是 RyzeBasicTestcase4TestNG 继承的类，则不在监听器中移除 session
+            return;
+        }
+        if (!Objects.equals(result.getAttribute(RYZE_TEST_METHOD), true)) {
+            // 如果没有 ryze test method 标识，则不处理
             return;
         }
         SessionRunner.removeSession();

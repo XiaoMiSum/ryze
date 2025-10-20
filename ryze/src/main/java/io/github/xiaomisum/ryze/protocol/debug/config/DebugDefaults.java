@@ -29,7 +29,6 @@ import io.github.xiaomisum.ryze.context.ContextWrapper;
 import io.github.xiaomisum.ryze.testelement.KW;
 import io.github.xiaomisum.ryze.testelement.TestSuiteResult;
 import io.github.xiaomisum.ryze.testelement.configure.AbstractConfigureElement;
-import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author xiaomi
@@ -53,8 +52,7 @@ public class DebugDefaults extends AbstractConfigureElement<DebugDefaults, Debug
 
     @Override
     protected void doProcess(ContextWrapper context) {
-        refName = StringUtils.isBlank(refName) ? DEF_REF_NAME_KEY : refName;
-        context.getSessionRunner().getContext().getLocalVariablesWrapper().put(refName, config);
+        context.getLocalVariablesWrapper().put(runtime.getRefName(DEF_REF_NAME_KEY), runtime.getConfig());
     }
 
     @Override

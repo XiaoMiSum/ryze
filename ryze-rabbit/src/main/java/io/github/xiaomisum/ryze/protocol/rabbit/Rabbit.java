@@ -31,13 +31,14 @@ package io.github.xiaomisum.ryze.protocol.rabbit;
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.BuiltinExchangeType;
 import com.rabbitmq.client.ConnectionFactory;
-import io.github.xiaomisum.ryze.testelement.sampler.DefaultSampleResult;
 import io.github.xiaomisum.ryze.protocol.rabbit.config.RabbitConfigureItem;
+import io.github.xiaomisum.ryze.testelement.sampler.DefaultSampleResult;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.Objects;
 
+import static com.rabbitmq.client.MessageProperties.MINIMAL_BASIC;
 import static io.github.xiaomisum.ryze.protocol.rabbit.RabbitConstantsInterface.EXCHANGE_TYPE_DIRECT;
 import static io.github.xiaomisum.ryze.protocol.rabbit.RabbitConstantsInterface.EXCHANGE_TYPE_FANOUT;
 
@@ -71,10 +72,8 @@ public class Rabbit {
             var queue = config.getQueue();
             channel.queueDeclare(queue.getName(), queue.getDurable(), queue.getExclusive(), queue.getAutoDelete(), queue.getArguments());
             result.sampleStart();
-            var properties = getBasicProperties(config);
             var exchange = config.getExchange();
             var exchangeName = Objects.isNull(exchange) ? "" : exchange.getName();
-            var routingKey = Objects.isNull(exchange) ? null : exchange.getRoutingKey();
             if (Objects.nonNull(exchange)) {
                 channel.exchangeDeclare(exchangeName,
                         switch (exchange.getType()) {
@@ -82,10 +81,10 @@ public class Rabbit {
                             case EXCHANGE_TYPE_DIRECT -> BuiltinExchangeType.DIRECT;
                             default -> BuiltinExchangeType.TOPIC;
                         });
-                routingKey = EXCHANGE_TYPE_FANOUT.equals(exchange.getType()) ? null : exchange.getRoutingKey();
-                channel.queueBind(exchange.getName(), exchange.getType(), routingKey);
+                var routingKey = EXCHANGE_TYPE_FANOUT.equals(exchange.getType()) ? null : exchange.getRoutingKey();
+                channel.queueBind(exchangeName, exchange.getType(), routingKey);
             }
-            channel.basicPublish(exchangeName, queue.getName(), properties, message.getBytes(StandardCharsets.UTF_8));
+            channel.basicPublish(exchangeName, queue.getName(), properties(config), message.getBytes(StandardCharsets.UTF_8));
         } catch (Exception e) {
             throw new RuntimeException(e);
         } finally {
@@ -103,27 +102,22 @@ public class Rabbit {
      * @param config RabbitMQ 配置项
      * @return AMQP.BasicProperties 对象，如果配置中没有属性设置则返回 null
      */
-    private static AMQP.BasicProperties getBasicProperties(RabbitConfigureItem config) {
-        AMQP.BasicProperties properties = null;
-        if (Objects.nonNull(config.getProps())) {
-            properties = new AMQP.BasicProperties(
-                    config.getProps().getContentType(),
-                    config.getProps().getContentEncoding(),
-                    config.getProps().getHeaders(),
-                    config.getProps().getDeliveryMode(),
-                    config.getProps().getPriority(),
-                    config.getProps().getCorrelationId(),
-                    config.getProps().getReplyTo(),
-                    config.getProps().getExpiration(),
-                    config.getProps().getMessageId(),
-                    new Date(),
-                    config.getProps().getType(),
-                    config.getProps().getUserId(),
-                    config.getProps().getAppId(),
-                    config.getProps().getClusterId()
-            );
-        }
-        return properties;
+    private static AMQP.BasicProperties properties(RabbitConfigureItem config) {
+        return Objects.isNull(config.getProps()) ? MINIMAL_BASIC : new AMQP.BasicProperties.Builder()
+                .appId(config.getProps().getAppId())
+                .clusterId(config.getProps().getClusterId())
+                .contentEncoding(config.getProps().getContentEncoding())
+                .contentType(config.getProps().getContentType())
+                .correlationId(config.getProps().getCorrelationId())
+                .deliveryMode(config.getProps().getDeliveryMode())
+                .expiration(config.getProps().getExpiration())
+                .messageId(config.getProps().getMessageId())
+                .priority(config.getProps().getPriority())
+                .replyTo(config.getProps().getReplyTo())
+                .timestamp(new Date())
+                .type(config.getProps().getType())
+                .userId(config.getProps().getUserId())
+                .build();
     }
 
     /**

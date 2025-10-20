@@ -86,25 +86,18 @@ Ryze 采用模块化架构设计，核心模块提供基础能力，协议模块
 
 ```mermaid
 graph TB
-    A[Ryze Core] --> B[HTTP Module]
-    A --> C[Dubbo Module]
-    A --> D[JDBC Module]
-    A --> E[Redis Module]
-    A --> F[MongoDB Module]
-    A --> G[Kafka Module]
-    A --> H[RabbitMQ Module]
-    A --> I[ActiveMQ Module]
+    A[Ryze-Parent] --> B[Ryze（Core）]
     
-    A --> J[TestNG Integration]
-    A --> K[Example Modules]
+    B --> B1[HTTP]
+    B --> B2[JDBC]
+    B --> B3[Redis]
     
-    B --> L[HTTP Sampler]
-    B --> M[HTTP Processor]
-    B --> N[HTTP Configure]
-    
-    C --> O[Dubbo Sampler]
-    C --> P[Dubbo Processor]
-    C --> Q[Dubbo Configure]
+    A --> C[Ryze-Dubbo]
+    A --> D[Ryze-Mongo]
+    A --> E[Ryze-Active]
+    A --> F[Ryze-Kafka]
+    A --> G[Ryze-Rabbit]
+    A --> H[Ryze-TestNG]
 ```
 
 ### 核心组件

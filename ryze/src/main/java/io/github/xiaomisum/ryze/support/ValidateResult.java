@@ -28,6 +28,7 @@ package io.github.xiaomisum.ryze.support;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;
+import java.util.StringJoiner;
 
 /**
  * {@link Validatable#validate()} 验证结果实体类
@@ -36,7 +37,7 @@ import java.util.Objects;
  */
 public class ValidateResult {
 
-    private final StringBuilder reason = new StringBuilder();
+    private final StringJoiner reason = new StringJoiner("\n");
     private boolean valid = true;
 
     /**
@@ -47,7 +48,7 @@ public class ValidateResult {
      */
     public ValidateResult appendDescription(String description) {
         if (StringUtils.isNotBlank(description)) {
-            reason.append(description);
+            reason.add(description);
         }
         return this;
     }
@@ -63,7 +64,7 @@ public class ValidateResult {
             // 任意一个失败，即为失败
             if (!result.isValid()) {
                 valid = false;
-                reason.append(result.getReason());
+                reason.add(result.getReason());
             }
         }
         return this;
@@ -79,7 +80,7 @@ public class ValidateResult {
     public ValidateResult append(String extraReason) {
         if (StringUtils.isNotBlank(extraReason)) {
             valid = false;
-            reason.append(extraReason);
+            reason.add(extraReason);
         }
         return this;
     }
@@ -105,6 +106,12 @@ public class ValidateResult {
 
     public String getReason() {
         return reason.toString();
+    }
+
+    public void valid() {
+        if (!valid) {
+            throw new IllegalArgumentException(reason.toString());
+        }
     }
 
 }

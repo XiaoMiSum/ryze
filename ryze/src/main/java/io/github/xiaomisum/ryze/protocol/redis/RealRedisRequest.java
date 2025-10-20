@@ -28,10 +28,12 @@
 
 package io.github.xiaomisum.ryze.protocol.redis;
 
+import com.alibaba.fastjson2.JSON;
 import io.github.xiaomisum.ryze.testelement.sampler.SampleResult;
 import org.apache.commons.lang3.StringUtils;
 
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 /**
  * Redis实际请求类
@@ -53,12 +55,12 @@ public class RealRedisRequest extends SampleResult.Real implements RedisConstant
     /**
      * 构造Redis实际请求对象
      *
-     * @param url Redis连接URL
+     * @param url     Redis连接URL
      * @param command Redis命令
-     * @param send Redis命令参数
+     * @param args    Redis命令参数
      */
-    public RealRedisRequest(String url, String command, String send) {
-        super((COMMAND + ": " + command + "\n" + SEND + ": " + send + "\n\n").getBytes(StandardCharsets.UTF_8));
+    public RealRedisRequest(String url, String command, List<String> args) {
+        super((COMMAND + ": " + command + "\n" + ARGS + ": " + JSON.toJSONString(args) + "\n\n").getBytes(StandardCharsets.UTF_8));
         this.url = url;
     }
 

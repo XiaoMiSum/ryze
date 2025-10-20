@@ -32,16 +32,15 @@ import groovy.lang.DelegatesTo;
 import io.github.xiaomisum.ryze.config.ConfigureItem;
 import io.github.xiaomisum.ryze.context.ContextWrapper;
 import io.github.xiaomisum.ryze.protocol.redis.RedisConstantsInterface;
-import io.github.xiaomisum.ryze.protocol.redis.processor.RedisPostprocessor;
-import io.github.xiaomisum.ryze.protocol.redis.processor.RedisPreprocessor;
-import io.github.xiaomisum.ryze.protocol.redis.sampler.RedisSampler;
+import io.github.xiaomisum.ryze.support.Collections;
 import io.github.xiaomisum.ryze.testelement.AbstractTestElement;
-import io.github.xiaomisum.ryze.testelement.sampler.DefaultSampleResult;
 import org.apache.commons.lang3.StringUtils;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.Protocol;
 import redis.clients.jedis.commands.ProtocolCommand;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 import java.util.function.Consumer;
 
@@ -58,6 +57,7 @@ import static redis.clients.jedis.Protocol.Command.*;
  * @author xiaomi
  */
 @JSONType(deserializer = RedisJSONInterceptor.class)
+@SuppressWarnings("rawtypes")
 public class RedisConfigureItem implements ConfigureItem<RedisConfigureItem>, RedisConstantsInterface {
 
     /**
@@ -86,7 +86,7 @@ public class RedisConfigureItem implements ConfigureItem<RedisConfigureItem>, Re
      * <p>Redis命令的参数列表，以逗号分隔</p>
      */
     @JSONField(name = ARGS, ordinal = 7)
-    protected String args;
+    protected List<String> args;
 
     /**
      * 连接超时时间
@@ -152,11 +152,11 @@ public class RedisConfigureItem implements ConfigureItem<RedisConfigureItem>, Re
         self.datasource = StringUtils.isBlank(self.datasource) ? localOther.datasource : self.datasource;
         self.url = StringUtils.isBlank(self.url) ? localOther.url : self.url;
         self.command = StringUtils.isBlank(self.command) ? localOther.command : self.command;
-        self.args = StringUtils.isBlank(self.args) ? localOther.args : self.args;
-        self.timeout = (self.timeout = self.timeout > 0 ? localOther.timeout : self.timeout) > 0 ? self.timeout : 10000;
-        self.maxTotal = (self.maxTotal = self.maxTotal > 0 ? localOther.maxTotal : self.maxTotal) > 0 ? self.maxTotal : 10;
-        self.maxIdle = (self.maxIdle = self.maxIdle > 0 ? localOther.maxIdle : self.maxIdle) > 0 ? self.maxIdle : 5;
-        self.minIdle = (self.minIdle = self.minIdle > 0 ? localOther.minIdle : self.minIdle) > 0 ? self.minIdle : 1;
+        self.args = self.getArgs() == null || self.args.isEmpty() ? localOther.args : self.args;
+        self.timeout = (self.timeout = self.timeout > 0 ? self.timeout : localOther.timeout) > 0 ? self.timeout : 10000;
+        self.maxTotal = (self.maxTotal = self.maxTotal > 0 ? self.maxTotal : localOther.maxTotal) > 0 ? self.maxTotal : 10;
+        self.maxIdle = (self.maxIdle = self.maxIdle > 0 ? self.maxIdle : localOther.maxIdle) > 0 ? self.maxIdle : 5;
+        self.minIdle = (self.minIdle = self.minIdle > 0 ? self.minIdle : localOther.minIdle) > 0 ? self.minIdle : 1;
         return self;
     }
 
@@ -174,7 +174,7 @@ public class RedisConfigureItem implements ConfigureItem<RedisConfigureItem>, Re
         datasource = (String) context.evaluate(datasource);
         url = (String) context.evaluate(url);
         command = (String) context.evaluate(command);
-        args = (String) context.evaluate(args);
+        args = (List<String>) context.evaluate(args);
         return this;
     }
 
@@ -220,7 +220,7 @@ public class RedisConfigureItem implements ConfigureItem<RedisConfigureItem>, Re
      * @return Redis命令
      */
     public String getCommand() {
-        return command.toUpperCase(Locale.ROOT);
+        return StringUtils.isBlank(command) ? "" : command.toUpperCase(Locale.ROOT);
     }
 
     /**
@@ -237,7 +237,7 @@ public class RedisConfigureItem implements ConfigureItem<RedisConfigureItem>, Re
      *
      * @return Redis命令参数
      */
-    public String getArgs() {
+    public List<String> getArgs() {
         return args;
     }
 
@@ -246,7 +246,7 @@ public class RedisConfigureItem implements ConfigureItem<RedisConfigureItem>, Re
      *
      * @param args Redis命令参数
      */
-    public void setArgs(String args) {
+    public void setArgs(List<String> args) {
         this.args = args;
     }
 
@@ -387,13 +387,10 @@ public class RedisConfigureItem implements ConfigureItem<RedisConfigureItem>, Re
          * @param args Redis命令参数
          * @return 构建器实例
          */
-        public Builder args(String args) {
-            configure.args = args;
-            return self;
-        }
-
         public Builder args(String arg, String... args) {
-            configure.args = String.join(",", parseArgs(arg, args));
+            var localArgs = Collections.newArrayList(arg);
+            localArgs.addAll(Arrays.stream(args).toList());
+            configure.args = Collections.addAllIfNonNull(configure.args, localArgs);
             return self;
         }
 
@@ -860,7 +857,7 @@ public class RedisConfigureItem implements ConfigureItem<RedisConfigureItem>, Re
         private Builder command(Protocol.Command command, String... args) {
             configure.command = command.name();
             if (args != null && args.length > 0) {
-                configure.args = String.join(",", args);
+                configure.args = Collections.addAllIfNonNull(configure.args, Arrays.stream(args).toList());
             }
             return self;
         }
