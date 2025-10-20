@@ -120,12 +120,17 @@ export default withMermaid({
               ]
             },
             {
-            text: '变量与函数', items: [
+              text: '变量与函数', items: [
                 { text: '变量', link: '/tester/variable/variables' },
                 { text: '函数', link: '/tester/variable/functions' }
               ]
             },
-            { text: '常见问题', link: '/faq/same' }
+            {
+              text: '其他事项', items: [
+                 { text: 'Gitlab集成',link: '/tester/other/gitlab' },
+                 { text: '常见问题',link: '/faq/same' }
+              ]
+            }
           ]
         }
       ],
