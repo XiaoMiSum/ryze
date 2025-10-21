@@ -38,7 +38,7 @@ test-job: # 执行测试并创建测试报告
       - $ALLURE_REPORT
     policy: push
 
-pages-job: # 发布测试报告到Gitlab Pages
+page: # 发布测试报告到Gitlab Pages
   stage: test
   tags:
     - qa
