@@ -26,115 +26,87 @@ strict: false # 是否严格验证，默认否：忽略大小写验证
 
 ### 验证基本字段
 
-```json
-{
-  "testclass": "http",
-  "title": "用户登录",
-  "config": {
-    "method": "POST",
-    "url": "https://api.example.com/login",
-    "body": {
-      "username": "testuser",
-      "password": "testpass"
-    }
-  },
-  "validators": [
-    {
-      "testclass": "json",
-      "field": "$.status",
-      "expected": 200,
-      "rule": "=="
-    },
-    {
-      "testclass": "json",
-      "field": "$.data.user.name",
-      "expected": "testuser",
-      "rule": "=="
-    },
-    {
-      "testclass": "json",
-      "field": "$.data.token",
-      "expected": "",
-      "rule": "isNotEmpty"
-    }
-  ]
-}
+```yaml
+testclass: http
+title: 用户登录
+config:
+  method: POST
+  protocol: http
+  host: api.example.com
+  path: /login
+  body:
+    username: testuser
+    password: testpass
+validators:
+  - testclass: json
+    field: $.status
+    expected: 200
+    rule: '=='
+  - testclass: json
+    field: $.data.user.name
+    expected: testuser
+    rule: '=='
+  - testclass: json
+    field: $.data.token
+    expected: ''
+    rule: isNotEmpty
 ```
 
 ### 验证数组元素
 
-```json
-{
-  "testclass": "http",
-  "title": "获取用户列表",
-  "config": {
-    "method": "GET",
-    "url": "https://api.example.com/users"
-  },
-  "validators": [
-    {
-      "testclass": "json",
-      "field": "$.data.length()",
-      "expected": 10,
-      "rule": ">="
-    },
-    {
-      "testclass": "json",
-      "field": "$.data[0].id",
-      "expected": 0,
-      "rule": ">"
-    },
-    {
-      "testclass": "json",
-      "field": "$.data[0].name",
-      "expected": "",
-      "rule": "isNotEmpty"
-    }
-  ]
-}
+```yaml
+testclass: http
+title: 获取用户列表
+config:
+  method: GET
+  protocol: http
+  host: api.example.com
+  path: /users
+validators:
+  - testclass: json
+    field: $.data.length()
+    expected: 10
+    rule: '>='
+  - testclass: json
+    field: $.data[0].id
+    expected: 0
+    rule: '>'
+  - testclass: json
+    field: $.data[0].name
+    expected: ''
+    rule: isNotEmpty
 ```
 
 ### 复杂验证场景
 
-```json
-{
-  "testclass": "http",
-  "title": "创建订单",
-  "config": {
-    "method": "POST",
-    "url": "https://api.example.com/orders",
-    "body": {
-      "product_id": 123,
-      "quantity": 2
-    }
-  },
-  "validators": [
-    {
-      "testclass": "json",
-      "field": "$.status",
-      "expected": 201,
-      "rule": "=="
-    },
-    {
-      "testclass": "json",
-      "field": "$.data.order_id",
-      "expected": "",
-      "rule": "isNotEmpty"
-    },
-    {
-      "testclass": "json",
-      "field": "$.data.total_amount",
-      "expected": 100.0,
-      "rule": ">="
-    },
-    {
-      "testclass": "json",
-      "field": "$.data.items.length()",
-      "expected": 1,
-      "rule": ">="
-    }
-  ]
-}
+```yaml
+testclass: http
+title: 创建订单
+config:
+  method: POST
+  protocol: http
+  host: api.example.com
+  url: /orders
+  body:
+    product_id: 123
+    quantity: 2
+validators:
+  - testclass: json
+    field: $.status
+    expected: 201
+    rule: '=='
+  - testclass: json
+    field: $.data.order_id
+    expected: ''
+    rule: isNotEmpty
+  - testclass: json
+    field: $.data.total_amount
+    expected: 100.0
+    rule: '>='
+  - testclass: json
+    field: $.data.items.length()
+    expected: 1
+    rule: '>='
 ```
 
 ## 支持的验证规则

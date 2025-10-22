@@ -18,33 +18,25 @@ ref_name: status # 变量名称
 
 ## 使用示例
 
-```json
-{
-  "testclass": "http",
-  "title": "用户登录",
-  "config": {
-    "method": "POST",
-    "url": "https://api.example.com/login",
-    "body": {
-      "username": "testuser",
-      "password": "testpass"
-    }
-  },
-  "extractors": [
-    {
-      "testclass": "result",
-      "ref_name": "login_result"
-    }
-  ],
-  "validators": [
-    {
-      "testclass": "http",
-      "field": "status",
-      "expected": 200,
-      "rule": "=="
-    }
-  ]
-}
+```yaml
+testclass: http
+title: 用户登录
+config:
+  protocol: http
+  host: localhost
+  method: post
+  path: /api/login
+  body:
+    username: testuser
+    password: testpass
+extractors:
+  - testclass: result
+    ref_name: login_result
+validators:
+  - testclass: http
+    field: status
+    expected: 200
+    rule: '=='
 ```
 
 在上述示例中，我们将整个 HTTP 请求的执行结果存储在变量 `login_result` 中，可以在后续的测试步骤中使用该变量。
