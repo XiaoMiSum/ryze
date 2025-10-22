@@ -64,10 +64,6 @@ children: # 测试集合 或 测试用例列表，为了方便查看，可通过
   ],
   "preprocessors": [
     {
-      "testclass": "log",
-      "message": "开始执行电商平台全量测试"
-    },
-    {
       "testclass": "jdbc",
       "config": {
         "url": "jdbc:mysql://localhost:3306/testdb",
@@ -84,10 +80,6 @@ children: # 测试集合 或 测试用例列表，为了方便查看，可通过
     "inventory/module.json"
   ],
   "postprocessors": [
-    {
-      "testclass": "log",
-      "message": "电商平台全量测试执行完成"
-    },
     {
       "testclass": "jdbc",
       "config": {
