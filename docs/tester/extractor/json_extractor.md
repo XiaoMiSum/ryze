@@ -20,39 +20,29 @@ ref_name: status # 变量名称
 
 ## 使用示例
 
-```json
-{
-  "testclass": "http",
-  "title": "用户登录",
-  "config": {
-    "method": "POST",
-    "url": "https://api.example.com/login",
-    "body": {
-      "username": "testuser",
-      "password": "testpass"
-    }
-  },
-  "extractors": [
-    {
-      "testclass": "json",
-      "field": "$.data.token",
-      "ref_name": "auth_token"
-    },
-    {
-      "testclass": "json",
-      "field": "$.data.user.id",
-      "ref_name": "user_id"
-    }
-  ],
-  "validators": [
-    {
-      "testclass": "http",
-      "field": "status",
-      "expected": 200,
-      "rule": "=="
-    }
-  ]
-}
+```yaml
+testclass: http
+title: 用户登录
+config:
+  method: POST
+  protocol: https
+  host: api.example.com
+  path: /login
+  body:
+    username: testuser
+    password: testpass
+extractors:
+  - testclass: json
+    field: $.data.token
+    ref_name: auth_token
+  - testclass: json
+    field: $.data.user.id
+    ref_name: user_id
+validators:
+  - testclass: http
+    field: status
+    expected: 200
+    rule: '=='
 ```
 
 在上述示例中，我们从 JSON 响应体中提取了 token 和用户 ID，并将它们分别存储在变量 `auth_token` 和 `user_id`

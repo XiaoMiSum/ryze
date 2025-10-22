@@ -26,69 +26,56 @@ strict: false # 是否严格验证，默认否：忽略大小写验证
 
 ### 验证状态码
 
-```json
-{
-  "testclass": "http",
-  "title": "用户登录",
-  "config": {
-    "method": "POST",
-    "url": "https://api.example.com/login",
-    "body": {
-      "username": "testuser",
-      "password": "testpass"
-    }
-  },
-  "validators": [
-    {
-      "testclass": "http",
-      "field": "status",
-      "expected": 200,
-      "rule": "=="
-    }
-  ]
-}
+```yaml
+testclass: http
+title: 用户登录
+config:
+  protocol: http
+  host: localhost
+  method: post
+  path: /api/login
+  body:
+    username: testuser
+    password: testpass
+validators:
+  - testclass: http
+    field: status
+    expected: 200
+    rule: '=='
 ```
 
 ### 验证响应头
 
-```json
-{
-  "testclass": "http",
-  "title": "下载文件",
-  "config": {
-    "method": "GET",
-    "url": "https://api.example.com/files/document.pdf"
-  },
-  "validators": [
-    {
-      "testclass": "http",
-      "field": "header[0].Content-Type",
-      "expected": "application/pdf",
-      "rule": "=="
-    }
-  ]
-}
+```yaml
+testclass: http
+title: 下载文件
+config:
+  method: GET
+  protocol: http
+  host: api.example.com
+  path: /files/document.pdf
+validators:
+  - testclass: http
+    field: header[0].Content-Type
+    expected: application/pdf
+    rule: '=='
 ```
 
 ### 验证响应体内容
 
-```json
-{
-  "testclass": "http",
-  "title": "获取用户信息",
-  "config": {
-    "method": "GET",
-    "url": "https://api.example.com/users/123"
-  },
-  "validators": [
-    {
-      "testclass": "http",
-      "field": "body",
-      "expected": "User not found",
-      "rule": "contains"
-    }
-  ]
-}
+```yaml
+testclass: http
+title: 获取用户信息
+config:
+  method: GET
+  protocol: http
+  host: api.example.com
+  path: /users/123
+validators:
+  - testclass: http
+    field: body
+    expected: User not found
+    rule: contains
 ```
 
 ## 支持的验证规则

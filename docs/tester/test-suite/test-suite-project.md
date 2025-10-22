@@ -17,7 +17,6 @@ preprocessors: # 前置处理器
   - testclass: jdbc
     config: # 可简化填写，无需config关键字，直接将配置内容至于上层
       datasource: JDBCDataSource_var
-      query_type: select
       sql: 'select * from sys_user;'
     extractors:
       - { testclass: json, field: '$.user_name', ref_name: user_name }
@@ -27,7 +26,6 @@ postprocessors: # 后置处理器
   - testclass: jdbc
     config: # 可简化填写，无需config关键字，直接将配置内容至于上层
       datasource: JDBCDataSource_var
-      query_type: select
       sql: 'select * from sys_user;'
 children: # 测试集合 或 测试用例列表，为了方便查看，可通过 @F(filepath) 将外部文件引入
   - !include '测试用例/测试集合（模块）.yaml'
@@ -46,51 +44,35 @@ children: # 测试集合 或 测试用例列表，为了方便查看，可通过
 
 ## 使用示例
 
-```json
-{
-  "title": "电商平台测试项目",
-  "configelements": [
-    {
-      "testclass": "http",
-      "config": {
-        "protocol": "https",
-        "host": "api.example.com",
-        "headers": {
-          "Content-Type": "application/json",
-          "User-Agent": "Ryze-Test-Framework/1.0"
-        }
-      }
-    }
-  ],
-  "preprocessors": [
-    {
-      "testclass": "jdbc",
-      "config": {
-        "url": "jdbc:mysql://localhost:3306/testdb",
-        "username": "testuser",
-        "password": "testpass"
-      },
-      "sql": "TRUNCATE TABLE test_data;"
-    }
-  ],
-  "children": [
-    "user_management/module.json",
-    "order_management/module.json",
-    "payment/module.json",
-    "inventory/module.json"
-  ],
-  "postprocessors": [
-    {
-      "testclass": "jdbc",
-      "config": {
-        "url": "jdbc:mysql://localhost:3306/testdb",
-        "username": "testuser",
-        "password": "testpass"
-      },
-      "sql": "TRUNCATE TABLE test_data;"
-    }
-  ]
-}
+```yaml
+title: 电商平台测试项目
+configelements:
+  - testclass: http
+    config:
+      protocol: https
+      host: api.example.com
+      headers:
+        Content-Type: application/json
+        User-Agent: Ryze-Test-Framework/1.0
+preprocessors:
+  - testclass: jdbc
+    config:
+      url: jdbc:mysql://localhost:3306/testdb
+      username: testuser
+      password: testpass
+      sql: TRUNCATE TABLE test_data;
+children:
+  - !import user_management/module.yaml
+  - !import order_management/module.yaml
+  - !import payment/module.yaml
+  - !import inventory/module.yaml
+postprocessors:
+  - testclass: jdbc
+    config:
+      url: jdbc:mysql://localhost:3306/testdb
+      username: testuser
+      password: testpass
+      sql: TRUNCATE TABLE test_data;
 ```
 
 在上述示例中，我们定义了一个电商平台的项目级测试集合，它包含了用户管理、订单管理、支付和库存四个模块级测试集合。项目级测试集合通常包含：

@@ -15,7 +15,6 @@ preprocessors: # 前置处理器
   - testclass: jdbc
     config: # 可简化填写，无需config关键字，直接将配置内容至于上层
       datasource: JDBCDataSource_var
-      query_type: select
       sql: 'select * from sys_user;'
     extractors:
       - { testclass: json, field: '$.user_name', ref_name: user_name }
@@ -25,7 +24,6 @@ postprocessors: # 后置处理器
   - testclass: jdbc
     config: # 可简化填写，无需config关键字，直接将配置内容至于上层
       datasource: JDBCDataSource_var
-      query_type: select
       sql: 'select * from sys_user;'
 children: # 执行步骤
   - title: 步骤1
@@ -70,67 +68,43 @@ children: # 执行步骤
 
 ## 使用示例
 
-```json
-{
-  "title": "用户登录并获取信息",
-  "configelements": [
-    {
-      "testclass": "http",
-      "config": {
-        "protocol": "https",
-        "host": "api.example.com"
-      }
-    }
-  ],
-  "children": [
-    {
-      "title": "用户登录",
-      "testclass": "http",
-      "config": {
-        "method": "POST",
-        "path": "/login",
-        "body": {
-          "username": "testuser",
-          "password": "testpass"
-        }
-      },
-      "extractors": [
-        {
-          "testclass": "json",
-          "field": "$.data.token",
-          "ref_name": "auth_token"
-        }
-      ],
-      "validators": [
-        {
-          "testclass": "http",
-          "field": "status",
-          "expected": 200,
-          "rule": "=="
-        }
-      ]
-    },
-    {
-      "title": "获取用户信息",
-      "testclass": "http",
-      "config": {
-        "method": "GET",
-        "path": "/user/profile",
-        "headers": {
-          "Authorization": "Bearer ${auth_token}"
-        }
-      },
-      "validators": [
-        {
-          "testclass": "http",
-          "field": "status",
-          "expected": 200,
-          "rule": "=="
-        }
-      ]
-    }
-  ]
-}
+```yaml
+title: 用户登录并获取信息
+configelements:
+  - testclass: http
+    config:
+      protocol: https
+      host: api.example.com
+children:
+  - title: 用户登录
+    testclass: http
+    config:
+      method: POST
+      path: /login
+      body:
+        username: testuser
+        password: testpass
+    extractors:
+      - testclass: json
+        field: $.data.token
+        ref_name: auth_token
+    validators:
+      - testclass: http
+        field: status
+        expected: 200
+        rule: '=='
+  - title: 获取用户信息
+    testclass: http
+    config:
+      method: GET
+      path: /user/profile
+      headers:
+        Authorization: Bearer ${auth_token}
+    validators:
+      - testclass: http
+        field: status
+        expected: 200
+        rule: '=='
 ```
 
 在上述示例中，我们定义了一个包含两个步骤的测试用例：

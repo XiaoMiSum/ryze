@@ -24,70 +24,53 @@ strict: false # 是否严格验证，默认否：忽略大小写验证
 
 ### 验证HTTP请求成功
 
-```json
-{
-  "testclass": "http",
-  "title": "用户登录",
-  "config": {
-    "method": "POST",
-    "url": "https://api.example.com/login",
-    "body": {
-      "username": "testuser",
-      "password": "testpass"
-    }
-  },
-  "validators": [
-    {
-      "testclass": "result",
-      "expected": "响应消息内容",
-      "rule": "=="
-    }
-  ]
-}
+```yaml
+testclass: http
+title: 用户登录
+config:
+  method: POST
+  protocol: http
+  host: api.example.com
+  path: /login
+  body:
+    username: testuser
+    password: testpass
+validators:
+  - testclass: result
+    expected: 响应消息内容
+    rule: '=='
 ```
 
 ### 验证数据库操作影响行数
 
-```json
-{
-  "testclass": "jdbc",
-  "title": "更新用户信息",
-  "config": {
-    "url": "jdbc:mysql://localhost:3306/testdb",
-    "username": "testuser",
-    "password": "testpass",
-    "sql": "UPDATE users SET name = 'updated_user' WHERE id = 123"
-  },
-  "validators": [
-    {
-      "testclass": "result",
-      "expected": 1,
-      "rule": "=="
-    }
-  ]
-}
+```yaml
+testclass: jdbc
+title: 更新用户信息
+config:
+  url: jdbc:mysql://localhost:3306/testdb
+  username: testuser
+  password: testpass
+  sql: UPDATE users SET name = 'updated_user' WHERE id = 123
+validators:
+  - testclass: result
+    expected: 1
+    rule: '=='
 ```
 
 ### 验证消息队列发送成功
 
-```json
-{
-  "testclass": "kafka",
-  "title": "发送订单创建消息",
-  "config": {
-    "bootstrap_servers": "localhost:9092",
-    "topic": "order-events",
-    "key": "order-123",
-    "value": "{\"orderId\": 123, \"status\": \"created\"}"
-  },
-  "validators": [
-    {
-      "testclass": "result",
-      "expected": true,
-      "rule": "=="
-    }
-  ]
-}
+```yaml
+testclass: kafka
+title: 发送订单创建消息
+config:
+  bootstrap_servers: localhost:9092
+  topic: order-events
+  key: order-123
+  value: '{"orderId": 123, "status": "created"}'
+validators:
+  - testclass: result
+    expected: true
+    rule: '=='
 ```
 
 ## 支持的验证规则

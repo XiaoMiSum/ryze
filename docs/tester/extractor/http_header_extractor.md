@@ -20,30 +20,23 @@ ref_name: content_type # 引用变量名称
 
 ## 使用示例
 
-```json
-{
-  "testclass": "http",
-  "title": "获取用户信息",
-  "config": {
-    "method": "GET",
-    "url": "https://api.example.com/users/123"
-  },
-  "extractors": [
-    {
-      "testclass": "http",
-      "field": "Content-Type",
-      "ref_name": "response_content_type"
-    }
-  ],
-  "validators": [
-    {
-      "testclass": "json",
-      "field": "$.id",
-      "expected": 123,
-      "rule": "=="
-    }
-  ]
-}
+```yaml
+testclass: http
+title: 获取用户信息
+config:
+  method: GET
+  protocol: http
+  host: api.example.com
+  path: /users/123
+extractors:
+  - testclass: http
+    field: Content-Type
+    ref_name: response_content_type
+validators:
+  - testclass: json
+    field: $.id
+    expected: 123
+    rule: '=='
 ```
 
 在上述示例中，我们从 HTTP 响应头中提取了 `Content-Type` 字段的值，并将其存储在变量 `response_content_type`

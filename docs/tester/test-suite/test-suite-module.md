@@ -17,7 +17,6 @@ preprocessors: # 前置处理器
   - testclass: jdbc
     config: # 可简化填写，无需config关键字，直接将配置内容至于上
       datasource: JDBCDataSource_var
-      query_type: select
       sql: 'select * from sys_user;'
     extractors:
       - { testclass: json, field: '$.user_name', ref_name: user_name }
@@ -27,7 +26,6 @@ postprocessors: # 后置处理器
   - testclass: jdbc
     config: # 可简化填写，无需config关键字，直接将配置内容至于上层
       datasource: JDBCDataSource_var
-      query_type: select
       sql: 'select * from sys_user;'
 children: # 测试集合 或 测试用例列表，为了方便查看，可通过 @F(filepath) 将外部文件引入
   - !include '测试用例/测试用例.yaml'
@@ -46,28 +44,20 @@ children: # 测试集合 或 测试用例列表，为了方便查看，可通过
 
 ## 使用示例
 
-```json
-{
-  "title": "用户管理模块测试",
-  "configelements": [
-    {
-      "testclass": "http",
-      "config": {
-        "protocol": "https",
-        "host": "api.example.com",
-        "headers": {
-          "Content-Type": "application/json"
-        }
-      }
-    }
-  ],
-  "children": [
-    "user/create_user.json",
-    "user/get_user.json",
-    "user/update_user.json",
-    "user/delete_user.json"
-  ]
-}
+```yaml
+title: 用户管理模块测试
+configelements:
+  - testclass: http
+    config:
+      protocol: https
+      host: api.example.com
+      headers:
+        Content-Type: application/json
+children:
+  - !import user/create_user.yaml
+  - !import user/get_user.yaml
+  - !import user/update_user.yaml
+  - !import user/delete_user.yaml
 ```
 
 在上述示例中，我们定义了一个用户管理模块的测试集合，它包含了创建用户、获取用户、更新用户和删除用户四个测试用例。通过引用外部文件的方式组织测试用例，使测试结构更加清晰。
