@@ -61,23 +61,11 @@ children: # 测试集合 或 测试用例列表，为了方便查看，可通过
       }
     }
   ],
-  "preprocessors": [
-    {
-      "testclass": "log",
-      "message": "开始执行用户管理模块测试"
-    }
-  ],
   "children": [
     "user/create_user.json",
     "user/get_user.json",
     "user/update_user.json",
     "user/delete_user.json"
-  ],
-  "postprocessors": [
-    {
-      "testclass": "log",
-      "message": "用户管理模块测试执行完成"
-    }
   ]
 }
 ```

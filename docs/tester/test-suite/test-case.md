@@ -82,12 +82,6 @@ children: # 执行步骤
       }
     }
   ],
-  "preprocessors": [
-    {
-      "testclass": "log",
-      "message": "开始执行用户登录测试"
-    }
-  ],
   "children": [
     {
       "title": "用户登录",
@@ -134,12 +128,6 @@ children: # 执行步骤
           "rule": "=="
         }
       ]
-    }
-  ],
-  "postprocessors": [
-    {
-      "testclass": "log",
-      "message": "用户登录测试执行完成"
     }
   ]
 }
