@@ -17,7 +17,6 @@ preprocessors: # 前置处理器
   - testclass: jdbc
     config: # 可简化填写，无需config关键字，直接将配置内容至于上层
       datasource: JDBCDataSource_var
-      query_type: select
       sql: 'select * from sys_user;'
     extractors:
       - { testclass: json, field: '$.user_name', ref_name: user_name }
@@ -27,7 +26,6 @@ postprocessors: # 后置处理器
   - testclass: jdbc
     config: # 可简化填写，无需config关键字，直接将配置内容至于上层
       datasource: JDBCDataSource_var
-      query_type: select
       sql: 'select * from sys_user;'
 children: # 测试集合 或 测试用例列表，为了方便查看，可通过 @F(filepath) 将外部文件引入
   - !include '测试用例/测试集合（模块）.yaml'
