@@ -37,6 +37,7 @@ import io.github.xiaomisum.ryze.template.TemplateEngine;
 import io.github.xiaomisum.ryze.template.freemarker.FreeMarkerTemplateEngine;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import static io.github.xiaomisum.ryze.testelement.TestElementConstantsInterface.INTERCEPTORS;
 
@@ -111,8 +112,8 @@ public class Configure {
      *
      * @return 默认配置对象
      */
-    public static Configure defaultConfigure() {
-        var configure = new Configure();
+    public static Configure defaultConfigure(boolean... enableAllureReport) {
+        var configure = new Configure(Objects.isNull(enableAllureReport) || enableAllureReport.length == 0 || enableAllureReport[0]);
         configure.setTemplateEngine(new FreeMarkerTemplateEngine());
         InterceptorConfigureItem<RyzeInterceptor> items = new InterceptorConfigureItem<>();
         items.addAll(new ArrayList<>(ApplicationConfig.getReporterListeners()));
