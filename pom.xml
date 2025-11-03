@@ -82,7 +82,6 @@
         <groovy.version>4.0.28</groovy.version>
         <yaml.version>2.3</yaml.version>
         <faker.version>1.0.2</faker.version>
-        <reports.version>5.1.2</reports.version>
         <allure.version>2.29.1</allure.version>
         <guava.version>33.4.0-jre</guava.version>
         <fastjson.version>2.0.53</fastjson.version>
@@ -265,28 +264,6 @@
                 <groupId>com.github.javafaker</groupId>
                 <artifactId>javafaker</artifactId>
                 <version>${faker.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>info.picocli</groupId>
-                <artifactId>picocli</artifactId>
-                <version>${picocli.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.aventstack</groupId>
-                <artifactId>extentreports</artifactId>
-                <version>${reports.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <artifactId>gson</artifactId>
-                        <groupId>com.google.code.gson</groupId>
-                    </exclusion>
-                    <exclusion>
-                        <artifactId>lombok</artifactId>
-                        <groupId>org.projectlombok</groupId>
-                    </exclusion>
-                </exclusions>
             </dependency>
 
             <dependency>
