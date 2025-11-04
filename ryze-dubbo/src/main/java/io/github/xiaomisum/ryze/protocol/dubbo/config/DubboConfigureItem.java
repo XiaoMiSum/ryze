@@ -193,8 +193,8 @@ public class DubboConfigureItem implements ConfigureItem<DubboConfigureItem>, Du
         }
         var localOther = other.copy();
         var self = copy();
-        self.registry = Objects.isNull(self.registry) ? localOther.registry : self.registry;
-        self.reference = Objects.isNull(self.reference) ? localOther.reference : self.reference;
+        self.registry = Objects.isNull(self.registry) ? localOther.registry : self.registry.merge(other.registry);
+        self.reference = Objects.isNull(self.reference) ? localOther.reference : self.reference.merge(other.reference);
         self.interfaceName = StringUtils.isBlank(self.interfaceName) ? localOther.interfaceName : self.interfaceName;
         self.method = StringUtils.isBlank(self.method) ? localOther.method : self.method;
         self.parameterTypes = Objects.isNull(self.parameterTypes) ? localOther.parameterTypes : self.parameterTypes;
