@@ -49,48 +49,48 @@ public interface RedisConstantsInterface extends TestElementConstantsInterface {
      * <p>Redis连接URL的标准格式前缀</p>
      */
     String REDIS_URL_TEMPLATE = "redis://";
-    
+
     /**
      * Redis连接URL键名
      * <p>Redis连接字符串，格式为：redis://[username:password@]host[:port][/db]</p>
      */
     String URL = "url";
-    
+
     /**
      * 废弃属性，请使用 host @see {@link #URL}
      * <p>旧版本中使用的主机键名，现已废弃</p>
      */
-    @Deprecated(since = "6.0.0")
+    @Deprecated(since = "6.0.0", forRemoval = true)
     String HOST = "host";
-    
+
     /**
      * 废弃属性，请使用 host @see {@link #URL}
      * <p>旧版本中使用的端口键名，现已废弃</p>
      */
-    @Deprecated(since = "6.0.0")
+    @Deprecated(since = "6.0.0", forRemoval = true)
     String PORT = "port";
-    
+
     /**
      * 废弃属性，请使用 host @see {@link #URL}
      * <p>旧版本中使用的数据库索引键名，现已废弃</p>
      */
-    @Deprecated(since = "6.0.0")
+    @Deprecated(since = "6.0.0", forRemoval = true)
     String DATABASE = "database";
-    
+
     /**
      * 废弃属性，请使用 host @see {@link #URL}
      * <p>旧版本中使用的用户名键名，现已废弃</p>
      */
-    @Deprecated(since = "6.0.0")
+    @Deprecated(since = "6.0.0", forRemoval = true)
     String USERNAME = "username";
-    
+
     /**
      * 废弃属性，请使用 host @see {@link #URL}
      * <p>旧版本中使用的密码键名，现已废弃</p>
      */
-    @Deprecated(since = "6.0.0")
+    @Deprecated(since = "6.0.0", forRemoval = true)
     String PASSWORD = "password";
-    
+
     /**
      * 废弃属性，请使用 timeout @see {@link #TIMEOUT}
      * <p>旧版本中使用的时间超时键名，现已废弃</p>
