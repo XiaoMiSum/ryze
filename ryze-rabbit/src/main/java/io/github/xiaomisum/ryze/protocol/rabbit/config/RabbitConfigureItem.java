@@ -163,9 +163,9 @@ public class RabbitConfigureItem implements ConfigureItem<RabbitConfigureItem>, 
         self.username = StringUtils.isBlank(self.username) ? localOther.username : self.username;
         self.password = StringUtils.isBlank(self.password) ? localOther.password : self.password;
         self.timeout = Objects.isNull(timeout) ? localOther.timeout : self.timeout;
-        self.queue = Objects.isNull(queue) ? localOther.queue : self.queue;
-        self.exchange = Objects.isNull(exchange) ? localOther.exchange : self.exchange;
-        self.props = Objects.isNull(props) ? localOther.props : self.props;
+        self.queue = Objects.isNull(queue) ? localOther.queue : self.queue.merge(other.queue);
+        self.exchange = Objects.isNull(exchange) ? localOther.exchange : self.exchange.merge(other.exchange);
+        self.props = Objects.isNull(props) ? localOther.props : self.props.merge(other.props);
         return self;
     }
 
