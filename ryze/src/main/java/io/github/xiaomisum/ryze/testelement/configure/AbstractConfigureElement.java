@@ -132,7 +132,7 @@ public abstract class AbstractConfigureElement<SELF extends AbstractConfigureEle
     public ValidateResult validate() {
         var result = super.validate();
         if (config == null) {
-            result.append("执行类测试元件 %s 字段值缺失或为空", CONFIG);
+            result.append("配置类测试元件 %s 字段值缺失或为空", CONFIG);
         }
         return result;
     }
