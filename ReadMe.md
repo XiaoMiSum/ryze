@@ -75,7 +75,7 @@ Ryze 是一个基于 Java 21 开发的现代化测试框架，专为多协议测
 我们提供了基于 VitePress 的在线文档站点，您可以通过以下链接访问：
 
 - 在线文档：[GitHub Pages](https://xiaomisum.github.io/ryze)
-- 中国大陆：[帽子云](https://ryze-rr7xp0ri.maozi.io)  [AtomGit Pages](https://xiaomisum.atomgit.net/ryze/)
+- 中国大陆：[帽子云](https://ryze-rr7xp0ri.maozi.io)
 
 在线文档包含了框架的所有功能介绍、使用指南和 API 参考，是学习和使用 Ryze 的最佳资源。
 
