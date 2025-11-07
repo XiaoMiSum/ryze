@@ -67,7 +67,6 @@ config: # 可简化填写，无需config关键字，直接将配置内容至于�
 testclass: ws  # ws前置处理器 类型
 config: # 处理器配置
   protocol: ws   # 请求协议，默认 ws
-  ws/2: false # 是否 ws2， ture、false，可空，默认 false
   port: 8080   # 请求端口，默认 80
   host: localhost  # 服务器地址
   path: /user   # 接口path
@@ -392,7 +391,7 @@ class GroovyWebsocketSuiteExample {
             })
         }
     }
-
+}
 ```
 
 ## ❓ 常见问题
