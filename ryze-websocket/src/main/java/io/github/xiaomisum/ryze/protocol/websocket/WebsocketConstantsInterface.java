@@ -120,4 +120,6 @@ public interface WebsocketConstantsInterface extends TestElementConstantsInterfa
      */
     String WSS = "wss";
 
+    String TIMEOUT = "timeout";
+
 }

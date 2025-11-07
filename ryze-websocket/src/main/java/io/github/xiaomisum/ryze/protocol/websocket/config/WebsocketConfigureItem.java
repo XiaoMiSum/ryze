@@ -121,6 +121,13 @@ public class WebsocketConfigureItem implements ConfigureItem<WebsocketConfigureI
     protected Object body;
 
     /**
+     * 超时时间
+     * <p>超时时间</p>
+     */
+    @JSONField(name = TIMEOUT, ordinal = 6)
+    protected Integer timeout;
+
+    /**
      * 字节数据
      * <p>二进制请求体数据</p>
      */
@@ -178,6 +185,7 @@ public class WebsocketConfigureItem implements ConfigureItem<WebsocketConfigureI
         self.query = self.query == null ? localOther.query : self.query;
         self.body = self.body == null ? localOther.body : self.body;
         self.bytes = self.bytes == null ? localOther.bytes : self.bytes;
+        self.timeout = self.timeout == null ? localOther.timeout : self.timeout;
         return self;
     }
 
@@ -387,6 +395,24 @@ public class WebsocketConfigureItem implements ConfigureItem<WebsocketConfigureI
      */
     public void setBytes(byte[] bytes) {
         this.bytes = bytes;
+    }
+
+    /**
+     * 获取超时时间
+     *
+     * @return 超时时间
+     */
+    public Integer getTimeout() {
+        return timeout;
+    }
+
+    /**
+     * 设置超时时间
+     *
+     * @param timeout 超时时间
+     */
+    public void setTimeout(Integer timeout) {
+        this.timeout = timeout;
     }
 
     /**
@@ -669,6 +695,17 @@ public class WebsocketConfigureItem implements ConfigureItem<WebsocketConfigureI
          */
         public WebsocketConfigureItem.Builder bytes(Supplier<byte[]> bytes) {
             configure.bytes = bytes.get();
+            return self;
+        }
+
+        /**
+         * 设置超时时间
+         *
+         * @param timeout 超时时间
+         * @return 构建器实例
+         */
+        public WebsocketConfigureItem.Builder timeout(Integer timeout) {
+            configure.timeout = timeout;
             return self;
         }
 

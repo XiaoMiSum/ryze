@@ -74,6 +74,7 @@ config: # 处理器配置
     h1: 1
   query: { } # url中的参数，如: ?id=1&name=t {id: 1, name: t}
   body: { userName: 'ryze', password: '123456qq' } # 请求body
+  response_pattern: 'userName'
 ```
 
 ### 后置处理器
@@ -92,6 +93,7 @@ config: # 处理器配置
     h1: 1
   query: { } # url中的参数，如: ?id=1&name=t {id: 1, name: t}
   body: { userName: 'ryze', password: '123456qq' } # 请求body
+  response_pattern: 'userName'
 ```
 
 ## 📊 取样器
@@ -112,6 +114,7 @@ config: # 取样器配置
   path: /user   # 接口path
   query: { } # url中的参数，如: ?id=1&name=t {id: 1, name: t}
   body: { userName: 'ryze', password: '123456qq' } # 请求body
+  response_pattern: 'userName'
 ```
 
 #### JSON 配置方式
@@ -132,7 +135,8 @@ config: # 取样器配置
       "username": "testuser",
       "password": "password123"
     },
-    "query": {}
+    "query": {},
+    "response_pattern": "userName"
   }
 }
 ```
@@ -162,6 +166,7 @@ public class websocketApiExample {
                     .host("127.0.0.1")
                     .port("58081")
                     .path("/user/${id}")
+                    .responsePattern("userName")
             );
             ws.assertions(assertions -> assertions.json("$.data.id", "${id}"));
         });
@@ -198,6 +203,7 @@ public class websocketSuiteExample {
                             .protocol("ws")
                             .host("127.0.0.1")
                             .port("58081")
+                            .responsePattern("userName")
                     ))
             );
 
@@ -274,6 +280,7 @@ class GroovyWebsocketExample {
                 port "58081"
                 method "GET"
                 path '/user/${id}'
+                responsePattern 'userName'
             }
             validators {
                 json {
@@ -320,6 +327,7 @@ class GroovyWebsocketSuiteExample {
                         protocol "ws"
                         host "127.0.0.1"
                         port "58081"
+                        responsePattern 'userName'
                     }
                 }
             })
@@ -410,6 +418,11 @@ class GroovyWebsocketSuiteExample {
 
 3. **如何处理 WSS 证书问题？**
     - 可以在配置中设置 `protocol: "wss"` 并根据需要配置证书验证选项。
+
+4. **如何处理服务端主动推送的消息不是期望的消息？**
+    - 在 websocket 中，服务器会主动推送消息到客户端，这些消息可能不是当前测试所期望的消息，可以使用
+      `response_pattern: "正则表达式"` 进行匹配，
+      如果匹配成功，则将消息写入到响应结果中，否则将持续等待直到匹配成功或超时
 
 ## 📚 相关文档
 
