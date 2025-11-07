@@ -98,15 +98,19 @@ redis-example/
 ├── src/
 │   └── test/
 │       ├── java/
-│       │   └── io/github/xiaomisum/example/redis/
-│       │       └── RedisExampleTest.java  # Ryze 测试类
+│       │   └── io/github/xiaomisum/ryze/redis/example/
+│       │       ├── code/                 # Java代码测试用例
+│       │       │   ├── CodeTestCase.java  # Redis Java代码测试类
+│       │       │   └── GroovyCodeTestCase.groovy  # Redis Groovy代码测试类
+│       │       └── yaml/                 # YAML配置测试用例
+│       │           └── YamlTestCase.java  # Redis YAML测试类
 │       └── resources/
-│           ├── 测试集合/                  # 测试集合配置
-│           ├── 取样器/                    # Redis 取样器模板
-│           ├── 处理器/                    # 前置/后置处理器模板
-│           └── 配置元件/                  # Redis 配置元件模板
-├── images/                               # 文档图片
-│   ├── redis.png                         # Redis 控制台截图
-│   └── redis_cli_keys.png                # Redis CLI Keys 截图
-└── pom.xml                               # Maven 配置文件
+│           ├── 取样器/                   # Redis 取样器模板
+│           ├── 处理器/                   # 前置/后置处理器模板
+│           ├── 测试用例/                 # 测试用例配置
+│           └── 配置元件/                 # Redis 配置元件模板
+├── images/                              # 文档图片
+│   ├── redis.png                        # Redis 控制台截图
+│   └── redis_cli_keys.png               # Redis CLI Keys 截图
+└── pom.xml                              # Maven 配置文件
 ```

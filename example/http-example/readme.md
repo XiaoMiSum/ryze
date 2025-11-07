@@ -19,8 +19,7 @@
 
 访问以下 URL 验证服务是否正常运行：
 
-- 用户接口: http://localhost:8080/user
-- 健康检查: http://localhost:8080/actuator/health
+- 用户接口: http://localhost:58081/user
 
 ## 🧪 执行 Ryze HTTP 测试
 
@@ -60,18 +59,28 @@ http-example/
 ├── src/
 │   ├── main/
 │   │   └── java/
-│   │       └── io/github/xiaomisum/example/http/
-│   │           ├── Application.java        # Spring Boot 应用主类
-│   │           └── controller/
-│   │               └── UserController.java # 用户控制器
+ 苏│   │       └── io/github/xiaomisum/ryze/http/example/
+│   │           └── springboot/
+│   │               ├── Application.java        # Spring Boot 应用主类
+│   │               ├── ErrorLogServiceImpl.java # 错误日志服务实现
+│   │               └── TestController.java    # 测试控制器
 │   └── test/
 │       ├── java/
-│       │   └── io/github/xiaomisum/example/http/
-│       │       └── HttpExampleTest.java   # Ryze 测试类
+│       │   └── io/github/xiaomisum/ryze/http/example/
+│       │       ├── ExampleInterceptor.java    # 示例拦截器
+│       │       ├── code/                      # Java代码测试用例
+│       │       │   ├── CodeExTestCase.java        # Java异常测试类
+│       │       │   ├── CodeTestCase.java          # Java代码测试类
+│       │       │   └── GroovyCodeTestCase.groovy  # Groovy代码测试类
+│       │       └── yaml/                      # YAML配置测试用例
+│       │           └── YamlTestCase.java           # YAML测试类
 │       └── resources/
-│           ├── 测试集合/                  # 测试集合配置
-│           ├── 取样器/                    # HTTP 取样器模板
-│           ├── 处理器/                    # 前置/后置处理器模板
-│           └── 配置元件/                  # HTTP 配置元件模板
-└── pom.xml                               # Maven 配置文件
+│           ├── 测试用例/                     # 测试用例配置
+│           ├── 取样器/                       # HTTP 取样器模板
+│           ├── 处理器/                       # 前置/后置处理器模板
+│           ├── 配置元件/                     # HTTP 配置元件模板
+│           └── META-INF/
+│               └── services/
+│                   └── io.github.xiaomisum.ryze.interceptor.Interceptor # 拦截器服务配置
+└── pom.xml                                  # Maven 配置文件
 ```
