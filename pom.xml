@@ -75,6 +75,7 @@
         <mongo.version>5.5.1</mongo.version>
         <rabbitmq.version>5.24.0</rabbitmq.version>
         <simplehttp.version>2.2.3</simplehttp.version>
+        <simple-websocket.version>1.0.0</simple-websocket.version>
 
         <!-- 工具包 -->
         <hamcrest.version>3.0</hamcrest.version>
@@ -114,6 +115,8 @@
         <module>ryze-rabbit</module>
         <module>ryze-testng</module>
         <module>ryze-mongo</module>
+        <module>ryze-websocket</module>
+        <module>example/websocket-example</module>
     </modules>
 
     <dependencyManagement>
@@ -240,6 +243,13 @@
                 <groupId>xyz.migoo</groupId>
                 <artifactId>simplehttp</artifactId>
                 <version>${simplehttp.version}</version>
+            </dependency>
+
+            <!-- https://mvnrepository.com/artifact/io.github.xiaomisum/simple-websocket -->
+            <dependency>
+                <groupId>io.github.xiaomisum</groupId>
+                <artifactId>simple-websocket</artifactId>
+                <version>${simple-websocket.version}</version>
             </dependency>
 
             <dependency>

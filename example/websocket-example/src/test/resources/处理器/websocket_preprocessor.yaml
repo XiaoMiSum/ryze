@@ -1,0 +1,5 @@
+testclass: ws  # websocket前置处理器 类型
+config: # 处理器配置
+  path: '/ws/body/string'
+  body: 'websocket preprocessor test'
+  response_pattern: 'websocket preprocessor test'

@@ -1,0 +1,12 @@
+title: path参数示例 # 包含配置原件、前置处理器、后置处理器、多个取样器（执行步骤）
+testclass: ws
+configelements:
+  - !include '配置元件/websocket_defaults.yaml'
+config:
+  path: '/ws/query'
+  query:
+    queryId: 1
+  body: 'test'
+  response_pattern: 'test'
+validators:
+  - { testclass: result, rule: 'equals', expected: 'test' }
