@@ -205,3 +205,11 @@ suite("RabbitMQ消息测试") { builder ->
 ## 相关文档
 
 - [RabbitMQ 官方文档](https://www.rabbitmq.com/documentation.html)
+
+- [示例项目](https://github.com/XiaoMiSum/ryze/tree/master/example/rabbit-example)
+
+---
+
+**💡 提示**:
+更多详细示例请参考 [example/rabbit-example](https://github.com/XiaoMiSum/ryze/tree/master/example/rabbit-example)
+目录下的完整示例代码。

@@ -128,7 +128,7 @@ export default withMermaid({
             {
               text: '其他事项', items: [
                  { text: 'Gitlab集成',link: '/tester/other/gitlab' },
-                 { text: '常见问题',link: '/faq/same' }
+                 { text: '常见问题',link: '/faq/some' }
               ]
             }
           ]
