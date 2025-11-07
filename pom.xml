@@ -116,7 +116,7 @@
         <module>ryze-testng</module>
         <module>ryze-mongo</module>
         <module>ryze-websocket</module>
-        <module>example/websocket-example</module>
+        <module>ryze-proto</module>
     </modules>
 
     <dependencyManagement>
@@ -154,6 +154,12 @@
             <dependency>
                 <groupId>io.github.xiaomisum</groupId>
                 <artifactId>ryze-rabbit</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.github.xiaomisum</groupId>
+                <artifactId>ryze-websocket</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
