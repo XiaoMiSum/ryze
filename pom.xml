@@ -74,8 +74,9 @@
         <dubbo.version>3.3.2</dubbo.version>
         <mongo.version>5.5.1</mongo.version>
         <rabbitmq.version>5.24.0</rabbitmq.version>
-        <simplehttp.version>2.2.3</simplehttp.version>
+        <simplehttp.version>2.2.7</simplehttp.version>
         <simple-websocket.version>1.0.0</simple-websocket.version>
+        <protobuf.version>4.33.0</protobuf.version>
 
         <!-- 工具包 -->
         <hamcrest.version>3.0</hamcrest.version>
@@ -336,6 +337,20 @@
                 <groupId>org.hamcrest</groupId>
                 <artifactId>hamcrest</artifactId>
                 <version>${hamcrest.version}</version>
+            </dependency>
+
+            <!-- Protobuf 核心库 -->
+            <dependency>
+                <groupId>com.google.protobuf</groupId>
+                <artifactId>protobuf-java</artifactId>
+                <version>${protobuf.version}</version>
+            </dependency>
+
+            <!-- JSON 与 Protobuf 互转工具（官方推荐） -->
+            <dependency>
+                <groupId>com.google.protobuf</groupId>
+                <artifactId>protobuf-java-util</artifactId>
+                <version>${protobuf.version}</version>
             </dependency>
         </dependencies>
 

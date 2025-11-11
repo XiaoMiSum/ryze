@@ -1,0 +1,4 @@
+testclass: proto # http后置处理器 类型
+config: # 处理器配置
+  method: get
+  path: '/user/${user_id}'

@@ -54,6 +54,7 @@
         <module>rabbit-example</module>
         <module>mongo-example</module>
         <module>websocket-example</module>
+        <module>proto-example</module>
     </modules>
 
 
@@ -146,6 +147,12 @@
             <dependency>
                 <groupId>io.github.xiaomisum</groupId>
                 <artifactId>ryze-websocket</artifactId>
+                <version>${ryze.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.github.xiaomisum</groupId>
+                <artifactId>ryze-proto</artifactId>
                 <version>${ryze.version}</version>
             </dependency>
         </dependencies>
