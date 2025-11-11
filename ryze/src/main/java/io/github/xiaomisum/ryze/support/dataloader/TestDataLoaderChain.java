@@ -136,7 +136,7 @@ public class TestDataLoaderChain {
             var result = firstHandler.loadData(source, type);
             return (T) getTypeClass(type).cast(result);
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage(), e);
+            throw e instanceof RuntimeException r ? r : new RuntimeException(e.getMessage(), e);
         }
     }
 }
