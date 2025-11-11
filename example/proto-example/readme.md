@@ -24,28 +24,10 @@ mvn spring-boot:run
 
 # 方式2：先构建，再运行
 mvn clean package
-java -jar target/protocol-example.jar
+java -jar target/proto-example.jar
 ```
 
 ## 使用方法
 
-启动服务后，可以通过 HTTP POST 请求发送 Protocol 数据：
+启动服务后，运行 test 中的示例脚本
 
-```bash
-curl -X POST http://localhost:8080/protocol/receive \
-  -H "Content-Type: application/json" \
-  -d '{"protocolName": "test-protocol", "data": {"key1": "value1", "key2": "value2"}}'
-```
-
-服务会将接收到的数据打印到控制台，并返回成功响应。
-
-## API 接口
-
-- **POST /protocol/receive**：接收 Protocol 数据
-  - 请求体：JSON 格式的 Protocol 数据
-  - 响应：成功或失败信息
-
-## 注意事项
-
-- 本示例仅演示了接收和打印 Protocol 数据的功能，不包含持久化存储
-- 可以根据需要扩展处理逻辑，如添加验证、转换等
