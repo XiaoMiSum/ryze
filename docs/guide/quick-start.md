@@ -410,9 +410,8 @@ mvn allure:serve
 
 恭喜！您已成功运行了第一个 Ryze 测试。接下来可以：
 
-1. 📖 阅读[详细文档](../README.md#📚-详细文档)
-2. 🔍 探索[各协议模块](../README.md#🧩-模块说明)
-3. 🛠️ 学习[高级配置](./docs/help/)
-4. 🤝 参与[社区贡献](../README.md#🤝-贡献指南)
+1. 📖 阅读[详细文档](./concepts/test-suite.md)
+2. 🔍 探索[各协议模块](./protocols/http.md)
+3. 🛠️ 学习[高级配置](./advanced/variables-and-functions.md)
 
 有问题？欢迎在 [Issues](https://github.com/XiaoMiSum/ryze/issues) 中提问！
