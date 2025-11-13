@@ -37,9 +37,11 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.regex.Pattern;
 
+import static io.github.xiaomisum.ryze.protocol.websocket.WebsocketConstantsInterface.DEFAULT_PROTOCOL;
+
 public class Websocket {
     public static Request build(WebsocketConfigureItem config) {
-        return new Request(config.getProtocol() + "://" + config.getHost() + ":" + config.getPort() + config.getPath())
+        return new Request(config.getProtocol(DEFAULT_PROTOCOL) + "://" + config.getHost() + ":" + config.getFullPort() + config.getFullPath())
                 .headers(config.getHeaders())
                 .query(config.getQuery())
                 .body(config.getBody() == null ? null : config.getBody() instanceof String s ? s : JSON.toJSONString(config.getBody()))

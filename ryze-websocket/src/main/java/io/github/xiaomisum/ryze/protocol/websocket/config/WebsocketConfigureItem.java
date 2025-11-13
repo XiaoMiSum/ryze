@@ -253,7 +253,7 @@ public class WebsocketConfigureItem implements ConfigureItem<WebsocketConfigureI
      * @return 协议，默认为"http"
      */
     public String getProtocol() {
-        return StringUtils.isBlank(protocol) ? DEFAULT_PROTOCOL : protocol;
+        return protocol;
     }
 
     /**
@@ -263,6 +263,10 @@ public class WebsocketConfigureItem implements ConfigureItem<WebsocketConfigureI
      */
     public void setProtocol(String protocol) {
         this.protocol = protocol;
+    }
+
+    public String getProtocol(String defaultProtocol) {
+        return StringUtils.isBlank(protocol) ? defaultProtocol : protocol;
     }
 
     /**
@@ -312,7 +316,7 @@ public class WebsocketConfigureItem implements ConfigureItem<WebsocketConfigureI
      * @return 路径，默认为"/"
      */
     public String getPath() {
-        return StringUtils.isBlank(path) ? "/" : Strings.CS.startsWith(path, "/") ? path : "/" + path;
+        return path;
     }
 
     /**
@@ -324,6 +328,10 @@ public class WebsocketConfigureItem implements ConfigureItem<WebsocketConfigureI
         this.path = path;
     }
 
+    @JSONField(serialize = false, deserialize = false)
+    public String getFullPath() {
+        return StringUtils.isBlank(path) ? "/" : Strings.CS.startsWith(path, "/") ? path : "/" + path;
+    }
 
     /**
      * 获取请求头映射
