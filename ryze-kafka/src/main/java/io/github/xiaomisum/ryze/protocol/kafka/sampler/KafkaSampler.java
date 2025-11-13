@@ -152,7 +152,7 @@ public class KafkaSampler extends AbstractSampler<KafkaSampler, KafkaConfigureIt
         var localConfig = Objects.isNull(runtime.getConfig()) ? new KafkaConfigureItem() : runtime.getConfig();
         var otherConfig = (KafkaConfigureItem) context.getLocalVariablesWrapper().get(localConfig.getRef());
         runtime.setConfig(localConfig.merge(otherConfig));
-        message = runtime.config.getMessage();
+        message = runtime.config.getFormatMessage();
         result.setRequest(RealKafkaRequest.build(runtime.getConfig(), message));
     }
 
