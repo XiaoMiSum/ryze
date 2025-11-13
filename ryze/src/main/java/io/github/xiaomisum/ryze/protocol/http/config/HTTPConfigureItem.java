@@ -274,7 +274,7 @@ public class HTTPConfigureItem implements ConfigureItem<HTTPConfigureItem>, HTTP
      * @return 协议，默认为"http"
      */
     public String getProtocol() {
-        return StringUtils.isBlank(protocol) ? PROTOCOL_HTTP : protocol;
+        return protocol;
     }
 
     /**
@@ -284,6 +284,16 @@ public class HTTPConfigureItem implements ConfigureItem<HTTPConfigureItem>, HTTP
      */
     public void setProtocol(String protocol) {
         this.protocol = protocol;
+    }
+
+    /**
+     * 获取协议
+     *
+     * @return 协议，默认为"http"
+     */
+    @JSONField(deserialize = false, serialize = false)
+    public String getProtocol(String defaultProtocol) {
+        return StringUtils.isBlank(protocol) ? defaultProtocol : protocol;
     }
 
     /**
@@ -333,7 +343,7 @@ public class HTTPConfigureItem implements ConfigureItem<HTTPConfigureItem>, HTTP
      * @return 路径，默认为"/"
      */
     public String getPath() {
-        return StringUtils.isBlank(path) ? "/" : Strings.CS.startsWith(path, "/") ? path : "/" + path;
+        return path;
     }
 
     /**
@@ -346,12 +356,22 @@ public class HTTPConfigureItem implements ConfigureItem<HTTPConfigureItem>, HTTP
     }
 
     /**
+     * 获取路径
+     *
+     * @return 路径，默认为"/"
+     */
+    @JSONField(serialize = false, deserialize = false)
+    public String getFullPath() {
+        return StringUtils.isBlank(path) ? "/" : Strings.CS.startsWith(path, "/") ? path : "/" + path;
+    }
+
+    /**
      * 获取HTTP方法
      *
      * @return HTTP方法，默认为"GET"
      */
     public String getMethod() {
-        return StringUtils.isBlank(method) ? GET : method.toUpperCase();
+        return method;
     }
 
     /**
@@ -361,6 +381,16 @@ public class HTTPConfigureItem implements ConfigureItem<HTTPConfigureItem>, HTTP
      */
     public void setMethod(String method) {
         this.method = method;
+    }
+
+    /**
+     * 获取HTTP方法
+     *
+     * @return HTTP方法，默认为"GET"
+     */
+    @JSONField(serialize = false, deserialize = false)
+    public String getMethod(String defaultMethod) {
+        return StringUtils.isBlank(method) ? defaultMethod : method.toUpperCase();
     }
 
     /**
