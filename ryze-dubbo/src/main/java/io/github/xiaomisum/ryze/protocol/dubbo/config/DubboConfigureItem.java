@@ -309,12 +309,6 @@ public class DubboConfigureItem implements ConfigureItem<DubboConfigureItem>, Du
      * @return 参数类型列表，可能为null
      */
     public List<String> getParameterTypes() {
-        if (Objects.isNull(parameterTypes) && Objects.nonNull(parameters)) {
-            parameterTypes = Collections.newArrayList();
-            for (var parameter : parameters) {
-                parameterTypes.add(parameter.getClass().getName());
-            }
-        }
         return parameterTypes;
     }
 
