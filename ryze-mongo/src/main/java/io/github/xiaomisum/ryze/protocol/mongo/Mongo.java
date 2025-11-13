@@ -84,7 +84,7 @@ public class Mongo {
             var collection = database.getCollection(config.getCollection());
             var data = config.getData();
             result.sampleStart();
-            return switch (config.getAction()) {
+            return switch (config.getAction(FIND)) {
                 case INSERT -> insert(collection, data);
                 case UPDATE -> update(collection, config.getCondition(), data);
                 case DELETE -> delete(collection, config.getCondition());
