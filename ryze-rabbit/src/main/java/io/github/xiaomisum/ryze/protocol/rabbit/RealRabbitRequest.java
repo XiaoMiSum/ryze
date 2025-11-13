@@ -29,8 +29,8 @@
 package io.github.xiaomisum.ryze.protocol.rabbit;
 
 import com.alibaba.fastjson2.JSON;
-import io.github.xiaomisum.ryze.testelement.sampler.SampleResult;
 import io.github.xiaomisum.ryze.protocol.rabbit.config.RabbitConfigureItem;
+import io.github.xiaomisum.ryze.testelement.sampler.SampleResult;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;
@@ -57,12 +57,12 @@ public class RealRabbitRequest extends SampleResult.Real {
      * 用户名
      */
     private String username;
-    
+
     /**
      * 密码
      */
     private String password;
-    
+
     /**
      * 虚拟主机
      */
@@ -99,12 +99,12 @@ public class RealRabbitRequest extends SampleResult.Real {
      */
     public static RealRabbitRequest build(RabbitConfigureItem config, String message) {
         var result = new RealRabbitRequest(message.getBytes());
-        result.address = config.getHost() + ":" + config.getPort();
-        result.username = config.getUsername();
-        result.password = config.getPassword();
+        result.address = config.getHost() + ":" + config.getPort("5672");
+        result.username = config.getUsername("guest");
+        result.password = config.getPassword("guest");
         result.queue = config.getQueue();
         result.exchange = config.getExchange();
-        result.virtualHost = config.getVirtualHost();
+        result.virtualHost = config.getVirtualHost("/");
         return result;
     }
 

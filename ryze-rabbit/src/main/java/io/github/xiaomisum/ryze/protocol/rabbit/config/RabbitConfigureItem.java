@@ -220,7 +220,7 @@ public class RabbitConfigureItem implements ConfigureItem<RabbitConfigureItem>, 
      * @return 虚拟主机
      */
     public String getVirtualHost() {
-        return StringUtils.isBlank(virtualHost) ? "/" : virtualHost;
+        return virtualHost;
     }
 
     /**
@@ -230,6 +230,10 @@ public class RabbitConfigureItem implements ConfigureItem<RabbitConfigureItem>, 
      */
     public void setVirtualHost(String virtualHost) {
         this.virtualHost = virtualHost;
+    }
+
+    public String getVirtualHost(String defVirtualHost) {
+        return StringUtils.isBlank(virtualHost) ? defVirtualHost : virtualHost;
     }
 
     /**
@@ -259,7 +263,7 @@ public class RabbitConfigureItem implements ConfigureItem<RabbitConfigureItem>, 
      * @return 端口号
      */
     public String getPort() {
-        return StringUtils.isBlank(port) ? "5672" : port;
+        return port;
     }
 
     /**
@@ -271,6 +275,10 @@ public class RabbitConfigureItem implements ConfigureItem<RabbitConfigureItem>, 
         this.port = port;
     }
 
+    public String getPort(String defPort) {
+        return StringUtils.isBlank(port) ? defPort : port;
+    }
+
     /**
      * 获取用户名
      * <p>
@@ -280,7 +288,7 @@ public class RabbitConfigureItem implements ConfigureItem<RabbitConfigureItem>, 
      * @return 用户名
      */
     public String getUsername() {
-        return StringUtils.isBlank(username) ? "guest" : username;
+        return username;
     }
 
     /**
@@ -292,6 +300,10 @@ public class RabbitConfigureItem implements ConfigureItem<RabbitConfigureItem>, 
         this.username = username;
     }
 
+    public String getUsername(String defUsername) {
+        return StringUtils.isBlank(username) ? defUsername : username;
+    }
+
     /**
      * 获取密码
      * <p>
@@ -301,7 +313,7 @@ public class RabbitConfigureItem implements ConfigureItem<RabbitConfigureItem>, 
      * @return 密码
      */
     public String getPassword() {
-        return StringUtils.isBlank(password) ? "guest" : password;
+        return password;
     }
 
     /**
@@ -313,19 +325,17 @@ public class RabbitConfigureItem implements ConfigureItem<RabbitConfigureItem>, 
         this.password = password;
     }
 
+    public String getPassword(String defPassword) {
+        return StringUtils.isBlank(password) ? defPassword : password;
+    }
+
     /**
      * 获取消息内容
      *
      * @return 消息内容
      */
-    public String getMessage() {
-        return switch (message) {
-            case Number number -> number.toString();
-            case Boolean bool -> bool.toString();
-            case String str -> str;
-            case null -> "";
-            default -> JSON.toJSONString(message);
-        };
+    public Object getMessage() {
+        return message;
     }
 
     /**
@@ -335,6 +345,16 @@ public class RabbitConfigureItem implements ConfigureItem<RabbitConfigureItem>, 
      */
     public void setMessage(Object message) {
         this.message = message;
+    }
+
+    public String getFormatMessage() {
+        return switch (message) {
+            case Number number -> number.toString();
+            case Boolean bool -> bool.toString();
+            case String str -> str;
+            case null -> "";
+            default -> JSON.toJSONString(message);
+        };
     }
 
     /**
