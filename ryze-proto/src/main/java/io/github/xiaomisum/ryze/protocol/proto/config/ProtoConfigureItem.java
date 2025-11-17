@@ -42,7 +42,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Strings;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -805,34 +804,6 @@ public class ProtoConfigureItem implements ConfigureItem<ProtoConfigureItem>, Pr
                 return self;
             }
             configure.body = Collections.putAllIfNonNull((Map) configure.body, body);
-            return self;
-        }
-
-
-        /**
-         * 通过自定义器设置请求体映射
-         * <p>仅当请求体是Map/List类型时生效</p>
-         *
-         * @param clazz      类型类
-         * @param customizer 请求体自定义器
-         * @return 构建器实例
-         */
-        public Builder body(Class<?> clazz, Customizer<Object> customizer) {
-            if (Map.class.isAssignableFrom(clazz)) {
-                if (configure.body != null && !(configure.body instanceof Map)) {
-                    return self;
-                }
-                var body = new HashMap<String, Object>();
-                customizer.customize(body);
-                configure.body = Collections.putAllIfNonNull((Map) configure.body, body);
-            } else if (List.class.isAssignableFrom(clazz)) {
-                if (configure.body != null && !(configure.body instanceof List)) {
-                    return self;
-                }
-                var body = Collections.newArrayList();
-                customizer.customize(body);
-                configure.body = Collections.addAllIfNonNull((List) configure.body, body);
-            }
             return self;
         }
 
