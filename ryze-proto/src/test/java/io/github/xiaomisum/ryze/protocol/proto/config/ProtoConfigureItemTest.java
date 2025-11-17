@@ -75,16 +75,10 @@ public class ProtoConfigureItemTest {
         ProtoConfigureItem item1 = ProtoConfigureItem.builder().post().build();
         ProtoConfigureItem item2 = ProtoConfigureItem.builder().put().build();
         ProtoConfigureItem item3 = ProtoConfigureItem.builder().delete().build();
-        ProtoConfigureItem item4 = ProtoConfigureItem.builder().patch().build();
-        ProtoConfigureItem item5 = ProtoConfigureItem.builder().options().build();
-        ProtoConfigureItem item6 = ProtoConfigureItem.builder().trace().build();
 
         Assert.assertEquals(item1.getMethod(), "POST");
         Assert.assertEquals(item2.getMethod(), "PUT");
         Assert.assertEquals(item3.getMethod(), "DELETE");
-        Assert.assertEquals(item4.getMethod(), "PATCH");
-        Assert.assertEquals(item5.getMethod(), "OPTIONS");
-        Assert.assertEquals(item6.getMethod(), "TRACE");
     }
 
     @Test

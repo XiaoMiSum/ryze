@@ -75,8 +75,8 @@ public class KafkaConfigureItemTest {
                 .message(messageMap)
                 .build();
 
-        Assert.assertTrue(item1.getMessage().contains("key1"));
-        Assert.assertTrue(item1.getMessage().contains("value1"));
+        Assert.assertTrue(item1.getFormatMessage().contains("key1"));
+        Assert.assertTrue(item1.getFormatMessage().contains("value1"));
 
         // Test with String message
         KafkaConfigureItem item2 = KafkaConfigureItem.builder()
