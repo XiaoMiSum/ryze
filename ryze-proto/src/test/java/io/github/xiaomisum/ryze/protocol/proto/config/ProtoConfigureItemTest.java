@@ -33,6 +33,7 @@ import org.testng.annotations.Test;
 import java.util.HashMap;
 import java.util.Map;
 
+import static io.github.xiaomisum.ryze.protocol.proto.ProtoConstantsInterface.DEFAULT_PROTOCOL;
 import static io.github.xiaomisum.ryze.protocol.proto.ProtoConstantsInterface.DEF_REF_NAME_KEY;
 
 
@@ -311,7 +312,7 @@ public class ProtoConfigureItemTest {
         Assert.assertEquals(evaluatedItem.getHost(), "testHost");
         Assert.assertEquals(evaluatedItem.getPort(), "testPort");
         Assert.assertEquals(evaluatedItem.getFullPort(), ":testPort");
-        Assert.assertEquals(evaluatedItem.getPath(), "/testPath");
+        Assert.assertEquals(evaluatedItem.getFullPath(), "/testPath");
         Assert.assertEquals(evaluatedItem.getMethod(), "TESTMETHOD");
 
         Assert.assertNotNull(evaluatedItem.getProtoDesc());
@@ -324,8 +325,8 @@ public class ProtoConfigureItemTest {
     public void testGettersWithDefaults() {
         ProtoConfigureItem item = new ProtoConfigureItem();
 
-        Assert.assertEquals(item.getProtocol(), "http");
-        Assert.assertEquals(item.getPath(), "/");
+        Assert.assertEquals(item.getProtocol(DEFAULT_PROTOCOL), "http");
+        Assert.assertEquals(item.getFullPath(), "/");
         Assert.assertEquals(item.getMethod(), "GET");
         Assert.assertEquals(item.getRef(), DEF_REF_NAME_KEY);
     }
@@ -344,8 +345,8 @@ public class ProtoConfigureItemTest {
         ProtoConfigureItem item1 = ProtoConfigureItem.builder().path("api/test").build();
         ProtoConfigureItem item2 = ProtoConfigureItem.builder().path("/api/test").build();
 
-        Assert.assertEquals(item1.getPath(), "/api/test");
-        Assert.assertEquals(item2.getPath(), "/api/test");
+        Assert.assertEquals(item1.getFullPath(), "/api/test");
+        Assert.assertEquals(item2.getFullPath(), "/api/test");
     }
 
     @Test

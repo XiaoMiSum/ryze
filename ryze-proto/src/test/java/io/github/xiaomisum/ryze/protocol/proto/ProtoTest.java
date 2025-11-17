@@ -11,7 +11,7 @@ import java.util.Map;
 public class ProtoTest {
 
     private static final String DESC_FILE_PATH = "D:\\Github\\ryze\\ryze-proto\\src\\test\\resources\\user.desc";
-    private static final String MESSAGE_TYPE = "io.github.xiaomisum.ryze.protocol.example.springboot.UserOuterClass.User";
+    private static final String MESSAGE_TYPE = "io.github.xiaomisum.ryze.protocol.example.springboot.User";
     private Descriptors.FileDescriptor fileDescriptor;
     private Descriptors.Descriptor userDescriptor;
 
