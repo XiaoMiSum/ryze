@@ -60,7 +60,8 @@ export default withMermaid({
             { text: 'Kafka', link: '/guide/protocols/kafka' },
             { text: 'RabbitMQ', link: '/guide/protocols/rabbitmq' },
             { text: 'ActiveMQ', link: '/guide/protocols/activemq' },
-            { text: 'MongoDB', link: '/guide/protocols/mongodb' }
+            { text: 'MongoDB', link: '/guide/protocols/mongodb' },
+            { text: 'Protobuf', link: '/guide/protocols/proto' }
           ]
         },
         {
@@ -113,12 +114,13 @@ export default withMermaid({
                 { text: 'HTTP 指南', link: '/tester/protocols/http' },
                 { text: 'JDBC 指南', link: '/tester/protocols/jdbc' },
                 { text: 'Redis 指南', link: '/tester/protocols/redis' },
-                { text: 'Websocket', link: '/guide/protocols/websocket' },
+                { text: 'Websocket 指南', link: '/tester/protocols/websocket' },
                 { text: 'Dubbo 指南', link: '/tester/protocols/dubbo' },
                 { text: 'Kafka 指南', link: '/tester/protocols/kafka' },
                 { text: 'RabbitMQ 指南', link: '/tester/protocols/rabbitmq' },
                 { text: 'ActiveMQ 指南', link: '/tester/protocols/activemq' },
-                { text: 'MongoDB 指南', link: '/tester/protocols/mongodb' }
+                { text: 'MongoDB 指南', link: '/tester/protocols/mongodb' },
+                { text: 'Proto 指南', link: '/tester/protocols/proto' }
               ]
             },
             {
