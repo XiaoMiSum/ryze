@@ -532,3 +532,11 @@ def performanceTest() {
 ## 相关文档
 
 - [ActiveMQ 官方文档](https://activemq.apache.org/)
+
+- [示例项目](https://github.com/XiaoMiSum/ryze/tree/master/example/active-example)
+
+---
+
+**💡 提示**:
+更多详细示例请参考 [example/active-example](https://github.com/XiaoMiSum/ryze/tree/master/example/active-example)
+目录下的完整示例代码。

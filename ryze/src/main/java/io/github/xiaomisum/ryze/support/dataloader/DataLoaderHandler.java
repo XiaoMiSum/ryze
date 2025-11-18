@@ -52,13 +52,12 @@ public interface DataLoaderHandler {
      * 实现类应根据数据源的类型和格式选择合适的加载和解析策略。
      * </p>
      *
-     * @param source     数据来源，可以是文件路径、URL或其他形式的数据源标识
-     * @param type       目标类型(Type)，用于泛型类型的数据转换
-     * @param targetType 目标类型(Class)，用于确定数据类型
+     * @param source 数据来源，可以是文件路径、URL或其他形式的数据源标识
+     * @param type   目标类型(Type)，用于泛型类型的数据转换
      * @return 数据加载并解析后的对象
      * @throws Exception 错误，可能包括文件不存在、格式不支持、解析错误等
      */
-    Object loadData(String source, Type type, Class<?> targetType) throws Exception;
+    Object loadData(String source, Type type) throws Exception;
 
     /**
      * 设置下一个处理器

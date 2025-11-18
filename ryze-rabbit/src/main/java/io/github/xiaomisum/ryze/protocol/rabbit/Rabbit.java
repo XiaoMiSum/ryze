@@ -133,11 +133,11 @@ public class Rabbit {
     public static ConnectionFactory handleRequest(RabbitConfigureItem config) {
         var factory = new ConnectionFactory();
         factory.setConnectionTimeout(config.getTimeout());
-        factory.setVirtualHost(config.getVirtualHost());
+        factory.setVirtualHost(config.getVirtualHost("/"));
         factory.setHost(config.getHost());
-        factory.setPort(Integer.parseInt(config.getPort()));
-        factory.setUsername(config.getUsername());
-        factory.setPassword(config.getPassword());
+        factory.setPort(Integer.parseInt(config.getPort("5672")));
+        factory.setUsername(config.getUsername("guest"));
+        factory.setPassword(config.getPassword("guest"));
         return factory;
     }
 }

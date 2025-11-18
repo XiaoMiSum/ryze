@@ -87,19 +87,23 @@ rabbit-example/
 ├── src/
 │   ├── main/
 │   │   └── java/
-│   │       └── io/github/xiaomisum/example/rabbit/
-│   │           ├── Consumer.java           # RabbitMQ 消费者
-│   │           └── RabbitApplication.java  # RabbitMQ 应用主类
+│   │       └── io/github/xiaomisum/ryze/rabbit/example/
+│   │           ├── Consumer.java          # RabbitMQ 消费者
+│   │           └── TestObj.java           # 测试对象类
 │   └── test/
 │       ├── java/
-│       │   └── io/github/xiaomisum/example/rabbit/
-│       │       └── RabbitExampleTest.java  # Ryze 测试类
+│       │   └── io/github/xiaomisum/ryze/rabbit/example/
+│       │       ├── code/                  # Java代码测试用例
+│       │       │   ├── CodeTestCase.java      # Java代码测试类
+│       │       │   └── GroovyCodeTestCase.groovy  # Groovy代码测试类
+│       │       └── yaml/                  # YAML配置测试用例
+│       │           └── YamlTestCase.java      # YAML测试类
 │       └── resources/
-│           ├── 测试集合/                  # 测试集合配置
-│           ├── 取样器/                    # RabbitMQ 取样器模板
-│           ├── 处理器/                    # 前置/后置处理器模板
-│           └── 配置元件/                  # RabbitMQ 配置元件模板
-├── images/                               # 文档图片
-│   └── rabbit_consumer.png               # RabbitMQ 消费者截图
-└── pom.xml                               # Maven 配置文件
+│           ├── 测试用例/                 # 测试用例配置
+│           ├── 取样器/                   # RabbitMQ 取样器模板
+│           ├── 处理器/                   # 前置/后置处理器模板
+│           └── 配置元件/                 # RabbitMQ 配置元件模板
+├── images/                              # 文档图片
+│   └── rabbit_consumer.png              # RabbitMQ 消费者截图
+└── pom.xml                              # Maven 配置文件
 ```

@@ -25,9 +25,9 @@
 
 package io.github.xiaomisum.ryze.protocol.kafka;
 
-import io.github.xiaomisum.ryze.testelement.sampler.DefaultSampleResult;
 import io.github.xiaomisum.ryze.protocol.kafka.config.KafkaConfigureItem;
 import io.github.xiaomisum.ryze.support.Collections;
+import io.github.xiaomisum.ryze.testelement.sampler.DefaultSampleResult;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 
@@ -66,7 +66,7 @@ import static io.github.xiaomisum.ryze.protocol.kafka.KafkaConstantsInterface.*;
  * @see ProducerRecord
  * @see KafkaConfigureItem
  */
-@SuppressWarnings({"unchecked", "rawtypes"})
+@SuppressWarnings({"unchecked"})
 public class Kafka {
 
     /**
@@ -76,7 +76,7 @@ public class Kafka {
      * 并返回发送结果的偏移量信息。整个过程包含完整的异常处理机制。
      * </p>
      *
-     * @param config Kafka配置项，包含服务器地址、主题、键、序列化器等配置信息
+     * @param config  Kafka配置项，包含服务器地址、主题、键、序列化器等配置信息
      * @param message 要发送的消息内容
      * @param result  测试结果对象，用于记录测试执行时间等信息
      * @return 发送结果的偏移量信息字节数组
@@ -84,7 +84,7 @@ public class Kafka {
      */
     public static byte[] execute(KafkaConfigureItem config, String message, DefaultSampleResult result) {
         var props = Collections.of(BOOTSTRAP_SERVERS, config.getBootstrapServers(), ACKS, config.getAcks().toString(), RETRIES, config.getRetries(),
-                LINGER_MS, config.getLingerMs(), KEY_SERIALIZER, config.getKeySerializer(), VALUE_SERIALIZER, config.getValueSerializer());
+                LINGER_MS, config.getLingerMs(), KEY_SERIALIZER, config.getKeySerializer(SERIALIZER_CLASS), VALUE_SERIALIZER, config.getValueSerializer(SERIALIZER_CLASS));
         try (var producer = new KafkaProducer<String, String>(props)) {
             result.sampleStart();
             var record = new ProducerRecord<>(config.getTopic(), config.getKey(), message);

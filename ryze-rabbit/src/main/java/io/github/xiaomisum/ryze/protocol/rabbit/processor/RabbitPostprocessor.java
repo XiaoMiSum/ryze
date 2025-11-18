@@ -142,7 +142,7 @@ public class RabbitPostprocessor extends AbstractProcessor<RabbitPostprocessor, 
         runtime.setConfig(localConfig.merge(otherConfig));
         // 2. 创建Rabbit 连接池对象
         factory = Rabbit.handleRequest(runtime.getConfig());
-        message = runtime.getConfig().getMessage();
+        message = runtime.getConfig().getFormatMessage();
         result.setRequest(RealRabbitRequest.build(runtime.getConfig(), message));
     }
 

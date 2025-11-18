@@ -53,6 +53,8 @@
         <module>jdbc-example</module>
         <module>rabbit-example</module>
         <module>mongo-example</module>
+        <module>websocket-example</module>
+        <module>proto-example</module>
     </modules>
 
 
@@ -72,7 +74,7 @@
     </developers>
 
     <properties>
-        <ryze.version>6.0.6</ryze.version>
+        <ryze.version>6.0.7</ryze.version>
         <testng.version>7.9.0</testng.version>
         <spring.boot.version>3.3.3</spring.boot.version>
 
@@ -139,6 +141,18 @@
             <dependency>
                 <groupId>io.github.xiaomisum</groupId>
                 <artifactId>ryze-rabbit</artifactId>
+                <version>${ryze.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.github.xiaomisum</groupId>
+                <artifactId>ryze-websocket</artifactId>
+                <version>${ryze.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.github.xiaomisum</groupId>
+                <artifactId>ryze-proto</artifactId>
                 <version>${ryze.version}</version>
             </dependency>
         </dependencies>

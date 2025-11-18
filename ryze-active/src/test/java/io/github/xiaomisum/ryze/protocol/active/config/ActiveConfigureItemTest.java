@@ -69,8 +69,8 @@ public class ActiveConfigureItemTest {
                 .message(messageMap)
                 .build();
 
-        Assert.assertTrue(item1.getMessage().contains("key1"));
-        Assert.assertTrue(item1.getMessage().contains("value1"));
+        Assert.assertTrue(item1.getFormatMessage().contains("key1"));
+        Assert.assertTrue(item1.getFormatMessage().contains("value1"));
 
         // Test with String message
         ActiveConfigureItem item2 = ActiveConfigureItem.builder()
@@ -148,10 +148,10 @@ public class ActiveConfigureItemTest {
 
         // Test default values
         Assert.assertEquals(item.getRef(), DEF_REF_NAME_KEY);
-        Assert.assertTrue(item.getBrokerUrl().contains("tcp://"));
+        Assert.assertTrue(item.getBrokerUrl(ACTIVEMQ_DEFAULT_BROKER_URL).contains("failover://"));
         Assert.assertEquals(item.getUsername(), ACTIVEMQ_DEFAULT_USERNAME);
         Assert.assertEquals(item.getPassword(), ACTIVEMQ_DEFAULT_PASSWORD);
-        Assert.assertEquals(item.getMessage(), "");
+        Assert.assertEquals(item.getFormatMessage(), "");
     }
 
     @Test

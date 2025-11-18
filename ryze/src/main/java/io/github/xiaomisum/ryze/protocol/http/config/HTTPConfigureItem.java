@@ -41,6 +41,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Strings;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -273,7 +274,7 @@ public class HTTPConfigureItem implements ConfigureItem<HTTPConfigureItem>, HTTP
      * @return 协议，默认为"http"
      */
     public String getProtocol() {
-        return StringUtils.isBlank(protocol) ? PROTOCOL_HTTP : protocol;
+        return protocol;
     }
 
     /**
@@ -283,6 +284,16 @@ public class HTTPConfigureItem implements ConfigureItem<HTTPConfigureItem>, HTTP
      */
     public void setProtocol(String protocol) {
         this.protocol = protocol;
+    }
+
+    /**
+     * 获取协议
+     *
+     * @return 协议，默认为"http"
+     */
+    @JSONField(deserialize = false, serialize = false)
+    public String getProtocol(String defaultProtocol) {
+        return StringUtils.isBlank(protocol) ? defaultProtocol : protocol;
     }
 
     /**
@@ -332,7 +343,7 @@ public class HTTPConfigureItem implements ConfigureItem<HTTPConfigureItem>, HTTP
      * @return 路径，默认为"/"
      */
     public String getPath() {
-        return StringUtils.isBlank(path) ? "/" : Strings.CS.startsWith(path, "/") ? path : "/" + path;
+        return path;
     }
 
     /**
@@ -345,12 +356,22 @@ public class HTTPConfigureItem implements ConfigureItem<HTTPConfigureItem>, HTTP
     }
 
     /**
+     * 获取路径
+     *
+     * @return 路径，默认为"/"
+     */
+    @JSONField(serialize = false, deserialize = false)
+    public String getFullPath() {
+        return StringUtils.isBlank(path) ? "/" : Strings.CS.startsWith(path, "/") ? path : "/" + path;
+    }
+
+    /**
      * 获取HTTP方法
      *
      * @return HTTP方法，默认为"GET"
      */
     public String getMethod() {
-        return StringUtils.isBlank(method) ? GET : method.toUpperCase();
+        return method;
     }
 
     /**
@@ -360,6 +381,16 @@ public class HTTPConfigureItem implements ConfigureItem<HTTPConfigureItem>, HTTP
      */
     public void setMethod(String method) {
         this.method = method;
+    }
+
+    /**
+     * 获取HTTP方法
+     *
+     * @return HTTP方法，默认为"GET"
+     */
+    @JSONField(serialize = false, deserialize = false)
+    public String getMethod(String defaultMethod) {
+        return StringUtils.isBlank(method) ? defaultMethod : method.toUpperCase();
     }
 
     /**
@@ -814,6 +845,48 @@ public class HTTPConfigureItem implements ConfigureItem<HTTPConfigureItem>, HTTP
                 return self;
             }
             configure.body = Collections.putAllIfNonNull((Map) configure.body, body);
+            return self;
+        }
+
+        /**
+         * 通过自定义器设置请求体映射
+         * <p>仅当请求体是Map/List类型时生效</p>
+         *
+         * @param clazz      请求体类型
+         * @param customizer 请求体自定义器
+         * @return 构建器实例
+         */
+        public Builder body(Class<?> clazz, Customizer<Object> customizer) {
+            if (Map.class.isAssignableFrom(clazz)) {
+                if (configure.body != null && !(configure.body instanceof Map)) {
+                    return self;
+                }
+                var body = new HashMap<String, Object>();
+                customizer.customize(body);
+                configure.body = Collections.putAllIfNonNull((Map) configure.body, body);
+            } else if (List.class.isAssignableFrom(clazz)) {
+                if (configure.body != null && !(configure.body instanceof List)) {
+                    return self;
+                }
+                var body = Collections.newArrayList();
+                customizer.customize(body);
+                configure.body = Collections.addAllIfNonNull((List) configure.body, body);
+            }
+            return self;
+        }
+
+        /**
+         * 设置请求体映射
+         * <p>仅当请求体是List类型时生效</p>
+         *
+         * @param body 请求体映射
+         * @return 构建器实例
+         */
+        public Builder body(List<Object> body) {
+            if (configure.body != null && !(configure.body instanceof List)) {
+                return self;
+            }
+            configure.body = Collections.addAllIfNonNull((List) configure.body, body);
             return self;
         }
 

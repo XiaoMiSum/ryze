@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: protocol-example
+
+server:
+  port: 8080
+
+#################### 框架相关配置 ####################
+
+migoo:
+  web:
+    api-prefix: /${spring.application.name}
+  xss:
+    enable: false

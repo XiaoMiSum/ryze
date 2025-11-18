@@ -46,9 +46,9 @@ import org.apache.kafka.clients.producer.ProducerConfig;
  * </p>
  *
  * @author xiaomi
- * @since 2021/11/11 11:08
  * @see TestElementConstantsInterface
  * @see ProducerConfig
+ * @since 2021/11/11 11:08
  */
 public interface KafkaConstantsInterface extends TestElementConstantsInterface {
 
@@ -100,6 +100,11 @@ public interface KafkaConstantsInterface extends TestElementConstantsInterface {
     /**
      * Kafka值序列化器配置键，对应ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG
      */
-    String VALUE_SERIALIZER = ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG;
+    String VALUE_SERIALIZER = ProducerConfig.VALUE_SERIALIZER_CLASS_DOC;
+
+    /**
+     * Kafka值序列化器配置键，对应ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG
+     */
+    String SERIALIZER_CLASS = "org.apache.kafka.common.serialization.StringSerializer";
 
 }

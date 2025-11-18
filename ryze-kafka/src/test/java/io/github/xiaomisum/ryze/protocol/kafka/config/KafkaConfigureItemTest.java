@@ -34,6 +34,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static io.github.xiaomisum.ryze.protocol.kafka.KafkaConstantsInterface.DEF_REF_NAME_KEY;
+import static io.github.xiaomisum.ryze.protocol.kafka.KafkaConstantsInterface.SERIALIZER_CLASS;
 
 public class KafkaConfigureItemTest {
 
@@ -75,8 +76,8 @@ public class KafkaConfigureItemTest {
                 .message(messageMap)
                 .build();
 
-        Assert.assertTrue(item1.getMessage().contains("key1"));
-        Assert.assertTrue(item1.getMessage().contains("value1"));
+        Assert.assertTrue(item1.getFormatMessage().contains("key1"));
+        Assert.assertTrue(item1.getFormatMessage().contains("value1"));
 
         // Test with String message
         KafkaConfigureItem item2 = KafkaConfigureItem.builder()
@@ -168,12 +169,12 @@ public class KafkaConfigureItemTest {
         // Test default values
         Assert.assertEquals(item.getRef(), DEF_REF_NAME_KEY);
         Assert.assertNull(item.getBootstrapServers());
-        Assert.assertEquals(item.getKeySerializer(), "org.apache.kafka.common.serialization.StringSerializer");
-        Assert.assertEquals(item.getValueSerializer(), "org.apache.kafka.common.serialization.StringSerializer");
+        Assert.assertEquals(item.getKeySerializer(SERIALIZER_CLASS), "org.apache.kafka.common.serialization.StringSerializer");
+        Assert.assertEquals(item.getValueSerializer(SERIALIZER_CLASS), "org.apache.kafka.common.serialization.StringSerializer");
         Assert.assertEquals(item.getAcks().intValue(), 1);
         Assert.assertEquals(item.getRetries().intValue(), 5);
         Assert.assertEquals(item.getLingerMs().intValue(), 20);
-        Assert.assertEquals(item.getMessage(), "");
+        Assert.assertEquals(item.getFormatMessage(), "");
     }
 
     @Test

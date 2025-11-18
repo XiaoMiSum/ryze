@@ -1,0 +1,9 @@
+title: proto in http # 包含配置原件、前置处理器、后置处理器、多个取样器（执行步骤）
+testclass: proto
+configelements:
+  - !include '配置元件/proto_http.yaml'
+config:
+  method: get
+  path: '/user/2'
+validators:
+  - { testclass: json, field: '$.name', expected: 'name_2' }

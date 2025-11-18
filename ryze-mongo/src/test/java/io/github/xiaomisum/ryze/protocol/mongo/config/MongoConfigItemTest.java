@@ -34,6 +34,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static io.github.xiaomisum.ryze.protocol.mongo.MongoConstantsInterface.DEF_REF_NAME_KEY;
+import static io.github.xiaomisum.ryze.protocol.mongo.MongoConstantsInterface.FIND;
 
 public class MongoConfigItemTest {
 
@@ -171,7 +172,7 @@ public class MongoConfigItemTest {
 
         // Test default values
         Assert.assertEquals(item.getRef(), DEF_REF_NAME_KEY);
-        Assert.assertEquals(item.getAction(), "find");
+        Assert.assertEquals(item.getAction(FIND), "find");
     }
 
     @Test

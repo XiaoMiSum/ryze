@@ -110,8 +110,8 @@ public class RabbitConfigureItemTest {
                 .message(messageMap)
                 .build();
 
-        Assert.assertTrue(item1.getMessage().contains("key1"));
-        Assert.assertTrue(item1.getMessage().contains("value1"));
+        Assert.assertTrue(item1.getFormatMessage().contains("key1"));
+        Assert.assertTrue(item1.getFormatMessage().contains("value1"));
 
         // Test with String message
         RabbitConfigureItem item2 = RabbitConfigureItem.builder()
@@ -188,12 +188,12 @@ public class RabbitConfigureItemTest {
 
         // Test default values
         Assert.assertEquals(item.getRef(), DEF_REF_NAME_KEY);
-        Assert.assertEquals(item.getVirtualHost(), "/");
+        Assert.assertEquals(item.getVirtualHost("/"), "/");
         Assert.assertNull(item.getHost());
-        Assert.assertEquals(item.getPort(), "5672");
-        Assert.assertEquals(item.getUsername(), "guest");
-        Assert.assertEquals(item.getPassword(), "guest");
-        Assert.assertEquals(item.getMessage(), "");
+        Assert.assertEquals(item.getPort("5672"), "5672");
+        Assert.assertEquals(item.getUsername("guest"), "guest");
+        Assert.assertEquals(item.getPassword("guest"), "guest");
+        Assert.assertEquals(item.getFormatMessage(), "");
         Assert.assertEquals(item.getTimeout(), Integer.valueOf(60000));
     }
 

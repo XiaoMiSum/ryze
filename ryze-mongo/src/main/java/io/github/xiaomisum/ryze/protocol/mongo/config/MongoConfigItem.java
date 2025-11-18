@@ -255,7 +255,7 @@ public class MongoConfigItem implements ConfigureItem<MongoConfigItem>, MongoCon
      * @return 操作类型
      */
     public String getAction() {
-        return StringUtils.isBlank(action) ? FIND : action;
+        return action;
     }
 
     /**
@@ -265,6 +265,10 @@ public class MongoConfigItem implements ConfigureItem<MongoConfigItem>, MongoCon
      */
     public void setAction(String action) {
         this.action = action;
+    }
+
+    public String getAction(String defaultAction) {
+        return StringUtils.isBlank(action) ? defaultAction : action;
     }
 
     /**

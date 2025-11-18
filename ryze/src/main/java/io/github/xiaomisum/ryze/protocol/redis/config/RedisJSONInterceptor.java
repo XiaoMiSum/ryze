@@ -111,28 +111,27 @@ public class RedisJSONInterceptor implements JSONInterceptor, RedisConstantsInte
      * @param testElementMap 测试元件映射表
      */
     private void standardizeConfig(Map<String, Object> testElementMap) {
-        if (StringUtils.isNotBlank((String) testElementMap.get(URL))) {
-            return;
-        }
         var oldKeyValue = testElementMap.remove(SEND);
         if (oldKeyValue != null) {
             testElementMap.put(ARGS, oldKeyValue);
         }
-        var host = testElementMap.remove(HOST);
-        var port = testElementMap.remove(PORT);
-        var username = testElementMap.remove(USERNAME);
-        var password = testElementMap.remove(PASSWORD);
-        var database = testElementMap.remove(DATABASE);
-        var rowArgs = testElementMap.get(ARGS);
-        if (rowArgs instanceof String args) {
+        var rawArgs = testElementMap.get(ARGS);
+        if (rawArgs instanceof String args) {
             testElementMap.put(ARGS, args.split(","));
         }
-        var url = REDIS_URL_TEMPLATE +
-                (Objects.isNull(username) ? "" : username) +
-                (Objects.isNull(password) ? "" : ":" + password + "@") +
-                host +
-                (Objects.isNull(port) ? "" : ":" + port) +
-                (Objects.isNull(database) ? "" : "/" + database);
-        testElementMap.put(URL, url);
+        if (StringUtils.isBlank((String) testElementMap.get(URL))) {
+            var host = testElementMap.remove(HOST);
+            var port = testElementMap.remove(PORT);
+            var username = testElementMap.remove(USERNAME);
+            var password = testElementMap.remove(PASSWORD);
+            var database = testElementMap.remove(DATABASE);
+            var url = REDIS_URL_TEMPLATE +
+                    (Objects.isNull(username) ? "" : username) +
+                    (Objects.isNull(password) ? "" : ":" + password + "@") +
+                    host +
+                    (Objects.isNull(port) ? "" : ":" + port) +
+                    (Objects.isNull(database) ? "" : "/" + database);
+            testElementMap.put(URL, url);
+        }
     }
 }

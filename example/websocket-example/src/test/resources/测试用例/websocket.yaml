@@ -1,0 +1,16 @@
+title: 测试用例 # 包含配置原件、前置处理器、后置处理器、多个取样器（执行步骤）
+configelements:
+  - !include '配置元件/websocket_defaults.yaml'
+preprocessors: # 前置处理器
+  - !include '处理器/websocket_preprocessor.yaml'
+postprocessors: # 后置处理器
+  - !include '处理器/websocket_postprocessor.yaml'
+children: # 执行步骤
+  - title: 测试步骤1
+    testclass: ws
+    config:
+      path: '/ws/body/string'
+      body: 'websocket sampler test'
+      response_pattern: 'websocket sampler test'
+    validators:
+      - { testclass: result, expected: 'websocket sampler test' }

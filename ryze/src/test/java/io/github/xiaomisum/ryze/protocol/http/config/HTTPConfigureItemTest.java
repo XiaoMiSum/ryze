@@ -33,7 +33,7 @@ import org.testng.annotations.Test;
 import java.util.HashMap;
 import java.util.Map;
 
-import static io.github.xiaomisum.ryze.protocol.http.HTTPConstantsInterface.DEF_REF_NAME_KEY;
+import static io.github.xiaomisum.ryze.protocol.http.HTTPConstantsInterface.*;
 
 
 public class HTTPConfigureItemTest {
@@ -301,17 +301,17 @@ public class HTTPConfigureItemTest {
         Assert.assertEquals(evaluatedItem.getHost(), "testHost");
         Assert.assertEquals(evaluatedItem.getPort(), "testPort");
         Assert.assertEquals(evaluatedItem.getFullPort(), ":testPort");
-        Assert.assertEquals(evaluatedItem.getPath(), "/testPath");
-        Assert.assertEquals(evaluatedItem.getMethod(), "TESTMETHOD");
+        Assert.assertEquals(evaluatedItem.getFullPath(), "/testPath");
+        Assert.assertEquals(evaluatedItem.getMethod(), "testMethod");
     }
 
     @Test
     public void testGettersWithDefaults() {
         HTTPConfigureItem item = new HTTPConfigureItem();
 
-        Assert.assertEquals(item.getProtocol(), "http");
-        Assert.assertEquals(item.getPath(), "/");
-        Assert.assertEquals(item.getMethod(), "GET");
+        Assert.assertEquals(item.getProtocol(HTTP), "http");
+        Assert.assertEquals(item.getFullPath(), "/");
+        Assert.assertEquals(item.getMethod(GET), "GET");
         Assert.assertEquals(item.getRef(), DEF_REF_NAME_KEY);
     }
 
@@ -329,13 +329,13 @@ public class HTTPConfigureItemTest {
         HTTPConfigureItem item1 = HTTPConfigureItem.builder().path("api/test").build();
         HTTPConfigureItem item2 = HTTPConfigureItem.builder().path("/api/test").build();
 
-        Assert.assertEquals(item1.getPath(), "/api/test");
+        Assert.assertEquals(item1.getFullPath(), "/api/test");
         Assert.assertEquals(item2.getPath(), "/api/test");
     }
 
     @Test
     public void testGetMethod() {
         HTTPConfigureItem item = HTTPConfigureItem.builder().method("post").build();
-        Assert.assertEquals(item.getMethod(), "POST");
+        Assert.assertEquals(item.getMethod(POST), "POST");
     }
 }

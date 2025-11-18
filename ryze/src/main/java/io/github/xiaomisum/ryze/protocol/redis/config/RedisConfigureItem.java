@@ -57,7 +57,7 @@ import static redis.clients.jedis.Protocol.Command.*;
  * @author xiaomi
  */
 @JSONType(deserializer = RedisJSONInterceptor.class)
-@SuppressWarnings("rawtypes")
+@SuppressWarnings({"unchecked"})
 public class RedisConfigureItem implements ConfigureItem<RedisConfigureItem>, RedisConstantsInterface {
 
     /**

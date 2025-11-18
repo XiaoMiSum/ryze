@@ -31,7 +31,6 @@ package io.github.xiaomisum.ryze.support.dataloader.parser;
 import com.alibaba.fastjson2.JSON;
 
 import java.lang.reflect.Type;
-import java.util.List;
 
 /**
  * JSON解析器
@@ -51,31 +50,11 @@ public class JsonParser {
      * 并采用相应的解析策略。
      * </p>
      *
-     * @param json       JSON字符串
-     * @param type       目标类型(Type)，用于泛型类型的数据转换
-     * @param targetType 目标类型(Class)，用于确定数据类型
+     * @param json JSON字符串
+     * @param type 目标类型(Type)，用于泛型类型的数据转换
      * @return 解析后的对象
      */
-    public static Object parse(String json, Type type, Class<?> targetType) {
-        return parseJSON(json, type, targetType);
-    }
-
-    /**
-     * 解析JSON字符串为核心方法
-     * <p>
-     * 根据目标类型判断是否为List类型，如果是则采用集合解析策略，否则采用普通对象解析策略。
-     * 对于单个JSON对象，如果目标类型是List，则会将其包装为数组进行解析。
-     * </p>
-     *
-     * @param json       JSON字符串
-     * @param type       目标类型(Type)，用于泛型类型的数据转换
-     * @param targetType 目标类型(Class)，用于确定数据类型
-     * @return 解析后的对象
-     */
-    private static Object parseJSON(String json, Type type, Class<?> targetType) {
-        if (List.class.isAssignableFrom(targetType)) {
-            return JSON.parseObject(JSON.isValidObject(json) ? "[" + json + "]" : json, type);
-        }
+    public static Object parse(String json, Type type) {
         return JSON.parseObject(json, type);
     }
 }

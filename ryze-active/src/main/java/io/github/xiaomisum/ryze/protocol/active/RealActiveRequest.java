@@ -28,9 +28,11 @@
 
 package io.github.xiaomisum.ryze.protocol.active;
 
-import io.github.xiaomisum.ryze.testelement.sampler.SampleResult;
 import io.github.xiaomisum.ryze.protocol.active.config.ActiveConfigureItem;
+import io.github.xiaomisum.ryze.testelement.sampler.SampleResult;
 import org.apache.commons.lang3.StringUtils;
+
+import static io.github.xiaomisum.ryze.protocol.active.ActiveConstantsInterface.*;
 
 /**
  * ActiveMQ实际请求信息类，用于封装和格式化ActiveMQ请求的详细信息
@@ -96,11 +98,11 @@ public class RealActiveRequest extends SampleResult.Real {
      */
     public static RealActiveRequest build(ActiveConfigureItem config, String message) {
         var result = new RealActiveRequest(message.getBytes());
-        result.address = config.getBrokerUrl();
+        result.address = config.getBrokerUrl(ACTIVEMQ_DEFAULT_BROKER_URL);
         result.topic = config.getTopic();
         result.queue = config.getQueue();
-        result.username = config.getUsername();
-        result.password = config.getPassword();
+        result.username = config.getUsername(ACTIVEMQ_DEFAULT_USERNAME);
+        result.password = config.getPassword(ACTIVEMQ_DEFAULT_PASSWORD);
         return result;
     }
 

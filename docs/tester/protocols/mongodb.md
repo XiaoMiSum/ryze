@@ -286,3 +286,11 @@ suite("MongoDB数据库测试") { builder ->
 ## 相关文档
 
 - [MongoDB 官方文档](https://docs.mongodb.com/)
+
+- [示例项目](https://github.com/XiaoMiSum/ryze/tree/master/example/mongo-example)
+
+---
+
+**💡 提示**:
+更多详细示例请参考 [example/mongo-example](https://github.com/XiaoMiSum/ryze/tree/master/example/mongo-example)
+目录下的完整示例代码。

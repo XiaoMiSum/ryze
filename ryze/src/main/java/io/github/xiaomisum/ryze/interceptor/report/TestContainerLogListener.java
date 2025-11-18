@@ -98,4 +98,16 @@ public class TestContainerLogListener implements ReporterListener<TestContainerE
         log.info("开始测试：{}\n", title);
         return true;
     }
+
+    /**
+     * 在容器执行后，处理执行时产生的异常
+     * <p>
+     * </p>
+     *
+     * @param context 上下文包装器
+     */
+    @Override
+    public void afterCompletion(ContextWrapper context) {
+        printStackTrace(context.getTestResult().getThrowable(), log);
+    }
 }

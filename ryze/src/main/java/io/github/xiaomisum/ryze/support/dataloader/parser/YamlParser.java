@@ -29,13 +29,11 @@
 package io.github.xiaomisum.ryze.support.dataloader.parser;
 
 import com.alibaba.fastjson2.JSON;
-import com.alibaba.fastjson2.JSONArray;
 import io.github.xiaomisum.ryze.support.yaml.IncludeConstructor;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.File;
 import java.lang.reflect.Type;
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -56,36 +54,15 @@ public class YamlParser {
      * 并采用相应的解析策略。支持YAML的!include和!import特性。
      * </p>
      *
-     * @param yaml       YAML字符串
-     * @param type       目标类型(Type)，用于泛型类型的数据转换
-     * @param targetType 目标类型(Class)，用于确定数据类型
-     * @param file       源文件对象，用于处理相对路径引用
+     * @param yaml YAML字符串
+     * @param type 目标类型(Type)，用于泛型类型的数据转换
+     * @param file 源文件对象，用于处理相对路径引用
      * @return 解析后的对象
      */
-    public static Object parse(String yaml, Type type, Class<?> targetType, File file) {
-        return parseYaml(yaml, type, targetType, file);
+    public static Object parse(String yaml, Type type, File file) {
+        var result = new Yaml(new IncludeConstructor(Objects.isNull(file) || file.isDirectory() || !file.exists() ? null : file)).load(yaml);
+        return JSON.parseObject(JSON.toJSONString(result), type);
+
     }
 
-    /**
-     * 解析YAML字符串为核心方法
-     * <p>
-     * 使用SnakeYAML解析YAML字符串，支持!include和!import特性。
-     * 根据目标类型判断是否为List类型，并采用相应的解析策略。
-     * 对于单个YAML对象，如果目标类型是List，则会将其包装为数组进行解析。
-     * </p>
-     *
-     * @param yaml       YAML字符串
-     * @param type       目标类型(Type)，用于泛型类型的数据转换
-     * @param targetType 目标类型(Class)，用于确定数据类型
-     * @param file       源文件对象，用于处理相对路径引用
-     * @return 解析后的对象
-     */
-    private static Object parseYaml(String yaml, Type type, Class<?> targetType, File file) {
-        var result = new Yaml(new IncludeConstructor(Objects.isNull(file) || file.isDirectory() || !file.exists() ? null : file)).load(yaml);
-        if (List.class.isAssignableFrom(targetType)) {
-            return result instanceof List<?> ? JSON.parseObject(JSON.toJSONString(result), type) :
-                    JSON.parseObject(JSONArray.of(result).toJSONString(), type);
-        }
-        return targetType.equals(Object.class) ? result : JSON.parseObject(JSON.toJSONString(result), type);
-    }
 }
