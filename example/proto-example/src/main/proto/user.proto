@@ -1,0 +1,9 @@
+syntax = "proto3"; // 指定使用 proto3 语法
+
+package io.github.xiaomisum.ryze.protocol.example.springboot;
+
+message User {
+  optional int32 id = 1;
+  optional string name = 2;
+  optional int32 age = 3;
+}

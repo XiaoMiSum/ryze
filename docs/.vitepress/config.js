@@ -16,7 +16,7 @@ export default withMermaid({
       { text: '测试人员', link: '/tester/test-suite/test-suite-project' },
       { text: '开发者', link: '/developer/style' },
       { text: 'FAQ', link: '/faq/same' },
-      { text: '6.0.6', link: 'https://github.com/XiaoMiSum/ryze' }
+      { text: '6.0.7', link: 'https://github.com/XiaoMiSum/ryze' }
     ],
     
     sidebar: {
@@ -56,6 +56,7 @@ export default withMermaid({
             { text: 'Dubbo', link: '/guide/protocols/dubbo' },
             { text: 'JDBC', link: '/guide/protocols/jdbc' },
             { text: 'Redis', link: '/guide/protocols/redis' },
+            { text: 'Websocket', link: '/guide/protocols/websocket' },
             { text: 'Kafka', link: '/guide/protocols/kafka' },
             { text: 'RabbitMQ', link: '/guide/protocols/rabbitmq' },
             { text: 'ActiveMQ', link: '/guide/protocols/activemq' },
@@ -112,6 +113,7 @@ export default withMermaid({
                 { text: 'HTTP 指南', link: '/tester/protocols/http' },
                 { text: 'JDBC 指南', link: '/tester/protocols/jdbc' },
                 { text: 'Redis 指南', link: '/tester/protocols/redis' },
+                { text: 'Websocket', link: '/guide/protocols/websocket' },
                 { text: 'Dubbo 指南', link: '/tester/protocols/dubbo' },
                 { text: 'Kafka 指南', link: '/tester/protocols/kafka' },
                 { text: 'RabbitMQ 指南', link: '/tester/protocols/rabbitmq' },
@@ -128,7 +130,7 @@ export default withMermaid({
             {
               text: '其他事项', items: [
                  { text: 'Gitlab集成',link: '/tester/other/gitlab' },
-                 { text: '常见问题',link: '/faq/same' }
+                 { text: '常见问题',link: '/faq/some' }
               ]
             }
           ]

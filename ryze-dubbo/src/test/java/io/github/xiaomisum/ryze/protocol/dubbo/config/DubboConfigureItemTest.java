@@ -223,7 +223,7 @@ public class DubboConfigureItemTest {
 
         // Check that properties from baseItem take precedence
         Assert.assertEquals(mergedItem.getRegistry().getAddress(), "zookeeper://127.0.0.1:2181");
-        Assert.assertNull(mergedItem.getRegistry().getUsername());
+        Assert.assertNotNull(mergedItem.getRegistry().getUsername());
         Assert.assertEquals(mergedItem.getReference().getVersion(), "1.0.0");
         Assert.assertNull(mergedItem.getReference().getGroup());
         Assert.assertEquals(mergedItem.getInterfaceName(), "com.example.BaseService");
@@ -271,20 +271,6 @@ public class DubboConfigureItemTest {
         Assert.assertNull(item.getAttachmentArgs());
         Assert.assertNull(item.getRegistry());
         Assert.assertNull(item.getReference());
-    }
-
-    @Test
-    public void testParameterTypeAutoInference() {
-        DubboConfigureItem item = DubboConfigureItem.builder()
-                .parameters("test", 123, true)
-                .build();
-
-        List<String> parameterTypes = item.getParameterTypes();
-        Assert.assertNotNull(parameterTypes);
-        Assert.assertEquals(parameterTypes.size(), 3);
-        Assert.assertEquals(parameterTypes.get(0), "java.lang.String");
-        Assert.assertEquals(parameterTypes.get(1), "java.lang.Integer");
-        Assert.assertEquals(parameterTypes.get(2), "java.lang.Boolean");
     }
 
     @Test

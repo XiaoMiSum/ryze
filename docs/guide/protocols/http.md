@@ -10,6 +10,7 @@ HTTP(S) 协议是 Ryze 框架内置支持的核心协议，提供完整的 HTTP/
 HTTP 协议支持内置在核心模块中，无需额外依赖：
 
 ```xml
+
 <dependency>
     <groupId>io.github.xiaomisum</groupId>
     <artifactId>ryze</artifactId>
@@ -482,12 +483,10 @@ class GroovyHttpSuiteExample {
 
 ## 📚 相关文档
 
-- [快速开始指南](../QuickStart.md)
-- [变量与函数](../help/变量与函数.md)
-- [验证器](../help/验证器.md)
-- [提取器](../help/提取器.md)
-- [示例项目](../../example/http-example/)
+- [示例项目](https://github.com/XiaoMiSum/ryze/tree/master/example/http-example)
 
 ---
 
-**💡 提示**: 更多详细示例请参考 [example/http-example](../../example/http-example/) 目录下的完整示例代码。
+**💡 提示**:
+更多详细示例请参考 [example/http-example](https://github.com/XiaoMiSum/ryze/tree/master/example/http-example)
+目录下的完整示例代码。

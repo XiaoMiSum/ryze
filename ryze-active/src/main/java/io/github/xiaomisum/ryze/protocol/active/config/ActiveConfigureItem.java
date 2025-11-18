@@ -196,7 +196,7 @@ public class ActiveConfigureItem implements ConfigureItem<ActiveConfigureItem>, 
      * @return Broker URL
      */
     public String getBrokerUrl() {
-        return StringUtils.isBlank(brokerUrl) ? ACTIVEMQ_DEFAULT_BROKER_URL : brokerUrl;
+        return brokerUrl;
     }
 
     /**
@@ -206,6 +206,19 @@ public class ActiveConfigureItem implements ConfigureItem<ActiveConfigureItem>, 
      */
     public void setBrokerUrl(String brokerUrl) {
         this.brokerUrl = brokerUrl;
+    }
+
+    /**
+     * 获取Broker URL
+     * <p>
+     * 如果未设置，返回ActiveMQ默认Broker URL
+     * </p>
+     *
+     * @return Broker URL
+     */
+    @JSONField(serialize = false, deserialize = false)
+    public String getBrokerUrl(String defaultBrokerUrl) {
+        return StringUtils.isBlank(brokerUrl) ? defaultBrokerUrl : brokerUrl;
     }
 
     /**
@@ -249,14 +262,8 @@ public class ActiveConfigureItem implements ConfigureItem<ActiveConfigureItem>, 
      *
      * @return 消息内容
      */
-    public String getMessage() {
-        return switch (message) {
-            case Number number -> number.toString();
-            case Boolean bool -> bool.toString();
-            case String str -> str;
-            case null -> "";
-            default -> JSON.toJSONString(message);
-        };
+    public Object getMessage() {
+        return message;
     }
 
     /**
@@ -269,6 +276,21 @@ public class ActiveConfigureItem implements ConfigureItem<ActiveConfigureItem>, 
     }
 
     /**
+     * 获取消息内容
+     *
+     * @return 消息内容
+     */
+    public String getFormatMessage() {
+        return switch (message) {
+            case Number number -> number.toString();
+            case Boolean bool -> bool.toString();
+            case String str -> str;
+            case null -> "";
+            default -> JSON.toJSONString(message);
+        };
+    }
+
+    /**
      * 获取用户名
      * <p>
      * 如果未设置，返回ActiveMQ默认用户名
@@ -277,7 +299,7 @@ public class ActiveConfigureItem implements ConfigureItem<ActiveConfigureItem>, 
      * @return 用户名
      */
     public String getUsername() {
-        return StringUtils.isBlank(username) ? ACTIVEMQ_DEFAULT_USERNAME : username;
+        return username;
     }
 
     /**
@@ -289,6 +311,10 @@ public class ActiveConfigureItem implements ConfigureItem<ActiveConfigureItem>, 
         this.username = username;
     }
 
+    public String getUsername(String defaultUsername) {
+        return StringUtils.isBlank(username) ? defaultUsername : username;
+    }
+
     /**
      * 获取密码
      * <p>
@@ -298,8 +324,7 @@ public class ActiveConfigureItem implements ConfigureItem<ActiveConfigureItem>, 
      * @return 密码
      */
     public String getPassword() {
-        return StringUtils.isBlank(password) ? ACTIVEMQ_DEFAULT_PASSWORD : password;
-
+        return password;
     }
 
     /**
@@ -311,6 +336,9 @@ public class ActiveConfigureItem implements ConfigureItem<ActiveConfigureItem>, 
         this.password = password;
     }
 
+    public String getPassword(String defaultPassword) {
+        return StringUtils.isBlank(password) ? defaultPassword : password;
+    }
 
     /**
      * ActiveMQ配置项构建器

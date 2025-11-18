@@ -494,12 +494,10 @@ Ryze JDBC 支持所有兼容 JDBC 标准的数据库：
 
 ## 📚 相关文档
 
-- [快速开始指南](../QuickStart.md)
-- [变量与函数](../help/变量与函数.md)
-- [验证器](../help/验证器.md)
-- [提取器](../help/提取器.md)
-- [示例项目](../../example/jdbc-example/)
+- [示例项目](https://github.com/XiaoMiSum/ryze/tree/master/example/jdbc-example)
 
 ---
 
-**💡 提示**: 更多详细示例请参考 [example/jdbc-example](../../example/jdbc-example/) 目录下的完整示例代码。
+**💡 提示**:
+更多详细示例请参考 [example/jdbc-example](https://github.com/XiaoMiSum/ryze/tree/master/example/jdbc-example)
+目录下的完整示例代码。

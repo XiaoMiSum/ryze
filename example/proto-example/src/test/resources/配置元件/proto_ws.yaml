@@ -1,0 +1,10 @@
+# Http 默认配置，各配置项的优先级为：取样器 > 默认配置
+testclass: proto  # 配置元件类型
+config:
+  protocol: ws
+  host: 127.0.0.1
+  port: 8080
+  proto_desc:
+    desc_path: 'D:\Github\ryze\example\proto-example\user.desc'
+    request_message_name: 'io.github.xiaomisum.ryze.protocol.example.springboot.UserOuterClass.User'
+    response_message_name: 'io.github.xiaomisum.ryze.protocol.example.springboot.UserOuterClass.User'

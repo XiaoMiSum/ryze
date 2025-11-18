@@ -33,7 +33,7 @@
     <artifactId>ryze-parent</artifactId>
     <packaging>pom</packaging>
 
-    <version>6.0.6</version>
+    <version>6.0.7</version>
 
     <name>${project.artifactId}</name>
     <description>a test tool for api</description>
@@ -74,7 +74,9 @@
         <dubbo.version>3.3.2</dubbo.version>
         <mongo.version>5.5.1</mongo.version>
         <rabbitmq.version>5.24.0</rabbitmq.version>
-        <simplehttp.version>2.2.3</simplehttp.version>
+        <simplehttp.version>2.2.7</simplehttp.version>
+        <simple-websocket.version>1.0.0</simple-websocket.version>
+        <protobuf.version>4.33.0</protobuf.version>
 
         <!-- 工具包 -->
         <hamcrest.version>3.0</hamcrest.version>
@@ -82,7 +84,6 @@
         <groovy.version>4.0.28</groovy.version>
         <yaml.version>2.3</yaml.version>
         <faker.version>1.0.2</faker.version>
-        <reports.version>5.1.2</reports.version>
         <allure.version>2.29.1</allure.version>
         <guava.version>33.4.0-jre</guava.version>
         <fastjson.version>2.0.53</fastjson.version>
@@ -115,6 +116,8 @@
         <module>ryze-rabbit</module>
         <module>ryze-testng</module>
         <module>ryze-mongo</module>
+        <module>ryze-websocket</module>
+        <module>ryze-proto</module>
     </modules>
 
     <dependencyManagement>
@@ -152,6 +155,12 @@
             <dependency>
                 <groupId>io.github.xiaomisum</groupId>
                 <artifactId>ryze-rabbit</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.github.xiaomisum</groupId>
+                <artifactId>ryze-websocket</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
@@ -243,6 +252,13 @@
                 <version>${simplehttp.version}</version>
             </dependency>
 
+            <!-- https://mvnrepository.com/artifact/io.github.xiaomisum/simple-websocket -->
+            <dependency>
+                <groupId>io.github.xiaomisum</groupId>
+                <artifactId>simple-websocket</artifactId>
+                <version>${simple-websocket.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>com.mysql</groupId>
                 <artifactId>mysql-connector-j</artifactId>
@@ -265,28 +281,6 @@
                 <groupId>com.github.javafaker</groupId>
                 <artifactId>javafaker</artifactId>
                 <version>${faker.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>info.picocli</groupId>
-                <artifactId>picocli</artifactId>
-                <version>${picocli.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.aventstack</groupId>
-                <artifactId>extentreports</artifactId>
-                <version>${reports.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <artifactId>gson</artifactId>
-                        <groupId>com.google.code.gson</groupId>
-                    </exclusion>
-                    <exclusion>
-                        <artifactId>lombok</artifactId>
-                        <groupId>org.projectlombok</groupId>
-                    </exclusion>
-                </exclusions>
             </dependency>
 
             <dependency>
@@ -343,6 +337,20 @@
                 <groupId>org.hamcrest</groupId>
                 <artifactId>hamcrest</artifactId>
                 <version>${hamcrest.version}</version>
+            </dependency>
+
+            <!-- Protobuf 核心库 -->
+            <dependency>
+                <groupId>com.google.protobuf</groupId>
+                <artifactId>protobuf-java</artifactId>
+                <version>${protobuf.version}</version>
+            </dependency>
+
+            <!-- JSON 与 Protobuf 互转工具（官方推荐） -->
+            <dependency>
+                <groupId>com.google.protobuf</groupId>
+                <artifactId>protobuf-java-util</artifactId>
+                <version>${protobuf.version}</version>
             </dependency>
         </dependencies>
 

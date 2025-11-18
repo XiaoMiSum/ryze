@@ -133,11 +133,10 @@ public class TestDataLoaderChain {
      */
     public <T> T loadData(String source, Type type) {
         try {
-            var targetType = getTypeClass(type);
-            var result = firstHandler.loadData(source, type, targetType);
-            return (T) targetType.cast(result);
+            var result = firstHandler.loadData(source, type);
+            return (T) getTypeClass(type).cast(result);
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage(), e);
+            throw e instanceof RuntimeException r ? r : new RuntimeException(e.getMessage(), e);
         }
     }
 }

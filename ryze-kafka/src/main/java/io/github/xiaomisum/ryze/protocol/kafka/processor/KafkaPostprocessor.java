@@ -148,7 +148,7 @@ public class KafkaPostprocessor extends AbstractProcessor<KafkaPostprocessor, Ka
         var localConfig = Objects.isNull(runtime.getConfig()) ? new KafkaConfigureItem() : runtime.getConfig();
         var otherConfig = (KafkaConfigureItem) context.getLocalVariablesWrapper().get(localConfig.getRef());
         runtime.setConfig(localConfig.merge(otherConfig));
-        message = runtime.getConfig().getMessage();
+        message = runtime.getConfig().getFormatMessage();
         result.setRequest(RealKafkaRequest.build(runtime.getConfig(), message));
     }
 

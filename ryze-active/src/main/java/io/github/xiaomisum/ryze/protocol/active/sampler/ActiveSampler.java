@@ -155,8 +155,9 @@ public class ActiveSampler extends AbstractSampler<ActiveSampler, ActiveConfigur
         var otherConfig = (ActiveConfigureItem) context.getLocalVariablesWrapper().get(localConfig.getRef());
         runtime.setConfig(localConfig.merge(otherConfig));
         // 2. 创建ActiveMQ 连接池;
-        factory = new ActiveMQConnectionFactory(runtime.config.getUsername(), runtime.config.getPassword(), runtime.config.getBrokerUrl());
-        message = runtime.config.getMessage();
+        factory = new ActiveMQConnectionFactory(runtime.getConfig().getUsername(ACTIVEMQ_DEFAULT_USERNAME),
+                runtime.getConfig().getPassword(ACTIVEMQ_DEFAULT_PASSWORD), runtime.getConfig().getBrokerUrl(ACTIVEMQ_DEFAULT_BROKER_URL));
+        message = runtime.config.getFormatMessage();
         result.setRequest(RealActiveRequest.build(runtime.getConfig(), message));
     }
 

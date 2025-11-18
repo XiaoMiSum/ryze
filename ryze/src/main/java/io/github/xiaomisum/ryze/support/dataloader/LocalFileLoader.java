@@ -62,14 +62,13 @@ public class LocalFileLoader extends AbstractDataLoaderHandler {
      * 支持的协议前缀包括"file:"和直接路径。
      * </p>
      *
-     * @param source     数据源路径，支持"file:"前缀，例如"file:/path/to/test.json"或"/home/user/data.yaml"
-     * @param type       目标类型(Type)，用于泛型类型的数据转换
-     * @param targetType 目标类型(Class)，用于确定数据类型
+     * @param source 数据源路径，支持"file:"前缀，例如"file:/path/to/test.json"或"/home/user/data.yaml"
+     * @param type   目标类型(Type)，用于泛型类型的数据转换
      * @return 解析后的数据对象
      * @throws Exception 当文件不存在、不支持的格式或解析过程中发生错误时抛出
      */
     @Override
-    public Object loadData(String source, Type type, Class<?> targetType) throws Exception {
+    public Object loadData(String source, Type type) throws Exception {
         var filePath = source;
         if (source.startsWith("file:")) {
             filePath = source.substring(5);
@@ -77,11 +76,11 @@ public class LocalFileLoader extends AbstractDataLoaderHandler {
         var file = new File(filePath);
         if (file.exists() && file.isFile()) {
             try (var stream = new FileInputStream(file)) {
-                return parseFile(stream, file, type, targetType);
+                return parseFile(stream, file, type);
             }
         }
         if (next != null) {
-            return next.loadData(source, type, targetType);
+            return next.loadData(source, type);
         }
         throw new IllegalArgumentException("Unsupported data source: " + source);
     }
@@ -96,20 +95,19 @@ public class LocalFileLoader extends AbstractDataLoaderHandler {
      * </ul>
      * </p>
      *
-     * @param stream     文件输入流
-     * @param file       文件对象，用于获取文件名等信息
-     * @param type       目标类型(Type)，用于泛型类型的数据转换
-     * @param targetType 目标类型(Class)，用于确定数据类型
+     * @param stream 文件输入流
+     * @param file   文件对象，用于获取文件名等信息
+     * @param type   目标类型(Type)，用于泛型类型的数据转换
      * @return 解析后的数据对象
      * @throws Exception 当文件格式不支持或解析过程中发生错误时抛出
      */
-    private Object parseFile(InputStream stream, File file, Type type, Class<?> targetType) throws Exception {
+    private Object parseFile(InputStream stream, File file, Type type) throws Exception {
         var fileName = file.getName().toLowerCase();
         var content = new String(stream.readAllBytes(), StandardCharsets.UTF_8);
         if (fileName.endsWith(".yaml") || fileName.endsWith(".yml")) {
-            return YamlParser.parse(content, type, targetType, file);
+            return YamlParser.parse(content, type, file);
         } else if (fileName.endsWith(".json")) {
-            return JsonParser.parse(content, type, targetType);
+            return JsonParser.parse(content, type);
         }
         throw new UnsupportedOperationException("Unsupported file format: " + file.getPath());
     }

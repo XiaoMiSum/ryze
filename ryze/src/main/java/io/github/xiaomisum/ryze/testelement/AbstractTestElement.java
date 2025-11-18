@@ -144,13 +144,6 @@ public abstract class AbstractTestElement<SELF extends AbstractTestElement<SELF,
     protected Map<String, Object> metadata = new HashMap<>();
 
     /**
-     * 原始数据映射
-     * <p>存储测试组件的原始数据，不参与JSON序列化和反序列化</p>
-     */
-    @JSONField(serialize = false, deserialize = false)
-    protected Map<String, Object> rawData;
-
-    /**
      * 运行时实例
      * <p>存储测试组件的运行时副本，不参与JSON序列化和反序列化</p>
      */
@@ -367,24 +360,6 @@ public abstract class AbstractTestElement<SELF extends AbstractTestElement<SELF,
      */
     public void setMetadata(Map<String, Object> metadata) {
         this.metadata = metadata;
-    }
-
-    /**
-     * 获取原始数据
-     *
-     * @return 原始数据映射
-     */
-    public Map<String, Object> getRawData() {
-        return rawData;
-    }
-
-    /**
-     * 设置原始数据
-     *
-     * @param rawData 原始数据映射
-     */
-    public void setRawData(Map<String, Object> rawData) {
-        this.rawData = rawData;
     }
 
     /**

@@ -493,3 +493,11 @@ suite("Redis缓存功能测试") { builder ->
 ## 相关文档
 
 - [Redis 官方文档](https://redis.io/documentation)
+
+- [示例项目](https://github.com/XiaoMiSum/ryze/tree/master/example/redis-example)
+
+---
+
+**💡 提示**:
+更多详细示例请参考 [example/redis-example](https://github.com/XiaoMiSum/ryze/tree/master/example/redis-example)
+目录下的完整示例代码。

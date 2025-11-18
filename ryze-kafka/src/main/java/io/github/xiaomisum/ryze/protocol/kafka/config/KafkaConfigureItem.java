@@ -265,14 +265,8 @@ public class KafkaConfigureItem implements ConfigureItem<KafkaConfigureItem>, Ka
      *
      * @return Kafka消息内容
      */
-    public String getMessage() {
-        return switch (message) {
-            case Number number -> number.toString();
-            case Boolean bool -> bool.toString();
-            case String str -> str;
-            case null -> "";
-            default -> JSON.toJSONString(message);
-        };
+    public Object getMessage() {
+        return message;
     }
 
     /**
@@ -284,13 +278,23 @@ public class KafkaConfigureItem implements ConfigureItem<KafkaConfigureItem>, Ka
         this.message = message;
     }
 
+    public String getFormatMessage() {
+        return switch (message) {
+            case Number number -> number.toString();
+            case Boolean bool -> bool.toString();
+            case String str -> str;
+            case null -> "";
+            default -> JSON.toJSONString(message);
+        };
+    }
+
     /**
      * 获取键序列化器类名
      *
      * @return 键序列化器类名
      */
     public String getKeySerializer() {
-        return StringUtils.isBlank(keySerializer) ? "org.apache.kafka.common.serialization.StringSerializer" : keySerializer;
+        return keySerializer;
     }
 
     /**
@@ -302,13 +306,17 @@ public class KafkaConfigureItem implements ConfigureItem<KafkaConfigureItem>, Ka
         this.keySerializer = keySerializer;
     }
 
+    public String getKeySerializer(String defaultValue) {
+        return StringUtils.isBlank(keySerializer) ? defaultValue : keySerializer;
+    }
+
     /**
      * 获取值序列化器类名
      *
      * @return 值序列化器类名
      */
     public String getValueSerializer() {
-        return StringUtils.isBlank(valueSerializer) ? "org.apache.kafka.common.serialization.StringSerializer" : valueSerializer;
+        return valueSerializer;
     }
 
     /**
@@ -318,6 +326,10 @@ public class KafkaConfigureItem implements ConfigureItem<KafkaConfigureItem>, Ka
      */
     public void setValueSerializer(String valueSerializer) {
         this.valueSerializer = valueSerializer;
+    }
+
+    public String getValueSerializer(String defaultValue) {
+        return StringUtils.isBlank(valueSerializer) ? defaultValue : valueSerializer;
     }
 
     /**
