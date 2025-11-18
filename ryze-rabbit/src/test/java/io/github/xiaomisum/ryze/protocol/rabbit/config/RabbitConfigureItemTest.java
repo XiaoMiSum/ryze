@@ -188,12 +188,12 @@ public class RabbitConfigureItemTest {
 
         // Test default values
         Assert.assertEquals(item.getRef(), DEF_REF_NAME_KEY);
-        Assert.assertEquals(item.getVirtualHost(), "/");
+        Assert.assertEquals(item.getVirtualHost("/"), "/");
         Assert.assertNull(item.getHost());
-        Assert.assertEquals(item.getPort(), "5672");
-        Assert.assertEquals(item.getUsername(), "guest");
-        Assert.assertEquals(item.getPassword(), "guest");
-        Assert.assertEquals(item.getMessage(), "");
+        Assert.assertEquals(item.getPort("5672"), "5672");
+        Assert.assertEquals(item.getUsername("guest"), "guest");
+        Assert.assertEquals(item.getPassword("guest"), "guest");
+        Assert.assertEquals(item.getFormatMessage(), "");
         Assert.assertEquals(item.getTimeout(), Integer.valueOf(60000));
     }
 

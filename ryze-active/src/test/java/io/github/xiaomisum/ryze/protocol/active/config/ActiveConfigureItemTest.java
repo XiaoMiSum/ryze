@@ -151,7 +151,7 @@ public class ActiveConfigureItemTest {
         Assert.assertTrue(item.getBrokerUrl(ACTIVEMQ_DEFAULT_BROKER_URL).contains("failover://"));
         Assert.assertEquals(item.getUsername(), ACTIVEMQ_DEFAULT_USERNAME);
         Assert.assertEquals(item.getPassword(), ACTIVEMQ_DEFAULT_PASSWORD);
-        Assert.assertEquals(item.getMessage(), "");
+        Assert.assertEquals(item.getFormatMessage(), "");
     }
 
     @Test
