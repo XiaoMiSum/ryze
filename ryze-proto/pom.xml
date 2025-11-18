@@ -6,10 +6,13 @@
     <parent>
         <groupId>io.github.xiaomisum</groupId>
         <artifactId>ryze-parent</artifactId>
-        <version>6.0.6</version>
+        <version>6.0.7</version>
     </parent>
 
     <artifactId>ryze-proto</artifactId>
+
+    <name>${project.artifactId}</name>
+    <description>protobuf sampler for ryze</description>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
