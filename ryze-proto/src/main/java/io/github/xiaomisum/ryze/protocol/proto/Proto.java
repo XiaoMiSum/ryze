@@ -35,6 +35,7 @@ import com.google.protobuf.DynamicMessage;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.util.JsonFormat;
 import io.github.xiaomisum.ryze.protocol.proto.config.ProtoConfigureItem;
+import io.github.xiaomisum.ryze.protocol.proto.util.FileDescriptorLoaderChain;
 import io.github.xiaomisum.ryze.testelement.sampler.DefaultSampleResult;
 import org.apache.commons.lang3.Strings;
 import org.apache.hc.core5.http.message.BasicHeader;
@@ -43,7 +44,6 @@ import xyz.migoo.simplehttp.Request;
 import xyz.migoo.simplehttp.RequestEntity;
 import xyz.migoo.simplehttp.Response;
 
-import java.io.FileInputStream;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -157,8 +157,9 @@ public class Proto {
      * @return 文件描述符映射
      */
     public static Map<String, Descriptors.FileDescriptor> loadFileDescriptors(String descPath) {
-        try (var fis = new FileInputStream(descPath)) {
-            var set = DescriptorProtos.FileDescriptorSet.parseFrom(fis);
+        try {
+            byte[] bytes = FileDescriptorLoaderChain.loadTestData(descPath);
+            var set = DescriptorProtos.FileDescriptorSet.parseFrom(bytes);
             var fileDescMap = new HashMap<String, Descriptors.FileDescriptor>();
             for (var fdProto : set.getFileList()) {
                 Descriptors.FileDescriptor[] deps = new Descriptors.FileDescriptor[fdProto.getDependencyCount()];

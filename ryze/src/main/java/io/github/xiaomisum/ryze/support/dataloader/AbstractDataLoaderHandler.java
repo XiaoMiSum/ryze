@@ -42,7 +42,7 @@ package io.github.xiaomisum.ryze.support.dataloader;
  *
  * @author xiaomi
  */
-abstract class AbstractDataLoaderHandler implements DataLoaderHandler {
+public abstract class AbstractDataLoaderHandler implements DataLoaderHandler {
 
     /**
      * 链中的下一个处理器

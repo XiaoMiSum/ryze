@@ -1,3 +1,28 @@
+/*
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2025.  Lorem XiaoMiSum (mi_xiao@qq.com)
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining
+ * a copy of this software and associated documentation files (the
+ * 'Software'), to deal in the Software without restriction, including
+ * without limitation the rights to use, copy, modify, merge, publish,
+ * distribute, sublicense, and/or sell copies of the Software, and to
+ * permit persons to whom the Software is furnished to do so, subject to
+ * the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be
+ * included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+ * CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+ * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+ * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package io.github.xiaomisum.ryze.protocol.proto;
 
 import com.google.protobuf.Descriptors;
@@ -10,7 +35,8 @@ import java.util.Map;
 
 public class ProtoTest {
 
-    private static final String DESC_FILE_PATH = "D:\\Github\\ryze\\ryze-proto\\src\\test\\resources\\user.desc";
+    private static final String DESC_FILE_LOCAL_PATH = "D:\\Github\\ryze\\ryze-proto\\src\\test\\resources\\user.desc";
+    private static final String DESC_FILE_CLASS_PATH = "user.desc";
     private static final String MESSAGE_TYPE = "io.github.xiaomisum.ryze.protocol.example.springboot.User";
     private Descriptors.FileDescriptor fileDescriptor;
     private Descriptors.Descriptor userDescriptor;
@@ -18,7 +44,7 @@ public class ProtoTest {
     @BeforeClass
     public void setUp() {
         try {
-            Map<String, Descriptors.FileDescriptor> fileDescriptorMap = Proto.loadFileDescriptors(DESC_FILE_PATH);
+            Map<String, Descriptors.FileDescriptor> fileDescriptorMap = Proto.loadFileDescriptors(DESC_FILE_LOCAL_PATH);
             fileDescriptor = fileDescriptorMap.values().iterator().next();
             userDescriptor = Proto.getMessageDescriptor(fileDescriptorMap, MESSAGE_TYPE);
         } catch (Exception e) {
@@ -28,28 +54,26 @@ public class ProtoTest {
     }
 
     @Test
-    public void testLoadFileDescriptors() {
-        try {
-            Map<String, Descriptors.FileDescriptor> fileDescriptorMap = Proto.loadFileDescriptors(DESC_FILE_PATH);
-            Assert.assertNotNull(fileDescriptorMap);
-            Assert.assertFalse(fileDescriptorMap.isEmpty());
-        } catch (Exception e) {
-            // 在某些测试环境中可能没有测试文件，这种情况可以接受
-            Assert.assertTrue(e instanceof RuntimeException);
-        }
+    public void testLoadLocalPathFileDescriptors() {
+        Map<String, Descriptors.FileDescriptor> fileDescriptorMap = Proto.loadFileDescriptors(DESC_FILE_LOCAL_PATH);
+        Assert.assertNotNull(fileDescriptorMap);
+        Assert.assertFalse(fileDescriptorMap.isEmpty());
+    }
+
+    @Test
+    public void testLoadClassPathFileDescriptors() {
+        Map<String, Descriptors.FileDescriptor> fileDescriptorMap = Proto.loadFileDescriptors(DESC_FILE_CLASS_PATH);
+        Assert.assertNotNull(fileDescriptorMap);
+        Assert.assertFalse(fileDescriptorMap.isEmpty());
     }
 
     @Test
     public void testGetMessageDescriptor() {
-        try {
-            Map<String, Descriptors.FileDescriptor> fileDescriptorMap = Proto.loadFileDescriptors(DESC_FILE_PATH);
-            Descriptors.Descriptor descriptor = Proto.getMessageDescriptor(fileDescriptorMap, MESSAGE_TYPE);
-            Assert.assertNotNull(descriptor);
-            Assert.assertEquals(descriptor.getFullName(), MESSAGE_TYPE);
-        } catch (Exception e) {
-            // 在某些测试环境中可能没有测试文件，这种情况可以接受
-            System.out.println("Warning: Could not test getMessageDescriptor: " + e.getMessage());
-        }
+
+        Map<String, Descriptors.FileDescriptor> fileDescriptorMap = Proto.loadFileDescriptors(DESC_FILE_LOCAL_PATH);
+        Descriptors.Descriptor descriptor = Proto.getMessageDescriptor(fileDescriptorMap, MESSAGE_TYPE);
+        Assert.assertNotNull(descriptor);
+        Assert.assertEquals(descriptor.getFullName(), MESSAGE_TYPE);
     }
 
     @Test
