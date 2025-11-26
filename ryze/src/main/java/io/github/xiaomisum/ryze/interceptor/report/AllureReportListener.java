@@ -35,6 +35,7 @@ import io.qameta.allure.Allure;
 import io.qameta.allure.model.StatusDetails;
 import io.qameta.allure.model.StepResult;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.text.StringEscapeUtils;
 
 import java.sql.Timestamp;
 import java.util.Objects;
@@ -84,13 +85,13 @@ public interface AllureReportListener<T extends AbstractTestElement<?, ?, ?>> ex
             var details = step.getStatusDetails() != null ? step.getStatusDetails() : new StatusDetails();
             var joiner = new StringJoiner("\n\n");
             if (StringUtils.isNotBlank(details.getMessage())) {
-                joiner.add(step.getStatusDetails().getMessage());
+                joiner.add(StringEscapeUtils.escapeHtml4(step.getStatusDetails().getMessage()));
             }
             if (result.getRequest() != null) {
-                joiner.add(result.getRequest().format());
+                joiner.add(StringEscapeUtils.escapeHtml4(result.getRequest().format()));
             }
             if (result.getResponse() != null) {
-                joiner.add(result.getResponse().format());
+                joiner.add(StringEscapeUtils.escapeHtml4(result.getResponse().format()));
             }
             step.getStatusDetails().setMessage(joiner.toString());
         }
