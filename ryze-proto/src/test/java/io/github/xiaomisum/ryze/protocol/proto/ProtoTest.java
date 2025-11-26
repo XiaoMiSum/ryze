@@ -36,7 +36,7 @@ import java.util.Map;
 
 public class ProtoTest {
 
-    private static final String DESC_FILE_LOCAL_PATH = System.getProperty("user.dir") +
+    public static final String DESC_FILE_LOCAL_PATH = System.getProperty("user.dir") +
             File.separator + "src" + File.separator + "test" + File.separator + "resources" + File.separator + "user.desc";
     private static final String DESC_FILE_CLASS_PATH = "user.desc";
     private static final String MESSAGE_TYPE = "io.github.xiaomisum.ryze.protocol.example.springboot.User";

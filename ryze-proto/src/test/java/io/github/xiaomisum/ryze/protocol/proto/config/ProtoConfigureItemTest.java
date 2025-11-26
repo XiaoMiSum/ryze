@@ -27,14 +27,14 @@ package io.github.xiaomisum.ryze.protocol.proto.config;
 
 import io.github.xiaomisum.ryze.SessionRunner;
 import io.github.xiaomisum.ryze.context.ContextWrapper;
+import io.github.xiaomisum.ryze.protocol.proto.ProtoTest;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static io.github.xiaomisum.ryze.protocol.proto.ProtoConstantsInterface.DEFAULT_PROTOCOL;
-import static io.github.xiaomisum.ryze.protocol.proto.ProtoConstantsInterface.DEF_REF_NAME_KEY;
+import static io.github.xiaomisum.ryze.protocol.proto.ProtoConstantsInterface.*;
 
 
 public class ProtoConfigureItemTest {
@@ -287,7 +287,7 @@ public class ProtoConfigureItemTest {
         context.getLocalVariablesWrapper().put("port", "testPort");
         context.getLocalVariablesWrapper().put("path", "testPath");
         context.getLocalVariablesWrapper().put("method", "testMethod");
-        context.getLocalVariablesWrapper().put("descPath", "/path/to/test.desc");
+        context.getLocalVariablesWrapper().put("descPath", ProtoTest.DESC_FILE_LOCAL_PATH);
         context.getLocalVariablesWrapper().put("requestMessage", "TestRequest");
         context.getLocalVariablesWrapper().put("responseMessage", "TestResponse");
 
@@ -298,11 +298,9 @@ public class ProtoConfigureItemTest {
                 .port("${port}")
                 .path("${path}")
                 .method("${method}")
-                .protoDesc(builder -> {
-                    builder.descPath("${descPath}")
-                            .requestMessageName("${requestMessage}")
-                            .responseMessageName("${responseMessage}");
-                })
+                .protoDesc(builder -> builder.descPath("${descPath}")
+                        .requestMessageName("${requestMessage}")
+                        .responseMessageName("${responseMessage}"))
                 .build();
 
         ProtoConfigureItem evaluatedItem = item.evaluate(context);
@@ -313,10 +311,10 @@ public class ProtoConfigureItemTest {
         Assert.assertEquals(evaluatedItem.getPort(), "testPort");
         Assert.assertEquals(evaluatedItem.getFullPort(), ":testPort");
         Assert.assertEquals(evaluatedItem.getFullPath(), "/testPath");
-        Assert.assertEquals(evaluatedItem.getMethod(), "TESTMETHOD");
+        Assert.assertEquals(evaluatedItem.getMethod(), "testMethod");
 
         Assert.assertNotNull(evaluatedItem.getProtoDesc());
-        Assert.assertEquals(evaluatedItem.getProtoDesc().getDescPath(), "/path/to/test.desc");
+        Assert.assertEquals(evaluatedItem.getProtoDesc().getDescPath(), ProtoTest.DESC_FILE_LOCAL_PATH);
         Assert.assertEquals(evaluatedItem.getProtoDesc().getRequestMessageName(), "TestRequest");
         Assert.assertEquals(evaluatedItem.getProtoDesc().getResponseMessageName(), "TestResponse");
     }
@@ -327,7 +325,7 @@ public class ProtoConfigureItemTest {
 
         Assert.assertEquals(item.getProtocol(DEFAULT_PROTOCOL), "http");
         Assert.assertEquals(item.getFullPath(), "/");
-        Assert.assertEquals(item.getMethod(), "GET");
+        Assert.assertEquals(item.getMethod(GET), "GET");
         Assert.assertEquals(item.getRef(), DEF_REF_NAME_KEY);
     }
 
@@ -352,7 +350,7 @@ public class ProtoConfigureItemTest {
     @Test
     public void testGetMethod() {
         ProtoConfigureItem item = ProtoConfigureItem.builder().method("post").build();
-        Assert.assertEquals(item.getMethod(), "POST");
+        Assert.assertEquals(item.getMethod(POST), "POST");
     }
 
     @Test
