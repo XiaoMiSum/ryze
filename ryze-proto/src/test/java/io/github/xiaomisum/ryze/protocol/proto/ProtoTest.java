@@ -30,12 +30,14 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
 public class ProtoTest {
 
-    private static final String DESC_FILE_LOCAL_PATH = "D:\\Github\\ryze\\ryze-proto\\src\\test\\resources\\user.desc";
+    private static final String DESC_FILE_LOCAL_PATH = System.getProperty("user.dir") +
+            File.separator + "src" + File.separator + "test" + File.separator + "resources" + File.separator + "user.desc";
     private static final String DESC_FILE_CLASS_PATH = "user.desc";
     private static final String MESSAGE_TYPE = "io.github.xiaomisum.ryze.protocol.example.springboot.User";
     private Descriptors.FileDescriptor fileDescriptor;
