@@ -30,9 +30,7 @@ package io.github.xiaomisum.ryze.protocol.redis;
 
 import com.alibaba.fastjson2.JSON;
 import io.github.xiaomisum.ryze.testelement.sampler.SampleResult;
-import org.apache.commons.lang3.StringUtils;
 
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 /**
@@ -45,12 +43,16 @@ import java.util.List;
  * @author xiaomi
  * @since 2025/7/21 19:11
  */
-public class RealRedisRequest extends SampleResult.Real implements RedisConstantsInterface {
+public class RealRedisRequest extends SampleResult.RealRequest implements RedisConstantsInterface {
 
     /**
      * Redis连接URL
      */
     private final String url;
+
+    private final String command;
+
+    private final List<String> args;
 
     /**
      * 构造Redis实际请求对象
@@ -60,8 +62,10 @@ public class RealRedisRequest extends SampleResult.Real implements RedisConstant
      * @param args    Redis命令参数
      */
     public RealRedisRequest(String url, String command, List<String> args) {
-        super((COMMAND + ": " + command + "\n" + ARGS + ": " + JSON.toJSONString(args) + "\n\n").getBytes(StandardCharsets.UTF_8));
+        super();
         this.url = url;
+        this.command = command;
+        this.args = args;
     }
 
     /**
@@ -75,7 +79,12 @@ public class RealRedisRequest extends SampleResult.Real implements RedisConstant
      */
     @Override
     public String format() {
-        return url + (StringUtils.isNotBlank(bytesAsString()) ? "\n" + bytesAsString() : "");
+        return url + "\n" + COMMAND + ": " + command + "\n" + ARGS + ": " + JSON.toJSONString(args) + "\n\n";
+    }
+
+    @Override
+    public byte[] bytes() {
+        return new byte[0];
     }
 
 }

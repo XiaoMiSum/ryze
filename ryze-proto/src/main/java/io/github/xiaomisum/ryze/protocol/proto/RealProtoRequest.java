@@ -25,7 +25,11 @@
 
 package io.github.xiaomisum.ryze.protocol.proto;
 
+import io.github.xiaomisum.ryze.support.Collections;
+import io.github.xiaomisum.ryze.testelement.sampler.SampleResult;
 import org.apache.commons.lang3.StringUtils;
+
+import java.util.Map;
 
 /**
  * HTTP实际请求结果类
@@ -36,7 +40,7 @@ import org.apache.commons.lang3.StringUtils;
  *
  * @author xiaomi
  */
-public class RealProtoRequest extends ProtoRealResult {
+public class RealProtoRequest extends SampleResult.RealRequest {
 
     /**
      * 请求URL
@@ -57,13 +61,18 @@ public class RealProtoRequest extends ProtoRealResult {
      * 请求体字节数组
      */
     String body;
-    
+
     /**
-     * 构造HTTP实际请求结果对象
+     * HTTP协议版本
+     * <p>例如："HTTP/1.1" 或 "HTTP/2"</p>
      */
-    public RealProtoRequest() {
-        super(new byte[0]);
-    }
+    String version;
+
+    /**
+     * HTTP响应头列表
+     * <p>包含响应中的所有HTTP头信息</p>
+     */
+    Map<String, String> headers;
 
 
     /**
@@ -74,17 +83,7 @@ public class RealProtoRequest extends ProtoRealResult {
      */
     @Override
     public byte[] bytes() {
-        return StringUtils.isNotBlank(body) ? body.getBytes() : query != null ? query.getBytes() : super.bytes();
-    }
-
-    /**
-     * 获取请求字符串表示
-     *
-     * @return 请求字符串
-     */
-    @Override
-    public String bytesAsString() {
-        return new String(bytes());
+        return StringUtils.isNotBlank(body) ? body.getBytes() : query != null ? query.getBytes() : new byte[0];
     }
 
     /**
@@ -115,7 +114,10 @@ public class RealProtoRequest extends ProtoRealResult {
         if (StringUtils.isNotBlank(version)) {
             buf.append(" ").append(version);
         }
-        header(buf);
+        if (!Collections.isEmpty(headers)) {
+            buf.append("\n");
+            headers.forEach((key, value) -> buf.append(key).append(": ").append(value).append("\n"));
+        }
         if (StringUtils.isNotBlank(query)) {
             buf.append("\n").append("Request Query:").append(query);
         }

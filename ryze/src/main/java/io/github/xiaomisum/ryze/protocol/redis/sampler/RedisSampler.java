@@ -28,16 +28,16 @@ package io.github.xiaomisum.ryze.protocol.redis.sampler;
 import com.alibaba.fastjson2.annotation.JSONField;
 import io.github.xiaomisum.ryze.builder.*;
 import io.github.xiaomisum.ryze.context.ContextWrapper;
-import io.github.xiaomisum.ryze.testelement.KW;
-import io.github.xiaomisum.ryze.testelement.sampler.AbstractSampler;
-import io.github.xiaomisum.ryze.testelement.sampler.DefaultSampleResult;
-import io.github.xiaomisum.ryze.testelement.sampler.SampleResult;
-import io.github.xiaomisum.ryze.testelement.sampler.Sampler;
 import io.github.xiaomisum.ryze.protocol.jdbc.JDBCConstantsInterface;
 import io.github.xiaomisum.ryze.protocol.redis.RealRedisRequest;
 import io.github.xiaomisum.ryze.protocol.redis.Redis;
 import io.github.xiaomisum.ryze.protocol.redis.config.RedisConfigureItem;
 import io.github.xiaomisum.ryze.protocol.redis.config.RedisDatasource;
+import io.github.xiaomisum.ryze.testelement.KW;
+import io.github.xiaomisum.ryze.testelement.sampler.AbstractSampler;
+import io.github.xiaomisum.ryze.testelement.sampler.DefaultSampleResult;
+import io.github.xiaomisum.ryze.testelement.sampler.SampleResult;
+import io.github.xiaomisum.ryze.testelement.sampler.Sampler;
 
 /**
  * @author xiaomi
@@ -82,7 +82,7 @@ public class RedisSampler extends AbstractSampler<RedisSampler, RedisConfigureIt
     @Override
     protected void handleResponse(ContextWrapper context, DefaultSampleResult result) {
         super.handleResponse(context, result);
-        result.setResponse(SampleResult.DefaultReal.build(bytes));
+        result.setResponse(SampleResult.DefaultRealResponse.build(bytes));
     }
 
     /**

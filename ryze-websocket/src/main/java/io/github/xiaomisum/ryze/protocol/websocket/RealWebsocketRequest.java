@@ -28,13 +28,14 @@
 
 package io.github.xiaomisum.ryze.protocol.websocket;
 
+import io.github.xiaomisum.ryze.support.Collections;
 import io.github.xiaomisum.ryze.testelement.sampler.SampleResult;
 import io.github.xiaomisum.simplewebsocket.Request;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;
 
-public class RealWebsocketRequest extends SampleResult.Real {
+public class RealWebsocketRequest extends SampleResult.RealRequest {
 
     /**
      * 请求URL
@@ -63,7 +64,6 @@ public class RealWebsocketRequest extends SampleResult.Real {
      * @param request Websocket请求对象
      */
     public RealWebsocketRequest(Request request) {
-        super(new byte[0]);
         url = request.url();
         query = request.query();
         body = request.bytes() != null && request.bytes().length > 0 ? new String(request.bytes()) : request.body();
@@ -79,24 +79,18 @@ public class RealWebsocketRequest extends SampleResult.Real {
      */
     @Override
     public byte[] bytes() {
-        return body != null && !body.isEmpty() ? body.getBytes() : query != null ? query.getBytes() : super.bytes();
+        return body != null && !body.isEmpty() ? body.getBytes() : query != null ? query.getBytes() : new byte[0];
     }
 
-    /**
-     * 获取请求字符串表示
-     *
-     * @return 请求字符串
-     */
-    @Override
-    public String bytesAsString() {
-        return new String(bytes());
-    }
 
     @Override
     public String format() {
         var buf = new StringBuilder();
         buf.append(url);
-        headers.forEach((key, value) -> buf.append(key).append(": ").append(value).append("\n"));
+        if (!Collections.isEmpty(headers)) {
+            buf.append("\n");
+            headers.forEach((key, value) -> buf.append(key).append(": ").append(value).append("\n"));
+        }
         if (StringUtils.isNotBlank(query)) {
             buf.append("\n").append("Request Query:").append(query);
         }

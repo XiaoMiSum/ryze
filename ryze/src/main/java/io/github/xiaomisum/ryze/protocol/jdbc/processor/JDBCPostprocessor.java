@@ -146,7 +146,7 @@ public class JDBCPostprocessor extends AbstractProcessor<JDBCPostprocessor, JDBC
     @Override
     protected void handleResponse(ContextWrapper context, DefaultSampleResult result) {
         super.handleResponse(context, result);
-        result.setResponse(SampleResult.DefaultReal.build(bytes));
+        result.setResponse(SampleResult.DefaultRealResponse.build(bytes));
     }
 
     /**

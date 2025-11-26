@@ -158,7 +158,7 @@ public class RabbitPreprocessor extends AbstractProcessor<RabbitPreprocessor, Ra
     @Override
     protected void handleResponse(ContextWrapper context, DefaultSampleResult result) {
         super.handleResponse(context, result);
-        result.setResponse(SampleResult.DefaultReal.build(new byte[0]));
+        result.setResponse(SampleResult.DefaultRealResponse.build());
         factory = null;
     }
 

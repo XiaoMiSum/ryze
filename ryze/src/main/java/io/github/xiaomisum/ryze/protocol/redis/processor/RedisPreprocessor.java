@@ -28,16 +28,16 @@ package io.github.xiaomisum.ryze.protocol.redis.processor;
 import com.alibaba.fastjson2.annotation.JSONField;
 import io.github.xiaomisum.ryze.builder.DefaultExtractorsBuilder;
 import io.github.xiaomisum.ryze.context.ContextWrapper;
-import io.github.xiaomisum.ryze.testelement.KW;
-import io.github.xiaomisum.ryze.testelement.processor.AbstractProcessor;
-import io.github.xiaomisum.ryze.testelement.processor.Preprocessor;
-import io.github.xiaomisum.ryze.testelement.sampler.DefaultSampleResult;
-import io.github.xiaomisum.ryze.testelement.sampler.SampleResult;
 import io.github.xiaomisum.ryze.protocol.jdbc.JDBCConstantsInterface;
 import io.github.xiaomisum.ryze.protocol.redis.RealRedisRequest;
 import io.github.xiaomisum.ryze.protocol.redis.Redis;
 import io.github.xiaomisum.ryze.protocol.redis.config.RedisConfigureItem;
 import io.github.xiaomisum.ryze.protocol.redis.config.RedisDatasource;
+import io.github.xiaomisum.ryze.testelement.KW;
+import io.github.xiaomisum.ryze.testelement.processor.AbstractProcessor;
+import io.github.xiaomisum.ryze.testelement.processor.Preprocessor;
+import io.github.xiaomisum.ryze.testelement.sampler.DefaultSampleResult;
+import io.github.xiaomisum.ryze.testelement.sampler.SampleResult;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -84,7 +84,7 @@ public class RedisPreprocessor extends AbstractProcessor<RedisPreprocessor, Redi
     @Override
     protected void handleResponse(ContextWrapper context, DefaultSampleResult result) {
         super.handleResponse(context, result);
-        result.setResponse(SampleResult.DefaultReal.build(bytes));
+        result.setResponse(SampleResult.DefaultRealResponse.build(bytes));
     }
 
     /**

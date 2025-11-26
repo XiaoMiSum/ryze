@@ -26,9 +26,8 @@
 package io.github.xiaomisum.ryze.protocol.mongo;
 
 import com.alibaba.fastjson2.JSON;
-import io.github.xiaomisum.ryze.testelement.sampler.SampleResult;
 import io.github.xiaomisum.ryze.protocol.mongo.config.MongoConfigItem;
-import org.apache.commons.lang3.StringUtils;
+import io.github.xiaomisum.ryze.testelement.sampler.SampleResult;
 
 import java.util.Map;
 import java.util.Objects;
@@ -37,7 +36,7 @@ import java.util.Objects;
  * MongoDB 真实请求信息类
  * <p>
  * 该类用于封装和格式化 MongoDB 操作的请求信息，包括连接地址、数据库名、集名称、操作类型和条件等。
- * 它继承自 SampleResult.Real，提供了将 MongoDB 配置项转换为可读格式的请求信息的功能。
+ * 它继承自 SampleResult.RealRequest，提供了将 MongoDB 配置项转换为可读格式的请求信息的功能。
  * </p>
  * <p>
  * 主要功能：
@@ -48,42 +47,35 @@ import java.util.Objects;
  * </ul>
  * </p>
  */
-public class MongoRealRequest extends SampleResult.Real {
+public class MongoRealRequest extends SampleResult.RealRequest {
 
 
     /**
      * MongoDB 连接地址
      */
     private String url;
-    
+
     /**
      * 数据库名称
      */
     private String database;
-    
+
     /**
      * 集合名称
      */
     private String collection;
-    
+
     /**
      * 操作类型（find、insert、update、delete）
      */
     private String action;
-    
+
     /**
      * 操作条件
      */
     private Map<String, Object> condition;
 
-    /**
-     * 构造方法，根据字节数组创建 MongoRealRequest 实例
-     *
-     * @param bytes 字节数组
-     */
-    public MongoRealRequest(byte[] bytes) {
-        super(bytes);
-    }
+    private Object data;
 
     /**
      * 根据 MongoConfigItem 构建 MongoRealRequest 实例
@@ -96,8 +88,8 @@ public class MongoRealRequest extends SampleResult.Real {
      * @return MongoRealRequest 实例
      */
     public static MongoRealRequest build(MongoConfigItem configure) {
-        var result = new MongoRealRequest(Objects.isNull(configure.getData()) ? new byte[0] :
-                JSON.toJSONBytes(configure.getData()));
+        var result = new MongoRealRequest();
+        result.data = configure.getData();
         result.url = configure.getUrl();
         result.database = configure.getDatabase();
         result.collection = configure.getCollection();
@@ -126,9 +118,14 @@ public class MongoRealRequest extends SampleResult.Real {
         if (Objects.nonNull(condition)) {
             buf.append("Condition as JSON: ").append(JSON.toJSONString(condition)).append("\n");
         }
-        if (StringUtils.isNotBlank(bytesAsString())) {
-            buf.append("\n").append("Data: ").append(bytesAsString());
+        if (Objects.nonNull(data)) {
+            buf.append("\n").append("Data: ").append(JSON.toJSONString(data));
         }
         return buf.toString();
+    }
+
+    @Override
+    public byte[] bytes() {
+        return JSON.toJSONBytes(data);
     }
 }

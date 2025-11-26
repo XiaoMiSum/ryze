@@ -69,7 +69,7 @@ public class Proto {
      */
     public static Request build(ProtoConfigureItem config) {
         var url = "%s://%s%s%s".formatted(config.getProtocol(DEFAULT_PROTOCOL), config.getHost(), config.getFullPort(), config.getFullPath());
-        var cli = Request.create(config.getMethod(), url);
+        var cli = Request.create(config.getMethod(POST), url);
         if (config.getQuery() != null && !config.getQuery().isEmpty()) {
             cli.query(Form.create((config.getQuery())));
         }
@@ -90,12 +90,11 @@ public class Proto {
      */
     public static RealProtoResponse execute(ProtoConfigureItem config, Map<String, Descriptors.FileDescriptor> descriptorMap, DefaultSampleResult result, RealProtoRequest request) {
         try {
+            request.headers = config.getHeaders();
+            var url = request.url = "%s://%s%s%s".formatted(config.getProtocol(DEFAULT_PROTOCOL), config.getHost(), config.getFullPort(), config.getPath());
             var requestMessageName = Proto.getMessageDescriptor(descriptorMap, config.getProtoDesc().getRequestMessageName());
             var responseMessageName = Proto.getMessageDescriptor(descriptorMap, config.getProtoDesc().getResponseMessageName());
-
-            request.headers = config.getHeaders();
             var body = convert(request.body = config.getStringBody(), requestMessageName);
-            var url = request.url = "%s://%s%s%s".formatted(config.getProtocol(), config.getHost(), config.getFullPort(), config.getPath());
             if (Strings.CI.equalsAny(config.getProtocol(), WS, WSS)) {
                 request.query = config.getQuery() == null ? "" : JSON.toJSONString(config.getQuery());
                 io.github.xiaomisum.simplewebsocket.Request ws = new io.github.xiaomisum.simplewebsocket.Request(url)
@@ -108,15 +107,16 @@ public class Proto {
                 io.github.xiaomisum.simplewebsocket.Response response = ws.execute(closeConnectHandler, converter);
                 return new RealProtoResponse(response, responseMessageName);
             }
-            var http = Request.create(config.getMethod(), url);
+            var http = Request.create(config.getMethod(POST), url);
             if (config.getQuery() != null && !config.getQuery().isEmpty()) {
                 http.query(Form.create((config.getQuery())));
             }
             if (config.getHeaders() != null && !config.getHeaders().isEmpty()) {
                 config.getHeaders().forEach(http::addHeader);
             }
-            request.method = config.getMethod();
             request.query = http.query();
+            request.version = http.version();
+            request.method = config.getMethod(POST);
             return new RealProtoResponse(execute(http, body, result), responseMessageName);
         } catch (Exception e) {
             if (e instanceof RuntimeException) {

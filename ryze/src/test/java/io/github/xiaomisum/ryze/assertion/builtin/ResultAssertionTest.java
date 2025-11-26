@@ -41,7 +41,7 @@ public class ResultAssertionTest {
 
         // 创建模拟的SampleResult
         SampleResult result = new DefaultSampleResult("test");
-        result.setResponse(SampleResult.DefaultReal.build(responseText.getBytes()));
+        result.setResponse(SampleResult.DefaultRealResponse.build(responseText.getBytes()));
 
         // 创建Result断言实例
         ResultAssertion assertion = ResultAssertion.builder()
@@ -61,7 +61,7 @@ public class ResultAssertionTest {
 
         // 创建模拟的SampleResult
         SampleResult result = new DefaultSampleResult("test");
-        result.setResponse(SampleResult.DefaultReal.build(responseText.getBytes()));
+        result.setResponse(SampleResult.DefaultRealResponse.build(responseText.getBytes()));
 
         ContextWrapper context = new ContextWrapper(SessionRunner.getSessionIfNoneCreateNew());
         context.setTestResult(result);
@@ -85,7 +85,7 @@ public class ResultAssertionTest {
 
         // 创建模拟的SampleResult
         SampleResult result = new DefaultSampleResult("test");
-        result.setResponse(SampleResult.DefaultReal.build(responseText.getBytes()));
+        result.setResponse(SampleResult.DefaultRealResponse.build(responseText.getBytes()));
 
         ContextWrapper context = new ContextWrapper(SessionRunner.getSessionIfNoneCreateNew());
         context.setTestResult(result);

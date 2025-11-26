@@ -31,12 +31,12 @@ package io.github.xiaomisum.ryze.protocol.debug.processer;
 import com.alibaba.fastjson2.JSON;
 import io.github.xiaomisum.ryze.builder.DefaultExtractorsBuilder;
 import io.github.xiaomisum.ryze.context.ContextWrapper;
+import io.github.xiaomisum.ryze.protocol.debug.config.DebugConfigureItem;
 import io.github.xiaomisum.ryze.testelement.KW;
 import io.github.xiaomisum.ryze.testelement.processor.AbstractProcessor;
 import io.github.xiaomisum.ryze.testelement.processor.Preprocessor;
 import io.github.xiaomisum.ryze.testelement.sampler.DefaultSampleResult;
 import io.github.xiaomisum.ryze.testelement.sampler.SampleResult;
-import io.github.xiaomisum.ryze.protocol.debug.config.DebugConfigureItem;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -73,8 +73,8 @@ public class DebugPreprocessor extends AbstractProcessor<DebugPreprocessor, Debu
         try {
             result.sampleStart();
             byte[] bytes = JSON.toJSONBytes(runtime.getConfig());
-            result.setRequest(SampleResult.DefaultReal.build(bytes));
-            result.setResponse(SampleResult.DefaultReal.build(bytes));
+            result.setRequest(SampleResult.DefaultRealRequest.build(bytes));
+            result.setResponse(SampleResult.DefaultRealResponse.build(bytes));
             logger.info("Debug Preprocessor");
         } finally {
             result.sampleEnd();

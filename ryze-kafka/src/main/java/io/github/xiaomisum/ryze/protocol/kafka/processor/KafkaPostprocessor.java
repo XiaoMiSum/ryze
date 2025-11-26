@@ -161,7 +161,7 @@ public class KafkaPostprocessor extends AbstractProcessor<KafkaPostprocessor, Ka
     @Override
     protected void handleResponse(ContextWrapper context, DefaultSampleResult result) {
         super.handleResponse(context, result);
-        result.setResponse(SampleResult.DefaultReal.build(response));
+        result.setResponse(SampleResult.DefaultRealResponse.build(response));
     }
 
     /**

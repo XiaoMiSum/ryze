@@ -44,7 +44,7 @@ import java.util.Objects;
  * @author xiaomi
  * @since 2025/7/21 19:11
  */
-public class RealJDBCRequest extends SampleResult.Real implements JDBCConstantsInterface {
+public class RealJDBCRequest extends SampleResult.RealRequest implements JDBCConstantsInterface {
 
     /**
      * 数据库连接URL
@@ -61,6 +61,8 @@ public class RealJDBCRequest extends SampleResult.Real implements JDBCConstantsI
      */
     private final String password;
 
+    private final String sql;
+
     /**
      * SQL参数
      */
@@ -75,10 +77,10 @@ public class RealJDBCRequest extends SampleResult.Real implements JDBCConstantsI
      * @param sql      要执行的SQL语句
      */
     public RealJDBCRequest(String url, String username, String password, String sql, List<Object> args) {
-        super(sql.getBytes());
         this.url = url;
         this.username = username;
         this.password = password;
+        this.sql = sql;
         this.args = args;
     }
 
@@ -103,8 +105,13 @@ public class RealJDBCRequest extends SampleResult.Real implements JDBCConstantsI
         return url + "\n" +
                 USERNAME + ": " + username + "\n" +
                 PASSWORD + ": " + password +
-                (StringUtils.isBlank(bytesAsString()) ? "" : "\n\nSQL: " + bytesAsString()) +
+                (StringUtils.isBlank(sql) ? "" : "\n\nSQL: " + sql) +
                 (Objects.isNull(args) || args.isEmpty() ? "" : "\n\nARGS: " + String.join(", ", ARGS));
+    }
+
+    @Override
+    public byte[] bytes() {
+        return sql.getBytes();
     }
 
 }

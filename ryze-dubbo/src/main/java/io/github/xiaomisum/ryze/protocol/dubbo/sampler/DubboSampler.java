@@ -30,11 +30,6 @@ import com.alibaba.fastjson2.annotation.JSONField;
 import io.github.xiaomisum.ryze.builder.DefaultAssertionsBuilder;
 import io.github.xiaomisum.ryze.builder.DefaultExtractorsBuilder;
 import io.github.xiaomisum.ryze.context.ContextWrapper;
-import io.github.xiaomisum.ryze.testelement.KW;
-import io.github.xiaomisum.ryze.testelement.sampler.AbstractSampler;
-import io.github.xiaomisum.ryze.testelement.sampler.DefaultSampleResult;
-import io.github.xiaomisum.ryze.testelement.sampler.SampleResult;
-import io.github.xiaomisum.ryze.testelement.sampler.Sampler;
 import io.github.xiaomisum.ryze.protocol.dubbo.Dubbo;
 import io.github.xiaomisum.ryze.protocol.dubbo.DubboConstantsInterface;
 import io.github.xiaomisum.ryze.protocol.dubbo.RealDubboRequest;
@@ -42,6 +37,11 @@ import io.github.xiaomisum.ryze.protocol.dubbo.builder.DubboConfigureElementsBui
 import io.github.xiaomisum.ryze.protocol.dubbo.builder.DubboPostprocessorsBuilder;
 import io.github.xiaomisum.ryze.protocol.dubbo.builder.DubboPreprocessorsBuilder;
 import io.github.xiaomisum.ryze.protocol.dubbo.config.DubboConfigureItem;
+import io.github.xiaomisum.ryze.testelement.KW;
+import io.github.xiaomisum.ryze.testelement.sampler.AbstractSampler;
+import io.github.xiaomisum.ryze.testelement.sampler.DefaultSampleResult;
+import io.github.xiaomisum.ryze.testelement.sampler.SampleResult;
+import io.github.xiaomisum.ryze.testelement.sampler.Sampler;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.dubbo.config.ReferenceConfig;
 import org.apache.dubbo.rpc.service.GenericService;
@@ -171,7 +171,7 @@ public class DubboSampler extends AbstractSampler<DubboSampler, DubboConfigureIt
     @Override
     protected void handleResponse(ContextWrapper context, DefaultSampleResult result) {
         super.handleResponse(context, result);
-        result.setResponse(SampleResult.DefaultReal.build(JSON.toJSONBytes(response)));
+        result.setResponse(SampleResult.DefaultRealResponse.build(JSON.toJSONBytes(response)));
     }
 
     /**

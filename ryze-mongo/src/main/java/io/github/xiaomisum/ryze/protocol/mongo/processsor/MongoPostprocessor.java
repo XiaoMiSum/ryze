@@ -167,7 +167,7 @@ public class MongoPostprocessor extends AbstractProcessor<MongoPostprocessor, Mo
     @Override
     protected void handleResponse(ContextWrapper context, DefaultSampleResult result) {
         super.handleResponse(context, result);
-        result.setResponse(SampleResult.DefaultReal.build(response));
+        result.setResponse(SampleResult.DefaultRealResponse.build(response));
     }
 
     /**

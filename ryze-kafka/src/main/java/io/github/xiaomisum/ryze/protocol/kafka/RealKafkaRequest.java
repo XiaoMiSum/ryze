@@ -28,8 +28,8 @@
 
 package io.github.xiaomisum.ryze.protocol.kafka;
 
-import io.github.xiaomisum.ryze.testelement.sampler.SampleResult;
 import io.github.xiaomisum.ryze.protocol.kafka.config.KafkaConfigureItem;
+import io.github.xiaomisum.ryze.testelement.sampler.SampleResult;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -56,11 +56,11 @@ import org.apache.commons.lang3.StringUtils;
  * </p>
  *
  * @author xiaomi
- * @since 2025/7/26 22:24
- * @see SampleResult.Real
+ * @see SampleResult.RealRequest
  * @see KafkaConfigureItem
+ * @since 2025/7/26 22:24
  */
-public class RealKafkaRequest extends SampleResult.Real {
+public class RealKafkaRequest extends SampleResult.RealRequest {
 
     /**
      * Kafka服务器地址
@@ -77,14 +77,7 @@ public class RealKafkaRequest extends SampleResult.Real {
      */
     private String key;
 
-    /**
-     * 构造函数，使用字节数组初始化请求对象
-     *
-     * @param bytes 请求内容字节数组
-     */
-    public RealKafkaRequest(byte[] bytes) {
-        super(bytes);
-    }
+    private String message;
 
     /**
      * 根据Kafka配置项和消息内容构建RealKafkaRequest实例
@@ -97,7 +90,8 @@ public class RealKafkaRequest extends SampleResult.Real {
      * @return RealKafkaRequest实例
      */
     public static RealKafkaRequest build(KafkaConfigureItem config, String message) {
-        var result = new RealKafkaRequest(message.getBytes());
+        var result = new RealKafkaRequest();
+        result.message = message;
         result.address = config.getBootstrapServers();
         result.topic = config.getTopic();
         result.key = config.getKey();
@@ -120,9 +114,14 @@ public class RealKafkaRequest extends SampleResult.Real {
         if (StringUtils.isNotBlank(key)) {
             buf.append("\n").append("key: ").append(key);
         }
-        if (StringUtils.isNotBlank(bytesAsString())) {
-            buf.append("\n").append("message: ").append(bytesAsString());
+        if (StringUtils.isNotBlank(message)) {
+            buf.append("\n").append("message: ").append(message);
         }
         return buf.toString();
+    }
+
+    @Override
+    public byte[] bytes() {
+        return message.getBytes();
     }
 }

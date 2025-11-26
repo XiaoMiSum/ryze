@@ -29,9 +29,9 @@
 package io.github.xiaomisum.ryze.protocol.dubbo;
 
 import com.alibaba.fastjson2.JSON;
-import io.github.xiaomisum.ryze.testelement.sampler.SampleResult;
-import org.apache.commons.lang3.StringUtils;
 import io.github.xiaomisum.ryze.protocol.dubbo.config.DubboConfigureItem;
+import io.github.xiaomisum.ryze.support.Collections;
+import io.github.xiaomisum.ryze.testelement.sampler.SampleResult;
 
 import java.util.List;
 import java.util.Map;
@@ -58,7 +58,7 @@ import java.util.Objects;
  * @since 6.0.0
  * Created at 2025/7/26 22:24
  */
-public class RealDubboRequest extends SampleResult.Real {
+public class RealDubboRequest extends SampleResult.RealRequest {
 
     /**
      * 注册中心地址
@@ -107,19 +107,7 @@ public class RealDubboRequest extends SampleResult.Real {
      */
     private Map<String, String> attachmentArgs;
 
-    /**
-     * 构造函数
-     * <p>
-     * 从字节数组创建RealDubboRequest实例。<br>
-     * 通常用于从序列化的请求数据恢复实例。<br>
-     * 字节数组应包含参数值信息，通过父类SampleResult.Real进行处理。
-     * </p>
-     *
-     * @param bytes 包含参数值信息的字节数组
-     */
-    public RealDubboRequest(byte[] bytes) {
-        super(bytes);
-    }
+    private List<Object> parameters;
 
     /**
      * 静态工厂方法：从配置项构建实例
@@ -134,7 +122,8 @@ public class RealDubboRequest extends SampleResult.Real {
      * @return RealDubboRequest实例
      */
     public static RealDubboRequest build(DubboConfigureItem config, String address) {
-        var result = new RealDubboRequest(JSON.toJSONBytes(config.getParameters()));
+        var result = new RealDubboRequest();
+        result.parameters = config.getParameters();
         result.address = address;
         result.interfaceName = config.getInterfaceName();
         result.method = config.getMethod();
@@ -167,12 +156,17 @@ public class RealDubboRequest extends SampleResult.Real {
         if (Objects.nonNull(parameterTypes)) {
             buf.append("\n").append(JSON.toJSONString(parameterTypes));
         }
-        if (StringUtils.isNotBlank(bytesAsString())) {
-            buf.append("\n").append("parameters: ").append(bytesAsString());
+        if (!Collections.isEmpty(parameters)) {
+            buf.append("\n").append("parameters: ").append(JSON.toJSONString(parameters));
         }
         if (Objects.nonNull(attachmentArgs) && !attachmentArgs.isEmpty()) {
             buf.append("\n").append("attachmentArgs: ").append(JSON.toJSONString(attachmentArgs));
         }
         return buf.toString();
+    }
+
+    @Override
+    public byte[] bytes() {
+        return JSON.toJSONBytes(parameters);
     }
 }

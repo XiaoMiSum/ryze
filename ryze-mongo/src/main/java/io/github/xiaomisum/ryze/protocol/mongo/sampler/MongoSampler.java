@@ -169,7 +169,7 @@ public class MongoSampler extends AbstractSampler<MongoSampler, MongoConfigItem,
     @Override
     protected void handleResponse(ContextWrapper context, DefaultSampleResult result) {
         super.handleResponse(context, result);
-        result.setResponse(SampleResult.DefaultReal.build(response));
+        result.setResponse(SampleResult.DefaultRealResponse.build(response));
     }
 
     /**

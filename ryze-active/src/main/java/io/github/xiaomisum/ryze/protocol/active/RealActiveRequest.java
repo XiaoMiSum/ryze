@@ -53,7 +53,7 @@ import static io.github.xiaomisum.ryze.protocol.active.ActiveConstantsInterface.
  * Created at 2025/7/26 22:24
  */
 @SuppressWarnings({"unchecked", "rawtypes"})
-public class RealActiveRequest extends SampleResult.Real {
+public class RealActiveRequest extends SampleResult.RealRequest {
 
     /**
      * ActiveMQ服务器地址
@@ -80,14 +80,7 @@ public class RealActiveRequest extends SampleResult.Real {
      */
     private String password;
 
-    /**
-     * 构造函数，使用字节数组初始化请求内容
-     *
-     * @param bytes 请求内容字节数组
-     */
-    public RealActiveRequest(byte[] bytes) {
-        super(bytes);
-    }
+    private String message;
 
     /**
      * 根据ActiveMQ配置项和消息内容构建RealActiveRequest实例
@@ -97,7 +90,8 @@ public class RealActiveRequest extends SampleResult.Real {
      * @return RealActiveRequest实例
      */
     public static RealActiveRequest build(ActiveConfigureItem config, String message) {
-        var result = new RealActiveRequest(message.getBytes());
+        var result = new RealActiveRequest();
+        result.message = message;
         result.address = config.getBrokerUrl(ACTIVEMQ_DEFAULT_BROKER_URL);
         result.topic = config.getTopic();
         result.queue = config.getQueue();
@@ -133,9 +127,14 @@ public class RealActiveRequest extends SampleResult.Real {
         if (StringUtils.isNotBlank(queue)) {
             buf.append("\n").append("queue: ").append(queue);
         }
-        if (StringUtils.isNotBlank(bytesAsString())) {
-            buf.append("\n").append("message: ").append(bytesAsString());
+        if (StringUtils.isNotBlank(message)) {
+            buf.append("\n").append("message: ").append(message);
         }
         return buf.toString();
+    }
+
+    @Override
+    public byte[] bytes() {
+        return message.getBytes();
     }
 }

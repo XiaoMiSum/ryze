@@ -29,9 +29,7 @@ import io.github.xiaomisum.ryze.protocol.websocket.config.WebsocketConfigureItem
 import io.github.xiaomisum.ryze.testelement.sampler.SampleResult;
 import io.github.xiaomisum.simplewebsocket.Response;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.text.StringEscapeUtils;
 
-import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
 /**
@@ -43,13 +41,13 @@ import java.util.Objects;
  *
  * @author xiaomi
  */
-public class RealWebsocketResponse extends SampleResult.Real {
+public class RealWebsocketResponse extends SampleResult.RealResponse {
 
     /**
-     * Websocket状态码
+     * Websocket 响应
      */
-    private int statusCode;
 
+    private final String body;
 
     /**
      * 构造Websocket实际响应结果对象
@@ -57,14 +55,16 @@ public class RealWebsocketResponse extends SampleResult.Real {
      * @param response Websocket响应对象
      */
     public RealWebsocketResponse(Response response, WebsocketConfigureItem config) {
-        super(Objects.isNull(response) ? new byte[0] : response.text(config.getBytesToStringConverter() == null ?
-                String::new : config.getBytesToStringConverter()).getBytes(StandardCharsets.UTF_8));
-        if (Objects.isNull(response)) {
-            return;
-        }
-        statusCode = response.status();
+        body = Objects.isNull(response) ? "" : response.text(config.getBytesToStringConverter() == null ?
+                String::new : config.getBytesToStringConverter());
+        status = response.status();
     }
 
+
+    @Override
+    public byte[] bytes() {
+        return body.getBytes();
+    }
 
     /**
      * 格式化Websocket响应信息
@@ -93,19 +93,11 @@ public class RealWebsocketResponse extends SampleResult.Real {
     @Override
     public String format() {
         var buf = new StringBuilder();
-        buf.append("status: ").append(statusCode);
-        if (StringUtils.isNotBlank(bytesAsString())) {
-            buf.append("\n").append("Response body: ").append(StringEscapeUtils.unescapeHtml4(bytesAsString()));
+        buf.append("status: ").append(status);
+        if (StringUtils.isNotBlank(body)) {
+            buf.append("\n").append("Response body: ").append(body);
         }
         return buf.toString();
     }
 
-    /**
-     * 获取Websocket状态码
-     *
-     * @return Websocket状态码
-     */
-    public int statusCode() {
-        return statusCode;
-    }
 }

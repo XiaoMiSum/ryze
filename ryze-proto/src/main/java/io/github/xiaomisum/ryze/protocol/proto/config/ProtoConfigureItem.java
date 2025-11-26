@@ -387,7 +387,7 @@ public class ProtoConfigureItem implements ConfigureItem<ProtoConfigureItem>, Pr
      * @return HTTP方法，默认为"GET"
      */
     public String getMethod() {
-        return StringUtils.isBlank(method) ? GET : method.toUpperCase();
+        return method;
     }
 
     /**
@@ -397,6 +397,10 @@ public class ProtoConfigureItem implements ConfigureItem<ProtoConfigureItem>, Pr
      */
     public void setMethod(String method) {
         this.method = method;
+    }
+
+    public String getMethod(String defaultMethod) {
+        return StringUtils.isBlank(method) ? defaultMethod : method.toUpperCase();
     }
 
     /**

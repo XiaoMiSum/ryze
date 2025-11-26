@@ -28,12 +28,12 @@ package io.github.xiaomisum.ryze.protocol.debug.sampler;
 import com.alibaba.fastjson2.JSON;
 import io.github.xiaomisum.ryze.builder.*;
 import io.github.xiaomisum.ryze.context.ContextWrapper;
+import io.github.xiaomisum.ryze.protocol.debug.config.DebugConfigureItem;
 import io.github.xiaomisum.ryze.testelement.KW;
 import io.github.xiaomisum.ryze.testelement.sampler.AbstractSampler;
 import io.github.xiaomisum.ryze.testelement.sampler.DefaultSampleResult;
 import io.github.xiaomisum.ryze.testelement.sampler.SampleResult;
 import io.github.xiaomisum.ryze.testelement.sampler.Sampler;
-import io.github.xiaomisum.ryze.protocol.debug.config.DebugConfigureItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -65,8 +65,8 @@ public class DebugSampler extends AbstractSampler<DebugSampler, DebugConfigureIt
         try {
             result.sampleStart();
             byte[] bytes = JSON.toJSONBytes(runtime.config);
-            result.setRequest(SampleResult.DefaultReal.build(bytes));
-            result.setResponse(SampleResult.DefaultReal.build(bytes));
+            result.setRequest(SampleResult.DefaultRealRequest.build(bytes));
+            result.setResponse(SampleResult.DefaultRealResponse.build(bytes));
             logger.info("Debug Sampler");
         } finally {
             result.sampleEnd();

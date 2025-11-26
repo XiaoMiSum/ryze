@@ -46,7 +46,7 @@ import java.util.Objects;
  * @since 2025/7/26 22:24
  */
 @SuppressWarnings({"unchecked", "rawtypes"})
-public class RealRabbitRequest extends SampleResult.Real {
+public class RealRabbitRequest extends SampleResult.RealRequest {
 
     /**
      * RabbitMQ 服务器地址
@@ -78,14 +78,13 @@ public class RealRabbitRequest extends SampleResult.Real {
      */
     private RabbitConfigureItem.Exchange exchange;
 
+    private String message;
+
     /**
      * 构造函数，使用字节数组初始化请求对象
      *
      * @param bytes 请求内容的字节数组表示
      */
-    public RealRabbitRequest(byte[] bytes) {
-        super(bytes);
-    }
 
     /**
      * 根据 RabbitMQ 配置和消息内容构建 RealRabbitRequest 对象
@@ -98,7 +97,8 @@ public class RealRabbitRequest extends SampleResult.Real {
      * @return 构建好的 RealRabbitRequest 对象
      */
     public static RealRabbitRequest build(RabbitConfigureItem config, String message) {
-        var result = new RealRabbitRequest(message.getBytes());
+        var result = new RealRabbitRequest();
+        result.message = message;
         result.address = config.getHost() + ":" + config.getPort("5672");
         result.username = config.getUsername("guest");
         result.password = config.getPassword("guest");
@@ -130,9 +130,14 @@ public class RealRabbitRequest extends SampleResult.Real {
         if (Objects.nonNull(exchange)) {
             buf.append("Exchange as JSON: ").append(JSON.toJSONString(exchange)).append("\n");
         }
-        if (StringUtils.isNotBlank(bytesAsString())) {
-            buf.append("\n").append("message: ").append(bytesAsString());
+        if (StringUtils.isNotBlank(message)) {
+            buf.append("\n").append("message: ").append(message);
         }
         return buf.toString();
+    }
+
+    @Override
+    public byte[] bytes() {
+        return message.getBytes();
     }
 }

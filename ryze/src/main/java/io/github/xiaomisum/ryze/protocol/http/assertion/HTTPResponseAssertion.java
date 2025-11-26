@@ -129,7 +129,7 @@ public class HTTPResponseAssertion extends AbstractAssertion {
             return response.headers().stream().filter(header -> header.getName().equalsIgnoreCase(headerName))
                     .toList().get(index).getValue();
         } else {
-            return STATUS.contains(field.toLowerCase()) ? response.statusCode() : response.bytesAsString();
+            return STATUS.contains(field.toLowerCase()) ? response.status() : response.bytesAsString();
         }
 
     }

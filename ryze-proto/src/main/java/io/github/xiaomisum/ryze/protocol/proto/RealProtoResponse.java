@@ -26,11 +26,13 @@
 package io.github.xiaomisum.ryze.protocol.proto;
 
 import com.google.protobuf.Descriptors;
+import io.github.xiaomisum.ryze.support.Collections;
+import io.github.xiaomisum.ryze.testelement.sampler.SampleResult;
 import org.apache.commons.lang3.StringUtils;
 import xyz.migoo.simplehttp.Response;
 
-import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -42,17 +44,29 @@ import java.util.Objects;
  *
  * @author xiaomi
  */
-public class RealProtoResponse extends ProtoRealResult {
-
-    /**
-     * HTTP状态码
-     */
-    int statusCode;
+public class RealProtoResponse extends SampleResult.RealResponse {
 
     /**
      * HTTP状态消息
      */
     String message;
+    /**
+     * 请求体字节数组
+     */
+    String body;
+
+    /**
+     * HTTP协议版本
+     * <p>例如："HTTP/1.1" 或 "HTTP/2"</p>
+     */
+    String version;
+
+    /**
+     * HTTP响应头列表
+     * <p>包含响应中的所有HTTP头信息</p>
+     */
+    Map<String, String> headers = Collections.newHashMap();
+
 
     /**
      * 构造HTTP实际响应结果对象
@@ -60,11 +74,8 @@ public class RealProtoResponse extends ProtoRealResult {
      * @param response HTTP响应对象
      */
     public RealProtoResponse(io.github.xiaomisum.simplewebsocket.Response response, Descriptors.Descriptor descriptor) {
-        super(Objects.isNull(response) ? new byte[0] : response.text(bytes -> Proto.convert(response.bytes(), descriptor)).getBytes(StandardCharsets.UTF_8));
-        if (Objects.isNull(response)) {
-            return;
-        }
-        statusCode = response.status();
+        body = Objects.isNull(response) ? "" : response.text(bytes -> Proto.convert(response.bytes(), descriptor));
+        status = response.status();
     }
 
     /**
@@ -73,16 +84,18 @@ public class RealProtoResponse extends ProtoRealResult {
      * @param response HTTP响应对象
      */
     public RealProtoResponse(Response response, Descriptors.Descriptor descriptor) {
-        super(Objects.isNull(response) ? new byte[0] : response.text(bytes -> Proto.convert(response.bytes(), descriptor)).getBytes(StandardCharsets.UTF_8));
-        if (Objects.isNull(response)) {
-            return;
-        }
-        statusCode = response.statusCode();
+        body = Objects.isNull(response) ? "" : response.text(bytes -> Proto.convert(response.bytes(), descriptor));
+        status = response.statusCode();
         version = response.version();
         message = response.message();
         Arrays.stream(response.headers()).toList().forEach(header -> headers.put(header.getName(), header.getValue()));
     }
 
+
+    @Override
+    public byte[] bytes() {
+        return new byte[0];
+    }
 
     /**
      * 格式化HTTP响应信息
@@ -128,13 +141,16 @@ public class RealProtoResponse extends ProtoRealResult {
         if (StringUtils.isNotBlank(version)) {
             buf.append(version).append(" ");
         }
-        buf.append(statusCode);
+        buf.append(status);
         if (StringUtils.isNotBlank(message)) {
             buf.append(" ").append(message);
         }
-        header(buf);
-        if (StringUtils.isNotBlank(bytesAsString())) {
-            buf.append("\n").append("Response body: ").append(bytesAsString());
+        if (!Collections.isEmpty(headers)) {
+            buf.append("\n");
+            headers.forEach((key, value) -> buf.append(key).append(": ").append(value).append("\n"));
+        }
+        if (StringUtils.isNotBlank(body)) {
+            buf.append("\n").append("Response body: ").append(body);
         }
         return buf.toString();
     }

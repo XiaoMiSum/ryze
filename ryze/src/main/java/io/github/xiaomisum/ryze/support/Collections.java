@@ -111,6 +111,10 @@ public class Collections {
     public static Map<String, String> emptyMap() {
         return java.util.Collections.emptyMap();
     }
+    
+    public static boolean isEmpty(Map<?, ?> object) {
+        return object == null || object.isEmpty();
+    }
 
     @SafeVarargs
     public static <T> List<T> newArrayList(T... elements) {
@@ -177,5 +181,9 @@ public class Collections {
 
     public static <T> Set<T> emptySet() {
         return java.util.Collections.emptySet();
+    }
+
+    public static boolean isEmpty(List<?> objects) {
+        return objects == null || objects.isEmpty();
     }
 }

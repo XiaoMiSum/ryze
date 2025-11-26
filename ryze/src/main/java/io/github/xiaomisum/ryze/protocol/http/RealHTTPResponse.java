@@ -25,12 +25,12 @@
 
 package io.github.xiaomisum.ryze.protocol.http;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.text.StringEscapeUtils;
+import io.github.xiaomisum.ryze.testelement.sampler.SampleResult;
 import org.apache.hc.core5.http.Header;
 import xyz.migoo.simplehttp.Response;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -42,18 +42,25 @@ import java.util.Objects;
  *
  * @author xiaomi
  */
-public class RealHTTPResponse extends HTTPRealResult {
+public class RealHTTPResponse extends SampleResult.RealResponse {
+
 
     /**
-     * HTTP状态码
+     * HTTP响应头列表
+     * <p>包含响应中的所有HTTP头信息</p>
      */
-    private int statusCode;
-
+    protected List<Header> headers;
+    /**
+     * HTTP协议版本
+     * <p>例如："HTTP/1.1" 或 "HTTP/2"</p>
+     */
+    protected String version;
     /**
      * HTTP状态消息
      */
     private String message;
 
+    private byte[] bytes;
 
     /**
      * 构造HTTP实际响应结果对象
@@ -61,14 +68,13 @@ public class RealHTTPResponse extends HTTPRealResult {
      * @param response HTTP响应对象
      */
     public RealHTTPResponse(Response response) {
-        super(Objects.isNull(response) ? new byte[0] : response.bytes());
-        if (Objects.isNull(response)) {
-            return;
+        if (Objects.nonNull(response)) {
+            status = response.statusCode();
+            version = response.version();
+            message = response.message();
+            headers = Arrays.stream(response.headers()).toList();
+            bytes = response.bytes();
         }
-        statusCode = response.statusCode();
-        version = response.version();
-        message = response.message();
-        headers = Arrays.stream(response.headers()).toList();
     }
 
     /**
@@ -83,13 +89,18 @@ public class RealHTTPResponse extends HTTPRealResult {
      * @param headers 响应头信息
      */
     public RealHTTPResponse(byte[] bytes, int status, String version, String message, Header... headers) {
-        super(bytes);
-        statusCode = status;
+        this.bytes = bytes;
+        this.status = status;
         this.version = version;
         this.message = message;
         this.headers = Arrays.stream(headers).toList();
     }
 
+
+    @Override
+    public byte[] bytes() {
+        return bytes;
+    }
 
     /**
      * 格式化HTTP响应信息
@@ -132,20 +143,19 @@ public class RealHTTPResponse extends HTTPRealResult {
     @Override
     public String format() {
         var buf = new StringBuilder();
-        buf.append(version).append(" ").append(statusCode).append(" ").append(message);
-        header(buf);
-        if (StringUtils.isNotBlank(bytesAsString())) {
-            buf.append("\n").append("Response body: ").append(StringEscapeUtils.unescapeHtml4(bytesAsString()));
+        buf.append(version).append(" ").append(status).append(" ").append(message);
+        if (headers != null && !headers.isEmpty()) {
+            buf.append("\n");
+            headers.forEach(header -> buf.append(header.getName()).append(": ").append(header.getValue()).append("\n"));
+        }
+        if (bytes != null && bytes.length > 0) {
+            buf.append("\n").append("Response body: ").append(new String(bytes));
         }
         return buf.toString();
     }
 
-    /**
-     * 获取HTTP状态码
-     *
-     * @return HTTP状态码
-     */
-    public int statusCode() {
-        return statusCode;
+    public List<Header> headers() {
+        return headers;
     }
+
 }

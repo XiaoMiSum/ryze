@@ -25,10 +25,13 @@
 
 package io.github.xiaomisum.ryze.protocol.http;
 
+import io.github.xiaomisum.ryze.testelement.sampler.SampleResult;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.hc.core5.http.Header;
 import xyz.migoo.simplehttp.Request;
 
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * HTTP实际请求结果类
@@ -39,7 +42,7 @@ import java.util.Arrays;
  *
  * @author xiaomi
  */
-public class RealHTTPRequest extends HTTPRealResult {
+public class RealHTTPRequest extends SampleResult.RealRequest {
 
     /**
      * 请求URL
@@ -60,7 +63,17 @@ public class RealHTTPRequest extends HTTPRealResult {
      * 请求体字节数组
      */
     private final byte[] body;
+    /**
+     * HTTP协议版本
+     * <p>例如："HTTP/1.1" 或 "HTTP/2"</p>
+     */
+    protected String version;
 
+    /**
+     * HTTP响应头列表
+     * <p>包含响应中的所有HTTP头信息</p>
+     */
+    protected List<Header> headers;
 
     /**
      * 构造HTTP实际请求结果对象
@@ -68,7 +81,6 @@ public class RealHTTPRequest extends HTTPRealResult {
      * @param request HTTP请求对象
      */
     public RealHTTPRequest(Request request) {
-        super(new byte[0]);
         url = request.uri();
         method = request.method();
         query = request.query();
@@ -86,17 +98,7 @@ public class RealHTTPRequest extends HTTPRealResult {
      */
     @Override
     public byte[] bytes() {
-        return body != null && body.length > 0 ? body : query != null ? query.getBytes() : super.bytes();
-    }
-
-    /**
-     * 获取请求字符串表示
-     *
-     * @return 请求字符串
-     */
-    @Override
-    public String bytesAsString() {
-        return new String(bytes());
+        return body != null && body.length > 0 ? body : query != null ? query.getBytes() : new byte[0];
     }
 
     /**
@@ -121,7 +123,10 @@ public class RealHTTPRequest extends HTTPRealResult {
     public String format() {
         var buf = new StringBuilder();
         buf.append(method).append(" ").append(url).append(" ").append(version);
-        header(buf);
+        if (headers != null && !headers.isEmpty()) {
+            buf.append("\n");
+            headers.forEach(header -> buf.append(header.getName()).append(": ").append(header.getValue()).append("\n"));
+        }
         if (StringUtils.isNotBlank(query)) {
             buf.append("\n").append("Request Query:").append(query);
         }

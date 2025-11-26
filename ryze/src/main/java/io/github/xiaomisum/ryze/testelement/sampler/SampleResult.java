@@ -67,12 +67,12 @@ public abstract class SampleResult extends Result {
     /**
      * 请求数据
      */
-    private Real request;
+    private RealRequest request;
 
     /**
      * 响应数据
      */
-    private Real response;
+    private RealResponse response;
 
     /**
      * 基于标题的构造函数
@@ -166,7 +166,7 @@ public abstract class SampleResult extends Result {
      *
      * @return 请求数据
      */
-    public Real getRequest() {
+    public RealRequest getRequest() {
         return request;
     }
 
@@ -175,7 +175,7 @@ public abstract class SampleResult extends Result {
      *
      * @param request 请求数据
      */
-    public void setRequest(Real request) {
+    public void setRequest(RealRequest request) {
         this.request = request;
     }
 
@@ -184,7 +184,7 @@ public abstract class SampleResult extends Result {
      *
      * @return 响应数据
      */
-    public Real getResponse() {
+    public RealResponse getResponse() {
         return response;
     }
 
@@ -193,76 +193,41 @@ public abstract class SampleResult extends Result {
      *
      * @param response 响应数据
      */
-    public void setResponse(Real response) {
+    public void setResponse(RealResponse response) {
         this.response = response;
     }
 
-
     /**
-     * 数据实体抽象类，用于表示请求或响应的数据内容
+     * 请求数据抽象类
      *
-     * <p>该类提供了数据的字节表示和字符串表示之间的转换功能，
-     * 并定义了数据格式化的抽象方法供子类实现。</p>
+     * <p>该类定义了请求数据的抽象接口，用于格式化请求数据。</p>
      */
-    public static abstract class Real {
+    public static abstract class RealRequest {
 
-        /**
-         * 数据的字节表示
-         */
-        private byte[] bytes;
-
-        /**
-         * 数据的字符串表示（缓存）
-         */
-        private String bytesAsString;
-
-        /**
-         * 构造函数
-         *
-         * @param bytes 数据的字节表示
-         */
-        public Real(byte[] bytes) {
-            this.bytes = bytes;
-        }
-
-        /**
-         * 格式化数据
-         *
-         * @return 格式化后的数据字符串
-         */
         public abstract String format();
 
-        /**
-         * 获取数据的字节表示
-         *
-         * @return 数据的字节表示
-         */
-        public byte[] bytes() {
-            return bytes;
+        public abstract byte[] bytes();
+    }
+
+    /**
+     * 响应数据抽象类
+     *
+     * <p>该类定义了响应数据的抽象接口，用于格式化响应数据。</p>
+     */
+    public static abstract class RealResponse {
+
+        protected int status;
+
+        public int status() {
+            return status;
         }
 
-        /**
-         * 设置数据的字节表示
-         *
-         * @param bytes 数据的字节表示
-         */
-        public void bytes(byte[] bytes) {
-            this.bytes = bytes;
-            this.bytesAsString = null;
-        }
+        public abstract byte[] bytes();
 
-        /**
-         * 获取数据的字符串表示
-         *
-         * <p>如果字符串表示尚未缓存，则从字节表示转换得到。</p>
-         *
-         * @return 数据的字符串表示
-         */
+        public abstract String format();
+
         public String bytesAsString() {
-            if (bytesAsString == null) {
-                bytesAsString = (bytes == null || bytes.length == 0) ? "" : new String(bytes);
-            }
-            return bytesAsString;
+            return new String(bytes());
         }
     }
 
@@ -271,15 +236,74 @@ public abstract class SampleResult extends Result {
      *
      * <p>该类提供了数据格式化的默认实现，直接返回数据的字符串表示。</p>
      */
-    public static class DefaultReal extends Real {
+    public static class DefaultRealRequest extends RealRequest {
+
+        private final byte[] bytes;
 
         /**
          * 私有构造函数
          *
          * @param bytes 数据的字节表示
          */
-        private DefaultReal(byte[] bytes) {
-            super(bytes);
+        private DefaultRealRequest(byte[] bytes) {
+            this.bytes = bytes;
+        }
+
+        /**
+         * 构建默认数据实体实例
+         *
+         * @return 默认数据实体实例
+         */
+        public static DefaultRealRequest build() {
+            return new DefaultRealRequest(null);
+        }
+
+        /**
+         * 构建默认数据实体实例
+         *
+         * @return 默认数据实体实例
+         */
+        public static DefaultRealRequest build(byte[] bytes) {
+            return new DefaultRealRequest(bytes);
+        }
+
+        @Override
+        public String format() {
+            return bytes == null || bytes.length == 0 ? "ok" : new String(bytes);
+        }
+
+        @Override
+        public byte[] bytes() {
+            return bytes;
+        }
+    }
+
+    /**
+     * 默认数据实体实现类
+     *
+     * <p>该类提供了数据格式化的默认实现，直接返回数据的字符串表示。</p>
+     */
+    public static class DefaultRealResponse extends RealResponse {
+
+        private final byte[] bytes;
+
+        /**
+         * 私有构造函数
+         *
+         * @param bytes 数据的字节表示
+         */
+        private DefaultRealResponse(byte[] bytes) {
+            this.bytes = bytes;
+            status = 200;
+        }
+
+        /**
+         * 构建默认数据实体实例
+         *
+         * @return 默认数据实体实例
+         */
+        public static DefaultRealResponse build() {
+            return new DefaultRealResponse("ok".getBytes());
         }
 
         /**
@@ -288,8 +312,13 @@ public abstract class SampleResult extends Result {
          * @param bytes 数据的字节表示
          * @return 默认数据实体实例
          */
-        public static DefaultReal build(byte[] bytes) {
-            return new DefaultReal(bytes);
+        public static DefaultRealResponse build(byte[] bytes) {
+            return new DefaultRealResponse(bytes);
+        }
+
+        @Override
+        public byte[] bytes() {
+            return bytes;
         }
 
         /**
@@ -299,7 +328,7 @@ public abstract class SampleResult extends Result {
          */
         @Override
         public String format() {
-            return bytesAsString();
+            return bytes == null || bytes.length == 0 ? "ok" : new String(bytes);
         }
     }
 }
