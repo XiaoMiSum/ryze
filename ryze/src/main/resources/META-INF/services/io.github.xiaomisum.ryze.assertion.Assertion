@@ -27,6 +27,7 @@
 
 io.github.xiaomisum.ryze.assertion.builtin.JSONAssertion
 io.github.xiaomisum.ryze.assertion.builtin.ResultAssertion
+io.github.xiaomisum.ryze.assertion.builtin.StatusAssertion
 
 io.github.xiaomisum.ryze.protocol.http.assertion.HTTPResponseAssertion
 
