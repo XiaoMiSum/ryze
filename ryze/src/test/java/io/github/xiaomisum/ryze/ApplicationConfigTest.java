@@ -28,6 +28,7 @@ package io.github.xiaomisum.ryze;
 import io.github.xiaomisum.ryze.assertion.Assertion;
 import io.github.xiaomisum.ryze.assertion.builtin.JSONAssertion;
 import io.github.xiaomisum.ryze.assertion.builtin.ResultAssertion;
+import io.github.xiaomisum.ryze.assertion.builtin.StatusAssertion;
 import io.github.xiaomisum.ryze.assertion.builtin.matcher.*;
 import io.github.xiaomisum.ryze.extractor.Extractor;
 import io.github.xiaomisum.ryze.extractor.builtin.JSONExtractor;
@@ -184,6 +185,10 @@ public class ApplicationConfigTest {
         Assert.assertTrue(map.get("http".toLowerCase()) == HTTPResponseAssertion.class);
         Assert.assertTrue(map.get("https".toLowerCase()) == HTTPResponseAssertion.class);
         Assert.assertTrue(map.get("HTTPResponseAssertion".toLowerCase()) == HTTPResponseAssertion.class);
+        Assert.assertTrue(map.get("status".toLowerCase()) == StatusAssertion.class);
+        Assert.assertTrue(map.get("status_code".toLowerCase()) == StatusAssertion.class);
+        Assert.assertTrue(map.get("status_assertion".toLowerCase()) == StatusAssertion.class);
+        Assert.assertTrue(map.get("StatusAssertion".toLowerCase()) == StatusAssertion.class);
     }
 
     @Test
