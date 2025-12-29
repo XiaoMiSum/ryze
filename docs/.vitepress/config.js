@@ -91,7 +91,8 @@ export default withMermaid({
               text: '测试集合', items: [
                 { text: '测试集合（项目）', link: '/tester/test-suite/test-suite-project' },
                 { text: '测试集合（模块）', link: '/tester/test-suite/test-suite-module' },
-                { text: '测试集合（用例）', link: '/tester/test-suite/test-case' }
+                { text: '测试集合（用例）', link: '/tester/test-suite/test-case' },
+                { text: '取样器', link: '/tester/test-suite/sampler' }
               ]
             },
             {

@@ -5,6 +5,28 @@
 Redis 协议支持为 Ryze 测试框架提供了与 Redis 数据库进行交互的能力。支持字符串、哈希、列表、集合等多种数据类型操作，以及缓存测试、分布式锁测试等常见
 Redis 应用场景。
 
+## 📊 配置项参考表
+
+### Redis 数据源配置
+
+| 配置项 | 类型 | 默认值 | 必需 | 描述 |
+|-------|------|--------|------|------|
+| url | String | - | ✅ | Redis 连接 URL (redis://[:password@]host:port/db) |
+| timeout | Integer | 5000 | ❌ | 连接超时时间 (毫秒) |
+| max_total | Integer | 10 | ❌ | 最大池大小 |
+| max_idle | Integer | 5 | ❌ | 最大空闲连接数 |
+| min_idle | Integer | 1 | ❌ | 最小空闲连接数 |
+
+### Redis 命令配置
+
+| 配置项 | 类型 | 默认值 | 必需 | 描述 |
+|-------|------|--------|------|------|
+| datasource | String | - | ✅ | 数据源引用名 |
+| command | String | - | ✅ | Redis 命令 (GET/SET/LPUSH/HSET 等) |
+| args | Array | - | ❌ | 命令参数数组 |
+
+> **配置优先级**: 取样器配置 > Redis 默认配置
+
 ## 依赖引入
 
 Redis 协议支持内置在核心模块中，无需额外依赖：

@@ -2,7 +2,31 @@
 
 ## 概述
 
-Kafka 协议支持为 Ryze 测试框架提供了与 Apache Kafka 消息流平台进行交互的能力。支持高吞吐量的消息发布，适用于大规模数据处理、实时流计算和微服务架构中的事件驱动测试。
+Kafka 协议支持为 Ryze 测试框架提供了与 Apache Kafka 消息流平台进行交互的能力。支持高吐吐量的消息发布，適用于大规模数据处理、实时流计算和微服务架构中的事件驱动测试。
+
+## 📊 配置项参考表
+
+### 生产者配置
+
+| 配置项 | 类型 | 默认值 | 必需 | 描述 |
+|-------|------|--------|------|------|
+| bootstrap.servers | String | - | ✅ | Kafka 整群地址 (host:port, 多个用透殇隔开) |
+| key.serializer | String | StringSerializer | ❌ | Key 序列化类 (org.apache.kafka.common.serialization.StringSerializer) |
+| value.serializer | String | StringSerializer | ❌ | Value 序列化类 |
+| acks | Integer/String | 1 | ❌ | 确认需求 (0/1/all) |
+| retries | Integer | 5 | ❌ | 重试次数 |
+| linger.ms | Integer | 20 | ❌ | 等待时间 (毫秒) |
+
+### ProducerRecord 配置
+
+| 配置项 | 类型 | 默认值 | 必需 | 描述 |
+|-------|------|--------|------|------|
+| topic | String | - | ✅ | 殈题名称 |
+| key | String | - | ❌ | 消息键 (ProducerRecord 中的 key) |
+| message | Object | - | ✅ | 消息内容 (JSON/字符串/数字) |
+| partition | Integer | - | ❌ | 目标分区 |
+
+> **配置优先级**: 取样器配置 > Kafka 默认配置
 
 ## 依赖引入
 

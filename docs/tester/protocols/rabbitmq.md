@@ -5,6 +5,46 @@
 RabbitMQ 协议支持为 Ryze 测试框架提供了与 RabbitMQ 消息代理进行交互的能力。支持多种交换机类型（direct、topic、fanout、headers）、队列管理、路由规则等
 AMQP 协议特性。
 
+## 📊 配置项参考表
+
+### 连接配置
+
+| 配置项 | 类型 | 默认值 | 必需 | 描述 |
+|-------|------|--------|------|------|
+| host | String | - | ✅ | RabbitMQ 服务器地址 |
+| port | Integer | 5672 | ❌ | RabbitMQ 服务器端口 |
+| username | String | guest | ❌ | RabbitMQ 用户名 |
+| password | String | guest | ❌ | RabbitMQ 密码 |
+| timeout | Integer | 60000 | ❌ | 连接超时时间 (毫秒) |
+
+### 队列配置
+
+| 配置项 | 类型 | 默认值 | 必需 | 描述 |
+|-------|------|--------|------|------|
+| queue.name | String | - | ✅* | 队列名称 |
+| queue.durable | Boolean | false | ❌ | 是否持久化队列 |
+| queue.exclusive | Boolean | false | ❌ | 是否为占用队列 |
+| queue.auto_delete | Boolean | false | ❌ | 是否自动删除 |
+| queue.arguments | Map | - | ❌ | 队列其他属性 |
+
+### 交换机配置
+
+| 配置项 | 类型 | 默认值 | 必需 | 描述 |
+|-------|------|--------|------|------|
+| exchange.name | String | - | ❌ | 交换机名称 |
+| exchange.type | String | topic | ❌ | 交换机类型 (direct/topic/fanout/headers) |
+| exchange.routing_key | String | - | ❌ | 路由 Key |
+
+### 消息配置
+
+| 配置项 | 类型 | 默认值 | 必需 | 描述 |
+|-------|------|--------|------|------|
+| message | Object | - | ✅ | 发送的消息 (JSON/字符串) |
+
+> **配置优先级**: 取样器配置 > RabbitMQ 默认配置
+>
+> **注**: *表示 queue 和 exchange 二选一
+
 ## 依赖引入
 
 ```xml

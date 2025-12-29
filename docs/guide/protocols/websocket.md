@@ -4,6 +4,23 @@
 
 WebSocket 协议支持为 Ryze 测试框架提供了 WebSocket 接口测试能力。
 
+## 📊 配置项参考表
+
+### WebSocket 连接配置
+
+| 配置项 | 类型 | 默认值 | 必需 | 描述 |
+|-------|------|--------|------|------|
+| protocol | String | ws | ❌ | 协议类型 (ws/wss) |
+| host | String | - | ✅ | 服务器地址 |
+| port | Integer | 80 | ❌ | 服务器端口 |
+| path | String | - | ❌ | 接口路径 |
+| headers | Map | - | ❌ | 请求头 |
+| query | Map | - | ❌ | URL 查询参数 |
+| body | Object | - | ❌ | 请求体 |
+| response_pattern | String | - | ❌ | 响应匹配正则表达式 |
+
+> **配置优先级**: 取样器配置 > WebSocket 默认配置
+
 ## 🚀 依赖引入
 
 ```xml
