@@ -3,7 +3,27 @@
 ## 概述
 
 MongoDB 协议支持为 Ryze 测试框架提供了与 MongoDB 数据库进行交互的能力。支持文档的增删改查、聚合查询、索引操作等 MongoDB
-核心功能，适用于 NoSQL 数据库的测试场景。
+核心功能，適用于 NoSQL 数据库的测试场景。
+
+## 📊 配置项参考表
+
+### MongoDB 连接配置
+
+| 配置项 | 类型 | 默认值 | 必需 | 描述 |
+|-------|------|--------|------|------|
+| url | String | - | ✅ | MongoDB 连接 URI (mongodb://user:pass@host:port/?authSource=db) |
+| database | String | - | ✅ | 数据库名称 |
+| collection | String | - | ❌ | 集合名称 |
+
+### 文档操作配置
+
+| 配置项 | 类型 | 默认值 | 必需 | 描述 |
+|-------|------|--------|------|------|
+| action | String | - | ✅ | 操作类型 (find/insert/update/delete/aggregate) |
+| condition | Object | - | ✅ | 查询条件 (JSON 对象) |
+| document | Object | - | ❌ | 文档内容 (insert/update 时使用) |
+
+> **配置优先级**: 取样器配置 > MongoDB 默认配置
 
 ## 依赖引入
 

@@ -5,6 +5,37 @@
 Proto 协议支持为 Ryze 测试框架提供了与 Protocol Buffer (protobuf) 协议进行交互的能力。支持 HTTP/HTTPS 和 WebSocket/WSS
 协议传输 protobuf 数据，自动处理 JSON 与 protobuf 二进制格式之间的序列化和反序列化。
 
+## 📊 配置项参考表
+
+### 传输协议配置
+
+| 配置项 | 类型 | 默认值 | 必需 | 描述 |
+|-------|------|--------|------|------|
+| protocol | String | http | ❌ | 传输协议 (http/https/ws/wss) |
+| method | String | POST | ❌ | HTTP 请求方法 (http/https 是候需要) |
+| host | String | - | ✅ | 服务器地址 |
+| port | Integer | 80/8080 | ❌ | 服务器端口 |
+| path | String | - | ❌ | 接口路径 |
+
+### Protobuf 描述配置
+
+| 配置项 | 类型 | 默认值 | 必需 | 描述 |
+|-------|------|--------|------|------|
+| proto_desc.desc_path | String | - | ✅ | .desc 文件路径 |
+| proto_desc.request_message_class | String | - | ✅ | 请求消息类全限定名 |
+| proto_desc.response_message_class | String | - | ✅ | 响应消息类全限定名 |
+
+### 请求配置
+
+| 配置项 | 类型 | 默认值 | 必需 | 描述 |
+|-------|------|--------|------|------|
+| headers | Map | - | ❌ | 请求头 |
+| query | Map | - | ❌ | URL 查询参数 |
+| body | Object | - | ✅ | 请求体 (JSON 格式) |
+| response_pattern | String | - | ❌ | 响应匹配正则 (WebSocket 是候需要) |
+
+> **配置优先级**: 取样器配置 > Protobuf 默认配置
+
 ## 🚀 依赖引入
 
 ```xml

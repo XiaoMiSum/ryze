@@ -5,6 +5,41 @@
 Dubbo 协议支持为 Ryze 测试框架提供了与 Dubbo 微服务进行交互的能力。支持服务发现、负载均衡、容错机制等 Dubbo
 核心特性，可以完成分布式服务的端到端测试。
 
+## 📊 配置项参考表
+
+### 注册中心配置
+
+| 配置项 | 类型 | 默认值 | 必需 | 描述 |
+|-------|------|--------|------|------|
+| registry.protocol | String | - | ✅ | 注册中心类型 (zookeeper/nacos) |
+| registry.address | String | - | ✅ | 注册中心地址 (host:port) |
+| registry.username | String | - | ❌ | 注册中心用户名 |
+| registry.password | String | - | ❌ | 注册中心密码 |
+| registry.version | String | - | ❌ | 协议版本 |
+
+### Reference 配置
+
+| 配置项 | 类型 | 默认值 | 必需 | 描述 |
+|-------|------|--------|------|------|
+| reference.version | String | 1.0.0 | ❌ | 服务版本 |
+| reference.retries | Integer | 1 | ❌ | 重试次数 |
+| reference.timeout | Integer | 5000 | ❌ | 超时时间 (毫秒) |
+| reference.async | Boolean | false | ❌ | 是否为异步调用 |
+| reference.load_balance | String | random | ❌ | 负载均衡策略 (random/roundrobin) |
+| reference.group | String | - | ❌ | 服务分组 |
+
+### 接口方法配置
+
+| 配置项 | 类型 | 默认值 | 必需 | 描述 |
+|-------|------|--------|------|------|
+| interface | String | - | ✅ | 接口全限定名 (com.example.UserService) |
+| method | String | - | ✅ | 方法名 |
+| parameter_types | Array | - | ✅ | 参数类型数组 (java.lang.String) |
+| parameters | Array | - | ✅ | 参数值数组 |
+| attachment_args | Map | - | ❌ | 附加参数 (keyword 形式) |
+
+> **配置优先级**: 取样器配置 > Dubbo 默认配置
+
 > 注意
 >
 > 泛化调用适用于老版本 dubbo 通信协议，如果您使用的是 3.3 及之后版本的 triple 协议，请直接使用 triple 自带的 http
