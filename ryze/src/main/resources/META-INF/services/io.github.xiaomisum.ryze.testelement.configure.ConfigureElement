@@ -29,6 +29,6 @@ io.github.xiaomisum.ryze.protocol.debug.config.DebugDefaults
 io.github.xiaomisum.ryze.protocol.http.config.HTTPDefaults
 io.github.xiaomisum.ryze.protocol.jdbc.config.JDBCDatasource
 io.github.xiaomisum.ryze.protocol.redis.config.RedisDatasource
-
+io.github.xiaomisum.ryze.protocol.email.config.EMailDefaults
 
 

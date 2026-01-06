@@ -77,7 +77,7 @@
         <simplehttp.version>2.2.7</simplehttp.version>
         <simple-websocket.version>1.0.0</simple-websocket.version>
         <protobuf.version>4.33.0</protobuf.version>
-
+        <mail.version>2.1.5</mail.version>
         <!-- 工具包 -->
         <hamcrest.version>3.0</hamcrest.version>
         <geantyref.version>2.0.1</geantyref.version>
@@ -352,6 +352,13 @@
                 <groupId>com.google.protobuf</groupId>
                 <artifactId>protobuf-java-util</artifactId>
                 <version>${protobuf.version}</version>
+            </dependency>
+
+            <!-- https://mvnrepository.com/artifact/jakarta.mail/jakarta.mail-api -->
+            <dependency>
+                <groupId>jakarta.mail</groupId>
+                <artifactId>jakarta.mail-api</artifactId>
+                <version>${mail.version}</version>
             </dependency>
         </dependencies>
 

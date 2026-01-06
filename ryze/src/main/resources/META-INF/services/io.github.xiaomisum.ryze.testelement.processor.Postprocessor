@@ -30,6 +30,7 @@ io.github.xiaomisum.ryze.protocol.debug.processer.DebugPostprocessor
 io.github.xiaomisum.ryze.protocol.http.processor.HTTPPostprocessor
 io.github.xiaomisum.ryze.protocol.jdbc.processor.JDBCPostprocessor
 io.github.xiaomisum.ryze.protocol.redis.processor.RedisPostprocessor
+io.github.xiaomisum.ryze.protocol.email.processor.EMailPostProcessor
 
 
 
