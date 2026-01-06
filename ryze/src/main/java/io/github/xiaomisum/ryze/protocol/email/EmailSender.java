@@ -21,8 +21,8 @@ public class EmailSender {
     public static void send(EMailConfigureItem config, SampleResult result) {
         result.sampleStart();
         var props = new Properties();
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.starttls.enable", config.getUsername()); // 启用TLS加密
+        props.put("mail.smtp.auth", true);
+        props.put("mail.smtp.starttls.enable", config.getUseSSL()); // 启用 TLS加密
         props.put("mail.smtp.host", config.getHost());
         props.put("mail.smtp.port", config.getPort(EMailConstantsInterface.DEFAULT_PORT));
 
