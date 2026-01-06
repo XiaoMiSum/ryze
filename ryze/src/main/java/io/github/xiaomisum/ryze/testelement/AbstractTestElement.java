@@ -50,6 +50,10 @@ import io.github.xiaomisum.ryze.protocol.debug.config.DebugDefaults;
 import io.github.xiaomisum.ryze.protocol.debug.processer.DebugPostprocessor;
 import io.github.xiaomisum.ryze.protocol.debug.processer.DebugPreprocessor;
 import io.github.xiaomisum.ryze.protocol.debug.sampler.DebugSampler;
+import io.github.xiaomisum.ryze.protocol.email.config.EMailDefaults;
+import io.github.xiaomisum.ryze.protocol.email.processor.EMailPostProcessor;
+import io.github.xiaomisum.ryze.protocol.email.processor.EMailPreProcessor;
+import io.github.xiaomisum.ryze.protocol.email.sampler.EMailSampler;
 import io.github.xiaomisum.ryze.protocol.http.assertion.HTTPResponseAssertion;
 import io.github.xiaomisum.ryze.protocol.http.config.HTTPDefaults;
 import io.github.xiaomisum.ryze.protocol.http.extractor.HTTPHeaderExtractor;
@@ -905,6 +909,56 @@ public abstract class AbstractTestElement<SELF extends AbstractTestElement<SELF,
             return self;
         }
 
+        // -----------------------EMailDefaults----------------------------
+
+        /**
+         * 应用 EMail 默认配置
+         *
+         * @param defaults EMail 默认配置
+         * @return 当前构建器实例，用于链式调用
+         */
+        public SELF mail(EMailDefaults defaults) {
+            configureElements.add(defaults);
+            return self;
+        }
+
+        /**
+         * 通过自定义器配置 EMail 默认配置
+         *
+         * @param customizer EMail 默认配置自定义器
+         * @return 当前构建器实例，用于链式调用
+         */
+        public SELF mail(Customizer<EMailDefaults.Builder> customizer) {
+            var builder = EMailDefaults.builder();
+            customizer.customize(builder);
+            configureElements.add(builder.build());
+            return self;
+        }
+
+        /**
+         * 通过构建器配置 EMail 默认配置
+         *
+         * @param builder EMail 默认配置构建器
+         * @return 当前构建器实例，用于链式调用
+         */
+        public SELF mail(EMailDefaults.Builder builder) {
+            configureElements.add(builder.build());
+            return self;
+        }
+
+        /**
+         * 通过闭包配置  EMail 默认配置
+         *
+         * @param closure Groovy 闭包
+         * @return 当前构建器实例，用于链式调用
+         */
+        public SELF mail(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = EMailDefaults.Builder.class) Closure<?> closure) {
+            var builder = EMailDefaults.builder();
+            call(closure, builder);
+            configureElements.add(builder.build());
+            return self;
+        }
+
 
         /**
          * 构建配置元件列表
@@ -1181,6 +1235,56 @@ public abstract class AbstractTestElement<SELF extends AbstractTestElement<SELF,
          */
         public SELF redis(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = RedisPreprocessor.Builder.class) Closure<?> closure) {
             var builder = RedisPreprocessor.builder();
+            call(closure, builder);
+            preprocessors.add(builder.build());
+            return self;
+        }
+
+        // -----------------------EMailPreprocessor----------------------------
+
+        /**
+         * 应用 mail 前置处理器
+         *
+         * @param preprocessor mail 前置处理器
+         * @return 当前构建器实例，用于链式调用
+         */
+        public SELF mail(EMailPreProcessor preprocessor) {
+            preprocessors.add(preprocessor);
+            return self;
+        }
+
+        /**
+         * 通过自定义器配置 mail 前置处理器
+         *
+         * @param customizer mail 前置处理器自定义器
+         * @return 当前构建器实例，用于链式调用
+         */
+        public SELF mail(Customizer<EMailPreProcessor.Builder> customizer) {
+            var builder = EMailPreProcessor.builder();
+            customizer.customize(builder);
+            preprocessors.add(builder.build());
+            return self;
+        }
+
+        /**
+         * 通过构建器配置 mail 前置处理器
+         *
+         * @param builder mail 前置处理器构建器
+         * @return 当前构建器实例，用于链式调用
+         */
+        public SELF mail(EMailPreProcessor.Builder builder) {
+            preprocessors.add(builder.build());
+            return self;
+        }
+
+        /**
+         * 通过闭包配置 mail 前置处理器
+         *
+         * @param closure Groovy 闭包
+         * @return 当前构建器实例，用于链式调用
+         */
+        public SELF mail(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = EMailPreProcessor.Builder.class) Closure<?> closure) {
+            var builder = EMailPreProcessor.builder();
             call(closure, builder);
             preprocessors.add(builder.build());
             return self;
@@ -1513,6 +1617,56 @@ public abstract class AbstractTestElement<SELF extends AbstractTestElement<SELF,
          */
         public SELF redis(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = RedisPostprocessor.Builder.class) Closure<?> closure) {
             var builder = RedisPostprocessor.builder();
+            call(closure, builder);
+            postprocessors.add(builder.build());
+            return self;
+        }
+
+        // -----------------------MailPostprocessor----------------------------
+
+        /**
+         * 应用 mail 后置处理器
+         *
+         * @param postprocessor mail 后置处理器
+         * @return 当前构建器实例，用于链式调用
+         */
+        public SELF mail(EMailPostProcessor postprocessor) {
+            postprocessors.add(postprocessor);
+            return self;
+        }
+
+        /**
+         * 通过自定义器配置 mail 后置处理器
+         *
+         * @param customizer mail 后置处理器自定义器
+         * @return 当前构建器实例，用于链式调用
+         */
+        public SELF mail(Customizer<EMailPostProcessor.Builder> customizer) {
+            var builder = EMailPostProcessor.builder();
+            customizer.customize(builder);
+            postprocessors.add(builder.build());
+            return self;
+        }
+
+        /**
+         * 通过构建器配置 mail 后置处理器
+         *
+         * @param builder mail 后置处理器构建器
+         * @return 当前构建器实例，用于链式调用
+         */
+        public SELF mail(EMailPostProcessor.Builder builder) {
+            postprocessors.add(builder.build());
+            return self;
+        }
+
+        /**
+         * 通过闭包配置 mail 后置处理器
+         *
+         * @param closure Groovy 闭包
+         * @return 当前构建器实例，用于链式调用
+         */
+        public SELF mail(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = EMailPostProcessor.Builder.class) Closure<?> closure) {
+            var builder = EMailPostProcessor.builder();
             call(closure, builder);
             postprocessors.add(builder.build());
             return self;
@@ -2483,6 +2637,56 @@ public abstract class AbstractTestElement<SELF extends AbstractTestElement<SELF,
          */
         public SELF redis(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = RedisSampler.Builder.class) Closure<?> closure) {
             var builder = RedisSampler.builder();
+            call(closure, builder);
+            this.children.add(builder.build());
+            return self;
+        }
+
+        // -----------------------MailSampler----------------------------
+
+        /**
+         * 应用 mail 取样器
+         *
+         * @param child mail 取样器实例
+         * @return 当前构建器实例，用于链式调用
+         */
+        public SELF mail(EMailSampler child) {
+            this.children.add(child);
+            return self;
+        }
+
+        /**
+         * 通过构建器应用 mail 取样器
+         *
+         * @param child mail 取样器构建器
+         * @return 当前构建器实例，用于链式调用
+         */
+        public SELF mail(EMailSampler.Builder child) {
+            this.children.add(child.build());
+            return self;
+        }
+
+        /**
+         * 通过自定义器配置 mail 取样器
+         *
+         * @param customizer mail 取样器自定义器
+         * @return 当前构建器实例，用于链式调用
+         */
+        public SELF mail(Customizer<EMailSampler.Builder> customizer) {
+            var builder = EMailSampler.builder();
+            customizer.customize(builder);
+            children.add(builder.build());
+            return self;
+        }
+
+        /**
+         * 通过闭包配置 mail 取样器
+         *
+         * @param closure Groovy 闭包
+         * @return 当前构建器实例，用于链式调用
+         */
+        public SELF mail(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = EMailSampler.Builder.class) Closure<?> closure) {
+            var builder = EMailSampler.builder();
             call(closure, builder);
             this.children.add(builder.build());
             return self;

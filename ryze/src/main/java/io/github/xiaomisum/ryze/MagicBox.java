@@ -32,6 +32,7 @@ import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
 import io.github.xiaomisum.ryze.builder.DefaultChildrenBuilder;
 import io.github.xiaomisum.ryze.protocol.debug.sampler.DebugSampler;
+import io.github.xiaomisum.ryze.protocol.email.sampler.EMailSampler;
 import io.github.xiaomisum.ryze.protocol.http.sampler.HTTPSampler;
 import io.github.xiaomisum.ryze.protocol.jdbc.sampler.JDBCSampler;
 import io.github.xiaomisum.ryze.protocol.redis.sampler.RedisSampler;
@@ -618,6 +619,97 @@ public class MagicBox {
      */
     public static Result debug(String title, Customizer<DebugSampler.Builder> customizer) {
         var builder = DebugSampler.builder();
+        customizer.customize(builder);
+        return MagicBox.runTest(title, builder.build());
+    }
+
+    /**
+     * 执行调试测试，使用闭包方式构建调试取样器配置
+     * <p>
+     * 该方法通过Groovy闭包来配置调试取样器，使用默认空标题。闭包中的方法调用会被委托给[EMailSampler.Builder](EMailSampler.Builder)对象，
+     * 允许以声明式的方式定义调试信息。执行完成后返回[Result](Result)结果对象，主要用于调试和测试框架功能验证。
+     * </p>
+     *
+     * @param closure Groovy闭包，用于配置调试取样器，闭包中的方法调用会被委托给[EMailSampler.Builder](EMailSampler.Builder)
+     * @return 调试测试执行结果
+     * @see #debug(String, Closure)
+     * @see EMailSampler.Builder
+     * @see Result
+     */
+    public static Result mail(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = EMailSampler.Builder.class) Closure<?> closure) {
+        return mail("", closure);
+    }
+
+    /**
+     * 执行调试测试，使用闭包方式构建调试取样器配置并指定标题
+     * <p>
+     * 该方法通过Groovy闭包来配置调试取样器，并指定测试标题。闭包中的方法调用会被委托给[EMailSampler.Builder](EMailSampler.Builder)对象，
+     * 允许以声明式的方式定义调试信息。执行完成后返回[Result](Result)结果对象，主要用于调试和测试框架功能验证。
+     * </p>
+     * <p>
+     * 业务流程：
+     * <ol>
+     *   <li>创建[EMailSampler.Builder](EMailSampler.Builder)实例</li>
+     *   <li>通过Groovy闭包配置调试取样器</li>
+     *   <li>构建调试取样器对象</li>
+     *   <li>执行调试测试并返回结果</li>
+     * </ol>
+     * </p>
+     *
+     * @param title   调试测试标题
+     * @param closure Groovy闭包，用于配置调试取样器，闭包中的方法调用会被委托给[EMailSampler.Builder](EMailSampler.Builder)
+     * @return 调试测试执行结果
+     * @see EMailSampler.Builder
+     * @see Result
+     */
+    public static Result mail(String title,
+                              @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = EMailSampler.Builder.class) Closure<?> closure) {
+        var builder = EMailSampler.builder();
+        Groovy.call(closure, builder);
+        return MagicBox.runTest(title, builder.build());
+    }
+
+    /**
+     * 执行调试测试，使用自定义器方式构建调试取样器配置
+     * <p>
+     * 该方法通过[Customizer](Customizer)来自定义调试取样器配置，使用默认空标题。自定义器中的方法调用会直接作用于[EMailSampler.Builder](EMailSampler.Builder)对象，
+     * 允许以编程方式定义调试信息。执行完成后返回[Result](Result)结果对象，主要用于调试和测试框架功能验证。
+     * </p>
+     *
+     * @param customizer 调试取样器自定义器，用于配置调试取样器
+     * @return 调试测试执行结果
+     * @see #mail(String, Customizer)
+     * @see EMailSampler.Builder
+     * @see Result
+     */
+    public static Result mail(Customizer<EMailSampler.Builder> customizer) {
+        return mail("", customizer);
+    }
+
+    /**
+     * 执行调试测试，使用自定义器方式构建调试取样器配置并指定标题
+     * <p>
+     * 该方法通过[Customizer](Customizer)来自定义调试取样器配置，并指定测试标题。自定义器中的方法调用会直接作用于[EMailSampler.Builder](EMailSampler.Builder)对象，
+     * 允许以编程方式定义调试信息。执行完成后返回[Result](Result)结果对象，主要用于调试和测试框架功能验证。
+     * </p>
+     * <p>
+     * 业务流程：
+     * <ol>
+     *   <li>创建[EMailSampler.Builder](EMailSampler.Builder)实例</li>
+     *   <li>通过自定义器配置调试取样器</li>
+     *   <li>构建调试取样器对象</li>
+     *   <li>执行调试测试并返回结果</li>
+     * </ol>
+     * </p>
+     *
+     * @param title      调试测试标题
+     * @param customizer 调试取样器自定义器，用于配置调试取样器
+     * @return 调试测试执行结果
+     * @see EMailSampler.Builder
+     * @see Result
+     */
+    public static Result mail(String title, Customizer<EMailSampler.Builder> customizer) {
+        var builder = EMailSampler.builder();
         customizer.customize(builder);
         return MagicBox.runTest(title, builder.build());
     }
