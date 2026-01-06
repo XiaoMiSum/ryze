@@ -39,6 +39,8 @@ public class RealEMailRequest extends SampleResult.RealRequest {
 
     protected Boolean useSSL;
 
+    protected Boolean useStarttls;
+
     protected String username;
 
     protected String password;
@@ -54,6 +56,7 @@ public class RealEMailRequest extends SampleResult.RealRequest {
         this.host = config.getHost();
         this.port = config.getPort(EMailConstantsInterface.DEFAULT_PORT);
         this.useSSL = config.getUseSSL();
+        this.useStarttls = config.getUseStarttls();
         this.username = config.getUsername();
         this.password = config.getPassword();
         this.to = config.getTo();

@@ -72,6 +72,9 @@ public class EMailConfigureItem implements ConfigureItem<EMailConfigureItem>, EM
     @JSONField(name = USE_SSL, ordinal = 4)
     protected Boolean useSSL;
 
+    @JSONField(name = USE_STRATTLS, ordinal = 4)
+    protected Boolean useStarttls;
+
     @JSONField(name = USERNAME, ordinal = 5)
     protected String username;
 
@@ -202,6 +205,24 @@ public class EMailConfigureItem implements ConfigureItem<EMailConfigureItem>, EM
     }
 
     /**
+     * 获取是否使用 Starttls
+     *
+     * @return 是否使用 Starttls
+     */
+    public Boolean getUseStarttls() {
+        return useStarttls;
+    }
+
+    /**
+     * 设置是否使用 Starttls
+     *
+     * @param useStarttls 是否使用 Starttls
+     */
+    public void setUseStarttls(Boolean useStarttls) {
+        this.useStarttls = useStarttls;
+    }
+
+    /**
      * 获取用户名
      *
      * @return 用户名
@@ -326,6 +347,27 @@ public class EMailConfigureItem implements ConfigureItem<EMailConfigureItem>, EM
          */
         public Builder port(String port) {
             configure.port = port;
+            return self;
+        }
+
+        /**
+         * 设置 启用 Starttls
+         *
+         * @return 构建器实例
+         */
+        public Builder useStarttls() {
+            configure.useStarttls = Boolean.TRUE;
+            return self;
+        }
+
+        /**
+         * 设置 是否启用 Starttls
+         *
+         * @param useStarttls 启用 ssl
+         * @return 构建器实例
+         */
+        public Builder useStarttls(Boolean useStarttls) {
+            configure.useStarttls = useStarttls;
             return self;
         }
 

@@ -14,6 +14,7 @@ import jakarta.mail.internet.MimeMultipart;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Strings;
 
+import java.util.Objects;
 import java.util.Properties;
 
 public class EmailSender {
@@ -22,10 +23,21 @@ public class EmailSender {
         result.sampleStart();
         var props = new Properties();
         props.put("mail.smtp.auth", true);
-        props.put("mail.smtp.starttls.enable", config.getUseSSL()); // 启用 TLS加密
         props.put("mail.smtp.host", config.getHost());
         props.put("mail.smtp.port", config.getPort(EMailConstantsInterface.DEFAULT_PORT));
-
+        if (Objects.nonNull(config.getUseSSL()) && config.getUseSSL()) {
+            props.put("mail.smtp.ssl.enable", "true"); // 启用SSL加密
+            props.put("mail.smtp.socketFactory.port", config.getPort(EMailConstantsInterface.DEFAULT_PORT));
+            props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+            props.put("mail.smtp.socketFactory.fallback", "false");
+        }
+        if (Objects.nonNull(config.getUseStarttls()) && config.getUseStarttls()) {
+            props.put("mail.smtp.starttls.enable", "true"); // 启用STARTTLS
+            props.put("mail.smtp.starttls.required", "true"); // 必须使用TLS
+            // TLS协议版本控制（重要！）
+            props.put("mail.smtp.ssl.protocols", "TLSv1.2 TLSv1.3");
+            props.put("mail.smtp.ssl.ciphersuites", "TLS_AES_128_GCM_SHA256:TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384");
+        }
         // 2. 创建Session会话
         var session = Session.getInstance(props, new jakarta.mail.Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {

@@ -58,6 +58,11 @@ public interface EMailConstantsInterface {
     String USE_SSL = "use_ssl";
 
     /**
+     * 是否启用 strattls
+     */
+    String USE_STRATTLS = "use_strattls";
+
+    /**
      * SMTP 服务器默认端口
      */
     int DEFAULT_PORT = 25;
