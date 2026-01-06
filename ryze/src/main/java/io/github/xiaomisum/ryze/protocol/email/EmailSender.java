@@ -29,7 +29,7 @@ public class EmailSender {
         // 2. 创建Session会话
         var session = Session.getInstance(props, new jakarta.mail.Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(config.getHost(), config.getPassword());
+                return new PasswordAuthentication(config.getUsername(), config.getPassword());
             }
         });
         try {
