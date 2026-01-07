@@ -32,7 +32,7 @@
     <parent>
         <groupId>io.github.xiaomisum</groupId>
         <artifactId>ryze-parent</artifactId>
-        <version>6.0.9</version>
+        <version>6.0.10</version>
     </parent>
 
     <artifactId>ryze</artifactId>
@@ -164,6 +164,11 @@
         <dependency>
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.angus</groupId>
+            <artifactId>jakarta.mail</artifactId>
         </dependency>
     </dependencies>
 

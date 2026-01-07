@@ -31,5 +31,5 @@ io.github.xiaomisum.ryze.protocol.debug.sampler.DebugSampler
 io.github.xiaomisum.ryze.protocol.http.sampler.HTTPSampler
 io.github.xiaomisum.ryze.protocol.jdbc.sampler.JDBCSampler
 io.github.xiaomisum.ryze.protocol.redis.sampler.RedisSampler
-
+io.github.xiaomisum.ryze.protocol.email.sampler.EMailSampler
 

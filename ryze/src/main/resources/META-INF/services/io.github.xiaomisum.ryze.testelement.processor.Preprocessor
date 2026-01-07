@@ -29,5 +29,6 @@ io.github.xiaomisum.ryze.protocol.debug.processer.DebugPreprocessor
 io.github.xiaomisum.ryze.protocol.http.processor.HTTPPreprocessor
 io.github.xiaomisum.ryze.protocol.jdbc.processor.JDBCPreprocessor
 io.github.xiaomisum.ryze.protocol.redis.processor.RedisPreprocessor
+io.github.xiaomisum.ryze.protocol.email.processor.EMailPreProcessor
 
 

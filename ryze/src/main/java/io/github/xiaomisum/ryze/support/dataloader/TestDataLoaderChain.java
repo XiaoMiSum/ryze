@@ -30,8 +30,7 @@ package io.github.xiaomisum.ryze.support.dataloader;
 
 import io.github.xiaomisum.ryze.support.RyzeServiceLoader;
 
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
+import java.lang.reflect.*;
 import java.util.List;
 
 /**
@@ -110,10 +109,14 @@ public class TestDataLoaderChain {
      */
     Class<?> getTypeClass(Type type) {
         try {
-            if (type instanceof ParameterizedType parameterizedType) {
-                return Class.forName(parameterizedType.getRawType().getTypeName());
-            }
-            return Class.forName(type.getTypeName());
+            return switch (type) {
+                case ParameterizedType parameterizedType -> Class.forName(parameterizedType.getRawType().getTypeName());
+                case Class<?> clazz -> clazz;
+                case TypeVariable<?> typeVariable -> getTypeClass(typeVariable.getBounds()[0]);
+                case WildcardType wildcardType -> getTypeClass(wildcardType.getUpperBounds()[0]);
+                case GenericArrayType g -> Array.newInstance(getTypeClass(g.getGenericComponentType()), 0).getClass();
+                default -> Class.forName(type.getTypeName());
+            };
         } catch (Exception e) {
             throw new RuntimeException("Class Not Found", e);
         }
