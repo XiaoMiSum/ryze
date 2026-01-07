@@ -116,7 +116,7 @@ public class JDBC {
             while (result.next()) {
                 var item = new JSONObject();
                 for (var i = 1; i <= meta.getColumnCount(); i++) {
-                    String key = meta.getColumnName(i);
+                    String key = meta.getColumnLabel(i);
                     item.put(key, result.getString(key));
                 }
                 results.add(item);
