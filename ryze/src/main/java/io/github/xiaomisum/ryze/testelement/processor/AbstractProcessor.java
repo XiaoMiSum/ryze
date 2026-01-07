@@ -121,7 +121,6 @@ public abstract class AbstractProcessor<SELF extends AbstractProcessor<SELF, CON
      * @return 初始化完成的上下文包装器
      */
     protected ContextWrapper initialized(SessionRunner session) {
-        validate().valid();
         super.initialized();
         var localContext = new ContextWrapper(session);
         localContext.setTestResult(getTestResult());

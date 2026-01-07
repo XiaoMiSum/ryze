@@ -109,7 +109,6 @@ public abstract class AbstractConfigureElement<SELF extends AbstractConfigureEle
      * @return 测试结果
      */
     public R process(ContextWrapper context) {
-        validate().valid();
         if (!initialized) {
             initialized();
         }
