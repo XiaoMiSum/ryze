@@ -122,6 +122,7 @@ public class EMailConfigureItem implements ConfigureItem<EMailConfigureItem>, EM
         self.host = StringUtils.isBlank(self.host) ? localOther.host : self.host;
         self.port = StringUtils.isBlank(self.port) ? localOther.port : self.port;
         self.useSSL = Objects.isNull(self.useSSL) ? localOther.useSSL : self.useSSL;
+        self.useStarttls = Objects.isNull(self.useStarttls) ? localOther.useStarttls : self.useStarttls;
         self.username = StringUtils.isBlank(self.username) ? localOther.username : self.username;
         self.password = StringUtils.isBlank(self.password) ? localOther.password : self.password;
         self.to = StringUtils.isBlank(self.to) ? localOther.to : self.to;
@@ -144,9 +145,12 @@ public class EMailConfigureItem implements ConfigureItem<EMailConfigureItem>, EM
         host = (String) context.evaluate(host);
         port = (String) context.evaluate(port);
         useSSL = (Boolean) context.evaluate(useSSL);
+        useStarttls = (Boolean) context.evaluate(useStarttls);
         username = (String) context.evaluate(username);
         password = (String) context.evaluate(password);
-        password = (String) context.evaluate(password);
+        to = (String) context.evaluate(to);
+        title = (String) context.evaluate(title);
+        content = (String) context.evaluate(content);
         return this;
     }
 
