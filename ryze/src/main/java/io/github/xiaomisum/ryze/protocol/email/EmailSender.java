@@ -33,10 +33,6 @@ public class EmailSender {
         }
         if (Objects.nonNull(config.getUseStarttls()) && config.getUseStarttls()) {
             props.put("mail.smtp.starttls.enable", "true"); // 启用STARTTLS
-            props.put("mail.smtp.starttls.required", "true"); // 必须使用TLS
-            // TLS协议版本控制（重要！）
-            props.put("mail.smtp.ssl.protocols", "TLSv1.2 TLSv1.3");
-            props.put("mail.smtp.ssl.ciphersuites", "TLS_AES_128_GCM_SHA256:TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384");
         }
         // 2. 创建Session会话
         var session = Session.getInstance(props, new jakarta.mail.Authenticator() {
