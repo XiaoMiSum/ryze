@@ -433,19 +433,21 @@ preprocessors:
 
 ### 性能优化
 
-#### 并行处理
+#### 异步处理
 
-对于相互独立的前置处理，可以考虑并行执行：
+对于不影响测试结果的前置处理，可以考虑异步执行：
 
 ```yaml
 preprocessors:
-  # 这些处理器可以并行执行
+  # 这些处理器可以异步执行
   - testclass: http
+    async: true
     config:
       method: GET
       path: /service1/health
 
   - testclass: http
+    async: true
     config:
       method: GET
       path: /service2/health
