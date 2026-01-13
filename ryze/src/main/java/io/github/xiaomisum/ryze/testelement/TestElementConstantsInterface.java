@@ -134,4 +134,14 @@ public interface TestElementConstantsInterface {
 
     String TESTSUITE = "__testsuite__";
 
+    /**
+     * 异步执行字段标识符
+     */
+    String ASYNC = "async";
+
+    /**
+     * 执行条件字段标识符
+     */
+    String CONDITION = "condition";
+
 }

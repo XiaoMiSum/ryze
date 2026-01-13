@@ -314,7 +314,7 @@ public class MyProtocolConfigureItem implements ConfigureItem<MyProtocolConfigur
 #### 响应类实现
 
 ```java
-public class MyProtocolResultResponse implements ResultResponse {
+public class MyProtocolResultResponse extends SampleResult.RealResponse {
     private final MyProtocolResponse originalResponse;
     private final byte[] responseBytes;
     private final Map<String, String> headers;

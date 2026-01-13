@@ -37,7 +37,7 @@ graph TB
     
     subgraph "框架层 Framework Layer"
         D[Ryze Core]
-        E[JsonTree 解析器]
+        E[ObjectReader 解析器]
         F[SessionRunner 执行引擎]
     end
     
@@ -155,27 +155,18 @@ public class SessionRunner {
 
 **设计模式**: 命令模式 + 责任链模式
 
-### 3. JsonTree - 配置解析器
+### 3. ObjectReader - 配置解析器
 
-```java
-public class JsonTree extends JSONObject {
-    // 将原始 JSON 转换为标准化的测试配置
-    public JsonTree(JSONObject testcase) {
-        replaceExpiredKeys(testcase);
-        var json = prepare(testcase);
-        initialize(json, isRyzeTestFramework(json));
-    }
-}
-```
+框架使用 fastjson2 的 `ObjectReader` 接口实现测试模板的解析，已默认集成对 JSON/YAML 测试配置的解析支持。
 
 **职责**:
 
 - 解析和标准化 JSON/YAML 测试配置
-- 处理键名大小写转换
+- 自动类型转换和映射
 - 支持配置继承和合并
 - 递归处理嵌套结构
 
-**设计模式**: 建造者模式 + 递归模式
+**设计模式**: 策略模式 + 委托模式
 
 ### 4. TestElement - 测试元件基类
 
@@ -184,7 +175,7 @@ public interface TestElement<T extends Result> extends Validatable, Cloneable<Te
     default T run(SessionRunner session) {
         return null;
     }
-    
+
     default TestElement<T> copy() {
         return this;
     }
@@ -231,11 +222,13 @@ public class DubboSampler implements Sampler<DefaultSampleResult> {
 
 ```java
 public class HTTPSampler {
-    public static class Builder extends AbstractSampler.Builder<...> {
-        public Builder method(String method) { ... }
-        public Builder url(String url) { ... }
-        public Builder header(String name, String value) { ... }
-        public HTTPSampler build() { ... }
+    public static class Builder extends AbstractSampler.Builder<...>
+
+    {
+        public Builder method (String method){ ...}
+        public Builder url (String url){ ...}
+        public Builder header (String name, String value){ ...}
+        public HTTPSampler build () { ...}
     }
 }
 ```
@@ -262,7 +255,7 @@ public abstract class AbstractSampler<SELF, CONFIG, RESULT> {
         // 4. 后处理阶段
         return result;
     }
-    
+
     protected abstract void sample(ContextWrapper context, RESULT result);
 }
 ```
@@ -299,7 +292,7 @@ public class ComponentFactory {
 ```java
 public class ContextWrapper {
     private List<Context> contextChain;
-    
+
     public Object getVariable(String name) {
         for (Context context : contextChain) {
             Object value = context.getVariable(name);
@@ -323,6 +316,7 @@ public class ContextWrapper {
 ```java
 public interface ReporterListener extends RyzeInterceptor {
     void beforeTest(TestElement element);
+
     void afterTest(TestElement element, Result result);
 }
 
@@ -358,6 +352,7 @@ META-INF/services/
 1. **实现相应接口**:
 
 ```java
+
 @KW("custom_sampler")
 public class CustomSampler implements Sampler<DefaultSampleResult> {
     @Override
@@ -369,7 +364,7 @@ public class CustomSampler implements Sampler<DefaultSampleResult> {
 
 2. **注册 SPI 服务**:
 
-```java
+```text
 #META-INF/services/io.github.xiaomisum.ryze.testelement.TestElement
 com.example.CustomSampler
 ```
@@ -403,13 +398,13 @@ com.example.CustomSampler
 sequenceDiagram
     participant U as User
     participant R as Ryze
-    participant J as JsonTree
+    participant J as ObjectReader
     participant S as SessionRunner
     participant T as TestElement
     
     U->>R: start(testcase)
-    R->>J: new JsonTree(config)
-    J->>J: parse and normalize
+    R->>J: parse(config)
+    J->>J: read and normalize
     R->>S: newSession(configure)
     S->>S: initContextChain()
     R->>T: run(session)
@@ -486,7 +481,7 @@ private static <T> T getDataMap(ReadWriteLock lock, Supplier<T> getter, Supplier
 ```java
 public class SessionRunner {
     public static final ThreadLocal<SessionRunner> HOLDER = new ThreadLocal<>();
-    
+
     public static SessionRunner getSessionIfNoneCreateNew() {
         var session = HOLDER.get();
         if (session == null) {

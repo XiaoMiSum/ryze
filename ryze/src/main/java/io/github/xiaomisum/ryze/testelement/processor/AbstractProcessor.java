@@ -45,9 +45,14 @@ import io.github.xiaomisum.ryze.testelement.AbstractTestElement;
 import io.github.xiaomisum.ryze.testelement.TestElement;
 import io.github.xiaomisum.ryze.testelement.TestElementConstantsInterface;
 import io.github.xiaomisum.ryze.testelement.sampler.SampleResult;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import static io.github.xiaomisum.ryze.TestStatus.broken;
 
@@ -81,8 +86,16 @@ public abstract class AbstractProcessor<SELF extends AbstractProcessor<SELF, CON
         extends AbstractTestElement<AbstractProcessor<SELF, CONFIG, R>, CONFIG, R>
         implements Processor, TestElementConstantsInterface {
 
+    /**
+     * 静态线程池，用于异步执行处理器（使用虚拟线程）
+     */
+    private static final ExecutorService asyncExecutor = Executors.newVirtualThreadPerTaskExecutor();
     @JSONField(name = EXTRACTORS, ordinal = 10)
     protected List<Extractor> extractors;
+    @JSONField(name = ASYNC, ordinal = 11)
+    protected boolean async = false;
+    @JSONField(name = CONDITION, ordinal = 12)
+    protected String condition;
 
     /**
      * 默认构造函数
@@ -99,6 +112,15 @@ public abstract class AbstractProcessor<SELF extends AbstractProcessor<SELF, CON
     public AbstractProcessor(Builder<SELF, ?, CONFIG, ?, ?, R> builder) {
         super(builder);
         this.extractors = builder.extractors;
+        this.async = builder.async;
+        this.condition = builder.condition;
+    }
+
+    /**
+     * 关闭异步执行器线程池
+     */
+    public static void shutdownAsyncExecutor() {
+        asyncExecutor.shutdown();
     }
 
     /**
@@ -155,26 +177,47 @@ public abstract class AbstractProcessor<SELF extends AbstractProcessor<SELF, CON
     public void process(ContextWrapper context) {
         var localContext = initialized(context.getSessionRunner());
         var result = (R) localContext.getTestResult();
-        try {
-            // 执行前置处理
-            if (runtime.chain.applyPreHandle(localContext, runtime)) {
-                // 业务处理
-                handleRequest(localContext, result);
-                result.sampleStart();
-                sample(localContext, result);
-                result.sampleEnd();
-                handleResponse(localContext, result);
-                // 执行后置处理
-                runtime.chain.applyPostHandle(localContext, runtime);
-                Optional.ofNullable(extractors).orElse(Collections.emptyList()).forEach(extractor -> extractor.process(localContext));
+        var isConditionPassed = StringUtils.isBlank(condition) || switch (localContext.evaluate(condition)) {
+            case Boolean bool -> bool;
+            case String str -> !str.isEmpty() && Strings.CS.equalsAny(str, "1", "t", "T", "true", "TRUE", "True");
+            case Number num -> num.intValue() == 1;
+            case null, default -> false;
+        };
+
+        // 条件判断，如果条件不满足则直接返回
+        if (!(boolean) isConditionPassed) {
+            return;
+        }
+        Runnable task = () -> {
+            try {
+                // 执行前置处理
+                if (runtime.chain.applyPreHandle(localContext, runtime)) {
+                    // 业务处理
+                    handleRequest(localContext, result);
+                    result.sampleStart();
+                    sample(localContext, result);
+                    result.sampleEnd();
+                    handleResponse(localContext, result);
+                    // 执行后置处理
+                    runtime.chain.applyPostHandle(localContext, runtime);
+                    Optional.ofNullable(extractors).orElse(Collections.emptyList()).forEach(extractor -> extractor.process(localContext));
+                }
+            } catch (Throwable throwable) {
+                result.setThrowable(throwable);
+                context.getTestResult().setThrowable(throwable);
+                context.getTestResult().setStatus(broken);
+            } finally {
+                // 最终处理
+                runtime.chain.triggerAfterCompletion(localContext);
             }
-        } catch (Throwable throwable) {
-            result.setThrowable(throwable);
-            context.getTestResult().setThrowable(throwable);
-            context.getTestResult().setStatus(broken);
-        } finally {
-            // 最终处理
-            runtime.chain.triggerAfterCompletion(localContext);
+        };
+
+        if (async) {
+            // 异步执行处理器
+            CompletableFuture.runAsync(task, asyncExecutor);
+        } else {
+            // 同步执行处理器
+            task.run();
         }
     }
 
@@ -251,6 +294,8 @@ public abstract class AbstractProcessor<SELF extends AbstractProcessor<SELF, CON
             extends AbstractTestElement.Builder<AbstractProcessor<ELE, CONFIG, R>, SELF, CONFIG, CONFIGURE_BUILDER, R> {
 
         protected List<Extractor> extractors;
+        protected boolean async;
+        protected String condition;
 
         /**
          * 配置变量提取器
@@ -275,6 +320,38 @@ public abstract class AbstractProcessor<SELF extends AbstractProcessor<SELF, CON
             EXTRACTORS_BUILDER builder = getExtractorsBuilder();
             Groovy.call(closure, builder);
             this.extractors = Collections.addAllIfNonNull(this.extractors, builder.build());
+            return self;
+        }
+
+        /**
+         * 设置异步执行
+         *
+         * @param async 是否异步执行
+         * @return 构建器自身实例
+         */
+        public SELF async(boolean async) {
+            this.async = async;
+            return self;
+        }
+
+        /**
+         * 设置异步执行
+         *
+         * @return 构建器自身实例
+         */
+        public SELF async() {
+            this.async = true;
+            return self;
+        }
+
+        /**
+         * 设置执行条件， FreeMarker 表达式
+         *
+         * @param condition FreeMarker 表达式
+         * @return 构建器自身实例
+         */
+        public SELF condition(String condition) {
+            this.condition = condition;
             return self;
         }
 
