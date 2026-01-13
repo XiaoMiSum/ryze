@@ -6,22 +6,12 @@ Ryze框架支持在测试执行过程中动态求值，提供灵活的配置选�
 
 在测试执行过程中动态生成的变量：
 
-```java
+```groovy
 // 在前置处理器中设置运行时变量
-preprocessor.extractors(extractors ->extractors
-        .
-
-json("$.data.token","authToken")
-);
+preprocessor.extractors(extractors -> extractors.json('$.data.token', "authToken"))
 
 // 在后续请求中使用
-        http.
-
-config(config ->config
-        .
-
-headers(Map.of("Authorization", "Bearer ${authToken}"))
-        );
+http.config(config -> config.headers(Map.of("Authorization", 'Bearer ${authToken}')))
 ```
 
 ## 表达式求值
@@ -47,17 +37,10 @@ variables:
 
 使用Java 8+的函数式特性：
 
-```java
-suite.variables("currentTime",() ->System.
+```groovy
+suite.variables("currentTime", () -> System.currentTimeMillis())
 
-currentTimeMillis());
-        suite.
-
-variables("randomId",() ->UUID.
-
-randomUUID().
-
-toString());
+suite.variables("randomId", () -> UUID.randomUUID().toString())
 ```
 
 ## 延迟求值
