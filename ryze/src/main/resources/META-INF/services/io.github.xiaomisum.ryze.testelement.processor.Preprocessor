@@ -25,6 +25,7 @@
 #  */
 #
 
+io.github.xiaomisum.ryze.testelement.processor.builtin.SyncTimer
 io.github.xiaomisum.ryze.protocol.debug.processer.DebugPreprocessor
 io.github.xiaomisum.ryze.protocol.http.processor.HTTPPreprocessor
 io.github.xiaomisum.ryze.protocol.jdbc.processor.JDBCPreprocessor
