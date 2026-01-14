@@ -82,8 +82,8 @@
         </dependency>
 
         <dependency>
-            <groupId>com.github.javafaker</groupId>
-            <artifactId>javafaker</artifactId>
+            <groupId>net.datafaker</groupId>
+            <artifactId>datafaker</artifactId>
             <exclusions>
                 <exclusion>
                     <groupId>org.apache.commons</groupId>
