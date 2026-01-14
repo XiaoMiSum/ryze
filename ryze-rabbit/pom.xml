@@ -32,7 +32,7 @@
     <parent>
         <groupId>io.github.xiaomisum</groupId>
         <artifactId>ryze-parent</artifactId>
-        <version>6.0.10</version>
+        <version>6.0.11</version>
     </parent>
 
     <artifactId>ryze-rabbit</artifactId>

@@ -142,7 +142,7 @@ public abstract class AbstractAssertion implements Assertion, AssertionConstants
                 proxy.expectedValue = expected;
             }
             matcher = matcher == null ? Matchers.createMatcher(rule, expected, strict) : matcher;
-            MatcherAssert.assertThat(actualValue, matcher);
+            MatcherAssert.assertThat("verify field: " + field + ", ", actualValue, matcher);
         }
     }
 

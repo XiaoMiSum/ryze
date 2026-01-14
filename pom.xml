@@ -33,7 +33,7 @@
     <artifactId>ryze-parent</artifactId>
     <packaging>pom</packaging>
 
-    <version>6.0.10</version>
+    <version>6.0.11</version>
 
     <name>${project.artifactId}</name>
     <description>a test tool for api</description>
@@ -83,7 +83,7 @@
         <geantyref.version>2.0.1</geantyref.version>
         <groovy.version>4.0.28</groovy.version>
         <yaml.version>2.3</yaml.version>
-        <faker.version>1.0.2</faker.version>
+        <faker.version>2.5.3</faker.version>
         <allure.version>2.29.1</allure.version>
         <guava.version>33.4.0-jre</guava.version>
         <fastjson.version>2.0.53</fastjson.version>
@@ -279,8 +279,8 @@
             </dependency>
 
             <dependency>
-                <groupId>com.github.javafaker</groupId>
-                <artifactId>javafaker</artifactId>
+                <groupId>net.datafaker</groupId>
+                <artifactId>datafaker</artifactId>
                 <version>${faker.version}</version>
             </dependency>
 

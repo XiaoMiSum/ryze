@@ -42,9 +42,14 @@ import java.util.Locale;
  * <p>在测试用例中可以通过 ${faker()} 的方式调用该函数。</p>
  *
  * @author xiaomi
- * @see <a href="https://github.com/DiUS/java-faker">Java Faker库</a>
+ * @see <a href="https://github.com/datafaker-net/datafaker">Java Faker库</a>
  */
 public class Faker implements Function {
+
+    public static void main(String[] args) {
+        System.out.println(new Faker().execute(null, Args.of("name.fullName")));
+        System.out.println(new net.datafaker.Faker(Locale.getDefault()).idNumber().valid());
+    }
 
     @Override
     public String key() {
@@ -84,9 +89,9 @@ public class Faker implements Function {
         var locale = args.size() < 2 ? "zh-CN" : args.getLast().toString();
 
         try {
-            var faker = new com.github.javafaker.Faker(Locale.of(locale));
+            var faker = new net.datafaker.Faker(Locale.of(locale));
             var keys = key.split("\\.");
-            var current = faker.getClass().getDeclaredMethod(StringUtils.uncapitalize(keys[0])).invoke(faker);
+            var current = faker.getClass().getMethod(StringUtils.uncapitalize(keys[0])).invoke(faker);
             Method method = current.getClass().getDeclaredMethod(StringUtils.uncapitalize(keys[1]));
             return method.invoke(current);
         } catch (Exception e) {

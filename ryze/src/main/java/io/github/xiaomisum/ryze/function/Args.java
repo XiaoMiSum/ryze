@@ -29,6 +29,7 @@
 package io.github.xiaomisum.ryze.function;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * 函数参数列表类，扩展自ArrayList，提供便捷的参数访问方法
@@ -46,6 +47,12 @@ import java.util.ArrayList;
  * Created at 2025/8/6 22:50
  */
 public class Args extends ArrayList<Object> {
+
+    public static Args of(Object... args) {
+        Args argsList = new Args();
+        argsList.addAll(Arrays.asList(args));
+        return argsList;
+    }
 
     /**
      * 获取指定索引位置的参数对象
