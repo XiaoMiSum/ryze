@@ -27,13 +27,6 @@ package io.github.xiaomisum.ryze.function.builtin;
 
 import io.github.xiaomisum.ryze.context.ContextWrapper;
 import io.github.xiaomisum.ryze.function.Args;
-import io.github.xiaomisum.ryze.function.Function;
-import org.apache.commons.lang3.StringUtils;
-
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
-import java.time.format.DateTimeFormatter;
 
 /**
  * 时间戳函数实现类
@@ -45,7 +38,7 @@ import java.time.format.DateTimeFormatter;
  *
  * @author mi.xiao
  */
-public class Timestamp implements Function {
+public class Timestamp extends TimeShift {
 
     @Override
     public String key() {
@@ -57,18 +50,32 @@ public class Timestamp implements Function {
      *
      * <p>参数说明：
      * <ol>
-     *   <li>format: 指定日期时间格式，如：yyyy-MM-dd、yyyy-MM-dd HH:mm:ss、yyyyMMdd、yyyyMMddHHmmss</li>
+     *   <li>format: 指定日期时间格式，如果该参数未传递，则返回时间戳</li>
+     *   <li>amount: 表示要从当前时间中添加或减去的时间量</li>
      * </ol>
      * </p>
      *
-     * <p>当格式化参数未传递时，则返回当前时间戳</p>
+     * <p>amount参数格式遵循ISO-8601标准的Duration格式：
+     * <ul>
+     *   <li>PT20.345S: 解析为 20.345秒</li>
+     *   <li>PT15M: 解析为 15分钟</li>
+     *   <li>PT10H: 解析为 10小时</li>
+     *   <li>P2D: 解析为 2天</li>
+     *   <li>P2DT3H4M: 解析为 2天3小时4分钟</li>
+     *   <li>P-6H3M: 解析为 -6小时+3分钟</li>
+     *   <li>-P6H3M: 解析为 -6小时-3分钟</li>
+     *   <li>-P-6H+3M: 解析为 +6小时-3分钟</li>
+     * </ul>
+     * </p>
+     *
+     * <p>当两个参数都未传递时，则返回当前时间戳</p>
      *
      * <p>使用示例：
      * <pre>
-     * ${timestamp()}                                // 返回当前时间戳
-     * ${timestamp("yyyy-MM-dd")}                    // 返回当前日期，格式为yyyy-MM-dd
-     * ${timestamp("yyyy-MM-dd HH:mm:ss")}           // 返回当前日期时间，格式为yyyy-MM-dd HH:mm:ss
-     * ${timestamp("yyyyMMddHHmmss")}                // 返回当前日期时间，格式为yyyyMMddHHmmss
+     * ${timestamp()}                          // 返回当前时间戳
+     * ${timestamp("yyyy-MM-dd")}              // 返回当前日期，格式为yyyy-MM-dd
+     * ${timestamp("yyyy-MM-dd HH:mm:ss", "P1D")}     // 返回明天此刻的时间，格式为yyyy-MM-dd HH:mm:ss
+     * ${timestamp("", "-P7D")}                // 返回7天前的时间戳
      * </pre>
      * </p>
      *
@@ -78,13 +85,8 @@ public class Timestamp implements Function {
      */
     @Override
     public String execute(ContextWrapper context, Args args) {
-        var localDateTime = LocalDateTime.now(ZoneId.systemDefault());
-        var format = args.getString(0);
-        if (StringUtils.isBlank(format)) {
-            var offset = ZoneOffset.systemDefault().getRules().getOffset(localDateTime);
-            return String.valueOf(localDateTime.toInstant(offset).toEpochMilli());
-        }
-        return localDateTime.format(DateTimeFormatter.ofPattern(format));
+        checkMethodArgCount(args, 0, 2);
+        return super.execute(context, args);
     }
 
 
