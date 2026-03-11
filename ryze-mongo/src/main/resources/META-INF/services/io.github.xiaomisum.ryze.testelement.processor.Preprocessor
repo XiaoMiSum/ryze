@@ -26,5 +26,6 @@
 #
 
 io.github.xiaomisum.ryze.protocol.mongo.processsor.MongoPreprocessor
+io.github.xiaomisum.ryze.protocol.mongo.processor.MongoPreprocessor
 
 

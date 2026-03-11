@@ -29,7 +29,7 @@ import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
 import io.github.xiaomisum.ryze.builder.DefaultExtractorsBuilder;
 import io.github.xiaomisum.ryze.builder.ExtensiblePostprocessorsBuilder;
-import io.github.xiaomisum.ryze.protocol.mongo.processsor.MongoPostprocessor;
+import io.github.xiaomisum.ryze.protocol.mongo.processor.MongoPostprocessor;
 import io.github.xiaomisum.ryze.support.Customizer;
 
 import static io.github.xiaomisum.ryze.support.groovy.Groovy.call;
@@ -75,7 +75,14 @@ public class MongoPostprocessorsBuilder extends ExtensiblePostprocessorsBuilder<
      *
      * @param postprocessor MongoPostprocessor 实例
      * @return 当前构建器实例，支持链式调用
+     * @deprecated 使用 {@link #mongo(MongoPostprocessor)} 代替
      */
+    @Deprecated
+    public MongoPostprocessorsBuilder mongo(io.github.xiaomisum.ryze.protocol.mongo.processsor.MongoPostprocessor postprocessor) {
+        postprocessors.add(postprocessor);
+        return self;
+    }
+
     public MongoPostprocessorsBuilder mongo(MongoPostprocessor postprocessor) {
         postprocessors.add(postprocessor);
         return self;
@@ -105,7 +112,14 @@ public class MongoPostprocessorsBuilder extends ExtensiblePostprocessorsBuilder<
      *
      * @param builder MongoPostprocessor.Builder 实例
      * @return 当前构建器实例，支持链式调用
+     * @deprecated 使用 {@link #mongo(MongoPostprocessor.Builder)} 代替
      */
+    @Deprecated
+    public MongoPostprocessorsBuilder mongo(io.github.xiaomisum.ryze.protocol.mongo.processsor.MongoPostprocessor.Builder builder) {
+        postprocessors.add(builder.build());
+        return self;
+    }
+
     public MongoPostprocessorsBuilder mongo(MongoPostprocessor.Builder builder) {
         postprocessors.add(builder.build());
         return self;
