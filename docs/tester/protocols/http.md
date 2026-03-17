@@ -9,18 +9,16 @@ HTTP(S) 协议是 Ryze 框架内置支持的核心协议，提供完整的 HTTP/
 
 ### HTTP 默认配置项
 
-| 配置项 | 类型 | 默认值 | 必需 | 描述 |
-|-------|------|--------|------|------|
-| method | String | GET | ❌ | 请求方法 (GET/POST/PUT/DELETE/PATCH/HEAD/OPTIONS) |
-| protocol | String | http | ❌ | 协议类型 (http/https) |
-| host | String | - | ✅ | 服务器地址/域名 |
-| port | Integer | 80 | ❌ | 服务器端口号 |
-| path | String | - | ❌ | 接口路径 (如 /api/users) |
-| http/2 | Boolean | false | ❌ | 是否启用 HTTP/2 协议 |
-| headers | Map | - | ❌ | 请求头，键值对格式 |
-| query | Map | - | ❌ | URL 查询参数，键值对格式 |
-| data | Map | - | ❌ | 表单数据 |
-| body | Object | - | ❌ | 请求体 (JSON 对象/字符串) |
+| 配置项      | 类型      | 默认值   | 必需 | 描述                                            |
+|----------|---------|-------|----|-----------------------------------------------|
+| method   | String  | GET   | ❌  | 请求方法 (GET/POST/PUT/DELETE/PATCH/HEAD/OPTIONS) |
+| base_url | String  | http  | ✅  | 基础url地址，如：http://127.0.0.1:8080               |
+| path     | String  | -     | ❌  | 接口路径 (如 /api/users)                           |
+| http/2   | Boolean | false | ❌  | 是否启用 HTTP/2 协议                                |
+| headers  | Map     | -     | ❌  | 请求头，键值对格式                                     |
+| query    | Map     | -     | ❌  | URL 查询参数，键值对格式                                |
+| data     | Map     | -     | ❌  | 表单数据                                          |
+| body     | Object  | -     | ❌  | 请求体 (JSON 对象/字符串)                             |
 
 > **配置优先级**: 取样器配置 > HTTP 默认配置
 
