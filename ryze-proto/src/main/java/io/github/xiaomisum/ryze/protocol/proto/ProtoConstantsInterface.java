@@ -67,18 +67,35 @@ public interface ProtoConstantsInterface {
     String HTTP2 = "http/2";
 
     /**
-     * 协议键名
+     * 请求基础 URL
+     * <p>用于在配置中指定HTTP请求基础 URL，不包含接口地址及参数</p>
+     * <p>例如："http://127.0.0.1:8080"</p>
+     * <p>例如："ws://127.0.0.1:8080"</p>
      */
+    String BASE_URL = "base_url";
+
+    /**
+     * 协议键名
+     *
+     * @deprecated since 6.0.12 please use {@link #BASE_URL}
+     */
+    @Deprecated(since = "6.0.12")
     String PROTOCOL = "protocol";
 
     /**
      * 主机键名
+     *
+     * @deprecated since 6.0.12 please use {@link #BASE_URL}
      */
+    @Deprecated(since = "6.0.12")
     String HOST = "host";
 
     /**
      * 端口键名
+     *
+     * @deprecated since 6.0.12 please use {@link #BASE_URL}
      */
+    @Deprecated(since = "6.0.12")
     String PORT = "port";
 
     /**

@@ -54,12 +54,6 @@ import java.util.regex.Pattern;
 @KW({"regex", "rx", "正则", "正则表达式"})
 public class RegexMatcher extends ProxyMatcher {
 
-    /**
-     * 正则表达式模式
-     * <p>编译后的Pattern对象，用于执行匹配操作</p>
-     */
-    private Pattern pattern;
-
     public RegexMatcher() {
         this(null, false);
     }
@@ -98,7 +92,7 @@ public class RegexMatcher extends ProxyMatcher {
         if (expectedValue == null || expectedValue.toString().isBlank()) {
             throw new IllegalArgumentException("Regex pattern cannot be null");
         }
-        this.pattern = Pattern.compile(expectedValue.toString(), !strict ? Pattern.CASE_INSENSITIVE : 0);
+        Pattern pattern = Pattern.compile(expectedValue.toString(), !strict ? Pattern.CASE_INSENSITIVE : 0);
         return pattern.matcher((String) actualValue).matches();
     }
 

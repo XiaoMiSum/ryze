@@ -64,7 +64,9 @@ import java.util.Objects;
  * </p>
  *
  * @author xiaomi
+ * @deprecated 该类已弃用，请使用 {@link io.github.xiaomisum.ryze.protocol.mongo.processor.MongoPostprocessor} 代替
  */
+@Deprecated(since = "6.0.12")
 @KW(value = {"mongo_preprocessor", "mongo_pre_processor", "mongo", "mongodb"})
 public class MongoPreprocessor extends AbstractProcessor<MongoPreprocessor, MongoConfigItem, DefaultSampleResult> implements Preprocessor, MongoConstantsInterface {
 

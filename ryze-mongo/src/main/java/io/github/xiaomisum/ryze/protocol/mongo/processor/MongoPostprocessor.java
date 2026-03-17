@@ -26,7 +26,7 @@
  *
  */
 
-package io.github.xiaomisum.ryze.protocol.mongo.processsor;
+package io.github.xiaomisum.ryze.protocol.mongo.processor;
 
 import com.alibaba.fastjson2.annotation.JSONField;
 import com.mongodb.ConnectionString;
@@ -64,9 +64,7 @@ import java.util.Objects;
  * </p>
  *
  * @author xiaomi
- * @deprecated 该类已弃用，请使用 {@link io.github.xiaomisum.ryze.protocol.mongo.processor.MongoPostprocessor} 代替
  */
-@Deprecated(since = "6.0.12")
 @KW(value = {"mongo_postprocessor", "mongo_post_processor", "mongo", "mongodb"})
 public class MongoPostprocessor extends AbstractProcessor<MongoPostprocessor, MongoConfigItem, DefaultSampleResult> implements Postprocessor, MongoConstantsInterface {
 

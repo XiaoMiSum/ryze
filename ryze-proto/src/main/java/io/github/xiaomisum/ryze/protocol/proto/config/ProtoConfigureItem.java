@@ -74,24 +74,36 @@ public class ProtoConfigureItem implements ConfigureItem<ProtoConfigureItem>, Pr
     @JSONField(name = PROTO_DESC)
     protected Proto protoDesc;
 
+    @JSONField(name = BASE_URL, ordinal = 1)
+    protected String baseUrl;
+
     /**
      * 请求发送协议
      * <p>协议类型，如"http"、"https"、"ws"、"wss"</p>
+     *
+     * @deprecated since 6.0.12 please use {@link #baseUrl}
      */
+    @Deprecated(since = "6.0.12")
     @JSONField(name = PROTOCOL, ordinal = 1)
     protected String protocol;
 
     /**
      * 主机
      * <p>目标服务器主机名或IP地址</p>
+     *
+     * @deprecated since 6.0.12 please use {@link #baseUrl}
      */
+    @Deprecated(since = "6.0.12")
     @JSONField(name = HOST, ordinal = 2)
     protected String host;
 
     /**
      * 端口
      * <p>目标服务器端口号</p>
+     *
+     * @deprecated since 6.0.12 please use {@link #baseUrl}
      */
+    @Deprecated(since = "6.0.12")
     @JSONField(name = PORT, ordinal = 2)
     protected String port;
 
@@ -188,6 +200,7 @@ public class ProtoConfigureItem implements ConfigureItem<ProtoConfigureItem>, Pr
         var self = copy();
         self.timeout = self.timeout == null ? localOther.timeout : self.timeout;
         self.protoDesc = self.protoDesc == null ? localOther.protoDesc : self.protoDesc.merge(localOther.protoDesc);
+        self.baseUrl = StringUtils.isBlank(self.baseUrl) ? localOther.baseUrl : self.baseUrl;
         self.protocol = StringUtils.isBlank(self.protocol) ? localOther.protocol : self.protocol;
         self.host = StringUtils.isBlank(self.host) ? localOther.host : self.host;
         self.port = StringUtils.isBlank(self.port) ? localOther.port : self.port;
@@ -214,6 +227,7 @@ public class ProtoConfigureItem implements ConfigureItem<ProtoConfigureItem>, Pr
     @Override
     public ProtoConfigureItem evaluate(ContextWrapper context) {
         ref = (String) context.evaluate(ref);
+        baseUrl = (String) context.evaluate(baseUrl);
         protocol = (String) context.evaluate(protocol);
         host = (String) context.evaluate(host);
         port = (String) context.evaluate(port);
@@ -263,6 +277,24 @@ public class ProtoConfigureItem implements ConfigureItem<ProtoConfigureItem>, Pr
     }
 
     /**
+     * 获取基础URL
+     *
+     * @return 基础URL
+     */
+    public String getBaseUrl() {
+        return baseUrl;
+    }
+
+    /**
+     * 设置基础URL
+     *
+     * @param baseUrl 基础URL
+     */
+    public void setBaseUrl(String baseUrl) {
+        this.baseUrl = baseUrl;
+    }
+
+    /**
      * 获取Proto配置
      *
      * @return Proto配置
@@ -284,7 +316,9 @@ public class ProtoConfigureItem implements ConfigureItem<ProtoConfigureItem>, Pr
      * 获取协议
      *
      * @return 协议，默认为"http"
+     * @deprecated since 6.0.12 please use {@link #baseUrl}
      */
+    @Deprecated(since = "6.0.12")
     public String getProtocol() {
         return protocol;
     }
@@ -293,7 +327,9 @@ public class ProtoConfigureItem implements ConfigureItem<ProtoConfigureItem>, Pr
      * 设置协议
      *
      * @param protocol 协议
+     * @deprecated since 6.0.12 please use {@link #baseUrl}
      */
+    @Deprecated(since = "6.0.12")
     public void setProtocol(String protocol) {
         this.protocol = protocol;
     }
@@ -302,7 +338,9 @@ public class ProtoConfigureItem implements ConfigureItem<ProtoConfigureItem>, Pr
      * 获取协议
      *
      * @return 协议，默认为"http"
+     * @deprecated since 6.0.12 please use {@link #baseUrl}
      */
+    @Deprecated(since = "6.0.12")
     public String getProtocol(String defaultProtocol) {
         return StringUtils.isBlank(protocol) ? defaultProtocol : protocol;
     }
@@ -311,7 +349,9 @@ public class ProtoConfigureItem implements ConfigureItem<ProtoConfigureItem>, Pr
      * 获取主机
      *
      * @return 主机
+     * @deprecated since 6.0.12 please use {@link #baseUrl}
      */
+    @Deprecated(since = "6.0.12")
     public String getHost() {
         return host;
     }
@@ -320,7 +360,9 @@ public class ProtoConfigureItem implements ConfigureItem<ProtoConfigureItem>, Pr
      * 设置主机
      *
      * @param host 主机
+     * @deprecated since 6.0.12 please use {@link #baseUrl}
      */
+    @Deprecated(since = "6.0.12")
     public void setHost(String host) {
         this.host = host;
     }
@@ -329,7 +371,9 @@ public class ProtoConfigureItem implements ConfigureItem<ProtoConfigureItem>, Pr
      * 获取端口
      *
      * @return 端口
+     * @deprecated since 6.0.12 please use {@link #baseUrl}
      */
+    @Deprecated(since = "6.0.12")
     public String getPort() {
         return port;
     }
@@ -338,7 +382,9 @@ public class ProtoConfigureItem implements ConfigureItem<ProtoConfigureItem>, Pr
      * 设置端口
      *
      * @param port 端口
+     * @deprecated since 6.0.12 please use {@link #baseUrl}
      */
+    @Deprecated(since = "6.0.12")
     public void setPort(String port) {
         this.port = port;
     }
@@ -347,7 +393,9 @@ public class ProtoConfigureItem implements ConfigureItem<ProtoConfigureItem>, Pr
      * 获取完整端口（包含冒号前缀）
      *
      * @return 完整端口字符串
+     * @deprecated since 6.0.12 please use {@link #baseUrl}
      */
+    @Deprecated(since = "6.0.12")
     @JSONField(serialize = false, deserialize = false)
     public String getFullPort() {
         return StringUtils.isBlank(port) ? "" : ":" + port;
@@ -587,11 +635,24 @@ public class ProtoConfigureItem implements ConfigureItem<ProtoConfigureItem>, Pr
         }
 
         /**
+         * 设置基础URL
+         *
+         * @param baseUrl 基础URL
+         * @return 构建器实例
+         */
+        public Builder baseUrl(String baseUrl) {
+            configure.baseUrl = baseUrl;
+            return self;
+        }
+
+        /**
          * 设置协议
          *
          * @param protocol 协议
          * @return 构建器实例
+         * @deprecated since 6.0.12 please use {@link #baseUrl}
          */
+        @Deprecated(since = "6.0.12")
         public Builder protocol(String protocol) {
             configure.protocol = protocol;
             return self;
@@ -601,7 +662,9 @@ public class ProtoConfigureItem implements ConfigureItem<ProtoConfigureItem>, Pr
          * 设置协议为HTTP
          *
          * @return 构建器实例
+         * @deprecated since 6.0.12 please use {@link #baseUrl}
          */
+        @Deprecated(since = "6.0.12")
         public Builder http() {
             configure.protocol = DEFAULT_PROTOCOL;
             return self;
@@ -611,7 +674,9 @@ public class ProtoConfigureItem implements ConfigureItem<ProtoConfigureItem>, Pr
          * 设置协议为HTTPS
          *
          * @return 构建器实例
+         * @deprecated since 6.0.12 please use {@link #baseUrl}
          */
+        @Deprecated(since = "6.0.12")
         public Builder https() {
             configure.protocol = HTTPS;
             return self;
@@ -621,7 +686,9 @@ public class ProtoConfigureItem implements ConfigureItem<ProtoConfigureItem>, Pr
          * 设置协议为WS
          *
          * @return 构建器实例
+         * @deprecated since 6.0.12 please use {@link #baseUrl}
          */
+        @Deprecated(since = "6.0.12")
         public Builder ws() {
             configure.protocol = WS;
             return self;
@@ -631,7 +698,9 @@ public class ProtoConfigureItem implements ConfigureItem<ProtoConfigureItem>, Pr
          * 设置协议为WSS
          *
          * @return 构建器实例
+         * @deprecated since 6.0.12 please use {@link #baseUrl}
          */
+        @Deprecated(since = "6.0.12")
         public Builder wss() {
             configure.protocol = WSS;
             return self;
@@ -642,7 +711,9 @@ public class ProtoConfigureItem implements ConfigureItem<ProtoConfigureItem>, Pr
          *
          * @param host 主机
          * @return 构建器实例
+         * @deprecated since 6.0.12 please use {@link #baseUrl}
          */
+        @Deprecated(since = "6.0.12")
         public Builder host(String host) {
             configure.host = host;
             return self;
@@ -653,7 +724,9 @@ public class ProtoConfigureItem implements ConfigureItem<ProtoConfigureItem>, Pr
          *
          * @param port 端口
          * @return 构建器实例
+         * @deprecated since 6.0.12 please use {@link #baseUrl}
          */
+        @Deprecated(since = "6.0.12")
         public Builder port(String port) {
             configure.port = port;
             return self;

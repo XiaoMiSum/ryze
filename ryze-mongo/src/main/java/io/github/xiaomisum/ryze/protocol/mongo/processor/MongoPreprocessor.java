@@ -26,7 +26,7 @@
  *
  */
 
-package io.github.xiaomisum.ryze.protocol.mongo.processsor;
+package io.github.xiaomisum.ryze.protocol.mongo.processor;
 
 import com.alibaba.fastjson2.annotation.JSONField;
 import com.mongodb.ConnectionString;
@@ -39,7 +39,7 @@ import io.github.xiaomisum.ryze.protocol.mongo.MongoRealRequest;
 import io.github.xiaomisum.ryze.protocol.mongo.config.MongoConfigItem;
 import io.github.xiaomisum.ryze.testelement.KW;
 import io.github.xiaomisum.ryze.testelement.processor.AbstractProcessor;
-import io.github.xiaomisum.ryze.testelement.processor.Postprocessor;
+import io.github.xiaomisum.ryze.testelement.processor.Preprocessor;
 import io.github.xiaomisum.ryze.testelement.sampler.DefaultSampleResult;
 import io.github.xiaomisum.ryze.testelement.sampler.SampleResult;
 import org.apache.commons.lang3.StringUtils;
@@ -47,15 +47,15 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.Objects;
 
 /**
- * MongoDB 后置处理器类
+ * MongoDB 前置处理器类
  * <p>
- * 该类用于在测试步骤执行后处理 MongoDB 操作，继承自 AbstractProcessor 并实现 Postprocessor 接口。
- * 它可以在测试步骤完成后执行 MongoDB 操作，例如清理数据或执行其他操作。
+ * 该类用于在测试步骤执行前处理 MongoDB 操作，继承自 AbstractProcessor 并实现 Preprocessor 接口。
+ * 它可以在测试步骤执行前准备数据或执行其他预处理操作。
  * </p>
  * <p>
  * 主要功能：
  * <ul>
- *   <li>在测试步骤执行后执行 MongoDB 操作</li>
+ *   <li>在测试步骤执行前执行 MongoDB 操作</li>
  *   <li>处理 MongoDB 连接和配置</li>
  *   <li>执行 MongoDB 增删改查操作</li>
  *   <li>生成和处理请求/响应信息</li>
@@ -64,11 +64,10 @@ import java.util.Objects;
  * </p>
  *
  * @author xiaomi
- * @deprecated 该类已弃用，请使用 {@link io.github.xiaomisum.ryze.protocol.mongo.processor.MongoPostprocessor} 代替
  */
-@Deprecated(since = "6.0.12")
-@KW(value = {"mongo_postprocessor", "mongo_post_processor", "mongo", "mongodb"})
-public class MongoPostprocessor extends AbstractProcessor<MongoPostprocessor, MongoConfigItem, DefaultSampleResult> implements Postprocessor, MongoConstantsInterface {
+
+@KW(value = {"mongo_preprocessor", "mongo_pre_processor", "mongo", "mongodb"})
+public class MongoPreprocessor extends AbstractProcessor<MongoPreprocessor, MongoConfigItem, DefaultSampleResult> implements Preprocessor, MongoConstantsInterface {
 
     /**
      * MongoDB 客户端设置，不会被序列化
@@ -83,28 +82,28 @@ public class MongoPostprocessor extends AbstractProcessor<MongoPostprocessor, Mo
     private byte[] response;
 
     /**
-     * 使用 Builder 构造方法创建 MongoPostprocessor 实例
+     * 使用 Builder 构造方法创建 MongoPreprocessor 实例
      *
      * @param builder Builder 实例
      */
-    public MongoPostprocessor(Builder builder) {
+    public MongoPreprocessor(Builder builder) {
         super(builder);
     }
 
     /**
      * 无参构造方法
      */
-    public MongoPostprocessor() {
+    public MongoPreprocessor() {
         super();
     }
 
     /**
      * 创建 Builder 实例
      * <p>
-     * 静态工厂方法，用于创建 MongoPostprocessor.Builder 实例。
+     * 静态工厂方法，用于创建 MongoPreprocessor.Builder 实例。
      * </p>
      *
-     * @return MongoPostprocessor.Builder 实例
+     * @return MongoPreprocessor.Builder 实例
      */
     public static Builder builder() {
         return new Builder();
@@ -113,7 +112,7 @@ public class MongoPostprocessor extends AbstractProcessor<MongoPostprocessor, Mo
     /**
      * 获取测试结果
      * <p>
-     * 创建并返回 MongoDB 后置处理器的采样结果实例。
+     * 创建并返回 MongoDB 前置处理器的采样结果实例。
      * </p>
      *
      * @return DefaultSampleResult 实例
@@ -173,21 +172,21 @@ public class MongoPostprocessor extends AbstractProcessor<MongoPostprocessor, Mo
     }
 
     /**
-     * MongoDB 后置处理器构建器类
+     * MongoDB 前置处理器构建器类
      * <p>
-     * 该类用于通过 Builder 模式构建 MongoPostprocessor 实例。
+     * 该类用于通过 Builder 模式构建 MongoPreprocessor 实例。
      * </p>
      */
-    public static class Builder extends PostprocessorBuilder<MongoPostprocessor, Builder, MongoConfigItem,
+    public static class Builder extends PreprocessorBuilder<MongoPreprocessor, Builder, MongoConfigItem,
             MongoConfigItem.Builder, DefaultExtractorsBuilder, DefaultSampleResult> {
         /**
-         * 构建 MongoPostprocessor 实例
+         * 构建 MongoPreprocessor 实例
          *
-         * @return MongoPostprocessor 实例
+         * @return MongoPreprocessor 实例
          */
         @Override
-        public MongoPostprocessor build() {
-            return new MongoPostprocessor(this);
+        public MongoPreprocessor build() {
+            return new MongoPreprocessor(this);
         }
 
         /**

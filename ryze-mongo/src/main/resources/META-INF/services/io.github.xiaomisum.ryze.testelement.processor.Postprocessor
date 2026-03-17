@@ -26,4 +26,5 @@
 #
 
 io.github.xiaomisum.ryze.protocol.mongo.processsor.MongoPostprocessor
+io.github.xiaomisum.ryze.protocol.mongo.processor.MongoPostprocessor
 

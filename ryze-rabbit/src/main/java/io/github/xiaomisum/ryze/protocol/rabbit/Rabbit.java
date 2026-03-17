@@ -33,6 +33,7 @@ import com.rabbitmq.client.BuiltinExchangeType;
 import com.rabbitmq.client.ConnectionFactory;
 import io.github.xiaomisum.ryze.protocol.rabbit.config.RabbitConfigureItem;
 import io.github.xiaomisum.ryze.testelement.sampler.DefaultSampleResult;
+import org.apache.commons.lang3.StringUtils;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
@@ -131,13 +132,21 @@ public class Rabbit {
      * @return 配置好的 ConnectionFactory 对象
      */
     public static ConnectionFactory handleRequest(RabbitConfigureItem config) {
-        var factory = new ConnectionFactory();
-        factory.setConnectionTimeout(config.getTimeout());
-        factory.setVirtualHost(config.getVirtualHost("/"));
-        factory.setHost(config.getHost());
-        factory.setPort(Integer.parseInt(config.getPort("5672")));
-        factory.setUsername(config.getUsername("guest"));
-        factory.setPassword(config.getPassword("guest"));
-        return factory;
+        try {
+            var factory = new ConnectionFactory();
+            factory.setConnectionTimeout(config.getTimeout());
+            if (StringUtils.isNotBlank(config.getUrl())) {
+                factory.setUri(config.getUrl());
+            } else {
+                factory.setHost(config.getHost());
+                factory.setPort(Integer.parseInt(config.getPort()));
+                factory.setVirtualHost(config.getVirtualHost());
+                factory.setUsername(config.getUsername());
+                factory.setPassword(config.getPassword());
+            }
+            return factory;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

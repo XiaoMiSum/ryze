@@ -71,23 +71,40 @@ public class HTTPConfigureItem implements ConfigureItem<HTTPConfigureItem>, HTTP
     protected String ref;
 
     /**
+     * 基础URL
+     * <p>包含协议、主机和端口</p>
+     * <p>如：http://localhost:8080</p>
+     */
+    @JSONField(name = BASE_URL, ordinal = 1)
+    protected String baseUrl;
+
+    /**
      * 协议
      * <p>HTTP协议类型，如"http"或"https"</p>
+     *
+     * @deprecated since 6.0.12 please use {@link #BASE_URL}
      */
+    @Deprecated(since = "6.0.12")
     @JSONField(name = PROTOCOL, ordinal = 1)
     protected String protocol;
 
     /**
      * 主机
      * <p>目标服务器主机名或IP地址</p>
+     *
+     * @deprecated since 6.0.12 please use {@link #BASE_URL}
      */
+    @Deprecated(since = "6.0.12")
     @JSONField(name = HOST, ordinal = 2)
     protected String host;
 
     /**
      * 端口
      * <p>目标服务器端口号</p>
+     *
+     * @deprecated since 6.0.12 please use {@link #BASE_URL}
      */
+    @Deprecated(since = "6.0.12")
     @JSONField(name = PORT, ordinal = 2)
     protected String port;
 
@@ -190,6 +207,7 @@ public class HTTPConfigureItem implements ConfigureItem<HTTPConfigureItem>, HTTP
         }
         var localOther = other.copy();
         var self = copy();
+        self.baseUrl = StringUtils.isBlank(self.baseUrl) ? localOther.baseUrl : self.baseUrl;
         self.protocol = StringUtils.isBlank(self.protocol) ? localOther.protocol : self.protocol;
         self.host = StringUtils.isBlank(self.host) ? localOther.host : self.host;
         self.port = StringUtils.isBlank(self.port) ? localOther.port : self.port;
@@ -218,6 +236,7 @@ public class HTTPConfigureItem implements ConfigureItem<HTTPConfigureItem>, HTTP
     @Override
     public HTTPConfigureItem evaluate(ContextWrapper context) {
         ref = (String) context.evaluate(ref);
+        baseUrl = (String) context.evaluate(baseUrl);
         protocol = (String) context.evaluate(protocol);
         host = (String) context.evaluate(host);
         port = (String) context.evaluate(port);
@@ -269,10 +288,30 @@ public class HTTPConfigureItem implements ConfigureItem<HTTPConfigureItem>, HTTP
     }
 
     /**
+     * 获取基础URL
+     *
+     * @return 基础URL
+     */
+    public String getBaseUrl() {
+        return baseUrl;
+    }
+
+    /**
+     * 设置基础URL
+     *
+     * @param baseUrl 基础URL
+     */
+    public void setBaseUrl(String baseUrl) {
+        this.baseUrl = baseUrl;
+    }
+
+    /**
      * 获取协议
      *
      * @return 协议，默认为"http"
+     * @deprecated since 6.0.12 please use {@link #BASE_URL}
      */
+    @Deprecated(since = "6.0.12")
     public String getProtocol() {
         return protocol;
     }
@@ -281,7 +320,9 @@ public class HTTPConfigureItem implements ConfigureItem<HTTPConfigureItem>, HTTP
      * 设置协议
      *
      * @param protocol 协议
+     * @deprecated since 6.0.12 please use {@link #BASE_URL}
      */
+    @Deprecated(since = "6.0.12")
     public void setProtocol(String protocol) {
         this.protocol = protocol;
     }
@@ -290,7 +331,9 @@ public class HTTPConfigureItem implements ConfigureItem<HTTPConfigureItem>, HTTP
      * 获取协议
      *
      * @return 协议，默认为"http"
+     * @deprecated since 6.0.12 please use {@link #BASE_URL}
      */
+    @Deprecated(since = "6.0.12")
     @JSONField(deserialize = false, serialize = false)
     public String getProtocol(String defaultProtocol) {
         return StringUtils.isBlank(protocol) ? defaultProtocol : protocol;
@@ -300,7 +343,9 @@ public class HTTPConfigureItem implements ConfigureItem<HTTPConfigureItem>, HTTP
      * 获取主机
      *
      * @return 主机
+     * @deprecated since 6.0.12 please use {@link #BASE_URL}
      */
+    @Deprecated(since = "6.0.12")
     public String getHost() {
         return host;
     }
@@ -309,7 +354,9 @@ public class HTTPConfigureItem implements ConfigureItem<HTTPConfigureItem>, HTTP
      * 设置主机
      *
      * @param host 主机
+     * @deprecated since 6.0.12 please use {@link #BASE_URL}
      */
+    @Deprecated(since = "6.0.12")
     public void setHost(String host) {
         this.host = host;
     }
@@ -318,7 +365,9 @@ public class HTTPConfigureItem implements ConfigureItem<HTTPConfigureItem>, HTTP
      * 获取端口
      *
      * @return 端口
+     * @deprecated since 6.0.12 please use {@link #BASE_URL}
      */
+    @Deprecated(since = "6.0.12")
     public String getPort() {
         return port;
     }
@@ -327,11 +376,18 @@ public class HTTPConfigureItem implements ConfigureItem<HTTPConfigureItem>, HTTP
      * 设置端口
      *
      * @param port 端口
+     * @deprecated since 6.0.12 please use {@link #BASE_URL}
      */
+    @Deprecated(since = "6.0.12")
     public void setPort(String port) {
         this.port = port;
     }
 
+    /**
+     * 设置端口
+     *
+     * @deprecated since 6.0.12 please use {@link #BASE_URL}
+     */
     @JSONField(serialize = false, deserialize = false)
     public String getFullPort() {
         return StringUtils.isBlank(port) ? "" : ":" + port;
@@ -565,11 +621,26 @@ public class HTTPConfigureItem implements ConfigureItem<HTTPConfigureItem>, HTTP
         }
 
         /**
+         * 设置基础URL
+         * <p>包含协议、主机和端口</p>
+         * <p>如：http://localhost:8080</p>
+         *
+         * @param baseUrl 基础URL
+         * @return 构建器实例
+         */
+        public Builder baseUrl(String baseUrl) {
+            configure.baseUrl = baseUrl;
+            return self;
+        }
+
+        /**
          * 设置协议
          *
          * @param protocol 协议
          * @return 构建器实例
+         * @deprecated since 6.0.12 please use {@link #BASE_URL}
          */
+        @Deprecated(since = "6.0.12")
         public Builder protocol(String protocol) {
             configure.protocol = protocol;
             return self;
@@ -579,7 +650,9 @@ public class HTTPConfigureItem implements ConfigureItem<HTTPConfigureItem>, HTTP
          * 设置协议
          *
          * @return 构建器实例
+         * @deprecated since 6.0.12 please use {@link #BASE_URL}
          */
+        @Deprecated(since = "6.0.12")
         public Builder http() {
             configure.protocol = HTTP;
             return self;
@@ -589,7 +662,9 @@ public class HTTPConfigureItem implements ConfigureItem<HTTPConfigureItem>, HTTP
          * 设置协议
          *
          * @return 构建器实例
+         * @deprecated since 6.0.12 please use {@link #BASE_URL}
          */
+        @Deprecated(since = "6.0.12")
         public Builder https() {
             configure.protocol = HTTPS;
             return self;
@@ -600,7 +675,9 @@ public class HTTPConfigureItem implements ConfigureItem<HTTPConfigureItem>, HTTP
          *
          * @param host 主机
          * @return 构建器实例
+         * @deprecated since 6.0.12 please use {@link #BASE_URL}
          */
+        @Deprecated(since = "6.0.12")
         public Builder host(String host) {
             configure.host = host;
             return self;
@@ -611,7 +688,9 @@ public class HTTPConfigureItem implements ConfigureItem<HTTPConfigureItem>, HTTP
          *
          * @param port 端口
          * @return 构建器实例
+         * @deprecated since 6.0.12 please use {@link #BASE_URL}
          */
+        @Deprecated(since = "6.0.12")
         public Builder port(String port) {
             configure.port = port;
             return self;
@@ -650,12 +729,34 @@ public class HTTPConfigureItem implements ConfigureItem<HTTPConfigureItem>, HTTP
         }
 
         /**
+         * 设置HTTP方法  GET + base_url
+         *
+         * @return 构建器实例
+         */
+        public Builder get(String baseUrl) {
+            configure.method = GET;
+            configure.baseUrl = baseUrl;
+            return self;
+        }
+
+        /**
          * 设置HTTP方法  POST
          *
          * @return 构建器实例
          */
         public Builder post() {
             configure.method = POST;
+            return self;
+        }
+
+        /**
+         * 设置HTTP方法  POST + base_url
+         *
+         * @return 构建器实例
+         */
+        public Builder post(String baseUrl) {
+            configure.method = POST;
+            configure.baseUrl = baseUrl;
             return self;
         }
 
@@ -670,12 +771,34 @@ public class HTTPConfigureItem implements ConfigureItem<HTTPConfigureItem>, HTTP
         }
 
         /**
+         * 设置HTTP方法  PUT + base_url
+         *
+         * @return 构建器实例
+         */
+        public Builder put(String baseUrl) {
+            configure.method = PUT;
+            configure.baseUrl = baseUrl;
+            return self;
+        }
+
+        /**
          * 设置HTTP方法  DELETE
          *
          * @return 构建器实例
          */
         public Builder delete() {
             configure.method = DELETE;
+            return self;
+        }
+
+        /**
+         * 设置HTTP方法  DELETE + base_url
+         *
+         * @return 构建器实例
+         */
+        public Builder delete(String baseUrl) {
+            configure.method = DELETE;
+            configure.baseUrl = baseUrl;
             return self;
         }
 
@@ -690,6 +813,17 @@ public class HTTPConfigureItem implements ConfigureItem<HTTPConfigureItem>, HTTP
         }
 
         /**
+         * 设置HTTP方法  PATCH + base_url
+         *
+         * @return 构建器实例
+         */
+        public Builder patch(String baseUrl) {
+            configure.method = PATCH;
+            configure.baseUrl = baseUrl;
+            return self;
+        }
+
+        /**
          * 设置HTTP方法  OPTIONS
          *
          * @return 构建器实例
@@ -700,12 +834,34 @@ public class HTTPConfigureItem implements ConfigureItem<HTTPConfigureItem>, HTTP
         }
 
         /**
+         * 设置HTTP方法  OPTIONS + base_url
+         *
+         * @return 构建器实例
+         */
+        public Builder options(String baseUrl) {
+            configure.method = OPTIONS;
+            configure.baseUrl = baseUrl;
+            return self;
+        }
+
+        /**
          * 设置HTTP方法  TRACE
          *
          * @return 构建器实例
          */
         public Builder trace() {
             configure.method = TRACE;
+            return self;
+        }
+
+        /**
+         * 设置HTTP方法  TRACE + base_url
+         *
+         * @return 构建器实例
+         */
+        public Builder trace(String baseUrl) {
+            configure.method = TRACE;
+            configure.baseUrl = baseUrl;
             return self;
         }
 

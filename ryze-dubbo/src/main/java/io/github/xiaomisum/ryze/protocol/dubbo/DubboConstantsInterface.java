@@ -45,7 +45,7 @@ import io.github.xiaomisum.ryze.testelement.TestElementConstantsInterface;
  *   <li>维护向后兼容性，通过@Deprecated标记已过时的配置项</li>
  * </ol>
  * </p>
- * 
+ *
  * @author xiaomi
  * @since 6.0.0
  */
@@ -94,9 +94,10 @@ public interface DubboConstantsInterface extends TestElementConstantsInterface {
      * 此配置项已被标记为过时，建议使用ADDRESS配置项替代，因为ADDRESS已包含协议信息。<br>
      * 格式示例：zookeeper、nacos等
      * </p>
+     *
      * @deprecated 自6.0.0版本起，建议使用ADDRESS配置项替代
      */
-    @Deprecated(since = "6.0.0")
+    @Deprecated(since = "6.0.0", forRemoval = true)
     String PROTOCOL = "protocol";
 
     /**

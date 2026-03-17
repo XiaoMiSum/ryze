@@ -37,6 +37,7 @@ import com.google.protobuf.util.JsonFormat;
 import io.github.xiaomisum.ryze.protocol.proto.config.ProtoConfigureItem;
 import io.github.xiaomisum.ryze.protocol.proto.util.FileDescriptorLoaderChain;
 import io.github.xiaomisum.ryze.testelement.sampler.DefaultSampleResult;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Strings;
 import org.apache.hc.core5.http.message.BasicHeader;
 import xyz.migoo.simplehttp.Form;
@@ -68,7 +69,8 @@ public class Proto {
      * @return 构建好的HTTP请求对象
      */
     public static Request build(ProtoConfigureItem config) {
-        var url = "%s://%s%s%s".formatted(config.getProtocol(DEFAULT_PROTOCOL), config.getHost(), config.getFullPort(), config.getFullPath());
+        var url = StringUtils.isNotBlank(config.getBaseUrl()) ? config.getBaseUrl() + config.getFullPath() :
+                "%s://%s%s%s".formatted(config.getProtocol(DEFAULT_PROTOCOL), config.getHost(), config.getFullPort(), config.getFullPath());
         var cli = Request.create(config.getMethod(POST), url);
         if (config.getQuery() != null && !config.getQuery().isEmpty()) {
             cli.query(Form.create((config.getQuery())));
@@ -91,11 +93,12 @@ public class Proto {
     public static RealProtoResponse execute(ProtoConfigureItem config, Map<String, Descriptors.FileDescriptor> descriptorMap, DefaultSampleResult result, RealProtoRequest request) {
         try {
             request.headers = config.getHeaders();
-            var url = request.url = "%s://%s%s%s".formatted(config.getProtocol(DEFAULT_PROTOCOL), config.getHost(), config.getFullPort(), config.getPath());
+            var url = request.url = StringUtils.isNotBlank(config.getBaseUrl()) ? config.getBaseUrl() + config.getFullPath() :
+                    "%s://%s%s%s".formatted(config.getProtocol(DEFAULT_PROTOCOL), config.getHost(), config.getFullPort(), config.getFullPath());
             var requestMessageName = Proto.getMessageDescriptor(descriptorMap, config.getProtoDesc().getRequestMessageName());
             var responseMessageName = Proto.getMessageDescriptor(descriptorMap, config.getProtoDesc().getResponseMessageName());
             var body = convert(request.body = config.getStringBody(), requestMessageName);
-            if (Strings.CI.equalsAny(config.getProtocol(), WS, WSS)) {
+            if (Strings.CI.startsWithAny(url, WS, WSS)) {
                 request.query = config.getQuery() == null ? "" : JSON.toJSONString(config.getQuery());
                 io.github.xiaomisum.simplewebsocket.Request ws = new io.github.xiaomisum.simplewebsocket.Request(url)
                         .headers(config.getHeaders())

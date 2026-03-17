@@ -48,7 +48,7 @@ import java.util.Locale;
  */
 public class TimeShift implements Function {
 
-    private final ZoneId systemDefaultZoneId = ZoneId.systemDefault();
+    private static final ZoneId systemDefaultZoneId = ZoneId.systemDefault();
 
     @Override
     public String key() {

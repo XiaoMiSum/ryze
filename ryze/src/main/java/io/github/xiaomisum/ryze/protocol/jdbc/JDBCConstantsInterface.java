@@ -59,13 +59,19 @@ public interface JDBCConstantsInterface extends TestElementConstantsInterface {
     /**
      * 数据库用户名键名
      * <p>用于数据库认证的用户名</p>
+     *
+     * @deprecated 请使用 {@link #URL 參數指定}
      */
+    @Deprecated(since = "6.0.12")
     String USERNAME = "username";
 
     /**
      * 数据库密码键名
      * <p>用于数据库认证的密码</p>
+     *
+     * @deprecated 请使用 {@link #URL 參數指定}
      */
+    @Deprecated(since = "6.0.12")
     String PASSWORD = "password";
 
     /**
@@ -91,11 +97,4 @@ public interface JDBCConstantsInterface extends TestElementConstantsInterface {
      * <p>预编译SQL参数</p>
      */
     String ARGS = "args";
-
-    /**
-     * 废弃属性，请使用 sql @see {@link #SQL}
-     * <p>旧版本中使用的SQL语句键名，现已废弃</p>
-     */
-    @Deprecated(since = "6.0.0")
-    String STATEMENT = "statement";
 }

@@ -35,6 +35,8 @@
 ```yaml
 # 通用前置处理器结构
 - testclass: 协议类型
+  async: true # 是否异步执行
+  condition: '${1<2}' # 条件表达式 freemarker 模板
   config:
   # 协议特定配置项
 ```
@@ -397,39 +399,6 @@ children:
 - **用例准备**：当前用例特定的准备工作
 - **状态设置**：设置测试所需的特定状态
 - **资源分配**：分配用例所需的资源
-
-### 错误处理
-
-#### 异常捕获
-
-```yaml
-preprocessors:
-  - testclass: http
-    config:
-      method: POST
-      path: /auth/login
-      body:
-        username: testuser
-        password: password123
-    # 处理登录失败的情况
-    validators:
-      - { testclass: http, field: 'status', expected: 200, rule: '==' }
-```
-
-#### 重试机制
-
-```yaml
-preprocessors:
-  - testclass: http
-    config:
-      method: GET
-      path: /health
-    # 如果服务未就绪，可以设置重试
-    interceptors:
-      - RetryInterceptor:
-          max_attempts: 3
-          retry_delay: 1000
-```
 
 ### 性能优化
 

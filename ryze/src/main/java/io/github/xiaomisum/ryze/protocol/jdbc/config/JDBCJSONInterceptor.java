@@ -38,7 +38,6 @@ import io.github.xiaomisum.ryze.support.fastjson.interceptor.JSONInterceptor;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * JDBC协议JSON拦截器
@@ -92,10 +91,6 @@ public class JDBCJSONInterceptor implements JSONInterceptor, JDBCConstantsInterf
     @Override
     public ConfigureItem<?> deserializeConfigureItem(Object value) {
         if (value instanceof Map configure) {
-            var statement = configure.remove(STATEMENT);
-            if (Objects.nonNull(statement)) {
-                configure.put(SQL, statement);
-            }
             var rawData = JSON.toJSONString(configure);
             return JSON.parseObject(rawData, JDBCConfigureItem.class);
         }

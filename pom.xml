@@ -69,9 +69,9 @@
         <activemq.version>6.1.7</activemq.version>
         <redis.version>5.2.0</redis.version>
         <mysql.version>9.3.0</mysql.version>
-        <kafka.version>4.0.0</kafka.version>
+        <kafka.version>4.2.0</kafka.version>
         <druid.version>1.2.24</druid.version>
-        <dubbo.version>3.3.2</dubbo.version>
+        <dubbo.version>3.3.6</dubbo.version>
         <mongo.version>5.5.1</mongo.version>
         <rabbitmq.version>5.24.0</rabbitmq.version>
         <simplehttp.version>2.2.7</simplehttp.version>
@@ -91,7 +91,7 @@
         <commons-lang3.version>3.18.0</commons-lang3.version>
         <commons-text.version>1.10.0</commons-text.version>
         <slf4j-api.version>2.0.17</slf4j-api.version>
-        <logback.version>1.5.18</logback.version>
+        <logback.version>1.5.32</logback.version>
         <kryo.version>5.6.2</kryo.version>
         <freemarker.version>2.3.34</freemarker.version>
         <caffeine.version>3.1.8</caffeine.version>

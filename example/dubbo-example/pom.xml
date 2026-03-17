@@ -33,12 +33,6 @@
         </dependency>
 
 
-        <dependency>
-            <groupId>org.apache.dubbo</groupId>
-            <artifactId>dubbo</artifactId>
-            <version>3.3.2</version>
-        </dependency>
-
     </dependencies>
 
 </project>

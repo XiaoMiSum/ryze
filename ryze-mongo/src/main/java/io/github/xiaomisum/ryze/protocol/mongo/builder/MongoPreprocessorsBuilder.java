@@ -29,7 +29,7 @@ import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
 import io.github.xiaomisum.ryze.builder.DefaultExtractorsBuilder;
 import io.github.xiaomisum.ryze.builder.ExtensiblePreprocessorsBuilder;
-import io.github.xiaomisum.ryze.protocol.mongo.processsor.MongoPreprocessor;
+import io.github.xiaomisum.ryze.protocol.mongo.processor.MongoPreprocessor;
 import io.github.xiaomisum.ryze.support.Customizer;
 
 import static io.github.xiaomisum.ryze.support.groovy.Groovy.call;
@@ -75,7 +75,14 @@ public class MongoPreprocessorsBuilder extends ExtensiblePreprocessorsBuilder<Mo
      *
      * @param preprocessor MongoPreprocessor 实例
      * @return 当前构建器实例，支持链式调用
+     * @deprecated 使用 {@link #mongo(MongoPreprocessor)} 代替
      */
+    @Deprecated(since = "6.0.12")
+    public MongoPreprocessorsBuilder mongo(io.github.xiaomisum.ryze.protocol.mongo.processsor.MongoPreprocessor preprocessor) {
+        preprocessors.add(preprocessor);
+        return self;
+    }
+
     public MongoPreprocessorsBuilder mongo(MongoPreprocessor preprocessor) {
         preprocessors.add(preprocessor);
         return self;
@@ -105,7 +112,14 @@ public class MongoPreprocessorsBuilder extends ExtensiblePreprocessorsBuilder<Mo
      *
      * @param builder MongoPreprocessor.Builder 实例
      * @return 当前构建器实例，支持链式调用
+     * @deprecated 使用 {@link #mongo(MongoPreprocessor.Builder)} 代替
      */
+    @Deprecated(since = "6.0.12")
+    public MongoPreprocessorsBuilder mongo(io.github.xiaomisum.ryze.protocol.mongo.processsor.MongoPreprocessor.Builder builder) {
+        preprocessors.add(builder.build());
+        return self;
+    }
+
     public MongoPreprocessorsBuilder mongo(MongoPreprocessor.Builder builder) {
         preprocessors.add(builder.build());
         return self;

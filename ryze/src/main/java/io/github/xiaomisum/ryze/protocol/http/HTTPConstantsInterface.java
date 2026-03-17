@@ -46,6 +46,13 @@ public interface HTTPConstantsInterface {
     String DEF_REF_NAME_KEY = "__http_configure_element_default_ref_name__";
 
     /**
+     * 请求基础 URL
+     * <p>用于在配置中指定HTTP请求基础 URL，不包含接口地址及参数</p>
+     * <p>例如："http://127.0.0.1:8080"</p>
+     */
+    String BASE_URL = "base_url";
+
+    /**
      * 请求头键名
      * <p>用于在配置中指定HTTP请求头</p>
      */
@@ -84,17 +91,26 @@ public interface HTTPConstantsInterface {
 
     /**
      * 主机键名
+     *
+     * @deprecated since 6.0.12 please use {@link #BASE_URL}
      */
+    @Deprecated(since = "6.0.12")
     String HOST = "host";
 
     /**
      * 端口键名
+     *
+     * @deprecated since 6.0.12 please use {@link #BASE_URL}
      */
+    @Deprecated(since = "6.0.12")
     String PORT = "port";
 
     /**
      * 协议键名
+     *
+     * @deprecated since 6.0.12 please use {@link #BASE_URL}
      */
+    @Deprecated(since = "6.0.12")
     String PROTOCOL = "protocol";
 
     /**
@@ -107,14 +123,13 @@ public interface HTTPConstantsInterface {
      */
     String HTTPS = "https";
 
-    /**
-     * 基础路径键名
-     */
-    String BASE_PATH = "base_path";
 
     /**
      * API路径键名
+     *
+     * @deprecated since 6.0.12 please use {@link #PATH}
      */
+    @Deprecated(since = "6.0.12")
     String API = "api";
 
     /**

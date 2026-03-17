@@ -71,23 +71,41 @@ public class WebsocketConfigureItem implements ConfigureItem<WebsocketConfigureI
     protected String ref;
 
     /**
+     * 基础URL
+     * <p>基础URL，包含协议、主机和端口</p>
+     * <p>用于在配置中指定Websocket请求基础 URL，不包含接口地址及参数</p>
+     * <p>例如："ws://127.0.0.1:8080"</p>
+     */
+    @JSONField(name = BASE_URL, ordinal = 1)
+    protected String baseUrl;
+
+    /**
      * 协议
      * <p>HTTP协议类型，如"http"或"https"</p>
+     *
+     * @deprecated since 6.0.12 please use {@link #BASE_URL}
      */
+    @Deprecated(since = "6.0.12")
     @JSONField(name = PROTOCOL, ordinal = 1)
     protected String protocol;
 
     /**
      * 主机
      * <p>目标服务器主机名或IP地址</p>
+     *
+     * @deprecated since 6.0.12 please use {@link #BASE_URL}
      */
+    @Deprecated(since = "6.0.12")
     @JSONField(name = HOST, ordinal = 2)
     protected String host;
 
     /**
      * 端口
      * <p>目标服务器端口号</p>
+     *
+     * @deprecated since 6.0.12 please use {@link #BASE_URL}
      */
+    @Deprecated(since = "6.0.12")
     @JSONField(name = PORT, ordinal = 2)
     protected String port;
 
@@ -177,6 +195,7 @@ public class WebsocketConfigureItem implements ConfigureItem<WebsocketConfigureI
         }
         var localOther = other.copy();
         var self = copy();
+        self.baseUrl = StringUtils.isBlank(self.baseUrl) ? localOther.baseUrl : self.baseUrl;
         self.protocol = StringUtils.isBlank(self.protocol) ? localOther.protocol : self.protocol;
         self.host = StringUtils.isBlank(self.host) ? localOther.host : self.host;
         self.port = StringUtils.isBlank(self.port) ? localOther.port : self.port;
@@ -201,6 +220,7 @@ public class WebsocketConfigureItem implements ConfigureItem<WebsocketConfigureI
     @Override
     public WebsocketConfigureItem evaluate(ContextWrapper context) {
         ref = (String) context.evaluate(ref);
+        baseUrl = (String) context.evaluate(baseUrl);
         protocol = (String) context.evaluate(protocol);
         host = (String) context.evaluate(host);
         port = (String) context.evaluate(port);
@@ -248,10 +268,30 @@ public class WebsocketConfigureItem implements ConfigureItem<WebsocketConfigureI
     }
 
     /**
+     * 获取基础URL
+     *
+     * @return 基础URL
+     */
+    public String getBaseUrl() {
+        return baseUrl;
+    }
+
+    /**
+     * 设置基础URL
+     *
+     * @param baseUrl 基础URL
+     */
+    public void setBaseUrl(String baseUrl) {
+        this.baseUrl = baseUrl;
+    }
+
+    /**
      * 获取协议
      *
      * @return 协议，默认为"http"
+     * @deprecated since 6.0.12 please use {@link #BASE_URL}
      */
+    @Deprecated(since = "6.0.12")
     public String getProtocol() {
         return protocol;
     }
@@ -260,11 +300,20 @@ public class WebsocketConfigureItem implements ConfigureItem<WebsocketConfigureI
      * 设置协议
      *
      * @param protocol 协议
+     * @deprecated since 6.0.12 please use {@link #BASE_URL}
      */
+    @Deprecated(since = "6.0.12")
     public void setProtocol(String protocol) {
         this.protocol = protocol;
     }
 
+    /**
+     * 获取协议
+     *
+     * @return 协议，默认为"http"
+     * @deprecated since 6.0.12 please use {@link #BASE_URL}
+     */
+    @Deprecated(since = "6.0.12")
     public String getProtocol(String defaultProtocol) {
         return StringUtils.isBlank(protocol) ? defaultProtocol : protocol;
     }
@@ -273,7 +322,9 @@ public class WebsocketConfigureItem implements ConfigureItem<WebsocketConfigureI
      * 获取主机
      *
      * @return 主机
+     * @deprecated since 6.0.12 please use {@link #BASE_URL}
      */
+    @Deprecated(since = "6.0.12")
     public String getHost() {
         return host;
     }
@@ -282,7 +333,9 @@ public class WebsocketConfigureItem implements ConfigureItem<WebsocketConfigureI
      * 设置主机
      *
      * @param host 主机
+     * @deprecated since 6.0.12 please use {@link #BASE_URL}
      */
+    @Deprecated(since = "6.0.12")
     public void setHost(String host) {
         this.host = host;
     }
@@ -291,7 +344,9 @@ public class WebsocketConfigureItem implements ConfigureItem<WebsocketConfigureI
      * 获取端口
      *
      * @return 端口
+     * @deprecated since 6.0.12 please use {@link #BASE_URL}
      */
+    @Deprecated(since = "6.0.12")
     public String getPort() {
         return port;
     }
@@ -300,11 +355,20 @@ public class WebsocketConfigureItem implements ConfigureItem<WebsocketConfigureI
      * 设置端口
      *
      * @param port 端口
+     * @deprecated since 6.0.12 please use {@link #BASE_URL}
      */
+    @Deprecated(since = "6.0.12")
     public void setPort(String port) {
         this.port = port;
     }
 
+    /**
+     * 获取端口
+     *
+     * @return 端口
+     * @deprecated since 6.0.12 please use {@link #BASE_URL}
+     */
+    @Deprecated(since = "6.0.12")
     @JSONField(serialize = false, deserialize = false)
     public String getFullPort() {
         return StringUtils.isBlank(port) ? "" : ":" + port;
@@ -488,11 +552,24 @@ public class WebsocketConfigureItem implements ConfigureItem<WebsocketConfigureI
         }
 
         /**
+         * 设置基础URL
+         *
+         * @param baseUrl 基础URL
+         * @return 构建器实例
+         */
+        public WebsocketConfigureItem.Builder baseUrl(String baseUrl) {
+            configure.baseUrl = baseUrl;
+            return self;
+        }
+
+        /**
          * 设置协议
          *
          * @param protocol 协议
          * @return 构建器实例
+         * @deprecated since 6.0.12 please use {@link #BASE_URL}
          */
+        @Deprecated(since = "6.0.12")
         public WebsocketConfigureItem.Builder protocol(String protocol) {
             configure.protocol = protocol;
             return self;
@@ -502,7 +579,9 @@ public class WebsocketConfigureItem implements ConfigureItem<WebsocketConfigureI
          * 设置协议
          *
          * @return 构建器实例
+         * @deprecated since 6.0.12 please use {@link #BASE_URL}
          */
+        @Deprecated(since = "6.0.12")
         public WebsocketConfigureItem.Builder ws() {
             configure.protocol = DEFAULT_PROTOCOL;
             return self;
@@ -512,7 +591,9 @@ public class WebsocketConfigureItem implements ConfigureItem<WebsocketConfigureI
          * 设置协议
          *
          * @return 构建器实例
+         * @deprecated since 6.0.12 please use {@link #BASE_URL}
          */
+        @Deprecated(since = "6.0.12")
         public WebsocketConfigureItem.Builder wss() {
             configure.protocol = WSS;
             return self;
@@ -523,7 +604,9 @@ public class WebsocketConfigureItem implements ConfigureItem<WebsocketConfigureI
          *
          * @param host 主机
          * @return 构建器实例
+         * @deprecated since 6.0.12 please use {@link #BASE_URL}
          */
+        @Deprecated(since = "6.0.12")
         public WebsocketConfigureItem.Builder host(String host) {
             configure.host = host;
             return self;
@@ -534,7 +617,9 @@ public class WebsocketConfigureItem implements ConfigureItem<WebsocketConfigureI
          *
          * @param port 端口
          * @return 构建器实例
+         * @deprecated since 6.0.12 please use {@link #BASE_URL}
          */
+        @Deprecated(since = "6.0.12")
         public WebsocketConfigureItem.Builder port(String port) {
             configure.port = port;
             return self;

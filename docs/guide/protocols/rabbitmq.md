@@ -9,37 +9,34 @@ AMQP 协议特性。
 
 ### 连接配置
 
-| 配置项 | 类型 | 默认值 | 必需 | 描述 |
-|-------|------|--------|------|------|
-| host | String | - | ✅ | RabbitMQ 服务器地址 |
-| port | Integer | 5672 | ❌ | RabbitMQ 服务器端口 |
-| username | String | guest | ❌ | RabbitMQ 用户名 |
-| password | String | guest | ❌ | RabbitMQ 密码 |
-| timeout | Integer | 60000 | ❌ | 连接超时时间 (毫秒) |
+| 配置项     | 类型      | 默认值   | 必需 | 描述               |
+|---------|---------|-------|----|------------------|
+| url     | String  | -     | ✅  | RabbitMQ 服务器连接信息 |
+| timeout | Integer | 60000 | ❌  | 连接超时时间 (毫秒)      |
 
 ### 队列配置
 
-| 配置项 | 类型 | 默认值 | 必需 | 描述 |
-|-------|------|--------|------|------|
-| queue.name | String | - | ✅* | 队列名称 |
-| queue.durable | Boolean | false | ❌ | 是否持久化队列 |
-| queue.exclusive | Boolean | false | ❌ | 是否为占用队列 |
-| queue.auto_delete | Boolean | false | ❌ | 是否自动删除 |
-| queue.arguments | Map | - | ❌ | 队列其他属性 |
+| 配置项               | 类型      | 默认值   | 必需 | 描述      |
+|-------------------|---------|-------|----|---------|
+| queue.name        | String  | -     | ✅* | 队列名称    |
+| queue.durable     | Boolean | false | ❌  | 是否持久化队列 |
+| queue.exclusive   | Boolean | false | ❌  | 是否为占用队列 |
+| queue.auto_delete | Boolean | false | ❌  | 是否自动删除  |
+| queue.arguments   | Map     | -     | ❌  | 队列其他属性  |
 
 ### 交换机配置
 
-| 配置项 | 类型 | 默认值 | 必需 | 描述 |
-|-------|------|--------|------|------|
-| exchange.name | String | - | ❌ | 交换机名称 |
-| exchange.type | String | topic | ❌ | 交换机类型 (direct/topic/fanout/headers) |
-| exchange.routing_key | String | - | ❌ | 路由 Key |
+| 配置项                  | 类型     | 默认值   | 必需 | 描述                                  |
+|----------------------|--------|-------|----|-------------------------------------|
+| exchange.name        | String | -     | ❌  | 交换机名称                               |
+| exchange.type        | String | topic | ❌  | 交换机类型 (direct/topic/fanout/headers) |
+| exchange.routing_key | String | -     | ❌  | 路由 Key                              |
 
 ### 消息配置
 
-| 配置项 | 类型 | 默认值 | 必需 | 描述 |
-|-------|------|--------|------|------|
-| message | Object | - | ✅ | 发送的消息 (JSON/字符串) |
+| 配置项     | 类型     | 默认值 | 必需 | 描述               |
+|---------|--------|-----|----|------------------|
+| message | Object | -   | ✅  | 发送的消息 (JSON/字符串) |
 
 > **配置优先级**: 取样器配置 > RabbitMQ 默认配置
 >
@@ -64,10 +61,7 @@ AMQP 协议特性。
 # rabbitmq 默认配置，各配置项的优先级为：取样器 > 默认配置
 testclass: rabbitmq_defaults  # 配置元件类型
 config:
-  host: 'localhost' # rabbitmq服务器地址
-  port: 5672 # rabbitmq服务器端口，可空，默认值：5672
-  username: guest # rabbitmq 用户名，可空，默认值：guest
-  password: guest # rabbitmq 密码，可空，默认值：guest
+  url: amqp://admin:MyPassword@192.168.1.100:5672/prod_vhost # RabbitMQ 服务器连接信息
   timeout: 5000 # 连接超时时间，毫秒，默认值：60000
   queue: # 队列配置
     name: ryze  # 消息队列名称
@@ -89,10 +83,7 @@ config:
 title: 标准rabbitmq取样器
 testclass: rabbitmqSampler  # 取样器类型
 config: # 取样器配置
-  host: 'localhost' # rabbitmq服务器地址
-  port: 5672 # rabbitmq服务器端口
-  username: guest # rabbitmq 用户名
-  password: guest # rabbitmq 密码
+  url: amqp://admin:MyPassword@192.168.1.100:5672/prod_vhost # RabbitMQ 服务器连接信息
   timeout: 5000 # 连接超时时间，毫秒
   queue: # 队列配置
     name: ryze  # 消息队列名称
@@ -127,10 +118,7 @@ public class RabbitMQApiExample {
     public void testDirectExchange() {
         // 直接交换机消息
         Result result = rabbitmq("发送直接消息", builder -> builder
-                .host("localhost")
-                .port(5672)
-                .username("guest")
-                .password("guest")
+                .url("amqp://guest:guest@localhost:5672/")
                 .queue(queue -> queue
                         .name("user.notifications")
                         .durable(true)
@@ -154,7 +142,7 @@ public class RabbitMQApiExample {
     public void testTopicExchange() {
         // 主题交换机消息
         rabbitmq("发送主题消息", builder -> builder
-                .host("localhost")
+                .url("amqp://guest:guest@localhost:5672/")
                 .exchange(exchange -> exchange
                         .name("logs.topic")
                         .type("topic")
@@ -174,10 +162,7 @@ import static io.github.xiaomisum.ryze.protocol.rabbitmq.RabbitMQMagicBox.*
 // 简单队列消息
 def sendQueueMessage() {
     rabbitmq("发送队列消息") { builder ->
-        builder.host("localhost")
-                .port(5672)
-                .username("guest")
-                .password("guest")
+        builder.url("amqp://guest:guest@localhost:5672/")
                 .queue { queue ->
                     queue.name("task.queue")
                             .durable(true)
@@ -195,10 +180,7 @@ def sendQueueMessage() {
 suite("RabbitMQ消息测试") { builder ->
     builder.configure { configure ->
         configure.rabbitmq { rabbitmq ->
-            rabbitmq.host("localhost")
-                    .port(5672)
-                    .username("guest")
-                    .password("guest")
+            rabbitmq.url("amqp://guest:guest@localhost:5672/")
                     .timeout(5000)
         }
     }

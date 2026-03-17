@@ -51,9 +51,6 @@ suite.variables("randomId", () -> UUID.randomUUID().toString())
 variables:
   # 延迟求值，每次使用时都会重新生成
   timestamp: "${now()}"
-
-  # 立即求值，只在初始化时生成一次
-  initTime: "${.now()}"
 ```
 
 ## 错误处理
