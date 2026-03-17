@@ -35,11 +35,9 @@ import io.github.xiaomisum.ryze.protocol.redis.processor.RedisPostprocessor;
 import io.github.xiaomisum.ryze.protocol.redis.processor.RedisPreprocessor;
 import io.github.xiaomisum.ryze.protocol.redis.sampler.RedisSampler;
 import io.github.xiaomisum.ryze.support.fastjson.interceptor.JSONInterceptor;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * Redis协议JSON拦截器
@@ -58,7 +56,7 @@ import java.util.Objects;
  * @author xiaomi
  * @since 2025/7/21 22:25
  */
-@SuppressWarnings({"rawtypes", "unchecked", "removal"})
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class RedisJSONInterceptor implements JSONInterceptor, RedisConstantsInterface {
 
     /**
@@ -111,27 +109,9 @@ public class RedisJSONInterceptor implements JSONInterceptor, RedisConstantsInte
      * @param testElementMap 测试元件映射表
      */
     private void standardizeConfig(Map<String, Object> testElementMap) {
-        var oldKeyValue = testElementMap.remove(SEND);
-        if (oldKeyValue != null) {
-            testElementMap.put(ARGS, oldKeyValue);
-        }
         var rawArgs = testElementMap.get(ARGS);
         if (rawArgs instanceof String args) {
             testElementMap.put(ARGS, args.split(","));
-        }
-        if (StringUtils.isBlank((String) testElementMap.get(URL))) {
-            var host = testElementMap.remove(HOST);
-            var port = testElementMap.remove(PORT);
-            var username = testElementMap.remove(USERNAME);
-            var password = testElementMap.remove(PASSWORD);
-            var database = testElementMap.remove(DATABASE);
-            var url = REDIS_URL_TEMPLATE +
-                    (Objects.isNull(username) ? "" : username) +
-                    (Objects.isNull(password) ? "" : ":" + password + "@") +
-                    host +
-                    (Objects.isNull(port) ? "" : ":" + port) +
-                    (Objects.isNull(database) ? "" : "/" + database);
-            testElementMap.put(URL, url);
         }
     }
 }
