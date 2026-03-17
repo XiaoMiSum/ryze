@@ -206,6 +206,7 @@ public class RabbitConfigureItem implements ConfigureItem<RabbitConfigureItem>, 
     @Override
     public RabbitConfigureItem evaluate(ContextWrapper context) {
         ref = (String) context.evaluate(ref);
+        url = (String) context.evaluate(url);
         virtualHost = (String) context.evaluate(virtualHost);
         host = (String) context.evaluate(host);
         port = (String) context.evaluate(port);
@@ -1650,11 +1651,28 @@ public class RabbitConfigureItem implements ConfigureItem<RabbitConfigureItem>, 
         }
 
         /**
+         * 设置连接 URL
+         * <p>
+         * 格式： amqp://[用户名:密码@]主机地址[:端口]/[虚拟主机]
+         * <p>
+         * 示例： amqp://admin:MyPassword@192.168.1.100:5672/prod_vhost
+         *
+         * @param url 连接URL
+         * @return 当前构建器实例，支持链式调用
+         */
+        public Builder url(String url) {
+            this.configure.url = url;
+            return self;
+        }
+
+        /**
          * 设置虚拟主机
          *
          * @param virtualHost 虚拟主机
          * @return 当前构建器实例，支持链式调用
+         * @deprecated 请使用 {@link #url(String)} 方法设置
          */
+        @Deprecated(since = "6.0.12")
         public Builder virtualHost(String virtualHost) {
             this.configure.virtualHost = virtualHost;
             return self;
@@ -1665,7 +1683,9 @@ public class RabbitConfigureItem implements ConfigureItem<RabbitConfigureItem>, 
          *
          * @param host 主机地址
          * @return 当前构建器实例，支持链式调用
+         * @deprecated 请使用 {@link #url(String)} 方法设置
          */
+        @Deprecated(since = "6.0.12")
         public Builder host(String host) {
             this.configure.host = host;
             return self;
@@ -1676,7 +1696,9 @@ public class RabbitConfigureItem implements ConfigureItem<RabbitConfigureItem>, 
          *
          * @param port 端口号
          * @return 当前构建器实例，支持链式调用
+         * @deprecated 请使用 {@link #url(String)} 方法设置
          */
+        @Deprecated(since = "6.0.12")
         public Builder port(String port) {
             this.configure.port = port;
             return self;
@@ -1687,7 +1709,9 @@ public class RabbitConfigureItem implements ConfigureItem<RabbitConfigureItem>, 
          *
          * @param username 用户名
          * @return 当前构建器实例，支持链式调用
+         * @deprecated 请使用 {@link #url(String)} 方法设置
          */
+        @Deprecated(since = "6.0.12")
         public Builder username(String username) {
             this.configure.username = username;
             return self;
@@ -1698,7 +1722,9 @@ public class RabbitConfigureItem implements ConfigureItem<RabbitConfigureItem>, 
          *
          * @param password 密码
          * @return 当前构建器实例，支持链式调用
+         * @deprecated 请使用 {@link #url(String)} 方法设置
          */
+        @Deprecated(since = "6.0.12")
         public Builder password(String password) {
             this.configure.password = password;
             return self;
