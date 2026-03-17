@@ -180,6 +180,7 @@ public class RabbitConfigureItem implements ConfigureItem<RabbitConfigureItem>, 
         var localOther = other.copy();
         var self = copy();
         self.ref = StringUtils.isBlank(self.ref) ? localOther.ref : self.ref;
+        self.url = StringUtils.isBlank(self.url) ? localOther.url : self.url;
         self.virtualHost = StringUtils.isBlank(self.virtualHost) ? localOther.virtualHost : self.virtualHost;
         self.host = StringUtils.isBlank(self.host) ? localOther.host : self.host;
         self.port = StringUtils.isBlank(self.port) ? localOther.port : self.port;

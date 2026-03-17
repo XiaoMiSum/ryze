@@ -33,6 +33,7 @@ import com.rabbitmq.client.BuiltinExchangeType;
 import com.rabbitmq.client.ConnectionFactory;
 import io.github.xiaomisum.ryze.protocol.rabbit.config.RabbitConfigureItem;
 import io.github.xiaomisum.ryze.testelement.sampler.DefaultSampleResult;
+import org.apache.commons.lang3.StringUtils;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
@@ -134,7 +135,15 @@ public class Rabbit {
         try {
             var factory = new ConnectionFactory();
             factory.setConnectionTimeout(config.getTimeout());
-            factory.setUri(config.getUrl());
+            if (StringUtils.isNotBlank(config.getUrl())) {
+                factory.setUri(config.getUrl());
+            } else {
+                factory.setHost(config.getHost());
+                factory.setPort(Integer.parseInt(config.getPort()));
+                factory.setVirtualHost(config.getVirtualHost());
+                factory.setUsername(config.getUsername());
+                factory.setPassword(config.getPassword());
+            }
             return factory;
         } catch (Exception e) {
             throw new RuntimeException(e);
