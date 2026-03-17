@@ -60,34 +60,58 @@ public class RabbitConfigureItem implements ConfigureItem<RabbitConfigureItem>, 
      */
     @JSONField(name = REF)
     protected String ref;
+    /**
+     * 连接 URL
+     * <p>
+     * 格式： amqp://[用户名:密码@]主机地址[:端口]/[虚拟主机]
+     * <p>
+     * 示例： amqp://admin:MyPassword@192.168.1.100:5672/prod_vhost
+     */
+    @JSONField(name = URL, ordinal = 1)
+    protected String url;
 
     /**
      * 虚拟主机
+     *
+     * @deprecated since 6.0.12, use {@link #url} instead
      */
+    @Deprecated(since = "6.0.12")
     @JSONField(name = VIRTUAL_HOST, ordinal = 1)
     protected String virtualHost;
 
     /**
      * 主机地址
+     *
+     * @deprecated since 6.0.12, use {@link #url} instead
      */
+    @Deprecated(since = "6.0.12")
     @JSONField(name = HOST, ordinal = 2)
     protected String host;
 
     /**
      * 端口号
+     *
+     * @deprecated since 6.0.12, use {@link #url} instead
      */
+    @Deprecated(since = "6.0.12")
     @JSONField(name = PORT, ordinal = 3)
     protected String port;
 
     /**
      * 用户名
+     *
+     * @deprecated since 6.0.12, use {@link #url} instead
      */
+    @Deprecated(since = "6.0.12")
     @JSONField(name = USERNAME, ordinal = 4)
     protected String username;
 
     /**
      * 密码
+     *
+     * @deprecated since 6.0.12, use {@link #url} instead
      */
+    @Deprecated(since = "6.0.12")
     @JSONField(name = PASSWORD, ordinal = 5)
     protected String password;
 
@@ -212,13 +236,33 @@ public class RabbitConfigureItem implements ConfigureItem<RabbitConfigureItem>, 
     }
 
     /**
+     * 获取连接 URL
+     *
+     * @return 连接 URL
+     */
+    public String getUrl() {
+        return url;
+    }
+
+    /**
+     * 设置连接 URL
+     *
+     * @param url 连接 URL
+     */
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    /**
      * 获取虚拟主机
      * <p>
      * 如果未设置虚拟主机，则返回默认值 "/"
      * </p>
      *
      * @return 虚拟主机
+     * @deprecated since 6.0.12, use {@link #url} instead
      */
+    @Deprecated(since = "6.0.12")
     public String getVirtualHost() {
         return virtualHost;
     }
@@ -227,11 +271,18 @@ public class RabbitConfigureItem implements ConfigureItem<RabbitConfigureItem>, 
      * 设置虚拟主机
      *
      * @param virtualHost 虚拟主机
+     * @deprecated since 6.0.12, use {@link #url} instead
      */
+    @Deprecated(since = "6.0.12")
     public void setVirtualHost(String virtualHost) {
         this.virtualHost = virtualHost;
     }
 
+    /**
+     * 设置虚拟主机
+     *
+     * @deprecated since 6.0.12, use {@link #url} instead
+     */
     public String getVirtualHost(String defVirtualHost) {
         return StringUtils.isBlank(virtualHost) ? defVirtualHost : virtualHost;
     }
@@ -240,7 +291,9 @@ public class RabbitConfigureItem implements ConfigureItem<RabbitConfigureItem>, 
      * 获取主机地址
      *
      * @return 主机地址
+     * @deprecated since 6.0.12, use {@link #url} instead
      */
+    @Deprecated(since = "6.0.12")
     public String getHost() {
         return host;
     }
@@ -249,7 +302,9 @@ public class RabbitConfigureItem implements ConfigureItem<RabbitConfigureItem>, 
      * 设置主机地址
      *
      * @param host 主机地址
+     * @deprecated since 6.0.12, use {@link #url} instead
      */
+    @Deprecated(since = "6.0.12")
     public void setHost(String host) {
         this.host = host;
     }
@@ -261,7 +316,9 @@ public class RabbitConfigureItem implements ConfigureItem<RabbitConfigureItem>, 
      * </p>
      *
      * @return 端口号
+     * @deprecated since 6.0.12, use {@link #url} instead
      */
+    @Deprecated(since = "6.0.12")
     public String getPort() {
         return port;
     }
@@ -270,11 +327,19 @@ public class RabbitConfigureItem implements ConfigureItem<RabbitConfigureItem>, 
      * 设置端口号
      *
      * @param port 端口号
+     * @deprecated since 6.0.12, use {@link #url} instead
      */
+    @Deprecated(since = "6.0.12")
     public void setPort(String port) {
         this.port = port;
     }
 
+    /**
+     * 获取端口号
+     *
+     * @deprecated since 6.0.12, use {@link #url} instead
+     */
+    @Deprecated(since = "6.0.12")
     public String getPort(String defPort) {
         return StringUtils.isBlank(port) ? defPort : port;
     }
@@ -286,7 +351,9 @@ public class RabbitConfigureItem implements ConfigureItem<RabbitConfigureItem>, 
      * </p>
      *
      * @return 用户名
+     * @deprecated since 6.0.12, use {@link #url} instead
      */
+    @Deprecated(since = "6.0.12")
     public String getUsername() {
         return username;
     }
@@ -295,11 +362,23 @@ public class RabbitConfigureItem implements ConfigureItem<RabbitConfigureItem>, 
      * 设置用户名
      *
      * @param username 用户名
+     * @deprecated since 6.0.12, use {@link #url} instead
      */
+    @Deprecated(since = "6.0.12")
     public void setUsername(String username) {
         this.username = username;
     }
 
+    /**
+     * 获取用户名
+     * <p>
+     * 如果未设置用户名，则返回默认值 "guest"
+     * </p>
+     *
+     * @return 用户名
+     * @deprecated since 6.0.12, use {@link #url} instead
+     */
+    @Deprecated(since = "6.0.12")
     public String getUsername(String defUsername) {
         return StringUtils.isBlank(username) ? defUsername : username;
     }
@@ -311,7 +390,9 @@ public class RabbitConfigureItem implements ConfigureItem<RabbitConfigureItem>, 
      * </p>
      *
      * @return 密码
+     * @deprecated since 6.0.12, use {@link #url} instead
      */
+    @Deprecated(since = "6.0.12")
     public String getPassword() {
         return password;
     }
@@ -320,11 +401,23 @@ public class RabbitConfigureItem implements ConfigureItem<RabbitConfigureItem>, 
      * 设置密码
      *
      * @param password 密码
+     * @deprecated since 6.0.12, use {@link #url} instead
      */
+    @Deprecated(since = "6.0.12")
     public void setPassword(String password) {
         this.password = password;
     }
 
+    /**
+     * 获取密码
+     * <p>
+     * 如果未设置密码，则返回默认值 "guest"
+     * </p>
+     *
+     * @return 密码
+     * @deprecated since 6.0.12, use {@link #url} instead
+     */
+    @Deprecated(since = "6.0.12")
     public String getPassword(String defPassword) {
         return StringUtils.isBlank(password) ? defPassword : password;
     }

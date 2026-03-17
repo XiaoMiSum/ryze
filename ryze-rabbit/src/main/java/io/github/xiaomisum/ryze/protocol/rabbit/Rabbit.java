@@ -131,13 +131,13 @@ public class Rabbit {
      * @return 配置好的 ConnectionFactory 对象
      */
     public static ConnectionFactory handleRequest(RabbitConfigureItem config) {
-        var factory = new ConnectionFactory();
-        factory.setConnectionTimeout(config.getTimeout());
-        factory.setVirtualHost(config.getVirtualHost("/"));
-        factory.setHost(config.getHost());
-        factory.setPort(Integer.parseInt(config.getPort("5672")));
-        factory.setUsername(config.getUsername("guest"));
-        factory.setPassword(config.getPassword("guest"));
-        return factory;
+        try {
+            var factory = new ConnectionFactory();
+            factory.setConnectionTimeout(config.getTimeout());
+            factory.setUri(config.getUrl());
+            return factory;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

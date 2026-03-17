@@ -49,11 +49,28 @@ public interface RabbitConstantsInterface extends TestElementConstantsInterface 
     String DEF_REF_NAME_KEY = "__rabbit_configure_element_default_ref_name__";
 
     /**
+     * 连接 URL
+     * <p>
+     * 用于在配置中 指定 RabbitMQ 连接 URL 的键名
+     * </p>
+     * <p>
+     * 格式： amqp://[用户名:密码@]主机地址[:端口]/[虚拟主机]
+     * </p>
+     * <p>
+     * 示例： amqp://admin:MyPassword@192.168.1.100:5672/prod_vhost
+     * </p>
+     */
+    String URL = "url";
+
+    /**
      * 虚拟主机配置键名
      * <p>
      * 用于在配置中指定 RabbitMQ 虚拟主机的键名
      * </p>
+     *
+     * @deprecated since 6.0.12, use {@link #URL} instead
      */
+    @Deprecated(since = "6.0.12")
     String VIRTUAL_HOST = "virtual_host";
 
     /**
@@ -61,7 +78,10 @@ public interface RabbitConstantsInterface extends TestElementConstantsInterface 
      * <p>
      * 用于在配置中指定 RabbitMQ 服务器主机地址的键名
      * </p>
+     *
+     * @deprecated since 6.0.12, use {@link #URL} instead
      */
+    @Deprecated(since = "6.0.12")
     String HOST = "host";
 
     /**
@@ -69,7 +89,10 @@ public interface RabbitConstantsInterface extends TestElementConstantsInterface 
      * <p>
      * 用于在配置中指定 RabbitMQ 服务器端口的键名
      * </p>
+     *
+     * @deprecated since 6.0.12, use {@link #URL} instead
      */
+    @Deprecated(since = "6.0.12")
     String PORT = "port";
 
     /**
@@ -77,7 +100,10 @@ public interface RabbitConstantsInterface extends TestElementConstantsInterface 
      * <p>
      * 用于在配置中指定连接 RabbitMQ 服务器的用户名的键名
      * </p>
+     *
+     * @deprecated since 6.0.12, use {@link #URL} instead
      */
+    @Deprecated(since = "6.0.12")
     String USERNAME = "username";
 
     /**
@@ -85,7 +111,10 @@ public interface RabbitConstantsInterface extends TestElementConstantsInterface 
      * <p>
      * 用于在配置中指定连接 RabbitMQ 服务器的密码的键名
      * </p>
+     *
+     * @deprecated since 6.0.12, use {@link #URL} instead
      */
+    @Deprecated(since = "6.0.12")
     String PASSWORD = "password";
 
     /**
@@ -151,7 +180,7 @@ public interface RabbitConstantsInterface extends TestElementConstantsInterface 
      * </p>
      */
     String EXCHANGE = "exchange";
-    
+
     /**
      * 交换机名称配置键名
      * <p>
@@ -167,7 +196,7 @@ public interface RabbitConstantsInterface extends TestElementConstantsInterface 
      * </p>
      */
     String EXCHANGE_TYPE = "type";
-    
+
     /**
      * 扇出类型交换机标识
      * <p>
@@ -175,7 +204,7 @@ public interface RabbitConstantsInterface extends TestElementConstantsInterface 
      * </p>
      */
     String EXCHANGE_TYPE_FANOUT = "fanout";
-    
+
     /**
      * 直连类型交换机标识
      * <p>
@@ -183,7 +212,7 @@ public interface RabbitConstantsInterface extends TestElementConstantsInterface 
      * </p>
      */
     String EXCHANGE_TYPE_DIRECT = "direct";
-    
+
     /**
      * 主题类型交换机标识
      * <p>
@@ -191,7 +220,7 @@ public interface RabbitConstantsInterface extends TestElementConstantsInterface 
      * </p>
      */
     String EXCHANGE_TYPE_TOPIC = "topic";
-    
+
     /**
      * 头部类型交换机标识
      * <p>
@@ -223,7 +252,7 @@ public interface RabbitConstantsInterface extends TestElementConstantsInterface 
      * </p>
      */
     String PROPS_CONTENT_TYPE = "content_type";
-    
+
     /**
      * 内容编码属性键名
      * <p>
@@ -231,7 +260,7 @@ public interface RabbitConstantsInterface extends TestElementConstantsInterface 
      * </p>
      */
     String PROPS_CONTENT_ENCODING = "content_encoding";
-    
+
     /**
      * 头部属性键名
      * <p>
@@ -239,7 +268,7 @@ public interface RabbitConstantsInterface extends TestElementConstantsInterface 
      * </p>
      */
     String PROPS_HEADERS = "headers";
-    
+
     /**
      * 传递模式属性键名
      * <p>
@@ -247,7 +276,7 @@ public interface RabbitConstantsInterface extends TestElementConstantsInterface 
      * </p>
      */
     String PROPS_DELIVERY_MODE = "delivery_mode";
-    
+
     /**
      * 优先级属性键名
      * <p>
@@ -255,7 +284,7 @@ public interface RabbitConstantsInterface extends TestElementConstantsInterface 
      * </p>
      */
     String PROPS_PRIORITY = "priority";
-    
+
     /**
      * 关联ID属性键名
      * <p>
@@ -263,7 +292,7 @@ public interface RabbitConstantsInterface extends TestElementConstantsInterface 
      * </p>
      */
     String PROPS_CORRELATION_ID = "correlation_id";
-    
+
     /**
      * 回复地址属性键名
      * <p>
@@ -271,7 +300,7 @@ public interface RabbitConstantsInterface extends TestElementConstantsInterface 
      * </p>
      */
     String PROPS_REPLY_TO = "reply_to";
-    
+
     /**
      * 过期时间属性键名
      * <p>
@@ -279,7 +308,7 @@ public interface RabbitConstantsInterface extends TestElementConstantsInterface 
      * </p>
      */
     String PROPS_EXPIRATION = "expiration";
-    
+
     /**
      * 消息ID属性键名
      * <p>
@@ -287,7 +316,7 @@ public interface RabbitConstantsInterface extends TestElementConstantsInterface 
      * </p>
      */
     String PROPS_MESSAGE_ID = "message_id";
-    
+
     /**
      * 时间戳属性键名
      * <p>
@@ -295,7 +324,7 @@ public interface RabbitConstantsInterface extends TestElementConstantsInterface 
      * </p>
      */
     String PROPS_TIMESTAMP = "timestamp";
-    
+
     /**
      * 类型属性键名
      * <p>
@@ -303,7 +332,7 @@ public interface RabbitConstantsInterface extends TestElementConstantsInterface 
      * </p>
      */
     String PROPS_TYPE = "type";
-    
+
     /**
      * 用户ID属性键名
      * <p>
@@ -311,7 +340,7 @@ public interface RabbitConstantsInterface extends TestElementConstantsInterface 
      * </p>
      */
     String PROPS_USER_ID = "user_id";
-    
+
     /**
      * 应用ID属性键名
      * <p>
@@ -319,7 +348,7 @@ public interface RabbitConstantsInterface extends TestElementConstantsInterface 
      * </p>
      */
     String PROPS_APP_ID = "app_id";
-    
+
     /**
      * 集群ID属性键名
      * <p>
