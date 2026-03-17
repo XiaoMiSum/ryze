@@ -204,9 +204,12 @@ public abstract class AbstractProcessor<SELF extends AbstractProcessor<SELF, CON
                 }
             } catch (Throwable throwable) {
                 result.setThrowable(throwable);
+                result.setStatus(broken);  // 同步设置本地 result 的状态
                 context.getTestResult().setThrowable(throwable);
                 context.getTestResult().setStatus(broken);
             } finally {
+                // 确保采样时间被记录，避免时间计算异常
+                result.sampleEnd();
                 // 最终处理
                 runtime.chain.triggerAfterCompletion(localContext);
             }

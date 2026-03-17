@@ -35,6 +35,8 @@
 ```yaml
 # 通用后置处理器结构
 - testclass: 协议类型
+  async: true # 是否异步执行
+  condition: '${1<2}' # 条件表达式 freemarker 模板
   config:
   # 协议特定配置项
 ```
@@ -393,20 +395,6 @@ postprocessors:
 - **资源释放**：释放用例使用的资源
 
 ### 错误处理
-
-#### 异常容忍
-
-后置处理器通常应该容忍异常，确保即使后置处理失败也不会影响测试结果：
-
-```yaml
-postprocessors:
-  - testclass: http
-    config:
-      method: DELETE
-      path: /users/${user_id}
-    # 即使清理失败，也不影响测试结果
-    ignore_errors: true
-```
 
 #### 条件执行
 

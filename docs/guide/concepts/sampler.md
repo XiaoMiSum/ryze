@@ -545,43 +545,6 @@ children:
         name: Test User
 ```
 
-### 错误处理
-
-#### 优雅降级
-
-对于非关键操作的取样器，可以配置错误容忍：
-
-```yaml
-- title: "发送通知消息"
-  testclass: http
-  config:
-    method: POST
-    path: /notifications
-    body:
-      message: "Test completed"
-  # 即使通知发送失败，也不影响测试结果
-  ignore_errors: true
-```
-
-#### 重试机制
-
-对于可能临时失败的操作，可以配置重试：
-
-```yaml
-- title: "查询异步处理结果"
-  testclass: http
-  config:
-    method: GET
-    path: /async/results/${task_id}
-  interceptors:
-    - RetryInterceptor:
-        max_attempts: 5
-        retry_delay: 2000
-        retry_on_status: [ 404, 500, 502, 503 ]
-  validators:
-    - { testclass: http, field: 'status', expected: 200, rule: '==' }
-```
-
 ### 性能优化
 
 #### 并行执行
