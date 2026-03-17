@@ -111,12 +111,6 @@ public class JDBCDatasource extends AbstractConfigureElement<JDBCDatasource, JDB
         if (StringUtils.isBlank(config.getUrl())) {
             result.append("数据源连接 %s 字段值缺失", URL);
         }
-        if (StringUtils.isBlank(config.getUsername())) {
-            result.append("数据源用户名 %s 字段值缺失", USERNAME);
-        }
-        if (StringUtils.isBlank(config.getPassword())) {
-            result.append("数据源密码 %s 字段值缺失", PASSWORD);
-        }
         return result;
     }
 
@@ -139,8 +133,13 @@ public class JDBCDatasource extends AbstractConfigureElement<JDBCDatasource, JDB
         }
         ((JDBCDatasource) runtime).datasource = new DruidDataSource();
         ((JDBCDatasource) runtime).datasource.setUrl(runtime.getConfig().getUrl());
-        ((JDBCDatasource) runtime).datasource.setUsername(runtime.getConfig().getUsername());
-        ((JDBCDatasource) runtime).datasource.setPassword(runtime.getConfig().getPassword());
+        // 保持兼容，避免影响已有的配置
+        if (StringUtils.isNotBlank(runtime.getConfig().getUsername())) {
+            ((JDBCDatasource) runtime).datasource.setUsername(runtime.getConfig().getUsername());
+        }
+        if (StringUtils.isNotBlank(runtime.getConfig().getPassword())) {
+            ((JDBCDatasource) runtime).datasource.setPassword(runtime.getConfig().getPassword());
+        }
         ((JDBCDatasource) runtime).datasource.setMaxActive(runtime.getConfig().getMaxActive());
         ((JDBCDatasource) runtime).datasource.setMaxWait(runtime.getConfig().getMaxWait());
         context.getLocalVariablesWrapper().put(runtime.getRefName(), ((JDBCDatasource) runtime).datasource);

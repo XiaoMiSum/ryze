@@ -66,6 +66,7 @@ public class JDBCConfigureItem implements ConfigureItem<JDBCConfigureItem>, JDBC
     /**
      * 数据库连接URL
      * <p>数据库连接字符串，包含协议、主机、端口和数据库名称等信息</p>
+     * 如： jdbc:mysql://hostname:port/database?user=username&password=password
      */
     @JSONField(name = URL, ordinal = 2)
     protected String url;
@@ -73,15 +74,21 @@ public class JDBCConfigureItem implements ConfigureItem<JDBCConfigureItem>, JDBC
     /**
      * 数据库用户名
      * <p>用于数据库认证的用户名</p>
+     *
+     * @deprecated since 6.0.12 @see {@link #JDBCConfigureItem#url}
      */
     @JSONField(name = USERNAME, ordinal = 3)
+    @Deprecated(since = "6.0.12")
     protected String username;
 
     /**
      * 数据库密码
      * <p>用于数据库认证的密码</p>
+     *
+     * @deprecated since 6.0.12 @see {@link #JDBCConfigureItem#url}
      */
     @JSONField(name = PASSWORD, ordinal = 4)
+    @Deprecated(since = "6.0.12")
     protected String password;
 
     /**
@@ -236,6 +243,7 @@ public class JDBCConfigureItem implements ConfigureItem<JDBCConfigureItem>, JDBC
      *
      * @return 数据库用户名
      */
+    @Deprecated(since = "6.0.12")
     public String getUsername() {
         return username;
     }
@@ -245,6 +253,7 @@ public class JDBCConfigureItem implements ConfigureItem<JDBCConfigureItem>, JDBC
      *
      * @param username 数据库用户名
      */
+    @Deprecated(since = "6.0.12")
     public void setUsername(String username) {
         this.username = username;
     }
@@ -254,6 +263,7 @@ public class JDBCConfigureItem implements ConfigureItem<JDBCConfigureItem>, JDBC
      *
      * @return 数据库密码
      */
+    @Deprecated(since = "6.0.12")
     public String getPassword() {
         return password;
     }
@@ -263,6 +273,7 @@ public class JDBCConfigureItem implements ConfigureItem<JDBCConfigureItem>, JDBC
      *
      * @param password 数据库密码
      */
+    @Deprecated(since = "6.0.12")
     public void setPassword(String password) {
         this.password = password;
     }
