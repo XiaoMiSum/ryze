@@ -41,7 +41,8 @@ import static io.github.xiaomisum.ryze.protocol.websocket.WebsocketConstantsInte
 
 public class Websocket {
     public static Request build(WebsocketConfigureItem config) {
-        return new Request(config.getProtocol(DEFAULT_PROTOCOL) + "://" + config.getHost() + ":" + config.getFullPort() + config.getFullPath())
+        return new Request(StringUtils.isNotBlank(config.getBaseUrl()) ? config.getBaseUrl() + config.getFullPath() :
+                config.getProtocol(DEFAULT_PROTOCOL) + "://" + config.getHost() + ":" + config.getFullPort() + config.getFullPath())
                 .headers(config.getHeaders())
                 .query(config.getQuery())
                 .body(config.getBody() == null ? null : config.getBody() instanceof String s ? s : JSON.toJSONString(config.getBody()))
