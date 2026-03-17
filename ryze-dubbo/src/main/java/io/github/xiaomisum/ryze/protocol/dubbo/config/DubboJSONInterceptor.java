@@ -35,11 +35,9 @@ import io.github.xiaomisum.ryze.protocol.dubbo.processor.DubboPostprocessor;
 import io.github.xiaomisum.ryze.protocol.dubbo.processor.DubboPreprocessor;
 import io.github.xiaomisum.ryze.protocol.dubbo.sampler.DubboSampler;
 import io.github.xiaomisum.ryze.support.fastjson.interceptor.JSONInterceptor;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * Dubbo协议JSON拦截器
@@ -93,13 +91,6 @@ public class DubboJSONInterceptor implements JSONInterceptor, DubboConstantsInte
     @Override
     public ConfigureItem<?> deserializeConfigureItem(Object value) {
         if (value instanceof Map configure) {
-            var registry = (Map<String, Object>) configure.get(REGISTRY);
-            if (Objects.nonNull(registry)) {
-                var protocol = registry.remove(PROTOCOL);
-                if (Objects.nonNull(protocol) && StringUtils.isNotBlank(protocol.toString())) {
-                    registry.put(ADDRESS, protocol + "://" + registry.get(ADDRESS));
-                }
-            }
             var rawData = JSON.toJSONString(configure);
             return JSON.parseObject(rawData, DubboConfigureItem.class);
         }
