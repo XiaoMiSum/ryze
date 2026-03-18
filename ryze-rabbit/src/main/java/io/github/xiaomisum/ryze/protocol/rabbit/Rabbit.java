@@ -137,6 +137,7 @@ public class Rabbit {
             factory.setConnectionTimeout(config.getTimeout());
             if (StringUtils.isNotBlank(config.getUrl())) {
                 factory.setUri(config.getUrl());
+                factory.setVirtualHost(StringUtils.isNotBlank(factory.getVirtualHost()) ? factory.getVirtualHost() : "/");
             } else {
                 factory.setHost(config.getHost());
                 factory.setPort(Integer.parseInt(config.getPort()));
