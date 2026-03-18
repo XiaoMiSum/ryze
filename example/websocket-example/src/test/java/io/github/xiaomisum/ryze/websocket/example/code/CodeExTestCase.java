@@ -12,7 +12,7 @@ public class CodeExTestCase extends RyzeBasicTestcase4TestNG {
     @Test
     public void test1() {
         ws("测试用例- test2()", sampler -> {
-            sampler.configureElements(WebsocketConfigureElementsBuilder.class, ele -> ele.ws(ws -> ws.config(config -> config.protocol("ws").host("127.0.0.1").port("8080"))));
+            sampler.configureElements(WebsocketConfigureElementsBuilder.class, ele -> ele.ws(ws -> ws.config(config -> config.baseUrl("ws://127.0.0.1:8080"))));
             sampler.preprocessors(WebsocketPreprocessorsBuilder.class, pre -> pre.ws(ws ->
                     ws.title("前置处理器发送消息").config(config -> config.path("/ws/body/string").body("websocket postprocessor test"))));
             sampler.config(config -> config.path("/ws/body/string").body("websocket sampler test").responsePattern("websocket sampler test"));

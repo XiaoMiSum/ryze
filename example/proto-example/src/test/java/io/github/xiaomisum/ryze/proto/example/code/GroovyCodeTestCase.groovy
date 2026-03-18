@@ -32,10 +32,8 @@ class GroovyCodeTestCase {
             configureElements ProtoConfigureElementsBuilder.class, {
                 proto {
                     config {
-                        protocol 'http'
+                        baseUrl 'http://127.0.0.1:8080'
                         method 'get'
-                        host '127.0.0.1'
-                        port '8080'
                         protoDesc {
                             descPath 'D:\\Github\\ryze\\example\\proto-example\\user.desc'
                             requestMessageName 'io.github.xiaomisum.ryze.protocol.example.springboot.UserOuterClass.User'
@@ -124,9 +122,7 @@ class GroovyCodeTestCase {
             configureElements ProtoConfigureElementsBuilder.class, {
                 proto {
                     config {
-                        protocol 'http'
-                        host '127.0.0.1'
-                        port '8080'
+                        baseUrl 'http://127.0.0.1:8080'
                         protoDesc {
                             descPath 'D:\\Github\\ryze\\example\\proto-example\\user.desc'
                             requestMessageName 'io.github.xiaomisum.ryze.protocol.example.springboot.UserOuterClass.User'
@@ -184,9 +180,7 @@ class GroovyCodeTestCase {
             configureElements ProtoConfigureElementsBuilder.class, {
                 proto {
                     config {
-                        protocol 'ws'
-                        host '127.0.0.1'
-                        port '8080'
+                        baseUrl 'ws://127.0.0.1:8080'
                         protoDesc {
                             descPath 'D:\\Github\\ryze\\example\\proto-example\\user.desc'
                             requestMessageName 'io.github.xiaomisum.ryze.protocol.example.springboot.UserOuterClass.User'
@@ -234,9 +228,7 @@ class GroovyCodeTestCase {
             configureElements ProtoConfigureElementsBuilder.class, {
                 proto {
                     config {
-                        protocol 'http'
-                        host '127.0.0.1'
-                        port '8080'
+                        baseUrl 'http://127.0.0.1:8080'
                         protoDesc {
                             descPath 'D:\\Github\\ryze\\example\\proto-example\\user.desc'
                             requestMessageName 'io.github.xiaomisum.ryze.protocol.example.springboot.UserOuterClass.User'

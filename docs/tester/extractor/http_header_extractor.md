@@ -25,8 +25,7 @@ testclass: http
 title: 获取用户信息
 config:
   method: GET
-  protocol: http
-  host: api.example.com
+  base_url: http://api.example.com
   path: /users/123
 extractors:
   - testclass: http

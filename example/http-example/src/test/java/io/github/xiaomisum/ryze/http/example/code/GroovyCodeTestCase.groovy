@@ -29,10 +29,8 @@ class GroovyCodeTestCase {
             configureElements {
                 http {
                     config {
-                        protocol "http"
+                        baseUrl "http://127.0.0.1:58081"
                         method "get"
-                        host "127.0.0.1"
-                        port "58081"
                     }
                 }
             }
@@ -116,9 +114,7 @@ class GroovyCodeTestCase {
             configureElements {
                 http {
                     config {
-                        protocol "http"
-                        host "127.0.0.1"
-                        port "58081"
+                        baseUrl "http://127.0.0.1:58081"
                     }
                 }
             }
@@ -168,9 +164,7 @@ class GroovyCodeTestCase {
             }
             title "步骤1——获取用户：id = \${id}"
             config {
-                protocol "http"
-                host "127.0.0.1"
-                port "58081"
+                baseUrl "http://127.0.0.1:58081"
                 method "GET"
                 path '/user/${id}'
             }
@@ -186,9 +180,7 @@ class GroovyCodeTestCase {
         MagicBox.http {
             title "步骤2——修改用户：id=ryze"
             config {
-                protocol "http"
-                host "127.0.0.1"
-                port "58081"
+                baseUrl "http://127.0.0.1:58081"
                 method "POST"
                 path '/user'
                 body { body -> body.putAll([id: "ryze", name: "ryze_http_sampler", age: 0]) }
@@ -209,9 +201,7 @@ class GroovyCodeTestCase {
             }
             title "步骤3——获取用户：id =\${t_body.id}"
             config {
-                protocol "http"
-                host "127.0.0.1"
-                port "58081"
+                baseUrl "http://127.0.0.1:58081"
                 method "GET"
                 path '/user/${t_body.id}'
             }

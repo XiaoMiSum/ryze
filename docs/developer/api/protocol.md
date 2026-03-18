@@ -11,9 +11,7 @@ HTTP取样器实现，支持完整的HTTP请求功能。
 #### 主要配置项
 
 - `method`: HTTP方法（GET、POST、PUT、DELETE等）
-- `protocol`: 协议（http、https）
-- `host`: 主机地址
-- `port`: 端口号
+- `base_url`: 基础URL（包含协议和主机）
 - `path`: 请求路径
 - `headers`: 请求头
 - `query`: 查询参数
@@ -32,10 +30,7 @@ config(config ->config
 method("POST")
         .
 
-protocol("https")
-        .
-
-host("api.example.com")
+base_url("https://api.example.com")
         .
 
 path("/users")

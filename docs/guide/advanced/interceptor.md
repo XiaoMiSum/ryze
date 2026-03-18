@@ -57,7 +57,8 @@ interceptors:
       mask_sensitive: true
 config:
   method: POST
-  url: https://api.example.com/users
+  base_url: https://api.example.com
+  path: /users
   headers:
     Authorization: Bearer ${token}
   body:
@@ -75,7 +76,8 @@ interceptors:
       algorithm: 'md5'
 config:
   method: POST
-  url: https://api.example.com/register
+  base_url: https://api.example.com
+  path: /register
   body:
     username: newuser
     password: plaintext  # 将被自动加密
@@ -92,7 +94,8 @@ interceptors:
       decryption_key: ${decrypt_key}
 config:
   method: GET
-  url: https://api.example.com/profile
+  base_url: https://api.example.com
+  path: /profile
 ```
 
 #### 4. 性能监控
@@ -105,7 +108,8 @@ interceptors:
       collect_metrics: true
 config:
   method: GET
-  url: https://api.example.com/heavy-operation
+  base_url: https://api.example.com
+  path: /heavy-operation
 ```
 
 ## 🛠️ 内置拦截器

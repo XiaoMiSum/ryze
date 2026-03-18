@@ -24,9 +24,7 @@ class GroovyCodeTestCase {
             configureElements(WebsocketConfigureElementsBuilder.class, {
                 ws {
                     config {
-                        protocol "ws"
-                        host "127.0.0.1"
-                        port "8080"
+                        baseUrl "ws://127.0.0.1:8080"
                     }
                 }
             })
@@ -70,9 +68,7 @@ class GroovyCodeTestCase {
             configureElements(WebsocketConfigureElementsBuilder.class, {
                 ws {
                     config {
-                        protocol "ws"
-                        host "127.0.0.1"
-                        port "8080"
+                        baseUrl "ws://127.0.0.1:8080"
                     }
                 }
             })

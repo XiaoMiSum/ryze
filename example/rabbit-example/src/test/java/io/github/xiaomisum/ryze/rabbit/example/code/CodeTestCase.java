@@ -21,8 +21,11 @@ public class CodeTestCase {
             suite.variables(var -> var.put("tick", "rabbit_preprocessor"));
             suite.variables(Map.of("a", 1, "b", 2));
             suite.configureElements(RabbitConfigureElementsBuilder.class, builder -> builder
-                    .rabbit(rabbit -> rabbit.config(config -> config.host("127.0.0.1").port("5672").username("guest").password("guest")))
+                    .rabbit(rabbit -> rabbit.config(config -> config.url("amqp://guest:guest@127.0.0.1:5672/")))
             );
+            /* suite.configureElements(RabbitConfigureElementsBuilder.class, builder -> builder
+                    .rabbit(rabbit -> rabbit.config(config -> config.host("127.0.0.1").port("5672").username("guest").password("guest").virtualHost("/")))
+            );*/
             suite.preprocessors(RabbitPreprocessorsBuilder.class, builder -> builder
                     .rabbit(rabbit -> rabbit.config(config -> config
                             .message(Map.of("username", "${tick}", "age", 18))
@@ -50,7 +53,7 @@ public class CodeTestCase {
     public void test2() {
         RabbitMagicBox.rabbit("测试用例- test2()", sampler -> {
             sampler.configureElements(RabbitConfigureElementsBuilder.class, builder -> builder
-                    .rabbit(rabbit -> rabbit.config(config -> config.host("127.0.0.1").port("5672").username("guest").password("guest")))
+                    .rabbit(rabbit -> rabbit.config(config -> config.url("amqp://guest:guest@127.0.0.1:5672/")))
             );
             sampler.preprocessors(RabbitPreprocessorsBuilder.class, builder -> builder
                     .rabbit(rabbit -> rabbit.config(config -> config
@@ -67,7 +70,7 @@ public class CodeTestCase {
     public void test3() {
         RabbitMagicBox.rabbit("测试用例- test3()-1", sampler -> {
             sampler.configureElements(RabbitConfigureElementsBuilder.class, builder -> builder
-                    .rabbit(rabbit -> rabbit.config(config -> config.host("127.0.0.1").port("5672").username("guest").password("guest")))
+                    .rabbit(rabbit -> rabbit.config(config -> config.url("amqp://guest:guest@127.0.0.1:5672/")))
 
             );
             sampler.config(config -> config.message(List.of(1, 2, 3, 4)).queue(queue -> queue.name("ryze.topic")));
@@ -76,7 +79,7 @@ public class CodeTestCase {
 
         RabbitMagicBox.rabbit("测试用例- test3()-2", sampler -> {
             sampler.configureElements(RabbitConfigureElementsBuilder.class, builder -> builder
-                    .rabbit(rabbit -> rabbit.config(config -> config.host("127.0.0.1").port("5672").username("guest").password("guest")))
+                    .rabbit(rabbit -> rabbit.config(config -> config.url("amqp://guest:guest@127.0.0.1:5672/")))
             );
             sampler.config(config -> config.message(true).queue(queue -> queue.name("ryze.topic")));
         });

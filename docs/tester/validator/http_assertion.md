@@ -30,8 +30,7 @@ strict: false # 是否严格验证，默认否：忽略大小写验证
 testclass: http
 title: 用户登录
 config:
-  protocol: http
-  host: localhost
+  base_url: http://localhost
   method: post
   path: /api/login
   body:
@@ -51,8 +50,7 @@ testclass: http
 title: 下载文件
 config:
   method: GET
-  protocol: http
-  host: api.example.com
+  base_url: http://api.example.com
   path: /files/document.pdf
 validators:
   - testclass: http
@@ -68,8 +66,7 @@ testclass: http
 title: 获取用户信息
 config:
   method: GET
-  protocol: http
-  host: api.example.com
+  base_url: http://api.example.com
   path: /users/123
 validators:
   - testclass: http

@@ -25,8 +25,7 @@ testclass: http
 title: 用户登录
 config:
   method: POST
-  protocol: https
-  host: api.example.com
+  base_url: https://api.example.com
   path: /login
   body:
     username: testuser

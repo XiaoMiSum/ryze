@@ -31,8 +31,7 @@ testclass: http
 title: 用户登录
 config:
   method: POST
-  protocol: http
-  host: api.example.com
+  base_url: http://api.example.com
   path: /login
   body:
     username: testuser
@@ -59,8 +58,7 @@ testclass: http
 title: 获取用户列表
 config:
   method: GET
-  protocol: http
-  host: api.example.com
+  base_url: http://api.example.com
   path: /users
 validators:
   - testclass: json
@@ -84,9 +82,8 @@ testclass: http
 title: 创建订单
 config:
   method: POST
-  protocol: http
-  host: api.example.com
-  url: /orders
+  base_url: http://api.example.com
+  path: /orders
   body:
     product_id: 123
     quantity: 2

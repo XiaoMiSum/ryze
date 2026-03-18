@@ -18,9 +18,7 @@ class GroovyCodeTestCase {
                 jdbc {
                     refName "jdbc_source"
                     config {
-                        username "root"
-                        password "123456qq!"
-                        url "jdbc:mysql://127.0.0.1:3306/ryze-test?characterEncoding=utf8&useSSL=true&serverTimezone=GMT%2b8&failOverReadOnly=false"
+                        url "jdbc:mysql://127.0.0.1:3306/ryze-test?user=root&password=123456qq!&characterEncoding=utf8&useSSL=true&serverTimezone=GMT%2b8&failOverReadOnly=false"
                     }
                 }
             }
@@ -88,9 +86,7 @@ class GroovyCodeTestCase {
                 jdbc {
                     refName "jdbc_source"
                     config {
-                        username "root"
-                        password "123456qq!"
-                        url "jdbc:mysql://127.0.0.1:3306/ryze-test?characterEncoding=utf8&useSSL=true&serverTimezone=GMT%2b8&failOverReadOnly=false"
+                        url "jdbc:mysql://127.0.0.1:3306/ryze-test?user=root&password=123456qq!&characterEncoding=utf8&useSSL=true&serverTimezone=GMT%2b8&failOverReadOnly=false"
                     }
                 }
             }
@@ -131,9 +127,7 @@ class GroovyCodeTestCase {
                 jdbc {
                     refName "jdbc_source"
                     config {
-                        username "root"
-                        password "123456qq!"
-                        url "jdbc:mysql://127.0.0.1:3306/ryze-test?characterEncoding=utf8&useSSL=true&serverTimezone=GMT%2b8&failOverReadOnly=false"
+                        url "jdbc:mysql://127.0.0.1:3306/ryze-test?user=root&password=123456qq!&characterEncoding=utf8&useSSL=true&serverTimezone=GMT%2b8&failOverReadOnly=false"
                     }
                 }
             }
@@ -149,9 +143,7 @@ class GroovyCodeTestCase {
                 jdbc {
                     refName "jdbc_source"
                     config {
-                        username "root"
-                        password "123456qq!"
-                        url "jdbc:mysql://127.0.0.1:3306/ryze-test?characterEncoding=utf8&useSSL=true&serverTimezone=GMT%2b8&failOverReadOnly=false"
+                        url "jdbc:mysql://127.0.0.1:3306/ryze-test?user=root&password=123456qq!&characterEncoding=utf8&useSSL=true&serverTimezone=GMT%2b8&failOverReadOnly=false"
                     }
                 }
             }

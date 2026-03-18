@@ -22,10 +22,7 @@ class GroovyCodeTestCase {
             configureElements(RabbitConfigureElementsBuilder.class, {
                 rabbit {
                     config {
-                        host "127.0.0.1"
-                        port "5672"
-                        username "guest"
-                        password "guest"
+                        url "amqp://guest:guest@127.0.0.1:5672/"
                     }
                 }
             })
@@ -85,10 +82,7 @@ class GroovyCodeTestCase {
             configureElements(RabbitConfigureElementsBuilder.class, {
                 rabbit {
                     config {
-                        host "127.0.0.1"
-                        port "5672"
-                        username "guest"
-                        password "guest"
+                        url "amqp://guest:guest@127.0.0.1:5672/"
                     }
                 }
             })
@@ -122,10 +116,7 @@ class GroovyCodeTestCase {
             configureElements(RabbitConfigureElementsBuilder.class, {
                 rabbit {
                     config {
-                        host "127.0.0.1"
-                        port "5672"
-                        username "guest"
-                        password "guest"
+                        url "amqp://guest:guest@127.0.0.1:5672/"
                     }
                 }
             })
@@ -142,10 +133,7 @@ class GroovyCodeTestCase {
             configureElements(RabbitConfigureElementsBuilder.class, {
                 rabbit {
                     config {
-                        host "127.0.0.1"
-                        port "5672"
-                        username "guest"
-                        password "guest"
+                        url "amqp://guest:guest@127.0.0.1:5672/"
                     }
                 }
             })

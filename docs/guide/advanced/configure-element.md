@@ -60,8 +60,7 @@ title: 项目测试集合
 configelements:
   - testclass: http
     config:
-      protocol: https
-      host: api.example.com
+      base_url: https://api.example.com
       headers:
         User-Agent: RyzeTestFramework
 
@@ -122,9 +121,7 @@ children:
 - testclass: http
   config:
     method: GET
-    protocol: http
-    host: localhost
-    port: 8080
+    base_url: http://localhost:8080
     path: /test
     http/2: false
     headers:
@@ -141,9 +138,7 @@ children:
 - testclass: jdbc
   config:
     driver: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/test
-    username: root
-    password: password
+    url: jdbc:mysql://localhost:3306/testdb?user=testuser&password=testpass
     max_active: 10
 ```
 
@@ -156,10 +151,7 @@ children:
 ```yaml
 - testclass: redis
   config:
-    host: localhost
-    port: 6379
-    database: 0
-    password: password
+    url: redis://localhost:6379/0
     timeout: 2000
 ```
 
@@ -172,10 +164,8 @@ children:
 ```yaml
 - testclass: dubbo
   config:
-    application: ryze-test
-    registry: zookeeper://127.0.0.1:2181
-    protocol: dubbo
-    timeout: 5000
+    registry:
+      address: zookeeper://localhost:2181
 ```
 
 **相关文档**：[Dubbo 协议文档](/guide/protocols/dubbo)
@@ -202,11 +192,8 @@ children:
 ```yaml
 - testclass: rabbit
   config:
-    host: localhost
-    port: 5672
-    username: guest
-    password: guest
-    virtual_host: /
+    # 推荐使用 url 格式：amqp://[用户名:密码@]主机地址[:端口]/[虚拟主机]
+    url: amqp://guest:guest@localhost:5672/
     exchange: test-exchange
 ```
 
@@ -253,8 +240,7 @@ configelements:
   # HTTP 全局配置
   - testclass: http
     config:
-      protocol: https
-      host: api.ecommerce.com
+      base_url: https://api.ecommerce.com
       headers:
         User-Agent: EcommerceTestFramework/1.0
         Accept: application/json
@@ -263,16 +249,12 @@ configelements:
   - testclass: jdbc
     config:
       driver: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://db.ecommerce.com:3306/ecommerce_test
-      username: ${db_username}
-      password: ${db_password}
+      url: jdbc:mysql://localhost:3306/testdb?user=testuser&password=testpass
 
   # 缓存全局配置
   - testclass: redis
     config:
-      host: cache.ecommerce.com
-      port: 6379
-      database: 0
+      url: redis://cache.ecommerce.com:6379/0
 
 children:
   - title: 用户服务模块
@@ -296,7 +278,7 @@ configelements:
   # 订单数据库配置
   - testclass: jdbc
     config:
-      url: jdbc:mysql://db.ecommerce.com:3306/order_service
+      url: jdbc:mysql://localhost:3306/testdb?user=testuser&password=testpass
 
 children:
   - title: 创建订单测试
@@ -322,23 +304,21 @@ variables:
   # 环境配置
   env_config:
     dev:
-      api_host: api-dev.example.com
-      db_url: jdbc:mysql://db-dev.example.com:3306/user_dev
+      api_base_url: https://api-dev.example.com
+      db_url: jdbc:mysql://db-dev.example.com:3306/user_dev?user=test&password=test
     test:
-      api_host: api-test.example.com
+      api_base_url: https://api-test.example.com
       db_url: jdbc:mysql://db-test.example.com:3306/user_test
 
 configelements:
   # 根据环境动态配置
   - testclass: http
     config:
-      host: ${env_config.${environment}.api_host}
+      base_url: ${env_config.${environment}.api_base_url}
 
   - testclass: jdbc
     config:
       url: ${env_config.${environment}.db_url}
-      username: ${db_username}
-      password: ${db_password}
 ```
 
 ## 📚 最佳实践
@@ -371,9 +351,7 @@ configelements:
   - testclass: http
     # 配置项使用标准命名
     config:
-      protocol: https
-      host: api.example.com
-      port: 443
+      base_url: https://api.example.com
       # 布尔值使用明确的 true/false
       http/2: false
       # 复杂配置使用嵌套结构
@@ -390,7 +368,7 @@ configelements:
 # 定义标准配置模板
 variables:
   standard_http_config: &standard_http_config
-    protocol: https
+    base_url: https://api.example.com
     headers:
       Content-Type: application/json
       User-Agent: StandardTestClient
@@ -400,7 +378,6 @@ configelements:
   - testclass: http
     config:
       <<: *standard_http_config
-      host: api.example.com
 ```
 
 #### 2. 变量配置
@@ -409,9 +386,7 @@ configelements:
 # 集中定义配置变量
 variables:
   http_config:
-    protocol: https
-    host: ${api_host}
-    port: ${api_port}
+    base_url: ${api_base_url}
     headers:
       User-Agent: ${user_agent}
 
