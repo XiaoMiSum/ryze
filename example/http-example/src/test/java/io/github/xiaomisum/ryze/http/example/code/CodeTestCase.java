@@ -18,7 +18,7 @@ public class CodeTestCase {
             suite.variables(Map.of("a", 1, "b", 2));
             suite.variables(var -> var.put("c", 3).put("d", 4));
             suite.configureElements(ele ->
-                    ele.http(http -> http.config(config -> config.protocol("http").host("127.0.0.1").port("58081"))));
+                    ele.http(http -> http.config(config -> config.baseUrl("http://127.0.0.1:58081"))));
             suite.preprocessors(pre ->
                     pre.http(http -> {
                                 http.title("前置处理器新增用户");
@@ -50,7 +50,7 @@ public class CodeTestCase {
     @RyzeTest
     public void test2() {
         MagicBox.http("测试用例- test2()", sampler -> {
-            sampler.configureElements(ele -> ele.http(http -> http.config(config -> config.protocol("http").host("127.0.0.1").port("58081"))));
+            sampler.configureElements(ele -> ele.http(http -> http.config(config -> config.baseUrl("http://127.0.0.1:58081"))));
             sampler.preprocessors(pre -> pre.http(http ->
                     http.title("前置处理器修改用户：ryze").config(config -> config.method("POST").path("/user").body(body -> {
                                 body.put("id", "ryze");
@@ -69,14 +69,14 @@ public class CodeTestCase {
         MagicBox.http(http -> {
             http.variables("id", 1);
             http.title("步骤1——获取用户：id = ${id}");
-            http.config(config -> config.protocol("http").host("127.0.0.1").port("58081")
+            http.config(config -> config.baseUrl("http://127.0.0.1:58081")
                     .method("GET").path("/user/${id}"));
             http.assertions(assertions -> assertions.json("$.data.id", "${id}"));
         });
 
         MagicBox.http(http -> {
             http.title("步骤2——修改用户：id = ryze");
-            http.config(config -> config.protocol("http").host("127.0.0.1").port("58081")
+            http.config(config -> config.baseUrl("http://127.0.0.1:58081")
                     .method("POST").path("/user").body(body -> {
                         body.put("id", "ryze");
                         body.put("name", "ryze_http_sampler");
@@ -87,7 +87,7 @@ public class CodeTestCase {
 
         MagicBox.http(http -> {
             http.title("步骤3——获取用户：id = ryze");
-            http.config(config -> config.protocol("http").host("127.0.0.1").port("58081")
+            http.config(config -> config.baseUrl("http://127.0.0.1:58081")
                     .method("GET").path("/user/ryze"));
             http.assertions(assertions -> assertions.json("$.data.name", "ryze_http_sampler"));
         });

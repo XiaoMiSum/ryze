@@ -126,10 +126,8 @@ children:
 - testclass: http
   config:
     method: post
-    protocol: http
+    base_url: http://localhost:8080
     http/2: false
-    port: 8080
-    host: localhost
     path: /user
     headers:
       h1: 1
@@ -355,7 +353,6 @@ preprocessors:
     config:
       method: GET
       path: /health
-      host: payment-service
 
   # 预先创建支付账户
   - testclass: http

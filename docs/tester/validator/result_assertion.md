@@ -29,8 +29,7 @@ testclass: http
 title: 用户登录
 config:
   method: POST
-  protocol: http
-  host: api.example.com
+  base_url: http://api.example.com
   path: /login
   body:
     username: testuser
@@ -47,9 +46,7 @@ validators:
 testclass: jdbc
 title: 更新用户信息
 config:
-  url: jdbc:mysql://localhost:3306/testdb
-  username: testuser
-  password: testpass
+  url: jdbc:mysql://localhost:3306/testdb?user=testuser&password=testpass
   sql: UPDATE users SET name = 'updated_user' WHERE id = 123
 validators:
   - testclass: result

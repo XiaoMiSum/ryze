@@ -13,7 +13,7 @@ public class CodeExTestCase extends RyzeBasicTestcase4TestNG {
         // 基于 http 协议的 protobuf
         ProtoMagicBox.proto("测试用例-http-protobuf", sampler -> {
             sampler.configureElements(ProtoConfigureElementsBuilder.class, ele -> ele.proto(
-                    proto -> proto.config(config -> config.protocol("http").host("127.0.0.1").port("8080")
+                    proto -> proto.config(config -> config.baseUrl("http://127.0.0.1:8080")
                             .protoDesc(b -> b.descPath("D:\\Github\\ryze\\example\\proto-example\\user.desc")
                                     .requestMessageName("io.github.xiaomisum.ryze.protocol.example.springboot.UserOuterClass.User")
                                     .responseMessageName("io.github.xiaomisum.ryze.protocol.example.springboot.UserOuterClass.User")))));
@@ -35,7 +35,7 @@ public class CodeExTestCase extends RyzeBasicTestcase4TestNG {
         // 基于 websocket 协议的 protobuf
         ProtoMagicBox.proto("测试用例-websocket-protobuf", sampler -> {
             sampler.configureElements(ProtoConfigureElementsBuilder.class, ele -> ele.proto(
-                    proto -> proto.config(config -> config.protocol("ws").host("127.0.0.1").port("8080")
+                    proto -> proto.config(config -> config.baseUrl("ws://127.0.0.1:8080")
                             .protoDesc(b -> b.descPath("D:\\Github\\ryze\\example\\proto-example\\user.desc")
                                     .requestMessageName("io.github.xiaomisum.ryze.protocol.example.springboot.UserOuterClass.User")
                                     .responseMessageName("io.github.xiaomisum.ryze.protocol.example.springboot.UserOuterClass.User")))));

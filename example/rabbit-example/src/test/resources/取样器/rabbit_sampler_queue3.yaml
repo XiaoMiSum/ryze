@@ -1,12 +1,9 @@
 title: rabbitmq_sampler_3
 testclass: rabbit  # 取样器类型
 config: # 处理器配置
-  host: 'localhost' # rabbitmq服务器地址
-  port: 5672 # rabbitmq服务器端口，可空，默认值：5672
-  username: guest # rabbitmq 用户名，可空，默认值：guest
-  password: guest # rabbitmq 密码，可空，默认值：guest
+  # 推荐使用 url 格式：amqp://[用户名:密码@]主机地址[:端口]/[虚拟主机]
+  url: amqp://guest:guest@localhost:5672/  # RabbitMQ 连接地址
   timeout: 5000 # 连接超时时间，毫秒，默认值：60000
-  virtual_host:
   queue: # 队列配置
     name: ryze.topic  # 消息队列名称
     durable:  # 是否持久化队列，可空，默认值：false

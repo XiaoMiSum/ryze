@@ -82,8 +82,7 @@ Ryze 是一个基于 Java 21 开发的现代化测试框架，专为多协议测
       "title": "获取用户信息",
       "config": {
         "method": "GET",
-        "protocol": "https",
-        "host": "${host}",
+        "base_url": "https://${host}",
         "api": "/users/${userId}",
         "headers": {
           "Accept": "application/json"

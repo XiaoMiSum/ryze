@@ -101,8 +101,7 @@ cd ryze-demo
       "title": "获取用户信息",
       "config": {
         "method": "GET",
-        "protocol": "https",
-        "host": "${host}",
+        "base_url": "https://${host}",
         "api": "/users/${userId}",
         "headers": {
           "Accept": "application/json"
@@ -141,8 +140,7 @@ cd ryze-demo
       "title": "获取用户文章",
       "config": {
         "method": "GET",
-        "protocol": "https",
-        "host": "${host}",
+        "base_url": "https://${host}",
         "api": "/users/${userId}/posts",
         "headers": {
           "Accept": "application/json"
@@ -228,8 +226,7 @@ public class MagicBoxDemo {
                 children.http(http -> http
                         .title("获取用户信息")
                         .method("GET")
-                        .protocol("https")
-                        .host("${host}")
+                        .base_url("https://${host}")
                         .api("/users/${userId}")
                         .header("Accept", "application/json")
                         // 添加断言
@@ -248,8 +245,7 @@ public class MagicBoxDemo {
                 children.http(http -> http
                         .title("获取用户文章")
                         .method("GET")
-                        .protocol("https")
-                        .host("${host}")
+                        .base_url("https://${host}")
                         .api("$/users/${userId}/posts")
                         .assertion(assertion -> assertion
                                 .json("$", "", "isNotEmpty")
@@ -283,7 +279,7 @@ def result = suite("用户API测试") {
         http {
             title "获取用户信息"
             method "GET"
-            protocol "https"
+            base_url "https://${host}"
             api '/users/${userId}'
             header "Accept", "application/json"
 
@@ -384,8 +380,7 @@ mvn allure:serve
       "title": "创建用户",
       "config": {
         "method": "POST",
-        "protocol": "https",
-        "host": "api.example.com",
+        "base_url": "https://api.example.com",
         "api": "/users",
         "body": {
           "id": "${randomId}",

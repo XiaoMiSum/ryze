@@ -64,9 +64,7 @@
 ```yaml
 config:
   method: GET              # HTTP 方法 (GET/POST/PUT/DELETE/PATCH)
-  protocol: https          # 协议 (http/https)
-  host: api.example.com    # 主机地址
-  port: 8080              # 端口（可选）
+  base_url: https://api.example.com:8080  # 基础URL
   path: /api/users        # 请求路径
   headers: # 请求头
     Content-Type: application/json

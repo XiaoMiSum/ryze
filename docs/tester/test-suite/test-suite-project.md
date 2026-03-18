@@ -30,11 +30,10 @@ variables:
 configelements:
   - testclass: http
     config:
-      protocol: https
-      host: ${base_url}
+      base_url: ${base_url}
       headers:
         Content-Type: application/json
-  
+
   - testclass: jdbc
     ref_name: main_db
     config:
@@ -63,14 +62,14 @@ children:
 
 ## 参数说明
 
-| 参数 | 类型 | 必填 | 描述 |
-|---------|--------|------|-------------------------------------|
-| title | String | 是 | 测试集合的标题 |
-| variables | Object | 否 | 全局变量定义，支持嵌套对象和动态函数，所有子集合都可继承 |
-| configelements | Array | 否 | 全局配置元件列表，为整个项目中的所有取样器提供默认配置 |
-| preprocessors | Array | 否 | 项目级前置处理器列表，在执行项目测试之前运行 |
-| postprocessors | Array | 否 | 项目级后置处理器列表，在执行项目测试之后运行 |
-| children | Array | 是 | 模块级测试集合列表 |
+| 参数             | 类型     | 必填 | 描述                           |
+|----------------|--------|----|------------------------------|
+| title          | String | 是  | 测试集合的标题                      |
+| variables      | Object | 否  | 全局变量定义，支持嵌套对象和动态函数，所有子集合都可继承 |
+| configelements | Array  | 否  | 全局配置元件列表，为整个项目中的所有取样器提供默认配置  |
+| preprocessors  | Array  | 否  | 项目级前置处理器列表，在执行项目测试之前运行       |
+| postprocessors | Array  | 否  | 项目级后置处理器列表，在执行项目测试之后运行       |
+| children       | Array  | 是  | 模块级测试集合列表                    |
 
 > **注意**：项目级配置被所有下级集合继承，修改需谨慎
 
@@ -90,7 +89,7 @@ variables:
   # 环境配置（必需）
   environment: test  # test/staging/production
   base_url: https://test-api.example.com
-  
+
   # 数据库配置
   database:
     host: test-db.example.com
@@ -98,15 +97,15 @@ variables:
     name: test_db
     username: test_user
     password: test_pass
-  
+
   # 缓存配置
   redis_url: redis://test-redis.example.com:6379
-  
+
   # 认证信息
   admin_credentials:
     username: admin
     password: admin123
-  
+
   # 常量配置
   DEFAULT_TIMEOUT: 30000
   MAX_RETRY_COUNT: 3
@@ -119,8 +118,7 @@ configelements:
   # HTTP 全局配置
   - testclass: http
     config:
-      protocol: https
-      host: ${base_url}
+      base_url: ${base_url}
       headers:
         Content-Type: application/json
         User-Agent: RyzeTestFramework/1.0
@@ -130,9 +128,7 @@ configelements:
     ref_name: main_db
     config:
       driver: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://${database.host}:${database.port}/${database.name}
-      username: ${database.username}
-      password: ${database.password}
+      url: jdbc:mysql://${database.host}:${database.port}/${database.name}?user=${database.username}&password=${database.password}
       max_active: 10
       max_idle: 5
 
@@ -156,7 +152,7 @@ preprocessors:
         -- 清理测试数据
         TRUNCATE TABLE test_users;
         TRUNCATE TABLE test_orders;
-  
+
   - testclass: http
     config:
       method: POST
@@ -172,7 +168,7 @@ postprocessors:
       path: /admin/cleanup-test-env
       body:
         environment: ${environment}
-  
+
   - testclass: jdbc
     config:
       datasource: main_db
@@ -187,19 +183,19 @@ postprocessors:
 ```yaml
 children:
   # 按业务领域分组
-  
+
   # 用户管理模块
   - !include modules/user-management/module.yaml
-  
+
   # 订单管理模块
   - !include modules/order-management/module.yaml
-  
+
   # 支付模块
   - !include modules/payment/module.yaml
-  
+
   # 库存模块
   - !include modules/inventory/module.yaml
-  
+
   # 报告和统计（可选）
   - !include modules/reporting/module.yaml
 ```
@@ -240,7 +236,7 @@ variables:
   # 环境配置
   environment: test
   base_url: https://test-api.ecommerce.com
-  
+
   # 数据库配置
   database:
     host: test-db.ecommerce.com
@@ -248,24 +244,24 @@ variables:
     name: ecommerce_test
     username: test_user
     password: test_pass_123
-  
+
   # 缓存配置
   redis:
     host: test-redis.ecommerce.com
     port: 6379
     db: 0
-  
+
   # 认证信息
   admin_user:
     username: admin
     password: admin@123
     email: admin@test.com
-  
+
   test_user:
     username: testuser
     password: testuser@123
     email: testuser@test.com
-  
+
   # 常量
   DEFAULT_TIMEOUT: 30000
   MAX_RETRY: 3
@@ -276,25 +272,22 @@ configelements:
   # HTTP 全局配置
   - testclass: http
     config:
-      protocol: https
-      host: ${base_url}
+      base_url: ${base_url}
       headers:
         Content-Type: application/json
         User-Agent: RyzeTestFramework/1.0
         X-Environment: ${environment}
-  
+
   # JDBC 全局配置
   - testclass: jdbc
     ref_name: main_db
     config:
       driver: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://${database.host}:${database.port}/${database.name}
-      username: ${database.username}
-      password: ${database.password}
+      url: jdbc:mysql://${database.host}:${database.port}/${database.name}?user=${database.username}&password=${database.password}
       max_active: 20
       max_idle: 10
       max_wait: 30000
-  
+
   # Redis 全局配置
   - testclass: redis
     ref_name: cache
@@ -315,19 +308,19 @@ preprocessors:
         TRUNCATE TABLE orders;
         TRUNCATE TABLE order_items;
         TRUNCATE TABLE payments;
-        
+
         -- 插入初始数据
         INSERT INTO users (id, username, email, status) 
         VALUES 
           (1, 'admin', 'admin@test.com', 'active'),
           (2, 'testuser', 'testuser@test.com', 'active');
-  
+
   # 2. 清空缓存
   - testclass: redis
     config:
       datasource: cache
       command: FLUSHDB
-  
+
   # 3. 环境初始化通知
   - testclass: http
     config:
@@ -344,16 +337,16 @@ preprocessors:
 children:
   # 用户管理模块
   - !include modules/user-management/module.yaml
-  
+
   # 商品管理模块
   - !include modules/product-management/module.yaml
-  
+
   # 订单管理模块
   - !include modules/order-management/module.yaml
-  
+
   # 支付模块
   - !include modules/payment/module.yaml
-  
+
   # 库存管理模块
   - !include modules/inventory/module.yaml
 
@@ -368,7 +361,7 @@ postprocessors:
         environment: ${environment}
         request_id: ${REQUEST_ID}
         status: completed
-  
+
   # 2. 数据清理
   - testclass: jdbc
     config:
@@ -379,7 +372,7 @@ postprocessors:
           (SELECT id FROM orders WHERE created_by = 'test_framework');
         DELETE FROM orders WHERE created_by = 'test_framework';
         DELETE FROM users WHERE email LIKE 'test%@test.com';
-  
+
   # 3. 环境清理通知
   - testclass: http
     config:
@@ -399,12 +392,12 @@ variables:
   # 部署环境
   environment: ${Env('TEST_ENV', 'test')}
   base_url: ${Env('API_BASE_URL', 'https://api-test.saas.com')}
-  
+
   # 多租户配置
   tenants:
     default: tenant_001
     secondary: tenant_002
-  
+
   # 数据库主从配置
   database:
     master:
@@ -415,13 +408,13 @@ variables:
     slave:
       host: ${Env('DB_SLAVE_HOST', 'test-db-slave.saas.com')}
       port: 3306
-  
+
   # 认证配置
   auth:
     oauth2_client_id: test_client_id
     oauth2_client_secret: test_client_secret
     jwt_secret: test_jwt_secret
-  
+
   # 特性开关
   features:
     advanced_analytics: true
@@ -432,22 +425,19 @@ configelements:
   # HTTP 配置
   - testclass: http
     config:
-      protocol: https
-      host: ${base_url}
+      base_url: ${base_url}
       headers:
         Content-Type: application/json
         User-Agent: SaasTestSuite/1.0
         X-Tenant-ID: ${tenants.default}
         X-Environment: ${environment}
-  
+
   # 主数据库配置
   - testclass: jdbc
     ref_name: master_db
     config:
       driver: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://${database.master.host}:${database.master.port}/saas_db
-      username: ${database.master.username}
-      password: ${database.master.password}
+      url: jdbc:mysql://${database.master.host}:${database.master.port}/saas_db?user=${database.master.username}&password=${database.master.password}
       max_active: 30
 
 preprocessors:
@@ -460,7 +450,7 @@ preprocessors:
         INSERT INTO tenants (id, name, status) VALUES 
           ('${tenants.default}', 'Default Tenant', 'active'),
           ('${tenants.secondary}', 'Secondary Tenant', 'active');
-        
+
         -- 初始化用户
         INSERT INTO users (tenant_id, username, email, role) VALUES
           ('${tenants.default}', 'admin', 'admin@test.com', 'admin'),
@@ -491,14 +481,14 @@ title: 微服务架构综合测试项目
 
 variables:
   environment: test
-  
+
   # 服务端点配置
   services:
     user_service: https://user-service.test.local
     order_service: https://order-service.test.local
     payment_service: https://payment-service.test.local
     notification_service: https://notification-service.test.local
-  
+
   # 消息队列配置
   kafka:
     bootstrap_servers: kafka-broker.test.local:9092
@@ -506,7 +496,7 @@ variables:
       user_events: user-events
       order_events: order-events
       payment_events: payment-events
-  
+
   # 数据库配置
   databases:
     user_db:
@@ -523,29 +513,25 @@ configelements:
   # 用户服务 HTTP 配置
   - testclass: http
     config:
-      protocol: https
-      host: ${services.user_service}
+      base_url: ${services.user_service}
       headers:
         X-Service: user-service
         Content-Type: application/json
-  
+
   # 订单服务 HTTP 配置
   - testclass: http
     config:
-      protocol: https
-      host: ${services.order_service}
+      base_url: ${services.order_service}
       headers:
         X-Service: order-service
-  
+
   # 用户服务数据库配置
   - testclass: jdbc
     ref_name: user_db
     config:
       driver: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://${databases.user_db.host}:3306/${databases.user_db.name}
-      username: sa
-      password: sa_pass
-  
+      url: jdbc:mysql://sa:sa_pass@${databases.user_db.host}:3306/${databases.user_db.name}
+
   # Kafka 消息队列配置
   - testclass: kafka
     config:
@@ -557,7 +543,7 @@ preprocessors:
     config:
       datasource: user_db
       sql: TRUNCATE TABLE users; TRUNCATE TABLE roles;
-  
+
   # 清理消息队列
   - testclass: kafka
     config:
@@ -578,7 +564,7 @@ postprocessors:
     config:
       datasource: user_db
       sql: DELETE FROM users WHERE created_by = 'test_framework';
-  
+
   # 生成性能报告
   - testclass: http
     config:
@@ -602,8 +588,7 @@ variables:
 configelements:
   - testclass: http
     config:
-      protocol: https
-      host: ${base_url}
+      base_url: ${base_url}
 
 children:
   - !include modules/basic-tests/module.yaml

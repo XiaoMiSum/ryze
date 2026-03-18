@@ -61,7 +61,7 @@ testclass: jdbc # 配置元件类型
 ref_name: JDBCDataSource_var  # 数据源名称
 config: # 可简化填写，无需config关键字，直接将配置内容至于首层
   driver: com.mysql.cj.jdbc.Driver # jdbc驱动，jdbc版本没支持 SPI时必填
-  url: 'jdbc:mysql://127.0.0.1:3306/db-template?username=root&password=123456&characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2b8&failOverReadOnly=false'
+  url: 'jdbc:mysql://127.0.0.1:3306/db-template?user=root&password=123456&characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2b8&failOverReadOnly=false'
   max_active: '10'
   max_wait: '60000'
 ```
@@ -120,7 +120,7 @@ public class JdbcApiExample {
             jdbc.configureElements(ele -> ele.jdbc(j -> j
                     .refName("jdbc_source")
                     .config(config -> config
-                            .url("jdbc:mysql://127.0.0.1:3306/ryze-test?username=root&password=123456&characterEncoding=utf8&useSSL=true&serverTimezone=GMT%2b8&failOverReadOnly=false")
+                            .url("jdbc:mysql://127.0.0.1:3306/ryze-test?user=root&password=123456&characterEncoding=utf8&useSSL=true&serverTimezone=GMT%2b8&failOverReadOnly=false")
                     )
             ));
             jdbc.config(config -> config
@@ -139,7 +139,7 @@ public class JdbcApiExample {
             jdbc.configureElements(ele -> ele.jdbc(j -> j
                     .refName("jdbc_source")
                     .config(config -> config
-                            .url("jdbc:mysql://127.0.0.1:3306/ryze-test?username=root&password=123456&characterEncoding=utf8&useSSL=true&serverTimezone=GMT%2b8&failOverReadOnly=false")
+                            .url("jdbc:mysql://127.0.0.1:3306/ryze-test?user=root&password=123456&characterEncoding=utf8&useSSL=true&serverTimezone=GMT%2b8&failOverReadOnly=false")
             ));
             jdbc.postprocessors(post -> post.jdbc(j -> j
                     .config(config -> config
@@ -180,7 +180,7 @@ public class JdbcSuiteExample {
             suite.configureElements(ele -> ele.jdbc(jdbc -> jdbc
                     .refName("jdbc_source")
                     .config(config -> config
-                            .url("jdbc:mysql://127.0.0.1:3306/ryze-test?username=root&password=123456&characterEncoding=utf8&useSSL=true&serverTimezone=GMT%2b8&failOverReadOnly=false")
+                            .url("jdbc:mysql://127.0.0.1:3306/ryze-test?user=root&password=123456&characterEncoding=utf8&useSSL=true&serverTimezone=GMT%2b8&failOverReadOnly=false")
             ));
 
             // 前置处理：插入测试数据
@@ -255,7 +255,7 @@ class GroovyJdbcExample {
                 jdbc {
                     refName "jdbc_source"
                     config {
-                        url "jdbc:mysql://127.0.0.1:3306/ryze-test?username=root&password=123456&characterEncoding=utf8&useSSL=true&serverTimezone=GMT%2b8&failOverReadOnly=false"
+                        url "jdbc:mysql://127.0.0.1:3306/ryze-test?user=root&password=123456&characterEncoding=utf8&useSSL=true&serverTimezone=GMT%2b8&failOverReadOnly=false"
                     }
                 }
             }
@@ -276,7 +276,7 @@ class GroovyJdbcExample {
                 jdbc {
                     refName "jdbc_source"
                     config {
-                        url "jdbc:mysql://127.0.0.1:3306/ryze-test?username=root&password=123456&characterEncoding=utf8&useSSL=true&serverTimezone=GMT%2b8&failOverReadOnly=false"
+                        url "jdbc:mysql://127.0.0.1:3306/ryze-test?user=root&password=123456&characterEncoding=utf8&useSSL=true&serverTimezone=GMT%2b8&failOverReadOnly=false"
                     }
                 }
             }
@@ -322,7 +322,7 @@ class GroovyJdbcSuiteExample {
                 jdbc {
                     refName "jdbc_source"
                     config {
-                        url "jdbc:mysql://127.0.0.1:3306/ryze-test?username=root&password=123456&characterEncoding=utf8&useSSL=true&serverTimezone=GMT%2b8&failOverReadOnly=false"
+                        url "jdbc:mysql://127.0.0.1:3306/ryze-test?user=root&password=123456&characterEncoding=utf8&useSSL=true&serverTimezone=GMT%2b8&failOverReadOnly=false"
                     }
                 }
             }

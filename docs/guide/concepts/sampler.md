@@ -151,10 +151,8 @@ title: 标准HTTP取样器
 testclass: http
 config:
   method: post
-  protocol: http
+  base_url: http://localhost:8080
   http/2: false
-  port: 8080
-  host: localhost
   headers:
     h1: 1
   path: /user

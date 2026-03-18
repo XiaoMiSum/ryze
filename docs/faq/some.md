@@ -288,8 +288,7 @@ println("提取的 token: "+token);
 testclass: http
 config:
   method: GET
-  protocol: https
-  host: api.example.com
+  base_url: https://api.example.com
   path: /slow
   # 注意：当前版本不支持独立的超时配置
 ```
@@ -301,8 +300,7 @@ config:
   "testclass": "http",
   "config": {
     "method": "GET",
-    "protocol": "https",
-    "host": "api.example.com",
+    "base_url": "https://api.example.com",
     "path": "/slow"
   }
 }
@@ -390,9 +388,7 @@ testclass: jdbc
 ref_name: mysqlDefault
 config:
   driver: com.mysql.cj.jdbc.Driver
-  url: 'jdbc:mysql://localhost:3306/testdb?useSSL=false&serverTimezone=UTC'
-  username: testuser
-  password: testpass
+  url: 'jdbc:mysql://localhost:3306/testdb?user=testuser&password=testpass'
   max_active: '5'      # 最大连接数（测试环境不需要太多）
   max_wait: '10000'    # 获取连接最大等待时间
 ```
@@ -403,9 +399,7 @@ config:
   "ref_name": "mysqlDefault",
   "config": {
     "driver": "com.mysql.cj.jdbc.Driver",
-    "url": "jdbc:mysql://localhost:3306/testdb?useSSL=false&serverTimezone=UTC",
-    "username": "testuser",
-    "password": "testpass",
+    "url": "jdbc:mysql://localhost:3306/testdb?user=testuser&password=testpass",
     "max_active": "5",
     "max_wait": "10000"
   }
@@ -551,7 +545,7 @@ public void testWithVariables() {
         suite.children(child -> child.http(http -> http
                 .config(config -> config
                         .method("POST")
-                        .host("api.example.com")
+                        .base_url("https://api.example.com")
                         .path("/users")
                         .body(body -> {
                             body.put("name", "${name}");
@@ -581,7 +575,7 @@ public void testWithVariables() {
       "testclass": "http",
       "config": {
         "method": "POST",
-        "host": "${baseUrl}",
+        "base_url": "https://${baseUrl}",
         "path": "/users",
         "body": "${userData}"
       }
@@ -670,9 +664,7 @@ mvn allure:report
   "testclass": "http",
   "config": {
     "method": "GET",
-    "protocol": "https",
-    "host": "api.example.com",
-    "port": 443,
+    "base_url": "https://api.example.com",
     "path": "/test",
     "headers": {
       "Host": "api.example.com",
@@ -687,9 +679,7 @@ mvn allure:report
 ```yaml
 testclass: http
 config:
-  protocol: https  # 支持 HTTPS
-  host: api.example.com
-  port: 443
+  base_url: https://api.example.com  # 支持 HTTPS
   path: /test
 ```
 

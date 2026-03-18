@@ -22,8 +22,7 @@ ref_name: status # 变量名称
 testclass: http
 title: 用户登录
 config:
-  protocol: http
-  host: localhost
+  base_url: http://localhost
   method: post
   path: /api/login
   body:

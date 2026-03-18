@@ -110,10 +110,8 @@ postprocessors:
 - testclass: http
   config:
     method: post
-    protocol: http
+    base_url: http://localhost:8080
     http/2: false
-    port: 8080
-    host: localhost
     path: /user
     headers:
       h1: 1

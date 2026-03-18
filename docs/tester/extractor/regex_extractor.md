@@ -29,8 +29,7 @@ testclass: http
 title: 创建用户
 config:
   method: POST
-  protocol: https
-  host: api.example.com
+  base_url: https://api.example.com
   path: /users
   body:
     name: testuser
@@ -55,8 +54,7 @@ testclass: http
 title: 获取订单列表
 config:
   method: GET
-  protocol: https
-  host: api.example.com
+  base_url: https://api.example.com
   path: /orders
 extractors:
   - testclass: regex

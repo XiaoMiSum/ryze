@@ -11,7 +11,7 @@ public class CodeExTestCase extends RyzeBasicTestcase4TestNG {
     @RyzeTest
     public void test1() {
         MagicBox.http("测试用例- test2()", sampler -> {
-            sampler.configureElements(ele -> ele.http(http -> http.config(config -> config.protocol("http").host("127.0.0.1").port("58081"))));
+            sampler.configureElements(ele -> ele.http(http -> http.config(config -> config.baseUrl("http://127.0.0.1:58081"))));
             sampler.preprocessors(pre -> pre.http(http ->
                     http.title("前置处理器修改用户：ryze").config(config -> config.method("POST").path("/user").body(body -> {
                                 body.put("id", "ryze");
@@ -28,7 +28,7 @@ public class CodeExTestCase extends RyzeBasicTestcase4TestNG {
     @RyzeTest
     public void test2() {
         MagicBox.http("测试用例- test2()", sampler -> {
-            sampler.configureElements(ele -> ele.http(http -> http.config(config -> config.protocol("http").host("127.0.0.1").port("58081"))));
+            sampler.configureElements(ele -> ele.http(http -> http.config(config -> config.baseUrl("http://127.0.0.1:58081"))));
             sampler.preprocessors(pre -> pre.http(http ->
                     http.title("前置处理器修改用户：ryze").config(config -> config.method("POST").path("/user").body(body -> {
                                 body.put("id", "ryze");

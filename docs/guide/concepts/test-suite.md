@@ -66,16 +66,13 @@ title: 测试集合描述
 variables:
   global_var: 全局变量值
   config:
-    host: api.example.com
-    port: 443
+    base_url: https://api.example.com
 
 # 配置元件（数据库连接、HTTP 配置等）
 configelements:
   - testclass: jdbc
     config:
-      url: jdbc:mysql://localhost:3306/testdb
-      username: ${db_user}
-      password: ${db_password}
+      url: jdbc:mysql://localhost:3306/testdb?user=testuser&password=testpass
 
 # 前置处理器
 preprocessors:
@@ -135,17 +132,14 @@ configelements:
   # 数据库连接配置
   - testclass: jdbc
     config:
-      url: jdbc:mysql://${database.host}:${database.port}/${database.name}
-      username: ${db_user}
-      password: ${db_password}
+      url: jdbc:mysql://${database.host}:${database.port}/${database.name}testuser&password=testpass
       max_active: 10
       max_wait: 5000
 
   # HTTP 全局配置
   - testclass: http
     config:
-      protocol: https
-      host: ${base_url}
+      base_url: ${base_url}
       headers:
         Content-Type: application/json
         User-Agent: RyzeTestFramework/1.0

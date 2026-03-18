@@ -63,7 +63,6 @@ testclass: proto  # 配置元件类型
 config: # 可简化填写，无需config关键字，直接将配置内容至于首层
   base_url: http://localhost:8080   # 基础路径，如：http://127.0.0.1:8080
   method: post
-  host: localhost
   headers: # 请求头，可空
     h1: 1
   proto_desc: # protobuf描述配置，可空（默认配置为空时，处理器\取样器则不可为空）
@@ -235,10 +234,8 @@ config: # 取样器配置
   "title": "用户登录接口",
   "testclass": "proto",
   "config": {
-    "protocol": "http",
+    "base_url": "http://localhost:8080",
     "method": "post",
-    "host": "api.example.com",
-    "port": 443,
     "path": "/auth/login",
     "headers": {
       "Content-Type": "application/json"
@@ -248,7 +245,11 @@ config: # 取样器配置
       "password": "password123"
     },
     "query": {},
-    "response_pattern": "userName"
+    "proto_desc": {
+      "desc_path": "/path",
+      "request_message_class": "com.example.User",
+      "response_message_class": "com.example.User"
+    }
   }
 }
 ```
@@ -277,7 +278,7 @@ config: # 取样器配置
   "title": "用户登录接口",
   "testclass": "proto",
   "config": {
-    "base_url": "wss://api.example.com",
+    "base_url": "ws://localhost:8080",
     "path": "/auth/login",
     "headers": {
       "Content-Type": "application/json"
@@ -287,7 +288,12 @@ config: # 取样器配置
       "password": "password123"
     },
     "query": {},
-    "response_pattern": "userName"
+    "response_pattern": "userName",
+    "proto_desc": {
+      "desc_path": "/path",
+      "request_message_class": "com.example.User",
+      "response_message_class": "com.example.User"
+    }
   }
 }
 ```
