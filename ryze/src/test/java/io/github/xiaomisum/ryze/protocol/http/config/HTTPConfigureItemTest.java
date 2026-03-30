@@ -310,7 +310,7 @@ public class HTTPConfigureItemTest {
         HTTPConfigureItem item = new HTTPConfigureItem();
 
         Assert.assertEquals(item.getProtocol(HTTP), "http");
-        Assert.assertEquals(item.getFullPath(), "/");
+        Assert.assertEquals(item.getFullPath(), "");
         Assert.assertEquals(item.getMethod(GET), "GET");
         Assert.assertEquals(item.getRef(), DEF_REF_NAME_KEY);
     }

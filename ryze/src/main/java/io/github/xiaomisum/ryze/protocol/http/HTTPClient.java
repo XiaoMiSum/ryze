@@ -92,7 +92,7 @@ public class HTTPClient extends Request implements HTTPConstantsInterface {
      */
     public static HTTPClient build(HTTPConfigureItem config) {
 
-        var url = StringUtils.isNoneBlank(config.getBaseUrl()) ? config.getBaseUrl() :
+        var url = StringUtils.isNoneBlank(config.getBaseUrl()) ? config.getBaseUrl() + config.getFullPath() :
                 "%s://%s%s%s".formatted(config.getProtocol(HTTP), config.getHost(), config.getFullPort(), config.getFullPath());
         // bytes body data(binary) 不会同时出现
         return (HTTPClient) new HTTPClient(config.getMethod(GET), url)
