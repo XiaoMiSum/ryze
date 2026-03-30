@@ -293,7 +293,7 @@ public class HTTPConfigureItem implements ConfigureItem<HTTPConfigureItem>, HTTP
      * @return 基础URL
      */
     public String getBaseUrl() {
-        return baseUrl;
+        return StringUtils.isNoneBlank(baseUrl) && baseUrl.endsWith("/") ? baseUrl.substring(0, baseUrl.length() - 1) : baseUrl;
     }
 
     /**
@@ -418,7 +418,7 @@ public class HTTPConfigureItem implements ConfigureItem<HTTPConfigureItem>, HTTP
      */
     @JSONField(serialize = false, deserialize = false)
     public String getFullPath() {
-        return StringUtils.isBlank(path) ? "/" : Strings.CS.startsWith(path, "/") ? path : "/" + path;
+        return StringUtils.isBlank(path) ? "" : Strings.CS.startsWith(path, "/") ? path : "/" + path;
     }
 
     /**
