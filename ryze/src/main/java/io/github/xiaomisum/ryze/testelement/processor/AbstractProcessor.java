@@ -31,24 +31,32 @@ package io.github.xiaomisum.ryze.testelement.processor;
 import com.alibaba.fastjson2.annotation.JSONField;
 import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
+import io.github.xiaomisum.ryze.Result;
 import io.github.xiaomisum.ryze.SessionRunner;
 import io.github.xiaomisum.ryze.builder.ExtensibleExtractorsBuilder;
 import io.github.xiaomisum.ryze.config.ConfigureItem;
+import io.github.xiaomisum.ryze.config.RyzeVariables;
+import io.github.xiaomisum.ryze.context.Context;
 import io.github.xiaomisum.ryze.context.ContextWrapper;
+import io.github.xiaomisum.ryze.context.TestSuiteContext;
 import io.github.xiaomisum.ryze.extractor.Extractor;
 import io.github.xiaomisum.ryze.interceptor.RyzeInterceptor;
 import io.github.xiaomisum.ryze.support.Collections;
 import io.github.xiaomisum.ryze.support.Customizer;
+import io.github.xiaomisum.ryze.support.KryoUtil;
 import io.github.xiaomisum.ryze.support.ValidateResult;
 import io.github.xiaomisum.ryze.support.groovy.Groovy;
 import io.github.xiaomisum.ryze.testelement.AbstractTestElement;
 import io.github.xiaomisum.ryze.testelement.TestElement;
+import io.github.xiaomisum.ryze.testelement.TestElementConfigureGroup;
 import io.github.xiaomisum.ryze.testelement.TestElementConstantsInterface;
 import io.github.xiaomisum.ryze.testelement.sampler.SampleResult;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Strings;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
@@ -81,7 +89,7 @@ import static io.github.xiaomisum.ryze.TestStatus.broken;
  * @param <R>      执行结果类型，继承自 SampleResult
  * @author xiaomi
  */
-@SuppressWarnings({"rawtypes", "unchecked"})
+@SuppressWarnings({"unchecked"})
 public abstract class AbstractProcessor<SELF extends AbstractProcessor<SELF, CONFIG, R>, CONFIG extends ConfigureItem<CONFIG>, R extends SampleResult>
         extends AbstractTestElement<AbstractProcessor<SELF, CONFIG, R>, CONFIG, R>
         implements Processor, TestElementConstantsInterface {
@@ -93,9 +101,11 @@ public abstract class AbstractProcessor<SELF extends AbstractProcessor<SELF, CON
     @JSONField(name = EXTRACTORS, ordinal = 10)
     protected List<Extractor> extractors;
     @JSONField(name = ASYNC, ordinal = 11)
-    protected boolean async = false;
+    protected String async;
     @JSONField(name = CONDITION, ordinal = 12)
     protected String condition;
+    @JSONField(name = VARIABLES, ordinal = 13)
+    protected RyzeVariables variables;
 
     /**
      * 默认构造函数
@@ -114,6 +124,7 @@ public abstract class AbstractProcessor<SELF extends AbstractProcessor<SELF, CON
         this.extractors = builder.extractors;
         this.async = builder.async;
         this.condition = builder.condition;
+        this.variables = builder.variables;
     }
 
     /**
@@ -121,6 +132,33 @@ public abstract class AbstractProcessor<SELF extends AbstractProcessor<SELF, CON
      */
     public static void shutdownAsyncExecutor() {
         asyncExecutor.shutdown();
+    }
+
+    /**
+     * 获取变量集合
+     *
+     * @return 变量集合
+     */
+    public RyzeVariables getVariables() {
+        return variables;
+    }
+
+    /**
+     * 设置变量集合
+     *
+     * @param variables 变量集合
+     */
+    public void setVariables(RyzeVariables variables) {
+        this.variables = variables;
+    }
+
+    /**
+     * 获取变量提取器列表
+     *
+     * @return 变量提取器列表
+     */
+    public List<Extractor> getExtractors() {
+        return extractors;
     }
 
     /**
@@ -144,14 +182,55 @@ public abstract class AbstractProcessor<SELF extends AbstractProcessor<SELF, CON
      */
     protected ContextWrapper initialized(SessionRunner session) {
         super.initialized();
-        var localContext = new ContextWrapper(session);
+
+        // 构建包含当前变量的新上下文链并创建 localContext
+        var localContext = createContextWithVariables(session);
+
         localContext.setTestResult(getTestResult());
         localContext.setTestElement(this);
+
         runtime.id = (String) localContext.evaluate(id);
         runtime.title = (String) localContext.evaluate(title);
         runtime.config = (CONFIG) localContext.evaluate(runtime.config);
         handleFilterInterceptors(localContext);
         return localContext;
+    }
+
+    /**
+     * 创建包含合并变量的上下文包装器
+     * <p>
+     * 构建新的上下文链，继承父级变量并合并当前组件的变量，
+     * 然后创建独立的 ContextWrapper，不修改 session 的原始上下文链。
+     * </p>
+     *
+     * @param session 会话运行器
+     * @return 包含完整变量的上下文包装器
+     */
+    private ContextWrapper createContextWithVariables(SessionRunner session) {
+        // 初始化变量
+        if (variables == null) {
+            variables = new RyzeVariables();
+        }
+
+        // 合并父级变量（当前变量优先级更高）
+        variables.merge(session.getContext().getConfigGroup().getVariables());
+
+        // 构建新上下文链
+        List<Context> newContextChain = new ArrayList<>(session.getContextChain());
+        TestSuiteContext currentContext = new TestSuiteContext();
+        TestElementConfigureGroup configGroup = new TestElementConfigureGroup();
+        configGroup.put(VARIABLES, variables);
+        currentContext.setConfigGroup(configGroup);
+        newContextChain.add(currentContext);
+
+        return new ContextWrapper(newContextChain, session);
+    }
+
+    @Override
+    public SELF copy() {
+        SELF self = (SELF) super.copy();
+        self.variables = KryoUtil.copy(variables);
+        return self;
     }
 
     /**
@@ -176,51 +255,88 @@ public abstract class AbstractProcessor<SELF extends AbstractProcessor<SELF, CON
     @Override
     public void process(ContextWrapper context) {
         var localContext = initialized(context.getSessionRunner());
-        var result = (R) localContext.getTestResult();
-        var isConditionPassed = StringUtils.isBlank(condition) || switch (localContext.evaluate(condition)) {
+        // 条件判断
+        if (!isConditionPassed(localContext)) {
+            return;
+        }
+        // 执行任务
+        Runnable task = () -> execute(localContext, context.getTestResult());
+        if (isAsyncPassed(localContext)) {
+            CompletableFuture.runAsync(task, asyncExecutor);
+        } else {
+            task.run();
+        }
+    }
+
+    /**
+     * 判断执行条件是否满足
+     *
+     * @param context 上下文包装器
+     * @return 条件是否通过
+     */
+    private boolean isConditionPassed(ContextWrapper context) {
+        if (StringUtils.isBlank(condition)) {
+            return true;
+        }
+        return evaluateAsBoolean(context, condition);
+    }
+
+    /**
+     * 判断是否异步执行
+     *
+     * @param context 上下文包装器
+     * @return 是否异步执行
+     */
+    private boolean isAsyncPassed(ContextWrapper context) {
+        if (StringUtils.isBlank(async)) {
+            return false;
+        }
+        return evaluateAsBoolean(context, async);
+    }
+
+    /**
+     * 将表达式评估为布尔值
+     *
+     * @param context    上下文包装器
+     * @param expression 待评估的表达式
+     * @return 评估结果
+     */
+    private boolean evaluateAsBoolean(ContextWrapper context, String expression) {
+        return switch (context.evaluate(expression)) {
             case Boolean bool -> bool;
             case String str -> !str.isEmpty() && Strings.CS.equalsAny(str, "1", "t", "T", "true", "TRUE", "True");
             case Number num -> num.intValue() == 1;
             case null, default -> false;
         };
+    }
 
-        // 条件判断，如果条件不满足则直接返回
-        if (!(boolean) isConditionPassed) {
-            return;
-        }
-        Runnable task = () -> {
-            try {
-                // 执行前置处理
-                if (runtime.chain.applyPreHandle(localContext, runtime)) {
-                    // 业务处理
-                    handleRequest(localContext, result);
-                    result.sampleStart();
-                    sample(localContext, result);
-                    result.sampleEnd();
-                    handleResponse(localContext, result);
-                    // 执行后置处理
-                    runtime.chain.applyPostHandle(localContext, runtime);
-                    Optional.ofNullable(extractors).orElse(Collections.emptyList()).forEach(extractor -> extractor.process(localContext));
-                }
-            } catch (Throwable throwable) {
-                result.setThrowable(throwable);
-                result.setStatus(broken);  // 同步设置本地 result 的状态
-                context.getTestResult().setThrowable(throwable);
-                context.getTestResult().setStatus(broken);
-            } finally {
-                // 确保采样时间被记录，避免时间计算异常
-                result.sampleEnd();
-                // 最终处理
-                runtime.chain.triggerAfterCompletion(localContext);
+    /**
+     * 执行处理器核心流程
+     *
+     * @param localContext 本地上下文
+     * @param parentResult 父级执行结果
+     */
+    private void execute(ContextWrapper localContext, Result parentResult) {
+        var localResult = (R) localContext.getTestResult();
+        try {
+            if (!runtime.chain.applyPreHandle(localContext, runtime)) {
+                return;
             }
-        };
-
-        if (async) {
-            // 异步执行处理器
-            CompletableFuture.runAsync(task, asyncExecutor);
-        } else {
-            // 同步执行处理器
-            task.run();
+            handleRequest(localContext, localResult);
+            localResult.sampleStart();
+            sample(localContext, localResult);
+            localResult.sampleEnd();
+            handleResponse(localContext, localResult);
+            runtime.chain.applyPostHandle(localContext, runtime);
+            Optional.ofNullable(extractors).orElse(Collections.emptyList()).forEach(extractor -> extractor.process(localContext));
+        } catch (Throwable throwable) {
+            localResult.setThrowable(throwable);
+            localResult.setStatus(broken);
+            parentResult.setThrowable(throwable);
+            parentResult.setStatus(broken);
+        } finally {
+            localResult.sampleEnd();
+            runtime.chain.triggerAfterCompletion(localContext);
         }
     }
 
@@ -297,8 +413,9 @@ public abstract class AbstractProcessor<SELF extends AbstractProcessor<SELF, CON
             extends AbstractTestElement.Builder<AbstractProcessor<ELE, CONFIG, R>, SELF, CONFIG, CONFIGURE_BUILDER, R> {
 
         protected List<Extractor> extractors;
-        protected boolean async;
+        protected String async;
         protected String condition;
+        protected RyzeVariables variables = new RyzeVariables();
 
         /**
          * 配置变量提取器
@@ -327,23 +444,28 @@ public abstract class AbstractProcessor<SELF extends AbstractProcessor<SELF, CON
         }
 
         /**
-         * 设置异步执行
+         * 设置异步执行，支持 FreeMarker 表达式动态计算
          *
-         * @param async 是否异步执行
+         * @param async FreeMarker 表达式，或 true/false
          * @return 构建器自身实例
          */
-        public SELF async(boolean async) {
+        public SELF async(String async) {
             this.async = async;
             return self;
         }
 
+        public SELF async(boolean async) {
+            this.async = String.valueOf(async);
+            return self;
+        }
+
         /**
-         * 设置异步执行
+         * 设置为异步执行
          *
          * @return 构建器自身实例
          */
         public SELF async() {
-            this.async = true;
+            this.async = "true";
             return self;
         }
 
@@ -355,6 +477,66 @@ public abstract class AbstractProcessor<SELF extends AbstractProcessor<SELF, CON
          */
         public SELF condition(String condition) {
             this.condition = condition;
+            return self;
+        }
+
+        /**
+         * 通过消费者函数配置变量
+         *
+         * @param consumer 变量构建器消费者函数
+         * @return 构建器实例
+         */
+        public SELF variables(java.util.function.Consumer<RyzeVariables.Builder> consumer) {
+            RyzeVariables.Builder builder = RyzeVariables.builder();
+            consumer.accept(builder);
+            this.variables = (RyzeVariables) Collections.putAllIfNonNull(this.variables, builder.build());
+            return self;
+        }
+
+        /**
+         * 通过Groovy闭包配置变量
+         *
+         * @param closure Groovy闭包
+         * @return 构建器实例
+         */
+        public SELF variables(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = RyzeVariables.Builder.class) Closure<?> closure) {
+            RyzeVariables.Builder builder = RyzeVariables.builder();
+            Groovy.call(closure, builder);
+            this.variables = (RyzeVariables) Collections.putAllIfNonNull(this.variables, builder.build());
+            return self;
+        }
+
+        /**
+         * 通过Map配置变量
+         *
+         * @param variables 变量Map
+         * @return 构建器实例
+         */
+        public SELF variables(Map<? extends String, ?> variables) {
+            this.variables = (RyzeVariables) Collections.putAllIfNonNull(this.variables, new RyzeVariables(variables));
+            return self;
+        }
+
+        /**
+         * 直接设置变量集合
+         *
+         * @param variables 变量集合
+         * @return 构建器实例
+         */
+        public SELF variables(RyzeVariables variables) {
+            this.variables = (RyzeVariables) Collections.putAllIfNonNull(this.variables, variables);
+            return self;
+        }
+
+        /**
+         * 添加单个变量
+         *
+         * @param name  变量名
+         * @param value 变量值
+         * @return 构建器实例
+         */
+        public SELF variables(String name, Object value) {
+            this.variables.put(name, value);
             return self;
         }
 
