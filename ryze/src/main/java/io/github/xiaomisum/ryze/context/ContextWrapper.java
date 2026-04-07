@@ -133,6 +133,23 @@ public class ContextWrapper {
         this.uuid = UUID.randomUUID().toString();
     }
 
+    /**
+     * 构造一个ContextWrapper实例，使用指定的上下文链和会话执行器
+     * <p>
+     * 该构造器适用于需要自定义上下文链的场景，例如处理器需要添加独立的变量层级
+     * 但不希望修改原始会话上下文链的情况。
+     * </p>
+     *
+     * @param contextChain  自定义的上下文链，包含从全局到当前层级的所有Context对象
+     * @param sessionRunner 会话执行器，用于提供模板引擎等配置信息
+     * @throws UnsupportedOperationException 当contextChain为空或包含空值时抛出
+     */
+    public ContextWrapper(List<Context> contextChain, SessionRunner sessionRunner) {
+        this(contextChain);
+        this.sessionRunner = sessionRunner;
+        this.uuid = UUID.randomUUID().toString();
+    }
+
     // == 构造器辅助方法 ==
 
     /**
