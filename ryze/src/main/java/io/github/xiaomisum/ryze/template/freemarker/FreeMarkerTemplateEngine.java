@@ -33,6 +33,7 @@ import io.github.xiaomisum.ryze.ApplicationConfig;
 import io.github.xiaomisum.ryze.context.ContextWrapper;
 import io.github.xiaomisum.ryze.template.TemplateEngine;
 import io.github.xiaomisum.ryze.template.Vkw;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.StringWriter;
 import java.util.*;
@@ -180,7 +181,8 @@ public class FreeMarkerTemplateEngine implements TemplateEngine {
                 model.put(Vkw.vars.name(), localVars);
             });
         }
-        return evaluate(model, expression);
+        Object result = evaluate(model, expression);
+        return result != null && StringUtils.isNotBlank(String.valueOf(result)) ? result : expression;
     }
 
     /**
