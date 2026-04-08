@@ -31,7 +31,6 @@ package io.github.xiaomisum.ryze.testelement.processor;
 import com.alibaba.fastjson2.annotation.JSONField;
 import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
-import io.github.xiaomisum.ryze.Result;
 import io.github.xiaomisum.ryze.SessionRunner;
 import io.github.xiaomisum.ryze.builder.ExtensibleExtractorsBuilder;
 import io.github.xiaomisum.ryze.config.ConfigureItem;
@@ -182,13 +181,15 @@ public abstract class AbstractProcessor<SELF extends AbstractProcessor<SELF, CON
      */
     protected ContextWrapper initialized(SessionRunner session) {
         super.initialized();
-
         // 构建包含当前变量的新上下文链并创建 localContext
         var localContext = createContextWithVariables(session);
-
         localContext.setTestResult(getTestResult());
         localContext.setTestElement(this);
-
+        // 模板计算：当前元件的变量配置项（不会计算父级元件）
+        RyzeVariables item;
+        if (runtime.variables != null && (item = localContext.getContextChain().getLast().getConfigGroup().getVariables()) != null) {
+            localContext.evaluate(item);
+        }
         runtime.id = (String) localContext.evaluate(id);
         runtime.title = (String) localContext.evaluate(title);
         runtime.config = (CONFIG) localContext.evaluate(runtime.config);
@@ -213,7 +214,7 @@ public abstract class AbstractProcessor<SELF extends AbstractProcessor<SELF, CON
         }
 
         // 合并父级变量（当前变量优先级更高）
-        variables.merge(session.getContext().getConfigGroup().getVariables());
+        variables.merge(session.getContextChain().getLast().getConfigGroup().getVariables());
 
         // 构建新上下文链
         List<Context> newContextChain = new ArrayList<>(session.getContextChain());
@@ -260,7 +261,7 @@ public abstract class AbstractProcessor<SELF extends AbstractProcessor<SELF, CON
             return;
         }
         // 执行任务
-        Runnable task = () -> execute(localContext, context.getTestResult());
+        Runnable task = () -> execute(localContext, context);
         if (isAsyncPassed(localContext)) {
             CompletableFuture.runAsync(task, asyncExecutor);
         } else {
@@ -313,10 +314,10 @@ public abstract class AbstractProcessor<SELF extends AbstractProcessor<SELF, CON
     /**
      * 执行处理器核心流程
      *
-     * @param localContext 本地上下文
-     * @param parentResult 父级执行结果
+     * @param localContext  本地上下文
+     * @param parentContext 父级上下文
      */
-    private void execute(ContextWrapper localContext, Result parentResult) {
+    private void execute(ContextWrapper localContext, ContextWrapper parentContext) {
         var localResult = (R) localContext.getTestResult();
         try {
             if (!runtime.chain.applyPreHandle(localContext, runtime)) {
@@ -328,12 +329,12 @@ public abstract class AbstractProcessor<SELF extends AbstractProcessor<SELF, CON
             localResult.sampleEnd();
             handleResponse(localContext, localResult);
             runtime.chain.applyPostHandle(localContext, runtime);
-            Optional.ofNullable(extractors).orElse(Collections.emptyList()).forEach(extractor -> extractor.process(localContext));
+            Optional.ofNullable(extractors).ifPresent(extractors -> extractors.forEach(extractor -> extractor.process(localContext, parentContext)));
         } catch (Throwable throwable) {
             localResult.setThrowable(throwable);
             localResult.setStatus(broken);
-            parentResult.setThrowable(throwable);
-            parentResult.setStatus(broken);
+            parentContext.getTestResult().setThrowable(throwable);
+            parentContext.getTestResult().setStatus(broken);
         } finally {
             localResult.sampleEnd();
             runtime.chain.triggerAfterCompletion(localContext);

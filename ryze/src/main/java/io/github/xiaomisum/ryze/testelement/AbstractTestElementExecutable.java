@@ -165,6 +165,11 @@ public abstract class AbstractTestElementExecutable<SELF extends AbstractTestEle
         }
 
         ContextWrapper context = updateCurrentContextInfo(session, snapshot);
+        // 模板计算：当前元件的变量配置项（不会计算父级元件）
+        RyzeVariables item;
+        if (runtime.variables != null && (item = runtime.configGroup.getVariables()) != null) {
+            context.evaluate(item);
+        }
         runtime.id = (String) context.evaluate(id);
         runtime.title = (String) context.evaluate(title);
         snapshot.testResult = getTestResult();
@@ -236,30 +241,25 @@ public abstract class AbstractTestElementExecutable<SELF extends AbstractTestEle
      * @param context 执行上下文包装器
      */
     protected void internalRun(ContextWrapper context) {
-        // 模板计算：当前元件的变量配置项（不会计算父级元件）
-        RyzeVariables item;
-        if (runtime.variables != null && (item = runtime.configGroup.getVariables()) != null) {
-            context.evaluate(item);
-        }
         // 处理配置元件
-        Optional.ofNullable(runtime.configureElements).orElse(Collections.emptyList()).forEach(ele -> ele.process(context));
+        Optional.ofNullable(runtime.configureElements).ifPresent(elements -> elements.forEach(ele -> ele.process(context)));
         // 执行前置动作
-        Optional.ofNullable(runtime.preprocessors).orElse(Collections.emptyList())
-                .stream().filter(preprocessor -> !preprocessor.isDisabled())
-                .forEach(preprocessor -> preprocessor.process(context));
+        Optional.ofNullable(runtime.preprocessors).ifPresent(preprocessors -> preprocessors.stream()
+                .filter(preprocessor -> !preprocessor.isDisabled())
+                .forEach(preprocessor -> preprocessor.process(context)));
         if (context.getTestResult().getStatus().isFailed() || context.getTestResult().getStatus().isBroken()) {
             // 前置步骤执行失败，后续步骤无需执行
             return;
         }
         // 执行请求
         execute(context, (R) context.getTestResult());
-        Optional.ofNullable(runtime.postprocessors).orElse(Collections.emptyList())
-                .stream().filter(postprocessor -> !postprocessor.isDisabled())
-                .forEach(postprocessor -> postprocessor.process(context));
+        Optional.ofNullable(runtime.postprocessors).ifPresent(postprocessors -> postprocessors.stream()
+                .filter(postprocessor -> !postprocessor.isDisabled())
+                .forEach(postprocessor -> postprocessor.process(context)));
         // 关闭配置元件
-        Optional.ofNullable(runtime.configureElements).orElse(Collections.emptyList()).stream()
+        Optional.ofNullable(runtime.configureElements).ifPresent(elements -> elements.stream()
                 .filter(ele -> ele instanceof Closeable)
-                .forEach(ele -> ((Closeable) ele).close());
+                .forEach(ele -> ((Closeable) ele).close()));
     }
 
     /**
