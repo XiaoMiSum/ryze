@@ -156,11 +156,12 @@ public class AbstractProcessorInitializedTest {
     @Test
     public void testInitialized_VariableMerge_CurrentPriorityHigher() throws Exception {
         // 在 session 的 context 中设置父级变量
-        TestElementConfigureGroup sessionConfig = (TestElementConfigureGroup) sessionRunner.getContext().getConfigGroup();
+        List<Context> contextChain = sessionRunner.getContextChain();
+        Context lastContext = contextChain.getLast();
         RyzeVariables parentVars = new RyzeVariables();
         parentVars.put("shared_key", "parent_value");
         parentVars.put("parent_only_key", "parent_only");
-        sessionConfig.put(VARIABLES, parentVars);
+        lastContext.getConfigGroup().put(VARIABLES, parentVars);
 
         // 创建处理器，设置当前变量（包含相同的 key）
         DebugPreprocessor processorWithVars = DebugPreprocessor.builder()
@@ -195,12 +196,13 @@ public class AbstractProcessorInitializedTest {
      */
     @Test
     public void testInitialized_VariableScopeChain_SessionVsLocal() throws Exception {
-        // 1. 设置 Session 变量
-        TestElementConfigureGroup sessionConfig = (TestElementConfigureGroup) sessionRunner.getContext().getConfigGroup();
+        // 1. 设置 Session 变量（到 contextChain 的最后一个 Context）
+        List<Context> contextChain = sessionRunner.getContextChain();
+        Context lastContext = contextChain.getLast();
         RyzeVariables sessionVars = new RyzeVariables();
         sessionVars.put("scope_var", "session_value");
         sessionVars.put("session_only", "from_session");
-        sessionConfig.put(VARIABLES, sessionVars);
+        lastContext.getConfigGroup().put(VARIABLES, sessionVars);
 
         // 2. 设置 Local 变量（处理器变量，覆盖 session）
         DebugPreprocessor processorWithVars = DebugPreprocessor.builder()
@@ -284,10 +286,11 @@ public class AbstractProcessorInitializedTest {
     @Test
     public void testInitialized_TitleExpressionEvaluation() throws Exception {
         // 设置 session 变量
-        TestElementConfigureGroup sessionConfig = (TestElementConfigureGroup) sessionRunner.getContext().getConfigGroup();
+        List<Context> contextChain = sessionRunner.getContextChain();
+        Context lastContext = contextChain.getLast();
         RyzeVariables sessionVars = new RyzeVariables();
         sessionVars.put("user", "xiaomi");
-        sessionConfig.put(VARIABLES, sessionVars);
+        lastContext.getConfigGroup().put(VARIABLES, sessionVars);
 
         // 创建使用表达式的处理器
         DebugPreprocessor processorWithExpr = DebugPreprocessor.builder()
@@ -310,10 +313,11 @@ public class AbstractProcessorInitializedTest {
     @Test
     public void testInitialized_ConfigExpressionEvaluation() throws Exception {
         // 设置变量
-        TestElementConfigureGroup sessionConfig = (TestElementConfigureGroup) sessionRunner.getContext().getConfigGroup();
+        List<Context> contextChain = sessionRunner.getContextChain();
+        Context lastContext = contextChain.getLast();
         RyzeVariables sessionVars = new RyzeVariables();
         sessionVars.put("msg", "dynamic message");
-        sessionConfig.put(VARIABLES, sessionVars);
+        lastContext.getConfigGroup().put(VARIABLES, sessionVars);
 
         // 创建使用表达式的 config
         DebugConfigureItem configWithExpr = DebugConfigureItem.builder()

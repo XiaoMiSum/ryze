@@ -163,9 +163,7 @@ public abstract class AbstractTestElementExecutable<SELF extends AbstractTestEle
         }
 
         // 2. 幂等初始化：确保只初始化一次
-        if (!initialized) {
-            initialized();
-        }
+        initialized();
 
         // 3. 上下文管理：保存旧上下文，设置新上下文
         var context = updateCurrentContextInfo(session, snapshot);
