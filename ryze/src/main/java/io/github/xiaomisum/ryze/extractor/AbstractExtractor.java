@@ -139,18 +139,19 @@ public abstract class AbstractExtractor implements Extractor, ExtractorConstants
      *
      * <p>该方法实现了提取器的完整执行生命周期，确保在各种情况下都能正确处理提取过程。</p>
      *
-     * @param context 测试上下文，包含测试结果和变量信息
+     * @param localContext  当前组件测试上下文，包含测试结果和变量信息
+     * @param parentContext 父组件测试上下文，包含测试结果和变量信息
      * @throws RuntimeException 当提取过程中发生无法处理的错误且未设置默认值时抛出
      */
     @Override
-    public void process(ContextWrapper context) {
-        if (!context.getTestResult().getStatus().isPassed()) {
+    public void process(ContextWrapper localContext, ContextWrapper parentContext) {
+        if (!localContext.getTestResult().getStatus().isPassed()) {
             // 非 ryze-testng 框架下测试失败不会抛出异常，取样步骤结果失败，无需执行验证器
             return;
         }
-        if (context.getTestResult() instanceof SampleResult result) {
+        if (localContext.getTestResult() instanceof SampleResult result) {
             validate().valid();
-            defaultValue = context.evaluate(defaultValue);
+            defaultValue = localContext.evaluate(defaultValue);
             var defaultValueIsBlank = defaultValue == null || StringUtils.isBlank(defaultValue.toString());
             if (StringUtils.isBlank(result.getResponse().bytesAsString()) && defaultValueIsBlank) {
                 throw new IllegalArgumentException("待提取的字符串为 null 或空白");
@@ -166,10 +167,11 @@ public abstract class AbstractExtractor implements Extractor, ExtractorConstants
             if (valueIsBlank && defaultValueIsBlank) {
                 throw new IllegalArgumentException("目标字符串没有匹配的数据 %s，目标字符串：%s".formatted(field, result.getResponse().bytesAsString()));
             }
-            context.getLocalVariablesWrapper().put(refName, valueIsBlank ? defaultValue : value);
+            // extractor 接口默认实现调用此方法 localContext 与 parentContext 为同一对象
+            parentContext.getLocalVariablesWrapper().put(refName, valueIsBlank ? defaultValue : value);
             return;
         }
-        throw new RuntimeException("不支持提取的测试组件: " + context.getTestElement().getClass());
+        throw new RuntimeException("不支持提取的测试组件: " + localContext.getTestElement().getClass());
     }
 
     /**

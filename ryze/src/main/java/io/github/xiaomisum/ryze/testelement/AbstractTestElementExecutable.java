@@ -126,9 +126,6 @@ public abstract class AbstractTestElementExecutable<SELF extends AbstractTestEle
      */
     protected List<Context> getContextChain(List<Context> parentContext) {
         List<Context> contextChain = new ArrayList<>(parentContext);
-        if (Objects.isNull(variables)) {
-            variables = new RyzeVariables();
-        }
         runtime.configGroup.put(VARIABLES, variables.merge(parentContext.getLast().getConfigGroup().getVariables()));
         TestSuiteContext context = new TestSuiteContext();
         context.setConfigGroup(runtime.getConfigGroup());
@@ -155,26 +152,63 @@ public abstract class AbstractTestElementExecutable<SELF extends AbstractTestEle
      */
     @Override
     public final R run(SessionRunner session) {
-        Snapshot snapshot = new Snapshot();
+        var snapshot = new Snapshot();
+
+        // 1. 禁用检查：快速失败，避免不必要的开销
         if (disabled) {
-            snapshot.testResult.testEnd();
-            return snapshot.testResult;
-        }
-        if (!initialized) {
-            initialized();
+            R skippedResult = getTestResult();
+            skippedResult.testStart();
+            skippedResult.testEnd();
+            return skippedResult;
         }
 
-        ContextWrapper context = updateCurrentContextInfo(session, snapshot);
-        runtime.id = (String) context.evaluate(id);
-        runtime.title = (String) context.evaluate(title);
-        snapshot.testResult = getTestResult();
-        context.setTestResult(snapshot.testResult);
-        snapshot.testResult.testStart();
-        handleFilterInterceptors(context);
-        internalRun(context);
-        restoreCurrentContextInfo(session, snapshot);
-        snapshot.testResult.testEnd();
-        return snapshot.testResult;
+        // 2. 幂等初始化：确保只初始化一次
+        initialized();
+
+        // 3. 上下文管理：保存旧上下文，设置新上下文
+        var context = updateCurrentContextInfo(session, snapshot);
+
+        try {
+            // 4. 模板计算：变量表达式求值（仅当前元件，不计算父级）
+            var variables = runtime.configGroup.getVariables();
+            if (variables != null) {
+                context.evaluate(variables);
+            }
+
+            // 5. 运行时元数据计算
+            runtime.id = (String) context.evaluate(id);
+            runtime.title = (String) context.evaluate(title);
+
+            // 6. 测试结果初始化与生命周期管理
+            snapshot.testResult = getTestResult();
+            context.setTestResult(snapshot.testResult);
+            snapshot.testResult.testStart();
+
+            // 7. 拦截器处理与核心执行
+            handleFilterInterceptors(context);
+            internalRun(context);
+
+            return snapshot.testResult;
+        } finally {
+            // 8. 上下文恢复：无论成功、失败、异常都必须执行
+            restoreCurrentContextInfo(session, snapshot);
+            // 9. 测试结束标记：保证生命周期完整闭环
+            if (snapshot.testResult != null) {
+                snapshot.testResult.testEnd();
+            }
+        }
+    }
+
+    @Override
+    public void initialized() {
+        if (initialized) {
+            return;
+        }
+        if (Objects.isNull(variables)) {
+            variables = new RyzeVariables();
+        }
+        super.initialized();
+
     }
 
     /**
@@ -236,30 +270,25 @@ public abstract class AbstractTestElementExecutable<SELF extends AbstractTestEle
      * @param context 执行上下文包装器
      */
     protected void internalRun(ContextWrapper context) {
-        // 模板计算：当前元件的变量配置项（不会计算父级元件）
-        RyzeVariables item;
-        if (runtime.variables != null && (item = runtime.configGroup.getVariables()) != null) {
-            context.evaluate(item);
-        }
         // 处理配置元件
-        Optional.ofNullable(runtime.configureElements).orElse(Collections.emptyList()).forEach(ele -> ele.process(context));
+        Optional.ofNullable(runtime.configureElements).ifPresent(elements -> elements.forEach(ele -> ele.process(context)));
         // 执行前置动作
-        Optional.ofNullable(runtime.preprocessors).orElse(Collections.emptyList())
-                .stream().filter(preprocessor -> !preprocessor.isDisabled())
-                .forEach(preprocessor -> preprocessor.process(context));
+        Optional.ofNullable(runtime.preprocessors).ifPresent(preprocessors -> preprocessors.stream()
+                .filter(preprocessor -> !preprocessor.isDisabled())
+                .forEach(preprocessor -> preprocessor.process(context)));
         if (context.getTestResult().getStatus().isFailed() || context.getTestResult().getStatus().isBroken()) {
             // 前置步骤执行失败，后续步骤无需执行
             return;
         }
         // 执行请求
         execute(context, (R) context.getTestResult());
-        Optional.ofNullable(runtime.postprocessors).orElse(Collections.emptyList())
-                .stream().filter(postprocessor -> !postprocessor.isDisabled())
-                .forEach(postprocessor -> postprocessor.process(context));
+        Optional.ofNullable(runtime.postprocessors).ifPresent(postprocessors -> postprocessors.stream()
+                .filter(postprocessor -> !postprocessor.isDisabled())
+                .forEach(postprocessor -> postprocessor.process(context)));
         // 关闭配置元件
-        Optional.ofNullable(runtime.configureElements).orElse(Collections.emptyList()).stream()
+        Optional.ofNullable(runtime.configureElements).ifPresent(elements -> elements.stream()
                 .filter(ele -> ele instanceof Closeable)
-                .forEach(ele -> ((Closeable) ele).close());
+                .forEach(ele -> ((Closeable) ele).close()));
     }
 
     /**

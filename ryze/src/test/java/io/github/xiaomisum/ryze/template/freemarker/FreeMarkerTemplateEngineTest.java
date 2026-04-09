@@ -168,10 +168,10 @@ public class FreeMarkerTemplateEngineTest {
 
     @Test
     public void testEvaluateWithNonExistentVariable() {
-        // 测试不存在的变量
+        // 测试不存在的变量 - 应返回原始表达式字符串
         String expression = "${nonExistentVar}";
         Object result = templateEngine.evaluate(context, expression);
-        Assert.assertNull(result);
+        Assert.assertEquals(result, expression, "不存在的变量应返回原始表达式字符串");
     }
 
     @Test

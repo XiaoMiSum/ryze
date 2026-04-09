@@ -119,9 +119,12 @@ public class SamplerLogListener implements ReporterListener {
         if (context.getTestResult() instanceof SampleResult result) {
             boolean hasRequest = !Objects.isNull(result.getRequest());
             boolean hasResponse = !Objects.isNull(result.getResponse());
-            log.info("{}{}{}{}{}{}",
-                    hasRequest ? "\n--------------- 请求信息 -----------------\n" : "", hasRequest ? result.getRequest().format() : "", hasRequest ? "\n" : "",
-                    hasResponse ? "\n--------------- 响应信息 -----------------\n" : "", hasResponse ? result.getResponse().format() : "", hasResponse ? "\n" : "");
+            if (hasRequest || hasResponse) {
+                log.info("{}{}{}{}{}{}",
+                        hasRequest ? "\n--------------- 请求信息 -----------------\n" : "", hasRequest ? result.getRequest().format() : "", hasRequest ? "\n" : "",
+                        hasResponse ? "\n--------------- 响应信息 -----------------\n" : "", hasResponse ? result.getResponse().format() : "", hasResponse ? "\n" : "");
+
+            }
             printStackTrace(result.getThrowable(), log);
         }
     }
