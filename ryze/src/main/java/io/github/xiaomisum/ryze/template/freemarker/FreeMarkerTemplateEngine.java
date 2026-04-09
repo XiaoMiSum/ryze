@@ -177,7 +177,7 @@ public class FreeMarkerTemplateEngine implements TemplateEngine {
             model.put(Vkw.context.name(), context);
             // 注册变量 - 框架执行过程中会将所有上级变量都合并到当前context的localVariablesWrapper中，这里仅需要将 localVariablesWrapper 注册到 model 中
             Optional.ofNullable(context.getLocalVariablesWrapper()).ifPresent(localVars -> {
-                model.putAll(localVars.mergeVariables());
+                model.putAll(localVars.getLastVariables());
                 model.put(Vkw.vars.name(), localVars);
             });
         }

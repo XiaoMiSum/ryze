@@ -126,9 +126,6 @@ public abstract class AbstractTestElementExecutable<SELF extends AbstractTestEle
      */
     protected List<Context> getContextChain(List<Context> parentContext) {
         List<Context> contextChain = new ArrayList<>(parentContext);
-        if (Objects.isNull(variables)) {
-            variables = new RyzeVariables();
-        }
         runtime.configGroup.put(VARIABLES, variables.merge(parentContext.getLast().getConfigGroup().getVariables()));
         TestSuiteContext context = new TestSuiteContext();
         context.setConfigGroup(runtime.getConfigGroup());
@@ -155,31 +152,65 @@ public abstract class AbstractTestElementExecutable<SELF extends AbstractTestEle
      */
     @Override
     public final R run(SessionRunner session) {
-        Snapshot snapshot = new Snapshot();
+        var snapshot = new Snapshot();
+
+        // 1. 禁用检查：快速失败，避免不必要的开销
         if (disabled) {
-            snapshot.testResult.testEnd();
-            return snapshot.testResult;
+            R skippedResult = getTestResult();
+            skippedResult.testStart();
+            skippedResult.testEnd();
+            return skippedResult;
         }
+
+        // 2. 幂等初始化：确保只初始化一次
         if (!initialized) {
             initialized();
         }
 
-        ContextWrapper context = updateCurrentContextInfo(session, snapshot);
-        // 模板计算：当前元件的变量配置项（不会计算父级元件）
-        RyzeVariables item;
-        if (runtime.variables != null && (item = runtime.configGroup.getVariables()) != null) {
-            context.evaluate(item);
+        // 3. 上下文管理：保存旧上下文，设置新上下文
+        var context = updateCurrentContextInfo(session, snapshot);
+
+        try {
+            // 4. 模板计算：变量表达式求值（仅当前元件，不计算父级）
+            var variables = runtime.configGroup.getVariables();
+            if (variables != null) {
+                context.evaluate(variables);
+            }
+
+            // 5. 运行时元数据计算
+            runtime.id = (String) context.evaluate(id);
+            runtime.title = (String) context.evaluate(title);
+
+            // 6. 测试结果初始化与生命周期管理
+            snapshot.testResult = getTestResult();
+            context.setTestResult(snapshot.testResult);
+            snapshot.testResult.testStart();
+
+            // 7. 拦截器处理与核心执行
+            handleFilterInterceptors(context);
+            internalRun(context);
+
+            return snapshot.testResult;
+        } finally {
+            // 8. 上下文恢复：无论成功、失败、异常都必须执行
+            restoreCurrentContextInfo(session, snapshot);
+            // 9. 测试结束标记：保证生命周期完整闭环
+            if (snapshot.testResult != null) {
+                snapshot.testResult.testEnd();
+            }
         }
-        runtime.id = (String) context.evaluate(id);
-        runtime.title = (String) context.evaluate(title);
-        snapshot.testResult = getTestResult();
-        context.setTestResult(snapshot.testResult);
-        snapshot.testResult.testStart();
-        handleFilterInterceptors(context);
-        internalRun(context);
-        restoreCurrentContextInfo(session, snapshot);
-        snapshot.testResult.testEnd();
-        return snapshot.testResult;
+    }
+
+    @Override
+    public void initialized() {
+        if (initialized) {
+            return;
+        }
+        if (Objects.isNull(variables)) {
+            variables = new RyzeVariables();
+        }
+        super.initialized();
+
     }
 
     /**
