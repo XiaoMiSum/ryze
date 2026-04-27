@@ -134,14 +134,14 @@ public class HTTPConfigureItem implements ConfigureItem<HTTPConfigureItem>, HTTP
      * <p>HTTP请求头键值对</p>
      */
     @JSONField(name = HEADERS, ordinal = 6)
-    protected Map<String, String> headers;
+    protected Map<String, Object> headers;
 
     /**
      * Cookie映射
      * <p>HTTP Cookie信息</p>
      */
     @JSONField(name = COOKIE, ordinal = 7)
-    protected Map<String, String> cookie;
+    protected Map<String, Object> cookie;
 
     /**
      * 查询参数映射
@@ -242,8 +242,8 @@ public class HTTPConfigureItem implements ConfigureItem<HTTPConfigureItem>, HTTP
         port = (String) context.evaluate(port);
         path = (String) context.evaluate(path);
         method = (String) context.evaluate(method);
-        headers = (Map<String, String>) context.evaluate(headers);
-        cookie = (Map<String, String>) context.evaluate(cookie);
+        headers = (Map<String, Object>) context.evaluate(headers);
+        cookie = (Map<String, Object>) context.evaluate(cookie);
         query = (Map<String, Object>) context.evaluate(query);
         data = (Map<String, Object>) context.evaluate(data);
         body = context.evaluate(body);
@@ -258,8 +258,8 @@ public class HTTPConfigureItem implements ConfigureItem<HTTPConfigureItem>, HTTP
      * @param self  当前映射表
      * @return 合并后的映射表
      */
-    private Map<String, String> handleMap(Map<String, String> other, Map<String, String> self) {
-        var resp = new HashMap<String, String>();
+    private Map<String, Object> handleMap(Map<String, Object> other, Map<String, Object> self) {
+        var resp = new HashMap<String, Object>();
         if (other != null) {
             resp.putAll(other);
         }
@@ -472,7 +472,7 @@ public class HTTPConfigureItem implements ConfigureItem<HTTPConfigureItem>, HTTP
      *
      * @return 请求头映射
      */
-    public Map<String, String> getHeaders() {
+    public Map<String, Object> getHeaders() {
         return headers;
     }
 
@@ -481,7 +481,7 @@ public class HTTPConfigureItem implements ConfigureItem<HTTPConfigureItem>, HTTP
      *
      * @param headers 请求头映射
      */
-    public void setHeaders(Map<String, String> headers) {
+    public void setHeaders(Map<String, Object> headers) {
         this.headers = headers;
     }
 
@@ -490,7 +490,7 @@ public class HTTPConfigureItem implements ConfigureItem<HTTPConfigureItem>, HTTP
      *
      * @return Cookie映射
      */
-    public Map<String, String> getCookie() {
+    public Map<String, Object> getCookie() {
         return cookie;
     }
 
@@ -499,7 +499,7 @@ public class HTTPConfigureItem implements ConfigureItem<HTTPConfigureItem>, HTTP
      *
      * @param cookie Cookie映射
      */
-    public void setCookie(Map<String, String> cookie) {
+    public void setCookie(Map<String, Object> cookie) {
         this.cookie = cookie;
     }
 
@@ -881,7 +881,7 @@ public class HTTPConfigureItem implements ConfigureItem<HTTPConfigureItem>, HTTP
          * @param headers 请求头映射
          * @return 构建器实例
          */
-        public Builder headers(Map<String, String> headers) {
+        public Builder headers(Map<String, Object> headers) {
             configure.headers = Collections.putAllIfNonNull(configure.headers, headers);
             return self;
         }
@@ -892,8 +892,8 @@ public class HTTPConfigureItem implements ConfigureItem<HTTPConfigureItem>, HTTP
          * @param customizer 请求头自定义器
          * @return 构建器实例
          */
-        public Builder headers(Customizer<Map<String, String>> customizer) {
-            Map<String, String> headers = new HashMap<>();
+        public Builder headers(Customizer<Map<String, Object>> customizer) {
+            Map<String, Object> headers = new HashMap<>();
             customizer.customize(headers);
             configure.headers = Collections.putAllIfNonNull(configure.headers, headers);
             return self;
@@ -906,7 +906,7 @@ public class HTTPConfigureItem implements ConfigureItem<HTTPConfigureItem>, HTTP
          * @param cookie Cookie映射
          * @return 构建器实例
          */
-        public Builder cookie(Map<String, String> cookie) {
+        public Builder cookie(Map<String, Object> cookie) {
             configure.cookie = Collections.putAllIfNonNull(configure.cookie, cookie);
             return self;
         }
@@ -917,8 +917,8 @@ public class HTTPConfigureItem implements ConfigureItem<HTTPConfigureItem>, HTTP
          * @param customizer Cookie自定义器
          * @return 构建器实例
          */
-        public Builder cookie(Customizer<Map<String, String>> customizer) {
-            Map<String, String> cookie = new HashMap<>();
+        public Builder cookie(Customizer<Map<String, Object>> customizer) {
+            Map<String, Object> cookie = new HashMap<>();
             customizer.customize(cookie);
             configure.cookie = Collections.putAllIfNonNull(configure.cookie, cookie);
             return self;
