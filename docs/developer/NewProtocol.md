@@ -317,7 +317,7 @@ public class MyProtocolConfigureItem implements ConfigureItem<MyProtocolConfigur
 public class MyProtocolResultResponse extends SampleResult.RealResponse {
     private final MyProtocolResponse originalResponse;
     private final byte[] responseBytes;
-    private final Map<String, String> headers;
+    private final Map<String, Object> headers;
 
     public MyProtocolResultResponse(MyProtocolResponse response) {
         this.originalResponse = response;
@@ -341,7 +341,7 @@ public class MyProtocolResultResponse extends SampleResult.RealResponse {
     }
 
     @Override
-    public Map<String, String> getHeaders() {
+    public Map<String, Object> getHeaders() {
         return headers;
     }
 

@@ -130,12 +130,12 @@ public class HTTPClient extends Request implements HTTPConstantsInterface {
      * @return HTTP客户端实例
      * @throws IllegalArgumentException 当使用字节数据但未指定Content-Type时抛出
      */
-    public HTTPClient bytes(byte[] bytes, Map<String, String> headers) {
+    public HTTPClient bytes(byte[] bytes, Map<String, Object> headers) {
         if (Objects.nonNull(bytes) && bytes.length > 0) {
-            if (Objects.isNull(headers) || headers.isEmpty() || StringUtils.isBlank(headers.get(HEADER_CONTENT_TYPE))) {
+            if (Objects.isNull(headers) || headers.isEmpty() || Objects.isNull(headers.get(HEADER_CONTENT_TYPE))) {
                 throw new IllegalArgumentException("使用bytes作为请求数据时， 请求头必须添加 %s".formatted(HEADER_CONTENT_TYPE));
             }
-            super.body(RequestEntity.bytes(bytes, headers.get(HEADER_CONTENT_TYPE)));
+            super.body(RequestEntity.bytes(bytes, String.valueOf(headers.get(HEADER_CONTENT_TYPE))));
         }
         return this;
     }
@@ -216,12 +216,13 @@ public class HTTPClient extends Request implements HTTPConstantsInterface {
      * @param headers 请求头映射
      * @return HTTP客户端实例
      */
-    public HTTPClient headers(Map<String, String> headers) {
+    public HTTPClient headers(Map<String, Object> headers) {
         if (headers == null || headers.isEmpty()) {
             return this;
         }
-        headers.entrySet().stream().filter(entry -> StringUtils.isNotBlank(entry.getValue()))
-                .forEach(entry -> addHeader(entry.getKey(), entry.getValue()));
+        headers.entrySet().stream()
+                .filter(entry -> !Objects.isNull(entry.getValue()) && !entry.getValue().toString().isEmpty())
+                .forEach(entry -> addHeader(entry.getKey(), String.valueOf(entry.getValue())));
         return this;
     }
 
@@ -231,13 +232,13 @@ public class HTTPClient extends Request implements HTTPConstantsInterface {
      * @param cookie Cookie映射，包含name、value、domain、path等信息
      * @return HTTP客户端实例
      */
-    public HTTPClient cookie(Map<String, String> cookie) {
+    public HTTPClient cookie(Map<String, Object> cookie) {
         if (cookie == null || cookie.isEmpty()) {
             return this;
         }
-        var localCookie = new BasicClientCookie(cookie.get(COOKIE_NAME), cookie.get(COOKIE_VALUE));
-        localCookie.setPath(cookie.get(COOKIE_PATH));
-        localCookie.setDomain(cookie.get(COOKIE_DOMAIN));
+        var localCookie = new BasicClientCookie(String.valueOf(cookie.get(COOKIE_NAME)), String.valueOf(cookie.get(COOKIE_VALUE)));
+        localCookie.setPath(String.valueOf(cookie.get(COOKIE_PATH)));
+        localCookie.setDomain(String.valueOf(cookie.get(COOKIE_DOMAIN)));
         addCookie(localCookie);
         return this;
     }

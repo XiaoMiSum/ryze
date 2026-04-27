@@ -89,11 +89,11 @@ public class HTTPConfigureItemTest {
 
     @Test
     public void testBuilderWithMaps() {
-        Map<String, String> headers = new HashMap<>();
+        Map<String, Object> headers = new HashMap<>();
         headers.put("Content-Type", "application/json");
         headers.put("Accept", "application/json");
 
-        Map<String, String> cookies = new HashMap<>();
+        Map<String, Object> cookies = new HashMap<>();
         cookies.put("sessionId", "abc123");
         cookies.put("userId", "user123");
 
@@ -253,10 +253,10 @@ public class HTTPConfigureItemTest {
 
     @Test
     public void testMergeMapProperties() {
-        Map<String, String> baseHeaders = new HashMap<>();
+        Map<String, Object> baseHeaders = new HashMap<>();
         baseHeaders.put("Content-Type", "application/json");
 
-        Map<String, String> otherHeaders = new HashMap<>();
+        Map<String, Object> otherHeaders = new HashMap<>();
         otherHeaders.put("Accept", "application/json");
 
         HTTPConfigureItem baseItem = HTTPConfigureItem.builder()
