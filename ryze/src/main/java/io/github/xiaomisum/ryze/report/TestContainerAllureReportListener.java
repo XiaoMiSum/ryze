@@ -2,7 +2,7 @@
  *
  *  * The MIT License (MIT)
  *  *
- *  * Copyright (c) 2025.  Lorem XiaoMiSum (mi_xiao@qq.com)
+ *  * Copyright (c) 2026.  Lorem XiaoMiSum (mi_xiao@qq.com)
  *  *
  *  * Permission is hereby granted, free of charge, to any person obtaining
  *  * a copy of this software and associated documentation files (the
@@ -26,11 +26,13 @@
  *
  */
 
-package io.github.xiaomisum.ryze.interceptor.report;
+package io.github.xiaomisum.ryze.report;
 
 import io.github.xiaomisum.ryze.context.ContextWrapper;
 import io.github.xiaomisum.ryze.testelement.TestContainerExecutable;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static io.qameta.allure.Allure.getLifecycle;
 
@@ -53,6 +55,8 @@ import static io.qameta.allure.Allure.getLifecycle;
  * Created at 2025/7/20 13:46
  */
 public class TestContainerAllureReportListener implements AllureReportListener<TestContainerExecutable<?, ?, ?>> {
+
+    private static final Logger logger = LoggerFactory.getLogger(TestContainerAllureReportListener.class);
 
     /**
      * 获取监听器的执行顺序
@@ -85,6 +89,9 @@ public class TestContainerAllureReportListener implements AllureReportListener<T
      * 在测试容器执行前创建 Allure 测试步骤报告
      * <p>
      * 根据测试容器的标题信息创建相应的 Allure 测试步骤并启动该步骤。
+     * 同时将当前线程上首个进入的 TestContainer 的 title 作为 Allure testcase 名称，
+     * 并折叠 allure-testng 默认产生的 parentSuite / suite / subSuite 三层 label，
+     * 仅保留一层 suite = TestClass 简名。
      * </p>
      *
      * @param context 上下文包装器
@@ -95,6 +102,10 @@ public class TestContainerAllureReportListener implements AllureReportListener<T
     public boolean preHandle(ContextWrapper context, TestContainerExecutable<?, ?, ?> runtime) {
         var title = StringUtils.isNotBlank(context.getTestResult().getTitle()) ? context.getTestResult().getTitle()
                 : "匿名 - " + context.getTestElement().getClass().getSimpleName();
+
+        // 仅首次调用生效：用 YAML 最顶层 title 作为 testcase 名称，并折叠 suite 层级
+        AllureTestCaseHelper.trySetTestCaseName(title);
+
         AllureReportListener.startStep(title, context);
         return true;
     }
@@ -109,6 +120,8 @@ public class TestContainerAllureReportListener implements AllureReportListener<T
      */
     @Override
     public void afterCompletion(ContextWrapper context) {
+        // 若本次执行被拦截器 preHandle 拒绝，将拦截事实标记到当前 step
+        AllureReportListener.markRejectionIfAny(context);
         getLifecycle().updateStep(context.getUuid(), step -> step.setStatus(context.getTestResult().getStatus().getAllureStatus()));
         AllureReportListener.stopStep(context);
     }

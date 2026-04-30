@@ -29,7 +29,7 @@ import io.github.xiaomisum.ryze.assertion.Assertion;
 import io.github.xiaomisum.ryze.extractor.Extractor;
 import io.github.xiaomisum.ryze.function.Function;
 import io.github.xiaomisum.ryze.interceptor.RyzeInterceptor;
-import io.github.xiaomisum.ryze.interceptor.report.ReporterListener;
+import io.github.xiaomisum.ryze.report.ReporterListener;
 import io.github.xiaomisum.ryze.support.RyzeServiceLoader;
 import io.github.xiaomisum.ryze.support.fastjson.interceptor.JSONInterceptor;
 import io.github.xiaomisum.ryze.testelement.TestElement;
@@ -300,7 +300,7 @@ public class ApplicationConfig {
 
     /**
      * 获取报告监听器列表
-     * <p>通过SPI机制加载所有ReporterListener实现类的实例。</p>
+     * <p>通过SPI机制加载所有Reporter实现类的实例。</p>
      *
      * @return 报告监听器列表
      */

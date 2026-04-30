@@ -29,17 +29,14 @@
 package io.github.xiaomisum.ryze;
 
 import io.github.xiaomisum.ryze.config.GlobalConfigure;
-import io.github.xiaomisum.ryze.config.InterceptorConfigureItem;
+import io.github.xiaomisum.ryze.config.ReporterConfigureItem;
 import io.github.xiaomisum.ryze.context.GlobalContext;
-import io.github.xiaomisum.ryze.interceptor.RyzeInterceptor;
-import io.github.xiaomisum.ryze.interceptor.report.AllureReportListener;
+import io.github.xiaomisum.ryze.report.AllureReportListener;
+import io.github.xiaomisum.ryze.report.ReporterListener;
 import io.github.xiaomisum.ryze.template.TemplateEngine;
 import io.github.xiaomisum.ryze.template.freemarker.FreeMarkerTemplateEngine;
 
-import java.util.ArrayList;
 import java.util.Objects;
-
-import static io.github.xiaomisum.ryze.testelement.TestElementConstantsInterface.INTERCEPTORS;
 
 /**
  * 测试框架配置类
@@ -51,7 +48,6 @@ import static io.github.xiaomisum.ryze.testelement.TestElementConstantsInterface
  * Configure类支持通过系统属性配置是否启用Allure报告功能，默认情况下启用该功能。
  * </p>
  *
- * @SuppressWarnings({"rawtypes"}) 忽略原始类型警告
  */
 @SuppressWarnings({"rawtypes"})
 public class Configure {
@@ -73,10 +69,10 @@ public class Configure {
     private TemplateEngine templateEngine;
 
     /**
-     * 内置拦截器，主要是测试报告和执行日志拦截器
-     * <p>用于在测试执行过程中拦截和处理各种事件</p>
+     * 内置报告监听器，独立于业务拦截器链
+     * <p>用于在测试执行过程中生成报告和日志</p>
      */
-    private InterceptorConfigureItem<RyzeInterceptor> builtinRyzeInterceptors;
+    private ReporterConfigureItem<ReporterListener> builtinReporters;
 
     /**
      * 全局上下文对象
@@ -115,13 +111,11 @@ public class Configure {
     public static Configure defaultConfigure(boolean... enableAllureReport) {
         var configure = new Configure(Objects.isNull(enableAllureReport) || enableAllureReport.length == 0 || enableAllureReport[0]);
         configure.setTemplateEngine(new FreeMarkerTemplateEngine());
-        InterceptorConfigureItem<RyzeInterceptor> items = new InterceptorConfigureItem<>();
-        items.addAll(new ArrayList<>(ApplicationConfig.getReporterListeners()));
-        configure.setBuiltinInterceptors(items);
-        var globalContext = new GlobalContext(new GlobalConfigure());
-        // todo 全局配置可以考虑固定位置存放全局变量
-        globalContext.getConfigGroup().put(INTERCEPTORS, configure.getBuiltinInterceptors());
-        configure.setGlobalContext(globalContext);
+        // ReporterListener 独立管理
+        var reporters = new ReporterConfigureItem<>();
+        reporters.addAll(ApplicationConfig.getReporterListeners());
+        configure.setBuiltinReporters(reporters);
+        configure.setGlobalContext(new GlobalContext(new GlobalConfigure()));
         return configure;
     }
 
@@ -153,24 +147,24 @@ public class Configure {
     }
 
     /**
-     * 获取内置拦截器列表（拷贝）
+     * 获取内置报告监听器列表
      *
-     * @return 内置拦截器列表
+     * @return 内置报告监听器列表
      */
-    public InterceptorConfigureItem<RyzeInterceptor> getBuiltinInterceptors() {
-        return builtinRyzeInterceptors.copy();
+    public ReporterConfigureItem<ReporterListener> getBuiltinReporters() {
+        return builtinReporters;
     }
 
     /**
-     * 设置内置拦截器
+     * 设置内置报告监听器
      *
-     * @param builtinRyzeInterceptors 内置拦截器配置项
+     * @param builtinReporters 内置报告监听器列表
      */
-    private void setBuiltinInterceptors(InterceptorConfigureItem<RyzeInterceptor> builtinRyzeInterceptors) {
+    private void setBuiltinReporters(ReporterConfigureItem<ReporterListener> builtinReporters) {
         if (!isEnableAllureReport()) {
-            builtinRyzeInterceptors.removeIf(AllureReportListener.class::isInstance);
+            builtinReporters.removeIf(reporter -> reporter instanceof AllureReportListener<?>);
         }
-        this.builtinRyzeInterceptors = builtinRyzeInterceptors;
+        this.builtinReporters = builtinReporters;
     }
 
     /**

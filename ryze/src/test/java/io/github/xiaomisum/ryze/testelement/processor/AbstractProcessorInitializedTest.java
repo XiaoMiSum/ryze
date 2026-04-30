@@ -27,27 +27,21 @@ package io.github.xiaomisum.ryze.testelement.processor;
 
 import io.github.xiaomisum.ryze.Configure;
 import io.github.xiaomisum.ryze.SessionRunner;
-import io.github.xiaomisum.ryze.config.InterceptorConfigureItem;
 import io.github.xiaomisum.ryze.config.RyzeVariables;
 import io.github.xiaomisum.ryze.context.Context;
 import io.github.xiaomisum.ryze.context.ContextWrapper;
-import io.github.xiaomisum.ryze.context.SessionContext;
 import io.github.xiaomisum.ryze.context.TestSuiteContext;
-import io.github.xiaomisum.ryze.interceptor.RyzeInterceptor;
 import io.github.xiaomisum.ryze.protocol.debug.config.DebugConfigureItem;
 import io.github.xiaomisum.ryze.protocol.debug.processer.DebugPreprocessor;
-import io.github.xiaomisum.ryze.testelement.TestElementConfigureGroup;
 import io.github.xiaomisum.ryze.testelement.sampler.SampleResult;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static io.github.xiaomisum.ryze.testelement.TestElementConstantsInterface.INTERCEPTORS;
 import static io.github.xiaomisum.ryze.testelement.TestElementConstantsInterface.VARIABLES;
 
 /**
@@ -356,102 +350,10 @@ public class AbstractProcessorInitializedTest {
 
     /**
      * 测试场景 9：拦截器处理 - 从上下文合并拦截器
+     * <p>
+     * 注：根据"拦截器设置在哪一层就只在哪一层生效"原则，此测试已删除
+     * </p>
      */
-    @Test
-    @SuppressWarnings("rawtypes")
-    public void testInitialized_InterceptorsMergedFromContext() throws Exception {
-        // 创建测试拦截器
-        RyzeInterceptor testInterceptor = new RyzeInterceptor() {
-            @Override
-            public int getOrder() {
-                return 100;
-            }
-
-            @Override
-            public boolean supports(ContextWrapper context) {
-                return true;
-            }
-        };
-
-        // 在上下文中设置拦截器
-        TestElementConfigureGroup sessionConfig = new TestElementConfigureGroup();
-        InterceptorConfigureItem<RyzeInterceptor> interceptorItem = new InterceptorConfigureItem<>();
-        interceptorItem.add(testInterceptor);
-        sessionConfig.put(INTERCEPTORS, interceptorItem);
-
-        SessionContext sessionContext = new SessionContext();
-        sessionContext.setConfigGroup(sessionConfig);
-
-        List<Context> contextChain = new ArrayList<>();
-        contextChain.add(sessionRunner.getContext().getGlobalContext());
-        contextChain.add(sessionContext);
-        sessionRunner.setContextChain(contextChain);
-
-        // 执行初始化
-        invokeInitialized(processor, sessionRunner);
-
-        // 验证 runtime 中包含拦截器（包含全局拦截器 + 自定义拦截器）
-        Assert.assertNotNull(processor.getRuntime().getInterceptors(),
-                "runtime.interceptors 应被设置");
-        // 全局拦截器 + 自定义拦截器
-        Assert.assertFalse(processor.getRuntime().getInterceptors().isEmpty(), "应至少合并 1 个拦截器");
-    }
-
-    /**
-     * 测试场景 10：拦截器处理 - 过滤不支持的拦截器
-     */
-    @Test
-    @SuppressWarnings("rawtypes")
-    public void testInitialized_InterceptorsFiltered() throws Exception {
-        // 创建支持的拦截器
-        RyzeInterceptor supportedInterceptor = new RyzeInterceptor() {
-            @Override
-            public int getOrder() {
-                return 100;
-            }
-
-            @Override
-            public boolean supports(ContextWrapper context) {
-                return true;  // 支持
-            }
-        };
-
-        // 创建不支持的拦截器
-        RyzeInterceptor unsupportedInterceptor = new RyzeInterceptor() {
-            @Override
-            public int getOrder() {
-                return 200;
-            }
-
-            @Override
-            public boolean supports(ContextWrapper context) {
-                return false;  // 不支持
-            }
-        };
-
-        // 在上下文中设置拦截器
-        TestElementConfigureGroup sessionConfig = new TestElementConfigureGroup();
-        InterceptorConfigureItem<RyzeInterceptor> interceptorItem = new InterceptorConfigureItem<>();
-        interceptorItem.add(supportedInterceptor);
-        interceptorItem.add(unsupportedInterceptor);
-        sessionConfig.put(INTERCEPTORS, interceptorItem);
-
-        SessionContext sessionContext = new SessionContext();
-        sessionContext.setConfigGroup(sessionConfig);
-
-        List<Context> contextChain = new ArrayList<>();
-        contextChain.add(sessionRunner.getContext().getGlobalContext());
-        contextChain.add(sessionContext);
-        sessionRunner.setContextChain(contextChain);
-
-        // 执行初始化
-        invokeInitialized(processor, sessionRunner);
-
-        // 验证只有支持的拦截器被保留
-        // 注意：runtime.interceptors 包含所有合并的拦截器，但 runtime.chain 只包含过滤后的
-        Assert.assertNotNull(getRuntimeChain(processor),
-                "runtime.chain 应被创建（有拦截器时）");
-    }
 
     /**
      * 测试场景 11：多次调用 initialized - 幂等性验证

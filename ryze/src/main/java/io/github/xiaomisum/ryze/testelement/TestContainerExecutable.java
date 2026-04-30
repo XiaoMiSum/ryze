@@ -106,8 +106,10 @@ public abstract class TestContainerExecutable<SELF extends TestContainerExecutab
      */
     protected void executeChildren(ContextWrapper context) {
         try {
-            // 执行前置处理
-            if (!runtime.chain.applyPreHandle(context, runtime)) {
+            // 执行 ReporterListener 前置处理
+            runtime.reporterChain.applyPreHandle(context, runtime);
+            // 执行拦截器前置处理
+            if (!runtime.handlerChain.applyPreHandle(context, runtime)) {
                 return;
             }
             // 业务处理
@@ -130,12 +132,21 @@ public abstract class TestContainerExecutable<SELF extends TestContainerExecutab
             if (hasFailedChildren) {
                 context.getTestResult().setStatus(TestStatus.failed);
             }
-            runtime.chain.applyPostHandle(context, runtime);
+            // 执行拦截器后置处理
+            runtime.handlerChain.applyPostHandle(context, runtime);
+            // 执行 ReporterListener 后置处理
+            if (runtime.reporterChain != null) {
+                runtime.reporterChain.applyPostHandle(context, runtime);
+            }
         } catch (Throwable throwable) {
             context.getTestResult().setThrowable(throwable);
         } finally {
-            // 最终处理
-            runtime.chain.triggerAfterCompletion(context);
+            // 最终处理 - ReporterListener
+            if (runtime.reporterChain != null) {
+                runtime.reporterChain.triggerAfterCompletion(context);
+            }
+            // 最终处理 - 拦截器
+            runtime.handlerChain.triggerAfterCompletion(context);
         }
 
     }

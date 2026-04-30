@@ -30,6 +30,7 @@ package io.github.xiaomisum.ryze;
 
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
+import io.github.xiaomisum.ryze.report.AllureTestCaseHelper;
 import io.github.xiaomisum.ryze.support.dataloader.TestDataLoaderChain;
 import io.github.xiaomisum.ryze.testelement.TestElement;
 
@@ -96,8 +97,8 @@ public class Ryze {
      * 执行测试的核心方法
      * <p>
      * 执行流程：
-     * 1. 根据测试类标识获取对应的测试元素类
-     * 2. 将测试用例数据转换为对应的测试元素对象
+     * 1. 在 Allure testcase 生命周期内执行测试（TestNG 模式下透传，Main/API 模式下由 Ryze 自建）
+     * 2. 将测试用例数据转换为测试元素对象
      * 3. 获取或创建测试会话并执行测试
      * </p>
      *
@@ -105,8 +106,10 @@ public class Ryze {
      */
     private Result runTest() {
         try {
-            var json = JSON.toJSONString(testcase);
-            return SessionRunner.getSessionIfNoneCreateNew().runTest(JSON.parseObject(json, TestElement.class));
+            return AllureTestCaseHelper.runInTestCase(() -> {
+                var json = JSON.toJSONString(testcase);
+                return SessionRunner.getSessionIfNoneCreateNew().runTest(JSON.parseObject(json, TestElement.class));
+            });
         } finally {
             SessionRunner.removeSession();
         }

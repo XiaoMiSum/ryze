@@ -2,7 +2,7 @@
  *
  *  * The MIT License (MIT)
  *  *
- *  * Copyright (c) 2025.  Lorem XiaoMiSum (mi_xiao@qq.com)
+ *  * Copyright (c) 2026.  Lorem XiaoMiSum (mi_xiao@qq.com)
  *  *
  *  * Permission is hereby granted, free of charge, to any person obtaining
  *  * a copy of this software and associated documentation files (the
@@ -26,12 +26,13 @@
  *
  */
 
-package io.github.xiaomisum.ryze.interceptor.report;
+package io.github.xiaomisum.ryze.report;
 
 import io.github.xiaomisum.ryze.context.ContextWrapper;
 import io.github.xiaomisum.ryze.testelement.AbstractTestElement;
 import io.github.xiaomisum.ryze.testelement.sampler.SampleResult;
 import io.qameta.allure.Allure;
+import io.qameta.allure.model.Status;
 import io.qameta.allure.model.StatusDetails;
 import io.qameta.allure.model.StepResult;
 import org.apache.commons.lang3.StringUtils;
@@ -116,5 +117,36 @@ public interface AllureReportListener<T extends AbstractTestElement<?, ?, ?>> ex
             context.getTestResult().setStatus(context.getTestResult().getThrowable() instanceof AssertionError ? failed : broken);
         }
         Allure.getLifecycle().stopStep(context.getUuid());
+    }
+
+    /**
+     * 若当前测试元件被拦截器 preHandle 拒绝，将拦截事实标记到当前 Allure step 上。
+     * <p>调用时机：已经 startStep 但尚未 stopStep 期间（通常在监听器 afterCompletion 中）。
+     * 效果：步骤名称加 ⛔ 前缀 + 拦截器名称，status 置为 SKIPPED，statusDetails 涵盖拦截原因。</p>
+     * <p>本方法只依赖 {@link io.github.xiaomisum.ryze.Result#getRejectBy()}，
+     * 与拦截器链内部结构完全解耦。</p>
+     *
+     * @param context 上下文包装器
+     */
+    static void markRejectionIfAny(ContextWrapper context) {
+        if (context == null || context.getTestResult() == null) {
+            return;
+        }
+        String rejectBy = context.getTestResult().getRejectBy();
+        if (StringUtils.isBlank(rejectBy)) {
+            return;
+        }
+        String message = "被拦截器 [" + rejectBy + "] 阻止执行（preHandle 返回 false）";
+        Allure.getLifecycle().updateStep(context.getUuid(), step -> {
+            String name = step.getName() == null ? "" : step.getName();
+            if (!name.startsWith("⛔")) {
+                step.setName("⛔ " + name);
+            }
+            step.setStatus(Status.SKIPPED);
+            StatusDetails details = step.getStatusDetails() != null ? step.getStatusDetails() : new StatusDetails();
+            String existing = StringUtils.isNotBlank(details.getMessage()) ? details.getMessage() + "\n\n" : "";
+            details.setMessage(existing + message);
+            step.setStatusDetails(details);
+        });
     }
 }

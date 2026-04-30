@@ -165,25 +165,32 @@ public abstract class AbstractSampler<SELF extends AbstractSampler<SELF, CONFIG,
             if (runtime.config != null && (config = runtime.configGroup.get(CONFIG)) != null) {
                 context.evaluate(config);
             }
-            // 执行前置处理
-            if (runtime.chain.applyPreHandle(context, runtime)) {
+            // 执行 ReporterListener 前置处理
+            runtime.reporterChain.applyPreHandle(context, runtime);
+            // 执行拦截器前置处理
+            if (runtime.handlerChain.applyPreHandle(context, runtime)) {
                 // 业务处理
                 handleRequest(context, result);
                 result.sampleStart();
                 sample(context, result);
                 result.sampleEnd();
                 handleResponse(context, result);
-                // 执行后置处理
-                runtime.chain.applyPostHandle(context, runtime);
+                // 执行拦截器后置处理
+                runtime.handlerChain.applyPostHandle(context, runtime);
                 Optional.ofNullable(runtime.assertions).orElse(Collections.emptyList()).forEach(assertion -> assertion.assertThat(context));
                 Optional.ofNullable(runtime.extractors).orElse(Collections.emptyList()).forEach(extractor -> extractor.process(context));
             }
+            // 执行 ReporterListener 后置处理
+            runtime.reporterChain.applyPostHandle(context, runtime);
         } catch (Throwable throwable) {
             // 1、sampler 执行异常 2、assertion 断言异常 3、extractor 提取异常
             result.setThrowable(throwable);
         } finally {
-            // 最终处理
-            runtime.chain.triggerAfterCompletion(context);
+            // 最终处理 - 拦截器
+            runtime.handlerChain.triggerAfterCompletion(context);
+            // 最终处理 - ReporterListener
+            runtime.reporterChain.triggerAfterCompletion(context);
+
         }
     }
 

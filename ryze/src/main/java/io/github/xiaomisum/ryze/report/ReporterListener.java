@@ -2,7 +2,7 @@
  *
  *  * The MIT License (MIT)
  *  *
- *  * Copyright (c) 2025.  Lorem XiaoMiSum (mi_xiao@qq.com)
+ *  * Copyright (c) 2026.  Lorem XiaoMiSum (mi_xiao@qq.com)
  *  *
  *  * Permission is hereby granted, free of charge, to any person obtaining
  *  * a copy of this software and associated documentation files (the
@@ -26,17 +26,17 @@
  *
  */
 
-package io.github.xiaomisum.ryze.interceptor.report;
+package io.github.xiaomisum.ryze.report;
 
 import io.github.xiaomisum.ryze.SessionRunner;
-import io.github.xiaomisum.ryze.interceptor.RyzeInterceptor;
+import io.github.xiaomisum.ryze.context.ContextWrapper;
 import io.github.xiaomisum.ryze.testelement.TestElement;
 import org.slf4j.Logger;
 
 /**
  * 测试报告监听器接口
  * <p>
- * ReporterListener 是测试报告生成的核心接口，继承自 RyzeInterceptor，
+ * ReporterListener 是测试报告生成的核心接口，独立于业务拦截器链，
  * 用于在测试执行过程中收集信息并生成测试报告。
  * </p>
  * <p>
@@ -44,7 +44,7 @@ import org.slf4j.Logger;
  * <ul>
  *   <li>打印异常堆栈信息到日志</li>
  *   <li>在测试框架环境中重新抛出异常</li>
- *   <li>提供测试元素的拦截处理能力</li>
+ *   <li>提供测试元素的报告处理能力</li>
  * </ul>
  * </p>
  *
@@ -52,8 +52,50 @@ import org.slf4j.Logger;
  * @author xiaomi
  * Created at 2025/7/20 14:15
  */
-public interface ReporterListener<T extends TestElement<?>> extends RyzeInterceptor<T> {
+public interface ReporterListener<T extends TestElement<?>> {
 
+    /**
+     * 获取执行顺序，数字越小优先级越高
+     *
+     * @return 执行顺序值
+     */
+    int getOrder();
+
+    /**
+     * 计算当前测试元件对象是否需要应用该报告监听器
+     *
+     * @param context 测试上下文
+     * @return 如果对 testElement 使用当前报告监听器则为 true，否则为 false。
+     */
+    boolean supports(ContextWrapper context);
+
+    /**
+     * 执行测试组件业务前执行
+     *
+     * @param context 测试上下文
+     * @param runtime TestElement 运行时数据
+     * @return 如果返回 false，将中断后续处理
+     */
+    default boolean preHandle(ContextWrapper context, T runtime) {
+        return true;
+    }
+
+    /**
+     * 执行测试组件业务后执行
+     *
+     * @param context 测试上下文
+     * @param runtime TestElement 运行时数据
+     */
+    default void postHandle(ContextWrapper context, T runtime) {
+    }
+
+    /**
+     * 报告监听器最终处理，一般用于打印日志和生成报告
+     *
+     * @param context 测试上下文
+     */
+    default void afterCompletion(ContextWrapper context) {
+    }
 
     /**
      * 打印异常堆栈信息到日志
@@ -79,6 +121,5 @@ public interface ReporterListener<T extends TestElement<?>> extends RyzeIntercep
             }
             throw new RuntimeException(throwable.getMessage(), throwable);
         }
-
     }
 }
