@@ -27,7 +27,7 @@ package io.github.xiaomisum.ryze.protocol.rabbit;
 
 import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
-import io.github.xiaomisum.ryze.MagicBox;
+import io.github.xiaomisum.ryze.Ryze;
 import io.github.xiaomisum.ryze.Result;
 import io.github.xiaomisum.ryze.protocol.rabbit.sampler.RabbitSampler;
 import io.github.xiaomisum.ryze.support.Customizer;
@@ -42,7 +42,7 @@ import io.github.xiaomisum.ryze.support.groovy.Groovy;
  *
  * @author xiaomi
  */
-public class RabbitMagicBox extends MagicBox {
+public class RabbitMagicBox {
 
     /**
      * 执行 RabbitMQ 消息发送操作（无标题）
@@ -71,7 +71,7 @@ public class RabbitMagicBox extends MagicBox {
                                 @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = RabbitSampler.Builder.class) Closure<?> closure) {
         var builder = RabbitSampler.builder();
         Groovy.call(closure, builder);
-        return MagicBox.runTest(title, builder.build());
+        return Ryze.runTest(title, builder.build());
     }
 
     /**
@@ -100,6 +100,6 @@ public class RabbitMagicBox extends MagicBox {
     public static Result rabbit(String title, Customizer<RabbitSampler.Builder> customizer) {
         var builder = RabbitSampler.builder();
         customizer.customize(builder);
-        return MagicBox.runTest(title, builder.build());
+        return Ryze.runTest(title, builder.build());
     }
 }

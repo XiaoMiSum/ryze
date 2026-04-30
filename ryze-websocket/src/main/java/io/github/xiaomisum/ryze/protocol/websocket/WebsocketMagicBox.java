@@ -27,7 +27,7 @@ package io.github.xiaomisum.ryze.protocol.websocket;
 
 import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
-import io.github.xiaomisum.ryze.MagicBox;
+import io.github.xiaomisum.ryze.Ryze;
 import io.github.xiaomisum.ryze.Result;
 import io.github.xiaomisum.ryze.protocol.websocket.sampler.WebsocketSampler;
 import io.github.xiaomisum.ryze.support.Customizer;
@@ -43,7 +43,7 @@ import io.github.xiaomisum.ryze.support.groovy.Groovy;
  *
  * @author xiaomi
  */
-public class WebsocketMagicBox extends MagicBox {
+public class WebsocketMagicBox {
 
     /**
      * 通过Groovy闭包执行WebsocketMQ取样器测试（无标题）
@@ -76,7 +76,7 @@ public class WebsocketMagicBox extends MagicBox {
                             @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = WebsocketSampler.Builder.class) Closure<?> closure) {
         var builder = WebsocketSampler.builder();
         Groovy.call(closure, builder);
-        return MagicBox.runTest(title, builder.build());
+        return Ryze.runTest(title, builder.build());
     }
 
     /**
@@ -109,6 +109,6 @@ public class WebsocketMagicBox extends MagicBox {
     public static Result ws(String title, Customizer<WebsocketSampler.Builder> customizer) {
         var builder = WebsocketSampler.builder();
         customizer.customize(builder);
-        return MagicBox.runTest(title, builder.build());
+        return Ryze.runTest(title, builder.build());
     }
 }

@@ -27,7 +27,7 @@ package io.github.xiaomisum.ryze.protocol.active;
 
 import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
-import io.github.xiaomisum.ryze.MagicBox;
+import io.github.xiaomisum.ryze.Ryze;
 import io.github.xiaomisum.ryze.Result;
 import io.github.xiaomisum.ryze.protocol.active.sampler.ActiveSampler;
 import io.github.xiaomisum.ryze.support.Customizer;
@@ -43,7 +43,7 @@ import io.github.xiaomisum.ryze.support.groovy.Groovy;
  *
  * @author xiaomi
  */
-public class ActiveMagicBox extends MagicBox {
+public class ActiveMagicBox {
 
     /**
      * 通过Groovy闭包执行ActiveMQ取样器测试（无标题）
@@ -76,7 +76,7 @@ public class ActiveMagicBox extends MagicBox {
                                 @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ActiveSampler.Builder.class) Closure<?> closure) {
         var builder = ActiveSampler.builder();
         Groovy.call(closure, builder);
-        return MagicBox.runTest(title, builder.build());
+        return Ryze.runTest(title, builder.build());
     }
 
     /**
@@ -109,6 +109,6 @@ public class ActiveMagicBox extends MagicBox {
     public static Result active(String title, Customizer<ActiveSampler.Builder> customizer) {
         var builder = ActiveSampler.builder();
         customizer.customize(builder);
-        return MagicBox.runTest(title, builder.build());
+        return Ryze.runTest(title, builder.build());
     }
 }

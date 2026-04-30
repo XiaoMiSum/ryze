@@ -27,7 +27,7 @@ package io.github.xiaomisum.ryze.protocol.mongo;
 
 import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
-import io.github.xiaomisum.ryze.MagicBox;
+import io.github.xiaomisum.ryze.Ryze;
 import io.github.xiaomisum.ryze.Result;
 import io.github.xiaomisum.ryze.protocol.mongo.sampler.MongoSampler;
 import io.github.xiaomisum.ryze.support.Customizer;
@@ -50,7 +50,7 @@ import io.github.xiaomisum.ryze.support.groovy.Groovy;
  *
  * @author xiaomi
  */
-public class MongoMagicBox extends MagicBox {
+public class MongoMagicBox {
 
     /**
      * 执行 MongoDB 操作（无标题）
@@ -79,7 +79,7 @@ public class MongoMagicBox extends MagicBox {
                                @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = MongoSampler.Builder.class) Closure<?> closure) {
         var builder = MongoSampler.builder();
         Groovy.call(closure, builder);
-        return MagicBox.runTest(title, builder.build());
+        return Ryze.runTest(title, builder.build());
     }
 
     /**
@@ -108,6 +108,6 @@ public class MongoMagicBox extends MagicBox {
     public static Result mongo(String title, Customizer<MongoSampler.Builder> customizer) {
         var builder = MongoSampler.builder();
         customizer.customize(builder);
-        return MagicBox.runTest(title, builder.build());
+        return Ryze.runTest(title, builder.build());
     }
 }

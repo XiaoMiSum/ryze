@@ -27,7 +27,7 @@ package io.github.xiaomisum.ryze.protocol.dubbo;
 
 import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
-import io.github.xiaomisum.ryze.MagicBox;
+import io.github.xiaomisum.ryze.Ryze;
 import io.github.xiaomisum.ryze.Result;
 import io.github.xiaomisum.ryze.protocol.dubbo.sampler.DubboSampler;
 import io.github.xiaomisum.ryze.support.Customizer;
@@ -54,7 +54,7 @@ import io.github.xiaomisum.ryze.support.groovy.Groovy;
  * @author xiaomi
  * @since 1.0.0
  */
-public class DubboMagicBox extends MagicBox {
+public class DubboMagicBox {
 
     /**
      * 执行Dubbo测试（通过Groovy闭包配置，无标题）
@@ -89,7 +89,7 @@ public class DubboMagicBox extends MagicBox {
                                @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = DubboSampler.Builder.class) Closure<?> closure) {
         var builder = DubboSampler.builder();
         Groovy.call(closure, builder);
-        return runTest(title, builder.build());
+        return Ryze.runTest(title, builder.build());
     }
 
     /**
@@ -124,6 +124,6 @@ public class DubboMagicBox extends MagicBox {
     public static Result dubbo(String title, Customizer<DubboSampler.Builder> customizer) {
         var builder = DubboSampler.builder();
         customizer.customize(builder);
-        return runTest(title, builder.build());
+        return Ryze.runTest(title, builder.build());
     }
 }

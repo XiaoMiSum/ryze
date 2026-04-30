@@ -6,7 +6,7 @@ import io.github.xiaomisum.ryze.protocol.websocket.builder.WebsocketSamplersBuil
 import io.github.xiaomisum.ryze.support.testng.annotation.RyzeTest;
 import org.testng.annotations.Test;
 
-import static io.github.xiaomisum.ryze.MagicBox.suite;
+import static io.github.xiaomisum.ryze.Ryze.suite;
 import static io.github.xiaomisum.ryze.protocol.websocket.WebsocketMagicBox.ws;
 
 public class CodeTestCase {

@@ -1,6 +1,6 @@
 package io.github.xiaomisum.ryze.dubbo.example.code;
 
-import io.github.xiaomisum.ryze.MagicBox;
+import io.github.xiaomisum.ryze.Ryze;
 import io.github.xiaomisum.ryze.protocol.dubbo.DubboMagicBox;
 import io.github.xiaomisum.ryze.protocol.dubbo.builder.DubboConfigureElementsBuilder;
 import io.github.xiaomisum.ryze.protocol.dubbo.builder.DubboPostprocessorsBuilder;
