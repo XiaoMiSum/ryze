@@ -297,7 +297,7 @@ com.example.MultiFormatExtractor
 @Test
 @RyzeTest
 public void testWithExtractors() {
-    MagicBox.http("提取器测试", http -> {
+    Ryze.http("提取器测试", http -> {
         http.config(config -> config
                 .method("GET")
                 .url("https://api.example.com/data")

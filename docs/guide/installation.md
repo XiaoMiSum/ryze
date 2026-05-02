@@ -110,7 +110,7 @@ implementation 'io.github.xiaomisum:ryze-active:${version}'
 创建一个简单的测试类来验证安装是否成功：
 
 ```java
-import static io.github.xiaomisum.ryze.MagicBox.*;
+import static io.github.xiaomisum.ryze.Ryze.*;
 
 public class InstallationTest {
     static void main(String[] args) {

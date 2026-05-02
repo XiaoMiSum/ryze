@@ -25,7 +25,7 @@
 
 package io.github.xiaomisum.ryze.debug;
 
-import io.github.xiaomisum.ryze.MagicBox;
+import io.github.xiaomisum.ryze.Ryze;
 import io.github.xiaomisum.ryze.SessionRunner;
 import org.testng.annotations.Test;
 
@@ -38,7 +38,7 @@ public class DebugTest {
     @Test
     public void test1() {
         SessionRunner.getSessionIfNoneCreateNew();
-        MagicBox.debug("测试用例- test()", sampler -> sampler
+        Ryze.debug("测试用例- test()", sampler -> sampler
                 .postprocessors(post -> post.debug(debug -> debug.title("条件不执行").async().condition("false")))
                 .config(config -> config.add("test", "t"))
                 .build());
@@ -48,7 +48,7 @@ public class DebugTest {
     @Test
     public void test2() {
         SessionRunner.getSessionIfNoneCreateNew();
-        MagicBox.debug("测试用例- test()", sampler -> sampler
+        Ryze.debug("测试用例- test()", sampler -> sampler
                 .postprocessors(post -> post.debug(debug -> debug.title("条件执行").async().condition("true")))
                 .config(config -> config.add("test", "t"))
                 .build());

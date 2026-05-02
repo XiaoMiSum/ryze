@@ -42,16 +42,17 @@ import io.github.xiaomisum.ryze.testelement.sampler.Sampler;
  * 该监听器支持所有实现了 Sampler 接口的取样器。
  * 在报告中会根据取样器是否有标题来决定显示名称：
  * <ul>
- *   <li>如果取样器设置了标题，则显示标题</li>
- *   <li>如果没有设置标题，则显示"匿名取样器：+ 取样器类名"</li>
+ * <li>如果取样器设置了标题，则显示标题</li>
+ * <li>如果没有设置标题，则显示"匿名取样器：+ 取样器类名"</li>
  * </ul>
- * 同时，若当前线程上尚未有 TestContainer 设置过 Allure testcase 名称（例如 YAML 根节点直接为 Sampler 的场景），
+ * 同时，若当前线程上尚未有 TestContainer 设置过 Allure testcase 名称（例如 YAML 根节点直接为 Sampler
+ * 的场景），
  * 则由首个 Sampler 负责设置 testcase 名称并折叠 suite 层级。
  * </p>
  *
  * @author xiaomi
  */
-@SuppressWarnings({"unchecked", "rawtypes"})
+@SuppressWarnings({"rawtypes"})
 public class SamplerAllureReportListener implements AllureReportListener {
 
     /**
@@ -85,8 +86,10 @@ public class SamplerAllureReportListener implements AllureReportListener {
      * 在取样器执行完成后创建 Allure 测试步骤报告
      * <p>
      * 根据取样器类型和标题信息创建相应的 Allure 测试步骤，并立即结束该步骤。
-     * 同时尝试设置 Allure testcase 名称作为兑底：当 YAML 根节点直接为 Sampler（无 TestSuite 包裹）
-     * 或首个进入的元素是 Sampler 时，由首个 Sampler 将 title 写入 testcase 名称。
+     * 首个 Sampler 完成时，会结合 {@link AllureTestCaseHelper} 中的 TestContainer 嵌套栈
+     * 一次性回填 parentSuite / suite / subSuite 三级 label 与 testcase name，
+     * 从而使 Allure 左侧 Suites 导航呈现层级结构；
+     * 当 YAML 根节点直接为 Sampler（栈为空）时，由首个 Sampler 的 title 作为 testcase name。
      * </p>
      *
      * @param context 上下文包装器
@@ -94,8 +97,8 @@ public class SamplerAllureReportListener implements AllureReportListener {
     @Override
     public void afterCompletion(ContextWrapper context) {
         String title = resolveTitle(context);
-        // 仅首次调用生效：在没有 TestContainer 包裹的场景下，由首个 Sampler 接管 testcase 名称与 suite 折叠
-        AllureTestCaseHelper.trySetTestCaseName(title);
+        // 仅首次生效：首个 Sampler 完成时按 TestContainer 栈深度回填 Allure 层级 label
+        AllureTestCaseHelper.trySetFromStack(title);
         AllureReportListener.startStep(title, context);
         // 若本 Sampler 被拦截器 preHandle 拒绝，将拦截事实标记到 step
         AllureReportListener.markRejectionIfAny(context);

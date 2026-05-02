@@ -1,0 +1,5 @@
+# 场景5: sampler(用例) —— 单取样器作为顶级元素
+title: "场景5 - 独立取样器验证"
+testclass: debug
+config:
+  message: "This is a standalone debug sampler, no parent suite"

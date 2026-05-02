@@ -1,0 +1,19 @@
+# 场景3: testsuite(接口1) → testsuite(用例) → sampler(步骤)
+title: "场景3 - 接口级嵌套结构验证"
+children:
+  - title: "用例级测试集合1"
+    children:
+      - title: "Debug取样器 - 步骤3"
+        testclass: debug
+        config:
+          message: "This is a debug step inside interface-level suite"
+  - title: "用例级测试集合2"
+    children:
+      - title: "Debug取样器 - 步骤3"
+        testclass: debug
+        config:
+          message: "This is a debug step inside interface-level suite"
+      - title: "Debug取样器 - 步骤4"
+        testclass: debug
+        config:
+          message: "This is a debug step inside interface-level suite"

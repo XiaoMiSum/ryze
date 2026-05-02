@@ -267,7 +267,7 @@ public class LoginTest {
 ### 3. MagicBox 函数式编程
 
 ```
-import static io.github.xiaomisum.ryze.MagicBox.*;
+import static io.github.xiaomisum.ryze.Ryze.*;
 
 public class FluentTest {
     public static void main(String[] args) {
@@ -303,7 +303,7 @@ public class FluentTest {
 ### 4. Groovy 闭包方式
 
 ```
-import static io.github.xiaomisum.ryze.MagicBox.*
+import static io.github.xiaomisum.ryze.Ryze.*
 
 // 使用 Groovy 闭包语法
 def result = suite("用户API测试") {

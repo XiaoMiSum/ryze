@@ -1,0 +1,11 @@
+# 场景4: testsuite(用例) → sampler(步骤)
+title: "场景4 - 用例级嵌套结构验证"
+children:
+  - title: "Debug取样器 - 步骤1"
+    testclass: debug
+    config:
+      message: "This is a debug step inside case-level suite"
+  - title: "Debug取样器 - 步骤2"
+    testclass: debug
+    config:
+      message: "This is a debug step inside case-level suite"

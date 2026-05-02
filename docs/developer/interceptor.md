@@ -628,7 +628,7 @@ public class InterceptorConfiguration {
 @Test
 @RyzeTest
 public void testWithInterceptors() {
-    MagicBox.http("带拦截器的测试", http -> {
+    Ryze.http("带拦截器的测试", http -> {
         http.config(config -> config
                 .method("GET")
                 .url("https://api.example.com/users")
@@ -651,7 +651,7 @@ public void testWithInterceptors() {
 @Test
 @RyzeTest
 public void testSuiteWithInterceptors() {
-    MagicBox.suite("拦截器测试套件", suite -> {
+    Ryze.suite("拦截器测试套件", suite -> {
         // 套件级拦截器
         suite.interceptors(interceptors ->
                 interceptors.add(new LoggingInterceptor())

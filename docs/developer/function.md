@@ -493,7 +493,7 @@ config:
 @Test
 @RyzeTest
 public void testWithFunctions() {
-    MagicBox.http("函数测试", http -> {
+    Ryze.http("函数测试", http -> {
         http.config(config -> config
                 .method("POST")
                 .url("${env(\"API_BASE_URL\")}/users")

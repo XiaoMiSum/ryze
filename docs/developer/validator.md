@@ -332,7 +332,7 @@ public static Matcher<Object> createMatcher(String rule, Object expected, boolea
 @Test
 @RyzeTest
 public void testWithValidators() {
-    MagicBox.http("验证器测试", http -> {
+    Ryze.http("验证器测试", http -> {
         http.config(config -> config
                 .method("POST")
                 .url("https://api.example.com/users")

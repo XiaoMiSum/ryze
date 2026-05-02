@@ -115,7 +115,7 @@ public class JdbcApiExample {
     @RyzeTest
     public void testJdbcInsert() {
         // 单个 JDBC 插入操作
-        MagicBox.jdbc(jdbc -> {
+        Ryze.jdbc(jdbc -> {
             jdbc.title("插入用户：tick = jdbc_preprocessor");
             jdbc.configureElements(ele -> ele.jdbc(j -> j
                     .refName("jdbc_source")
@@ -134,13 +134,13 @@ public class JdbcApiExample {
     @RyzeTest
     public void testJdbcQuery() {
         // JDBC 查询操作
-        MagicBox.jdbc(jdbc -> {
+        Ryze.jdbc(jdbc -> {
             jdbc.title("查找用户：tick = jdbc_preprocessor");
             jdbc.configureElements(ele -> ele.jdbc(j -> j
                     .refName("jdbc_source")
                     .config(config -> config
                             .url("jdbc:mysql://127.0.0.1:3306/ryze-test?user=root&password=123456&characterEncoding=utf8&useSSL=true&serverTimezone=GMT%2b8&failOverReadOnly=false")
-            ));
+                    ));
             jdbc.postprocessors(post -> post.jdbc(j -> j
                     .config(config -> config
                             .datasource("jdbc_source")
@@ -171,7 +171,7 @@ public class JdbcSuiteExample {
     @Test
     @RyzeTest
     public void userDatabaseTestSuite() {
-        MagicBox.suite("测试用例", suite -> {
+        Ryze.suite("测试用例", suite -> {
             suite.variables("id", 1);
             suite.variables(var -> var.put("tick", "ryze"));
             suite.variables(Map.of("a", 1, "b", 2));
@@ -181,7 +181,7 @@ public class JdbcSuiteExample {
                     .refName("jdbc_source")
                     .config(config -> config
                             .url("jdbc:mysql://127.0.0.1:3306/ryze-test?user=root&password=123456&characterEncoding=utf8&useSSL=true&serverTimezone=GMT%2b8&failOverReadOnly=false")
-            ));
+                    ));
 
             // 前置处理：插入测试数据
             suite.preprocessors(pre ->
@@ -249,7 +249,7 @@ class GroovyJdbcExample {
     @RyzeTest
     void testJdbcInsert() {
         // 简单的插入操作
-        MagicBox.jdbc({
+        Ryze.jdbc({
             title "插入用户：tick = jdbc_preprocessor"
             configureElements {
                 jdbc {
@@ -270,7 +270,7 @@ class GroovyJdbcExample {
     @RyzeTest
     void testJdbcQuery() {
         // 查询操作
-        MagicBox.jdbc({
+        Ryze.jdbc({
             title "查找用户：tick = ryze_http_sampler"
             configureElements {
                 jdbc {
@@ -312,7 +312,7 @@ class GroovyJdbcSuiteExample {
     @Test
     @RyzeTest
     void userDatabaseTestSuite() {
-        MagicBox.suite("测试用例", {
+        Ryze.suite("测试用例", {
             variables("id", 1)
             variables { put("tick", "ryze") }
             variables Map.of("a", 1, "b", 2)
@@ -398,7 +398,7 @@ class GroovyJdbcSuiteExample {
 @Test
 @RyzeTest
 public void transactionTest() {
-    MagicBox.suite("数据库事务测试", suite -> {
+    Ryze.suite("数据库事务测试", suite -> {
         suite.children(child -> {
             // 开启事务
             child.jdbc(jdbc -> jdbc
@@ -448,7 +448,7 @@ public void transactionTest() {
 @Test
 @RyzeTest
 public void parameterizedQuery() {
-    MagicBox.jdbc(jdbc -> {
+    Ryze.jdbc(jdbc -> {
         jdbc.title("参数化查询用户");
         jdbc.variables("userId", 1);
         jdbc.variables("status", "active");

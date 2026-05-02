@@ -205,7 +205,7 @@ import org.testng.annotations.Test;
 
 import java.util.Map;
 
-import static io.github.xiaomisum.ryze.MagicBox.*;
+import static io.github.xiaomisum.ryze.Ryze.*;
 import static org.testng.Assert.assertTrue;
 
 public class MagicBoxDemo {
@@ -267,7 +267,7 @@ public class MagicBoxDemo {
 创建 `src/test/groovy/ApiTestGroovy.groovy`（需要添加 Groovy 依赖）：
 
 ```groovy
-import static io.github.xiaomisum.ryze.MagicBox.*
+import static io.github.xiaomisum.ryze.Ryze.*
 
 def result = suite("用户API测试") {
     variables([

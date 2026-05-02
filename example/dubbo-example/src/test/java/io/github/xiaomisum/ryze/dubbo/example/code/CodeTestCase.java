@@ -16,7 +16,7 @@ public class CodeTestCase {
     @Test
     @RyzeTest
     public void test1() {
-        MagicBox.suite("测试用例", suite -> {
+        Ryze.suite("测试用例", suite -> {
             suite.variables("id", 1);
             suite.variables(var -> var.put("tick", "dubbo_preprocessor"));
             suite.variables(Map.of("a", 1, "b", 2));
