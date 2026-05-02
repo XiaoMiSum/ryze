@@ -1,6 +1,6 @@
 package io.github.xiaomisum.ryze.dubbo.example.code;
 
-import io.github.xiaomisum.ryze.MagicBox;
+import io.github.xiaomisum.ryze.Ryze;
 import io.github.xiaomisum.ryze.protocol.dubbo.DubboMagicBox;
 import io.github.xiaomisum.ryze.protocol.dubbo.builder.DubboConfigureElementsBuilder;
 import io.github.xiaomisum.ryze.protocol.dubbo.builder.DubboPostprocessorsBuilder;
@@ -16,7 +16,7 @@ public class CodeTestCase {
     @Test
     @RyzeTest
     public void test1() {
-        MagicBox.suite("测试用例", suite -> {
+        Ryze.suite("测试用例", suite -> {
             suite.variables("id", 1);
             suite.variables(var -> var.put("tick", "dubbo_preprocessor"));
             suite.variables(Map.of("a", 1, "b", 2));

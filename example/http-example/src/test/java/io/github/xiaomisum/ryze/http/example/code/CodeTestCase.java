@@ -1,6 +1,6 @@
 package io.github.xiaomisum.ryze.http.example.code;
 
-import io.github.xiaomisum.ryze.MagicBox;
+import io.github.xiaomisum.ryze.Ryze;
 import io.github.xiaomisum.ryze.support.Collections;
 import io.github.xiaomisum.ryze.support.testng.annotation.RyzeTest;
 import org.testng.annotations.Test;
@@ -12,7 +12,7 @@ public class CodeTestCase {
     @Test
     @RyzeTest
     public void test1() {
-        MagicBox.suite("测试用例", suite -> {
+        Ryze.suite("测试用例", suite -> {
             suite.variables("id", 1);
             suite.variables("t_body", Collections.of("id", "ryze", "name", "ryze_http_preprocessor", "age", 0));
             suite.variables(Map.of("a", 1, "b", 2));
@@ -49,7 +49,7 @@ public class CodeTestCase {
     @Test
     @RyzeTest
     public void test2() {
-        MagicBox.http("测试用例- test2()", sampler -> {
+        Ryze.http("测试用例- test2()", sampler -> {
             sampler.configureElements(ele -> ele.http(http -> http.config(config -> config.baseUrl("http://127.0.0.1:58081"))));
             sampler.preprocessors(pre -> pre.http(http ->
                     http.title("前置处理器修改用户：ryze").config(config -> config.method("POST").path("/user").body(body -> {
@@ -66,7 +66,7 @@ public class CodeTestCase {
     @Test
     @RyzeTest
     public void test3() {
-        MagicBox.http(http -> {
+        Ryze.http(http -> {
             http.variables("id", 1);
             http.title("步骤1——获取用户：id = ${id}");
             http.config(config -> config.baseUrl("http://127.0.0.1:58081")
@@ -74,7 +74,7 @@ public class CodeTestCase {
             http.assertions(assertions -> assertions.json("$.data.id", "${id}"));
         });
 
-        MagicBox.http(http -> {
+        Ryze.http(http -> {
             http.title("步骤2——修改用户：id = ryze");
             http.config(config -> config.baseUrl("http://127.0.0.1:58081")
                     .method("POST").path("/user").body(body -> {
@@ -85,7 +85,7 @@ public class CodeTestCase {
             http.assertions(assertions -> assertions.httpStatus(200));
         });
 
-        MagicBox.http(http -> {
+        Ryze.http(http -> {
             http.title("步骤3——获取用户：id = ryze");
             http.config(config -> config.baseUrl("http://127.0.0.1:58081")
                     .method("GET").path("/user/ryze"));

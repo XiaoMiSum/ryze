@@ -2,7 +2,7 @@
  *
  *  * The MIT License (MIT)
  *  *
- *  * Copyright (c) 2025.  Lorem XiaoMiSum (mi_xiao@qq.com)
+ *  * Copyright (c) 2026.  Lorem XiaoMiSum (mi_xiao@qq.com)
  *  *
  *  * Permission is hereby granted, free of charge, to any person obtaining
  *  * a copy of this software and associated documentation files (the
@@ -26,7 +26,7 @@
  *
  */
 
-package io.github.xiaomisum.ryze.interceptor.report;
+package io.github.xiaomisum.ryze.report;
 
 import io.github.xiaomisum.ryze.context.ContextWrapper;
 import io.github.xiaomisum.ryze.testelement.TestElement;
@@ -57,7 +57,7 @@ import java.util.Objects;
  * @author xiaomi
  * Created at 2025/7/20 13:46
  */
-@SuppressWarnings({"unchecked", "rawtypes"})
+@SuppressWarnings({"rawtypes"})
 public class ProcessorLogListener implements ReporterListener {
 
     static final Logger log = LoggerFactory.getLogger("");

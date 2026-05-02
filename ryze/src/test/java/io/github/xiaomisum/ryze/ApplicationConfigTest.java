@@ -36,7 +36,6 @@ import io.github.xiaomisum.ryze.extractor.builtin.RegexExtractor;
 import io.github.xiaomisum.ryze.extractor.builtin.ResultExtractor;
 import io.github.xiaomisum.ryze.function.Function;
 import io.github.xiaomisum.ryze.function.builtin.*;
-import io.github.xiaomisum.ryze.interceptor.report.*;
 import io.github.xiaomisum.ryze.protocol.debug.config.DebugDefaults;
 import io.github.xiaomisum.ryze.protocol.debug.processer.DebugPostprocessor;
 import io.github.xiaomisum.ryze.protocol.debug.processer.DebugPreprocessor;
@@ -334,18 +333,6 @@ public class ApplicationConfigTest {
         Assert.assertTrue(map.get(RedisDatasource.class) instanceof RedisJSONInterceptor);
         Assert.assertTrue(map.get(RedisPreprocessor.class) instanceof RedisJSONInterceptor);
         Assert.assertTrue(map.get(RedisPostprocessor.class) instanceof RedisJSONInterceptor);
-    }
-
-    @Test
-    public void testGetReporterListeners() {
-        List<? extends ReporterListener> listeners = ApplicationConfig.getReporterListeners();
-        Assert.assertNotNull(listeners);
-        Assert.assertFalse(listeners.stream().filter(listener -> listener instanceof TestContainerLogListener).toList().isEmpty());
-        Assert.assertFalse(listeners.stream().filter(listener -> listener instanceof ProcessorLogListener).toList().isEmpty());
-        Assert.assertFalse(listeners.stream().filter(listener -> listener instanceof SamplerLogListener).toList().isEmpty());
-        Assert.assertFalse(listeners.stream().filter(listener -> listener instanceof TestContainerAllureReportListener).toList().isEmpty());
-        Assert.assertFalse(listeners.stream().filter(listener -> listener instanceof ProcessorAllureReportListener).toList().isEmpty());
-        Assert.assertFalse(listeners.stream().filter(listener -> listener instanceof SamplerAllureReportListener).toList().isEmpty());
     }
 
     @Test

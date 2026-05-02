@@ -46,36 +46,44 @@ public abstract class Result implements Serializable {
      * <p>唯一标识一个测试元素实例</p>
      */
     private final String id;
-    
+
     /**
      * 测试元素标题
      * <p>描述测试元素的名称或标题</p>
      */
     private final String title;
-    
+
     /**
      * 测试执行状态
      * <p>标识测试元素的执行结果状态，默认为通过状态</p>
      */
     private TestStatus status = TestStatus.passed;
-    
+
     /**
      * 测试开始时间
      * <p>记录测试元素开始执行的时间戳</p>
      */
     private LocalDateTime startTime;
-    
+
     /**
      * 测试结束时间
      * <p>记录测试元素执行完成的时间戳</p>
      */
     private LocalDateTime endTime;
-    
+
     /**
      * 测试过程中抛出的异常
      * <p>如果测试执行过程中发生异常，将异常对象保存在此字段中</p>
      */
     private Throwable throwable;
+
+    /**
+     * 拦截器 preHandle 阶段投出反对票时的拦截者标识（通常为拦截器的 SimpleName）。
+     * <p>null 表示本次执行未被拦截；非 null 时说明业务被跳过，由哪一个拦截器阻止。
+     * 该字段让报告层（Allure / 日志）可脱离拦截器链内部结构，仅依赖结果即可呈现
+     * "被拦截"事实，避免 passed 的欺骗性展示。</p>
+     */
+    private String rejectBy;
 
 
     /**
@@ -206,5 +214,23 @@ public abstract class Result implements Serializable {
      */
     public void setThrowable(Throwable throwable) {
         this.throwable = throwable;
+    }
+
+    /**
+     * 获取拦截者标识
+     *
+     * @return 拦截者标识（通常为拦截器 SimpleName），未被拦截时返回 null
+     */
+    public String getRejectBy() {
+        return rejectBy;
+    }
+
+    /**
+     * 设置拦截者标识
+     *
+     * @param rejectBy 拦截者标识（通常为拦截器 SimpleName）
+     */
+    public void setRejectBy(String rejectBy) {
+        this.rejectBy = rejectBy;
     }
 }

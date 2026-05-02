@@ -1,6 +1,6 @@
 package io.github.xiaomisum.ryze.http.example.code
 
-import io.github.xiaomisum.ryze.MagicBox
+
 import io.github.xiaomisum.ryze.support.Collections
 import io.github.xiaomisum.ryze.support.testng.annotation.RyzeTest
 import org.testng.annotations.Test
@@ -17,7 +17,7 @@ class GroovyCodeTestCase {
         // 这样的好处：
         //      1、所有步骤共用suite中配置的变量和默认配置，可以减少重复代码
         //      2、前置步骤提取的变量，会自动添加到 suite 中，后续步骤可以直接使用
-        MagicBox.suite {
+        Ryze.suite {
             title "测试用例"
             variables("id", 1)
             variables("t_body", [id: "ryze", name: "ryze_http_preprocessor", age: 0])
@@ -109,7 +109,7 @@ class GroovyCodeTestCase {
         // 以 Sampler 作为主执行步骤，其他步骤以 preprocessors 、 postprocessors 执行
         // 执行顺序：preprocessors -> sampler -> postprocessors
         // 注意：preprocessors 、 postprocessors 无断言功能，需断言的步骤应当为 Sampler
-        MagicBox.http {
+        Ryze.http {
             title "测试用例- test2()"
             configureElements {
                 http {
@@ -158,7 +158,7 @@ class GroovyCodeTestCase {
     void test3() {
         // 以独立的 http sampler 执行测试步骤
         // 无法共用前置步骤提取的变量，建议在单步骤用例下使用此方式
-        MagicBox.http {
+        Ryze.http {
             variables {
                 put "id", "1"
             }
@@ -177,7 +177,7 @@ class GroovyCodeTestCase {
             }
         }
 
-        MagicBox.http {
+        Ryze.http {
             title "步骤2——修改用户：id=ryze"
             config {
                 baseUrl "http://127.0.0.1:58081"
@@ -195,7 +195,7 @@ class GroovyCodeTestCase {
             }
         }
 
-        MagicBox.http {
+        Ryze.http {
             variables {
                 put "t_body", Collections.of("id", "ryze", "name", "ryze_http_preprocessor", "age", 0)
             }

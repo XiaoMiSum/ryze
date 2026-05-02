@@ -1,6 +1,6 @@
 package io.github.xiaomisum.ryze.jdbc.example.code
 
-import io.github.xiaomisum.ryze.MagicBox
+
 import io.github.xiaomisum.ryze.support.testng.annotation.RyzeTest
 import org.testng.annotations.Test
 
@@ -10,7 +10,7 @@ class GroovyCodeTestCase {
     @Test
     @RyzeTest
     void test1() {
-        MagicBox.suite("测试用例", {
+        Ryze.suite("测试用例", {
             variables("id", 1)
             variables { put("tick", "ryze") }
             variables Map.of("a", 1, "b", 2)
@@ -81,7 +81,7 @@ class GroovyCodeTestCase {
     @Test
     @RyzeTest
     void test2() {
-        MagicBox.jdbc("测试用例- test2()", sampler -> {
+        Ryze.jdbc("测试用例- test2()", sampler -> {
             configureElements {
                 jdbc {
                     refName "jdbc_source"
@@ -121,7 +121,7 @@ class GroovyCodeTestCase {
     @Test
     @RyzeTest
     void test3() {
-        MagicBox.jdbc({
+        Ryze.jdbc({
             title "步骤1——插入用户：tick = jdbc_preprocessor"
             configureElements {
                 jdbc {
@@ -137,7 +137,7 @@ class GroovyCodeTestCase {
             }
         })
 
-        MagicBox.jdbc({
+        Ryze.jdbc({
             title "步骤2——查找用户：tick = ryze_http_sampler"
             configureElements {
                 jdbc {

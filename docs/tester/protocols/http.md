@@ -174,7 +174,7 @@ public class HttpApiExample {
     @RyzeTest
     public void testHttpGet() {
         // 单个 HTTP GET 请求
-        MagicBox.http(http -> {
+        Ryze.http(http -> {
             http.variables("id", 1);
             http.title("获取用户信息：id = ${id}");
             http.config(config -> config
@@ -190,7 +190,7 @@ public class HttpApiExample {
     @RyzeTest
     public void testHttpPost() {
         // HTTP POST 请求
-        MagicBox.http(http -> {
+        Ryze.http(http -> {
             http.title("创建用户");
             http.config(config -> config
                     .base_url("http://127.0.0.1:58081")
@@ -223,7 +223,7 @@ public class HttpSuiteExample {
     @Test
     @RyzeTest
     public void userApiTestSuite() {
-        MagicBox.suite("测试用例", suite -> {
+        Ryze.suite("测试用例", suite -> {
             suite.variables("id", 1);
             suite.variables("t_body", Collections.of("id", "ryze", "name", "ryze_http_preprocessor", "age", 0));
             suite.variables(Map.of("a", 1, "b", 2));
@@ -302,7 +302,7 @@ class GroovyHttpExample {
     @RyzeTest
     void testHttpGet() {
         // 简单的 GET 请求
-        MagicBox.http {
+        Ryze.http {
             variables {
                 put "id", "1"
             }
@@ -326,7 +326,7 @@ class GroovyHttpExample {
     @RyzeTest
     void testHttpPost() {
         // POST 请求创建数据
-        MagicBox.http {
+        Ryze.http {
             title "创建用户"
             config {
                 base_url "http://127.0.0.1:58081"
@@ -360,7 +360,7 @@ class GroovyHttpSuiteExample {
     @RyzeTest
     void userApiTestSuite() {
         // 用户API完整测试流程
-        MagicBox.suite {
+        Ryze.suite {
             title "测试用例"
             variables("id", 1)
             variables("t_body", [id: "ryze", name: "ryze_http_preprocessor", age: 0])

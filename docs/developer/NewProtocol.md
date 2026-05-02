@@ -394,7 +394,7 @@ public class MyProtocolMagicBox {
     public static void myprotocol(String title, Consumer<MyProtocolSampler.Builder> customizer) {
         var builder = MyProtocolSampler.builder().title(title);
         customizer.accept(builder);
-        MagicBox.addTestElement(builder.build());
+        Ryze.addTestElement(builder.build());
     }
 
     /**
@@ -410,7 +410,7 @@ public class MyProtocolMagicBox {
     public static void myprotocolPreprocessor(String title, Consumer<MyProtocolSampler.Builder> customizer) {
         var builder = MyProtocolSampler.builder().title(title);
         customizer.accept(builder);
-        MagicBox.addPreprocessor(builder.build());
+        Ryze.addPreprocessor(builder.build());
     }
 
     /**
@@ -419,7 +419,7 @@ public class MyProtocolMagicBox {
     public static void myprotocolPostprocessor(String title, Consumer<MyProtocolSampler.Builder> customizer) {
         var builder = MyProtocolSampler.builder().title(title);
         customizer.accept(builder);
-        MagicBox.addPostprocessor(builder.build());
+        Ryze.addPostprocessor(builder.build());
     }
 }
 ```
@@ -538,7 +538,7 @@ ryze-protocol/
 @Test
 @RyzeTest
 public void testMyProtocol() {
-    MagicBox.myprotocol("测试自定义协议", protocol -> {
+    Ryze.myprotocol("测试自定义协议", protocol -> {
         protocol.host("localhost")
                 .port(8080)
                 .command("ping")
@@ -554,7 +554,7 @@ public void testMyProtocol() {
 @Test
 @RyzeTest
 public void testProtocolSuite() {
-    MagicBox.suite("协议测试套件", suite -> {
+    Ryze.suite("协议测试套件", suite -> {
         suite.children(children -> {
             children.myprotocolPreprocessor("初始化连接", init -> init
                     .host("localhost")

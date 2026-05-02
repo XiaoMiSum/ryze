@@ -27,8 +27,8 @@ package io.github.xiaomisum.ryze.interceptor;
 
 import com.alibaba.fastjson2.annotation.JSONType;
 import io.github.xiaomisum.ryze.context.ContextWrapper;
-import io.github.xiaomisum.ryze.testelement.TestElement;
 import io.github.xiaomisum.ryze.support.fastjson.deserializer.InterceptorObjectReader;
+import io.github.xiaomisum.ryze.testelement.TestElement;
 
 /**
  * 拦截器接口
@@ -42,7 +42,7 @@ import io.github.xiaomisum.ryze.support.fastjson.deserializer.InterceptorObjectR
  * @author xiaomi
  */
 @JSONType(deserializer = InterceptorObjectReader.class)
-@SuppressWarnings({"unchecked", "rawtypes"})
+@SuppressWarnings({"rawtypes"})
 public interface RyzeInterceptor<T extends TestElement> {
 
     int getOrder();

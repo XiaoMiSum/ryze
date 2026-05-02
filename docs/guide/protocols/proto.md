@@ -346,7 +346,7 @@ public class ProtobufSuiteExample {
     @Test
     @RyzeTest
     public void userApiTestSuite() {
-        MagicBox.suite("测试用例", suite -> {
+        Ryze.suite("测试用例", suite -> {
             suite.variables("id", 1);
             suite.variables("t_body", Collections.of("id", "ryze", "name", "ryze_ws_preprocessor", "age", 0));
             suite.variables(Map.of("a", 1, "b", 2));

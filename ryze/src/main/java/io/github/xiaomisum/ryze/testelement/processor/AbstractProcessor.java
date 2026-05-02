@@ -320,7 +320,9 @@ public abstract class AbstractProcessor<SELF extends AbstractProcessor<SELF, CON
     private void execute(ContextWrapper localContext, ContextWrapper parentContext) {
         var localResult = (R) localContext.getTestResult();
         try {
-            if (!runtime.chain.applyPreHandle(localContext, runtime)) {
+            // 执行 ReporterListener 前置处理
+            runtime.reporterChain.applyPreHandle(localContext, runtime);
+            if (!runtime.handlerChain.applyPreHandle(localContext, runtime)) {
                 return;
             }
             handleRequest(localContext, localResult);
@@ -328,8 +330,10 @@ public abstract class AbstractProcessor<SELF extends AbstractProcessor<SELF, CON
             sample(localContext, localResult);
             localResult.sampleEnd();
             handleResponse(localContext, localResult);
-            runtime.chain.applyPostHandle(localContext, runtime);
+            runtime.handlerChain.applyPostHandle(localContext, runtime);
             Optional.ofNullable(extractors).ifPresent(extractors -> extractors.forEach(extractor -> extractor.process(localContext, parentContext)));
+            // 执行 ReporterListener 后置处理
+            runtime.reporterChain.applyPostHandle(localContext, runtime);
         } catch (Throwable throwable) {
             localResult.setThrowable(throwable);
             localResult.setStatus(broken);
@@ -337,7 +341,11 @@ public abstract class AbstractProcessor<SELF extends AbstractProcessor<SELF, CON
             parentContext.getTestResult().setStatus(broken);
         } finally {
             localResult.sampleEnd();
-            runtime.chain.triggerAfterCompletion(localContext);
+            // 最终处理 - 拦截器
+            runtime.handlerChain.triggerAfterCompletion(localContext);
+            // 最终处理 - ReporterListener
+            runtime.reporterChain.triggerAfterCompletion(localContext);
+
         }
     }
 

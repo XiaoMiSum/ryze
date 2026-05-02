@@ -27,8 +27,8 @@ package io.github.xiaomisum.ryze.protocol.kafka;
 
 import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
-import io.github.xiaomisum.ryze.MagicBox;
 import io.github.xiaomisum.ryze.Result;
+import io.github.xiaomisum.ryze.Ryze;
 import io.github.xiaomisum.ryze.protocol.kafka.sampler.KafkaSampler;
 import io.github.xiaomisum.ryze.support.Customizer;
 import io.github.xiaomisum.ryze.support.groovy.Groovy;
@@ -58,10 +58,10 @@ import io.github.xiaomisum.ryze.support.groovy.Groovy;
  * </p>
  *
  * @author xiaomi
- * @see MagicBox
+ * @see Ryze
  * @see KafkaSampler
  */
-public class KafkaMagicBox extends MagicBox {
+public class KafkaMagicBox {
 
     /**
      * 执行Kafka测试（无标题版本）
@@ -90,7 +90,7 @@ public class KafkaMagicBox extends MagicBox {
                                @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = KafkaSampler.Builder.class) Closure<?> closure) {
         var builder = KafkaSampler.builder();
         Groovy.call(closure, builder);
-        return MagicBox.runTest(title, builder.build());
+        return Ryze.runTest(title, builder.build());
     }
 
     /**
@@ -119,6 +119,6 @@ public class KafkaMagicBox extends MagicBox {
     public static Result kafka(String title, Customizer<KafkaSampler.Builder> customizer) {
         var builder = KafkaSampler.builder();
         customizer.customize(builder);
-        return MagicBox.runTest(title, builder.build());
+        return Ryze.runTest(title, builder.build());
     }
 }

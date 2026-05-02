@@ -1,5 +1,6 @@
 package io.github.xiaomisum.ryze.interceptor;
 
+import io.github.xiaomisum.ryze.TestStatus;
 import io.github.xiaomisum.ryze.context.ContextWrapper;
 import io.github.xiaomisum.ryze.testelement.TestElement;
 
@@ -34,7 +35,7 @@ public class HandlerExecutionChain<T extends TestElement<?>> {
      * 拦截器列表，按顺序存储所有注册的拦截器
      */
     private final List<RyzeInterceptor> interceptors;
-    
+
     /**
      * 已成功执行前置处理的拦截器索引，用于异常情况下的清理工作
      * -1表示尚未执行任何拦截器的前置处理
@@ -67,13 +68,39 @@ public class HandlerExecutionChain<T extends TestElement<?>> {
         for (int i = 0; i < interceptors.size(); i++) {
             RyzeInterceptor interceptor = interceptors.get(i);
             if (!interceptor.preHandle(context, runtime)) {
-                // 前置处理失败，触发已完成拦截器的afterCompletion
+                // 写入结果供报告层读取 —— 链自身不持有拦截状态，保持无状态线程友好
+                markRejectionOnResult(context, interceptor);
+                // 触发已成功执行拦截器的 afterCompletion
                 triggerAfterCompletion(context, i - 1);
                 return false;
             }
             executedIndex = i;
         }
         return true;
+    }
+
+    /**
+     * 将拦截事实写入测试结果：
+     * <ul>
+     *   <li>记录拦截者标识到 {@code result.rejectBy}，供报告层呈现；</li>
+     *   <li>若业务尚未改写状态（status==passed 且无 throwable），自动置为 skipped，
+     *       避免报告误报 passed。若拦截器已显式 setStatus/setThrowable，保留不覆盖。</li>
+     * </ul>
+     *
+     * @param context     测试上下文
+     * @param interceptor 投出反对票的拦截器
+     */
+    private void markRejectionOnResult(ContextWrapper context, RyzeInterceptor interceptor) {
+        if (context == null || context.getTestResult() == null) {
+            return;
+        }
+        var result = context.getTestResult();
+        if (result.getRejectBy() == null) {
+            result.setRejectBy(interceptor.getClass().getSimpleName());
+        }
+        if (result.getStatus() == TestStatus.passed && result.getThrowable() == null) {
+            result.setStatus(TestStatus.skipped);
+        }
     }
 
     /**

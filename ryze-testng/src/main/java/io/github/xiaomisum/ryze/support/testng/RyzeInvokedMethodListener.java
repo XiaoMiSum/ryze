@@ -30,6 +30,7 @@ package io.github.xiaomisum.ryze.support.testng;
 
 import io.github.xiaomisum.ryze.Configure;
 import io.github.xiaomisum.ryze.SessionRunner;
+import io.github.xiaomisum.ryze.report.AllureTestCaseHelper;
 import io.github.xiaomisum.ryze.support.testng.annotation.AnnotationUtils;
 import org.testng.IInvokedMethod;
 import org.testng.IInvokedMethodListener;
@@ -70,6 +71,8 @@ public class RyzeInvokedMethodListener implements IInvokedMethodListener, TestNG
         if (!method.isTestMethod()) {
             return;
         }
+        // 每个测试方法执行前重置 Allure testcase 名称标志，以便本方法内的首个 TestSuite / Sampler 能重新设置名称
+        AllureTestCaseHelper.reset();
         if (Objects.equals(result.getAttribute(RYZE_TEST_METHOD), true)) {
             // 已存在 ryze test method 标识，则不在监听器中创建 session
             return;

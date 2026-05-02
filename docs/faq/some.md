@@ -460,7 +460,7 @@ json("$.data","","isNotEmpty")
 
 ```java
 // 使用测试套件组织相关测试
-MagicBox.suite("用户测试套件",suite ->{
+Ryze.suite("用户测试套件",suite ->{
         // 配置共享资源
         suite.
 
@@ -537,7 +537,7 @@ java -Xmx2g -Xms1g -XX:+UseG1GC -jar test-app.jar
 
 @Test
 public void testWithVariables() {
-    MagicBox.suite("数据驱动测试", suite -> {
+    Ryze.suite("数据驱动测试", suite -> {
         suite.variables("name", "testuser");
         suite.variables("email", "test@example.com");
         suite.variables("age", 25);

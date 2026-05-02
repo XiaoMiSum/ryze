@@ -1,6 +1,6 @@
 package io.github.xiaomisum.ryze.jdbc.example.code;
 
-import io.github.xiaomisum.ryze.MagicBox;
+import io.github.xiaomisum.ryze.Ryze;
 import io.github.xiaomisum.ryze.support.testng.annotation.RyzeTest;
 import org.testng.annotations.Test;
 
@@ -11,7 +11,7 @@ public class CodeTestCase {
     @Test
     @RyzeTest
     public void test1() {
-        MagicBox.suite("测试用例", suite -> {
+        Ryze.suite("测试用例", suite -> {
             suite.variables("id", 1);
             suite.variables(var -> var.put("tick", "ryze"));
             suite.variables(Map.of("a", 1, "b", 2));
@@ -34,7 +34,7 @@ public class CodeTestCase {
     @Test
     @RyzeTest
     public void test2() {
-        MagicBox.jdbc("测试用例- test2()", sampler -> {
+        Ryze.jdbc("测试用例- test2()", sampler -> {
             sampler.configureElements(ele -> ele.jdbc(jdbc -> jdbc.refName("jdbc_source")
                     .config(config -> config.url("jdbc:mysql://127.0.0.1:3306/ryze-test?user=root&password=123456qq!&characterEncoding=utf8&useSSL=true&serverTimezone=GMT%2b8&failOverReadOnly=false"))
             ));
@@ -51,14 +51,14 @@ public class CodeTestCase {
     @Test
     @RyzeTest
     public void test3() {
-        MagicBox.jdbc(jdbc -> jdbc.title("步骤1——插入用户：tick = jdbc_preprocessor")
+        Ryze.jdbc(jdbc -> jdbc.title("步骤1——插入用户：tick = jdbc_preprocessor")
                 .configureElements(ele -> ele.jdbc(j -> j.refName("jdbc_source")
                         .config(config -> config.url("jdbc:mysql://127.0.0.1:3306/ryze-test?user=root&password=123456qq!&characterEncoding=utf8&useSSL=true&serverTimezone=GMT%2b8&failOverReadOnly=false"))
                 ))
                 .config(config -> config.datasource("jdbc_source").sql("insert into t_001 (tick, name) values (\"jdbc_preprocessor\", \"ryze_http_sampler\");"))
         );
 
-        MagicBox.jdbc(jdbc -> jdbc.title("步骤2——查找用户：tick = jdbc_preprocessor")
+        Ryze.jdbc(jdbc -> jdbc.title("步骤2——查找用户：tick = jdbc_preprocessor")
                 .configureElements(ele -> ele.jdbc(j -> j.refName("jdbc_source")
                         .config(config -> config.url("jdbc:mysql://127.0.0.1:3306/ryze-test?user=root&password=123456qq!&characterEncoding=utf8&useSSL=true&serverTimezone=GMT%2b8&failOverReadOnly=false"))
                 ))

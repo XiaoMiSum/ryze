@@ -1,6 +1,6 @@
 package io.github.xiaomisum.ryze.redis.example.code
 
-import io.github.xiaomisum.ryze.MagicBox
+
 import io.github.xiaomisum.ryze.support.testng.annotation.RyzeTest
 import org.testng.annotations.Test
 
@@ -10,7 +10,7 @@ class GroovyCodeTestCase {
     @Test
     @RyzeTest
     void test1() {
-        MagicBox.suite("测试用例", {
+        Ryze.suite("测试用例", {
             variables("id", 1)
             variables { put("tick", "ryze") }
             variables Map.of("a", 1, "b", 2)
@@ -53,7 +53,7 @@ class GroovyCodeTestCase {
     @Test
     @RyzeTest
     void test2() {
-        MagicBox.redis("测试用例- test2()", sampler -> {
+        Ryze.redis("测试用例- test2()", sampler -> {
             configureElements {
                 redis {
                     refName "redis_source"
@@ -87,7 +87,7 @@ class GroovyCodeTestCase {
     @Test
     @RyzeTest
     void test3() {
-        MagicBox.redis({
+        Ryze.redis({
             title "步骤1——插入用户：tick = redis_preprocessor"
             configureElements {
                 redis {
@@ -104,7 +104,7 @@ class GroovyCodeTestCase {
             }
         })
 
-        MagicBox.redis({
+        Ryze.redis({
             title "步骤2——查找用户：tick = ryze_http_sampler"
             configureElements {
                 redis {

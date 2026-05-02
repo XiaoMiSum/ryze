@@ -27,7 +27,7 @@ package io.github.xiaomisum.ryze.protocol.proto;
 
 import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
-import io.github.xiaomisum.ryze.MagicBox;
+import io.github.xiaomisum.ryze.Ryze;
 import io.github.xiaomisum.ryze.Result;
 import io.github.xiaomisum.ryze.protocol.proto.sampler.ProtoSampler;
 import io.github.xiaomisum.ryze.support.Customizer;
@@ -50,7 +50,7 @@ import io.github.xiaomisum.ryze.support.groovy.Groovy;
  *
  * @author xiaomi
  */
-public class ProtoMagicBox extends MagicBox {
+public class ProtoMagicBox {
 
     /**
      * 执行 Proto 操作（无标题）
@@ -79,7 +79,7 @@ public class ProtoMagicBox extends MagicBox {
                                @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ProtoSampler.Builder.class) Closure<?> closure) {
         var builder = ProtoSampler.builder();
         Groovy.call(closure, builder);
-        return MagicBox.runTest(title, builder.build());
+        return Ryze.runTest(title, builder.build());
     }
 
     /**
@@ -108,6 +108,6 @@ public class ProtoMagicBox extends MagicBox {
     public static Result proto(String title, Customizer<ProtoSampler.Builder> customizer) {
         var builder = ProtoSampler.builder();
         customizer.customize(builder);
-        return MagicBox.runTest(title, builder.build());
+        return Ryze.runTest(title, builder.build());
     }
 }

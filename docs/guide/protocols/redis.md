@@ -9,21 +9,21 @@ Redis 应用场景。
 
 ### Redis 数据源配置
 
-| 配置项 | 类型 | 默认值 | 必需 | 描述 |
-|-------|------|--------|------|------|
-| url | String | - | ✅ | Redis 连接 URL (redis://[:password@]host:port/db) |
-| timeout | Integer | 5000 | ❌ | 连接超时时间 (毫秒) |
-| max_total | Integer | 10 | ❌ | 最大池大小 |
-| max_idle | Integer | 5 | ❌ | 最大空闲连接数 |
-| min_idle | Integer | 1 | ❌ | 最小空闲连接数 |
+| 配置项       | 类型      | 默认值  | 必需 | 描述                                              |
+|-----------|---------|------|----|-------------------------------------------------|
+| url       | String  | -    | ✅  | Redis 连接 URL (redis://[:password@]host:port/db) |
+| timeout   | Integer | 5000 | ❌  | 连接超时时间 (毫秒)                                     |
+| max_total | Integer | 10   | ❌  | 最大池大小                                           |
+| max_idle  | Integer | 5    | ❌  | 最大空闲连接数                                         |
+| min_idle  | Integer | 1    | ❌  | 最小空闲连接数                                         |
 
 ### Redis 命令配置
 
-| 配置项 | 类型 | 默认值 | 必需 | 描述 |
-|-------|------|--------|------|------|
-| datasource | String | - | ✅ | 数据源引用名 |
-| command | String | - | ✅ | Redis 命令 (GET/SET/LPUSH/HSET 等) |
-| args | Array | - | ❌ | 命令参数数组 |
+| 配置项        | 类型     | 默认值 | 必需 | 描述                              |
+|------------|--------|-----|----|---------------------------------|
+| datasource | String | -   | ✅  | 数据源引用名                          |
+| command    | String | -   | ✅  | Redis 命令 (GET/SET/LPUSH/HSET 等) |
+| args       | Array  | -   | ❌  | 命令参数数组                          |
 
 > **配置优先级**: 取样器配置 > Redis 默认配置
 
@@ -151,7 +151,7 @@ config: # 取样器配置
 ### 基础 Redis 操作
 
 ```java
-import static io.github.xiaomisum.ryze.MagicBox.*;
+import static io.github.xiaomisum.ryze.Ryze.*;
 
 public class RedisApiExample {
 
@@ -210,7 +210,7 @@ public class RedisApiExample {
 ### 完整 Redis 测试套件
 
 ```java
-import static io.github.xiaomisum.ryze.MagicBox.*;
+import static io.github.xiaomisum.ryze.Ryze.*;
 
 public class RedisTestSuite {
 
@@ -283,7 +283,7 @@ public class RedisTestSuite {
 ### 基础 Redis 操作
 
 ```groovy
-import static io.github.xiaomisum.ryze.MagicBox.*
+import static io.github.xiaomisum.ryze.Ryze.*
 
 // 配置 Redis 数据源
 def setupRedis() {
@@ -367,7 +367,7 @@ def listOperations() {
 ### 完整 Redis 测试脚本
 
 ```groovy
-import static io.github.xiaomisum.ryze.MagicBox.*
+import static io.github.xiaomisum.ryze.Ryze.*
 
 // Redis 缓存完整测试流程
 suite("Redis缓存功能测试") { builder ->

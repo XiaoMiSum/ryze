@@ -68,6 +68,8 @@ import io.github.xiaomisum.ryze.protocol.redis.config.RedisDatasource;
 import io.github.xiaomisum.ryze.protocol.redis.processor.RedisPostprocessor;
 import io.github.xiaomisum.ryze.protocol.redis.processor.RedisPreprocessor;
 import io.github.xiaomisum.ryze.protocol.redis.sampler.RedisSampler;
+import io.github.xiaomisum.ryze.report.ReporterExecutionChain;
+import io.github.xiaomisum.ryze.report.ReporterListener;
 import io.github.xiaomisum.ryze.support.Collections;
 import io.github.xiaomisum.ryze.support.Customizer;
 import io.github.xiaomisum.ryze.support.KryoUtil;
@@ -166,7 +168,14 @@ public abstract class AbstractTestElement<SELF extends AbstractTestElement<SELF,
      * <p>存储测试组件的拦截器执行链，不参与JSON序列化和反序列化</p>
      */
     @JSONField(serialize = false, deserialize = false)
-    protected HandlerExecutionChain chain;
+    protected HandlerExecutionChain handlerChain;
+
+    /**
+     * 报告监听器执行链
+     * <p>存储测试组件的报告监听器执行链，独立于业务拦截器链，不参与JSON序列化和反序列化</p>
+     */
+    @JSONField(serialize = false, deserialize = false)
+    protected ReporterExecutionChain reporterChain;
 
     /**
      * 基于构建器的构造函数
@@ -205,14 +214,16 @@ public abstract class AbstractTestElement<SELF extends AbstractTestElement<SELF,
      * @param context 上下文包装器
      */
     protected void handleFilterInterceptors(ContextWrapper context) {
-        runtime.interceptors = Collections.addAllIfNonNull(runtime.interceptors, context.getConfigGroup().get(INTERCEPTORS));
-        if (Objects.isNull(runtime.interceptors) || runtime.interceptors.isEmpty()) {
-            return;
-        }
-        //
-        var runtimeInterceptors = runtime.interceptors.stream().filter(interceptor -> interceptor.supports(context)).distinct()
+        var configure = context.getSessionRunner().getConfigure();
+        var interceptors = Objects.isNull(runtime.interceptors) ? new ArrayList<RyzeInterceptor>() :
+                runtime.interceptors.stream().filter(interceptor -> interceptor.supports(context)).distinct()
                 .sorted(Comparator.comparingInt(RyzeInterceptor::getOrder)).toList();
-        runtime.chain = new HandlerExecutionChain(runtimeInterceptors);
+        runtime.handlerChain = new HandlerExecutionChain(interceptors);
+
+        // 初始化 ReporterChain，从 Configure 中获取 ReporterListener 列表
+        var reporters = configure.getBuiltinReporters().stream().filter(interceptor -> interceptor.supports(context))
+                .distinct().sorted(Comparator.comparingInt(ReporterListener::getOrder)).toList();
+        runtime.reporterChain = new ReporterExecutionChain(reporters);
     }
 
     /**

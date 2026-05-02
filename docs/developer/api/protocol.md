@@ -21,7 +21,7 @@ HTTP取样器实现，支持完整的HTTP请求功能。
 #### 使用示例
 
 ```java
-MagicBox.http(http ->{
+Ryze.http(http ->{
         http.
 
 config(config ->config
@@ -61,7 +61,7 @@ Dubbo取样器实现，支持Dubbo服务调用。
 #### 使用示例
 
 ```java
-MagicBox.dubbo(dubbo ->{
+Ryze.dubbo(dubbo ->{
         dubbo.
 
 registry("zookeeper://localhost:2181")
@@ -95,7 +95,7 @@ JDBC取样器实现，支持数据库查询和更新操作。
 #### 使用示例
 
 ```java
-MagicBox.jdbc(jdbc ->{
+Ryze.jdbc(jdbc ->{
         jdbc.
 
 datasource("mysqlDataSource")
@@ -123,7 +123,7 @@ Redis取样器实现，支持各种Redis命令操作。
 #### 使用示例
 
 ```java
-MagicBox.redis(redis ->{
+Ryze.redis(redis ->{
         redis.
 
 datasource("redisDataSource")
@@ -153,7 +153,7 @@ Kafka取样器实现，支持消息生产和消费。
 #### 使用示例
 
 ```java
-MagicBox.kafka(kafka ->{
+Ryze.kafka(kafka ->{
         kafka.
 
 bootstrapServers("localhost:9092")
@@ -186,7 +186,7 @@ RabbitMQ取样器实现，支持消息队列操作。
 #### 使用示例
 
 ```java
-MagicBox.rabbitmq(rabbitmq ->{
+Ryze.rabbitmq(rabbitmq ->{
         rabbitmq.
 
 host("localhost")
@@ -220,7 +220,7 @@ ActiveMQ取样器实现，支持消息队列操作。
 #### 使用示例
 
 ```java
-MagicBox.activemq(activemq ->{
+Ryze.activemq(activemq ->{
         activemq.
 
 brokerUrl("tcp://localhost:61616")
@@ -252,7 +252,7 @@ MongoDB取样器实现，支持文档数据库操作。
 #### 使用示例
 
 ```java
-MagicBox.mongo(mongo ->{
+Ryze.mongo(mongo ->{
         mongo.
 
 datasource("mongoDataSource")
