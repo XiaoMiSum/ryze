@@ -33,6 +33,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * JDBC请求实体类
@@ -103,10 +104,10 @@ public class RealJDBCRequest extends SampleResult.RealRequest implements JDBCCon
     @Override
     public String format() {
         return url + "\n" +
-                USERNAME + ": " + username + "\n" +
-                PASSWORD + ": " + password +
-                (StringUtils.isBlank(sql) ? "" : "\n\nSQL: " + sql) +
-                (Objects.isNull(args) || args.isEmpty() ? "" : "\n\nARGS: " + String.join(", ", ARGS));
+                (StringUtils.isNotBlank(username) ? USERNAME + ": " + username + "\n" : "") +
+                (StringUtils.isNotBlank(password) ? PASSWORD + ": " + password + "\n" : "") +
+                (StringUtils.isBlank(sql) ? "" : "\nSQL: " + sql) +
+                (Objects.isNull(args) || args.isEmpty() ? "" : "\nARGS: " + args.stream().map(String::valueOf).collect(Collectors.joining(", ")));
     }
 
     @Override

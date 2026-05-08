@@ -105,9 +105,6 @@ public class JDBCDatasource extends AbstractConfigureElement<JDBCDatasource, JDB
     @Override
     public ValidateResult validate() {
         var result = super.validate();
-        if (StringUtils.isBlank(refName)) {
-            result.append("数据源引用名称 %s 字段值缺失", REF_NAME);
-        }
         if (StringUtils.isBlank(config.getUrl())) {
             result.append("数据源连接 %s 字段值缺失", URL);
         }
@@ -142,7 +139,7 @@ public class JDBCDatasource extends AbstractConfigureElement<JDBCDatasource, JDB
         }
         ((JDBCDatasource) runtime).datasource.setMaxActive(runtime.getConfig().getMaxActive());
         ((JDBCDatasource) runtime).datasource.setMaxWait(runtime.getConfig().getMaxWait());
-        context.getLocalVariablesWrapper().put(runtime.getRefName(), ((JDBCDatasource) runtime).datasource);
+        context.getLocalVariablesWrapper().put(runtime.getRefName(DEF_REF_NAME_KEY), ((JDBCDatasource) runtime).datasource);
     }
 
     /**

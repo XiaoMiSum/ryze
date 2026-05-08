@@ -58,7 +58,6 @@ import org.apache.commons.lang3.StringUtils;
  * @author xiaomi
  */
 @KW(value = {"jdbc_preprocessor", "jdbc_pre_processor", "jdbc"})
-@SuppressWarnings({"unchecked", "rawtypes"})
 public class JDBCPreprocessor extends AbstractProcessor<JDBCPreprocessor, JDBCConfigureItem, DefaultSampleResult> implements Preprocessor, JDBCConstantsInterface {
 
     /**
@@ -133,7 +132,7 @@ public class JDBCPreprocessor extends AbstractProcessor<JDBCPreprocessor, JDBCCo
     @Override
     protected void handleRequest(ContextWrapper context, DefaultSampleResult result) {
         super.handleRequest(context, result);
-        datasource = (DruidDataSource) context.getLocalVariablesWrapper().get(runtime.getConfig().getDatasource());
+        datasource = (DruidDataSource) context.getLocalVariablesWrapper().get(runtime.getConfig().getDatasource(DEF_REF_NAME_KEY));
         result.setRequest(new RealJDBCRequest(datasource.getUrl(), datasource.getUsername(), datasource.getPassword(), runtime.getConfig().getSql(), runtime.getConfig().getArgs()));
     }
 

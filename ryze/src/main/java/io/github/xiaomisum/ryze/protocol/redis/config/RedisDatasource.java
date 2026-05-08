@@ -113,7 +113,7 @@ public class RedisDatasource extends AbstractConfigureElement<RedisDatasource, R
         var password = JedisURIHelper.getPassword(uri);
         var database = JedisURIHelper.getDBIndex(uri);
         ((RedisDatasource) runtime).jedisPool = new JedisPool(poolConfig, uri.getHost(), uri.getPort(), runtime.getConfig().getTimeout(), username, password, database);
-        context.getLocalVariablesWrapper().put(runtime.getRefName(), this);
+        context.getLocalVariablesWrapper().put(runtime.getRefName(DEF_REF_NAME_KEY), this);
     }
 
     /**

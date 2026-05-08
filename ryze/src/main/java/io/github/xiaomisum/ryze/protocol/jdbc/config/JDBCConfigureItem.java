@@ -192,7 +192,7 @@ public class JDBCConfigureItem implements ConfigureItem<JDBCConfigureItem>, JDBC
     public String getDatasource() {
         return datasource;
     }
-
+    
     /**
      * 设置数据源引用名称
      *
@@ -200,6 +200,10 @@ public class JDBCConfigureItem implements ConfigureItem<JDBCConfigureItem>, JDBC
      */
     public void setDatasource(String datasource) {
         this.datasource = datasource;
+    }
+
+    public String getDatasource(String defaultName) {
+        return StringUtils.isNotBlank(datasource) ? datasource : defaultName;
     }
 
     /**

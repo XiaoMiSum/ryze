@@ -196,6 +196,10 @@ public class RedisConfigureItem implements ConfigureItem<RedisConfigureItem>, Re
         this.datasource = datasource;
     }
 
+    public String getDatasource(String defaultName) {
+        return StringUtils.isNotBlank(datasource) ? datasource : defaultName;
+    }
+
     /**
      * 获取Redis连接URL
      *
