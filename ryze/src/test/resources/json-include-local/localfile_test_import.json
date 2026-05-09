@@ -1,0 +1,6 @@
+{
+  "title": "本地文件测试 - 使用 !import: 语法",
+  "base": "!import: local_base.json",
+  "server": {"$ref": "./local_server.json"},
+  "endpoints": ["/api/v1", "/api/v2"]
+}
