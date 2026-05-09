@@ -9,7 +9,7 @@ import org.testng.annotations.Test;
  * 严格参照 example/YamlTestCase.java 官方示例写法
  */
 public class DebugScenariosTest {
-
+    
     /**
      * 场景1: testsuite(项目) → testsuite(模块) → testsuite(接口1) → testsuite(用例) → sampler(步骤)
      */
