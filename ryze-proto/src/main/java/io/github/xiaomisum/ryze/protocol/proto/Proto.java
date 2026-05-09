@@ -76,7 +76,7 @@ public class Proto {
             cli.query(Form.create((config.getQuery())));
         }
         if (config.getHeaders() != null && !config.getHeaders().isEmpty()) {
-            config.getHeaders().forEach(cli::addHeader);
+            config.getHeaders().forEach((key, value) -> cli.addHeader(key, value.toString()));
         }
         return cli;
     }
@@ -100,8 +100,13 @@ public class Proto {
             var body = convert(request.body = config.getStringBody(), requestMessageName);
             if (Strings.CI.startsWithAny(url, WS, WSS)) {
                 request.query = config.getQuery() == null ? "" : JSON.toJSONString(config.getQuery());
+                // 将 Map<String, Object> 转换为 Map<String, String> 以兼容 websocket 请求
+                Map<String, String> stringHeaders = new HashMap<>();
+                if (config.getHeaders() != null) {
+                    config.getHeaders().forEach((key, value) -> stringHeaders.put(key, value.toString()));
+                }
                 io.github.xiaomisum.simplewebsocket.Request ws = new io.github.xiaomisum.simplewebsocket.Request(url)
-                        .headers(config.getHeaders())
+                        .headers(stringHeaders)
                         .timeout(config.getTimeout() == null ? 0 : config.getTimeout())
                         .query(config.getQuery())
                         .bytes(body);
@@ -115,7 +120,7 @@ public class Proto {
                 http.query(Form.create((config.getQuery())));
             }
             if (config.getHeaders() != null && !config.getHeaders().isEmpty()) {
-                config.getHeaders().forEach(http::addHeader);
+                config.getHeaders().forEach((key, value) -> http.addHeader(key, value.toString()));
             }
             request.query = http.query();
             request.version = http.version();
