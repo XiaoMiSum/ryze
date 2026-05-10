@@ -3,10 +3,23 @@ package io.github.xiaomisum.ryze.proto.example.code;
 import io.github.xiaomisum.ryze.protocol.proto.ProtoMagicBox;
 import io.github.xiaomisum.ryze.protocol.proto.builder.ProtoConfigureElementsBuilder;
 import io.github.xiaomisum.ryze.protocol.proto.builder.ProtoPreprocessorsBuilder;
+import io.github.xiaomisum.ryze.proto.example.mock.MockProtoHttpServer;
 import io.github.xiaomisum.ryze.support.testng.RyzeBasicTestcase4TestNG;
+import org.testng.annotations.AfterSuite;
+import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
 
 public class CodeExTestCase extends RyzeBasicTestcase4TestNG {
+
+    @BeforeSuite
+    public void setup() {
+        MockProtoHttpServer.start();
+    }
+
+    @AfterSuite
+    public void teardown() {
+        MockProtoHttpServer.stop();
+    }
 
     @Test
     public void test1() {

@@ -1,11 +1,24 @@
 package io.github.xiaomisum.ryze.proto.example.yaml;
 
 import io.github.xiaomisum.ryze.Ryze;
+import io.github.xiaomisum.ryze.proto.example.mock.MockProtoHttpServer;
 import io.github.xiaomisum.ryze.support.testng.annotation.RyzeTest;
 import io.github.xiaomisum.ryze.testelement.TestElement;
+import org.testng.annotations.AfterSuite;
+import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
 
 public class YamlTestCase {
+
+    @BeforeSuite
+    public void setup() {
+        MockProtoHttpServer.start();
+    }
+
+    @AfterSuite
+    public void teardown() {
+        MockProtoHttpServer.stop();
+    }
 
     /**
      * 普通TestNg测试用例中执行 ryze yaml模板测试用例

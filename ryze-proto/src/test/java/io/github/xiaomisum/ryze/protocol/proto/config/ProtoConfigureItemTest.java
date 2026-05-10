@@ -84,7 +84,7 @@ public class ProtoConfigureItemTest {
 
     @Test
     public void testBuilderWithMaps() {
-        Map<String, String> headers = new HashMap<>();
+        Map<String, Object> headers = new HashMap<>();
         headers.put("Content-Type", "application/json");
         headers.put("Accept", "application/json");
 
@@ -256,10 +256,10 @@ public class ProtoConfigureItemTest {
 
     @Test
     public void testMergeMapProperties() {
-        Map<String, String> baseHeaders = new HashMap<>();
+        Map<String, Object> baseHeaders = new HashMap<>();
         baseHeaders.put("Content-Type", "application/json");
 
-        Map<String, String> otherHeaders = new HashMap<>();
+        Map<String, Object> otherHeaders = new HashMap<>();
         otherHeaders.put("Accept", "application/json");
 
         ProtoConfigureItem baseItem = ProtoConfigureItem.builder()

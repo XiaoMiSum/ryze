@@ -3,11 +3,24 @@ package io.github.xiaomisum.ryze.websocket.example.code;
 import io.github.xiaomisum.ryze.protocol.websocket.builder.WebsocketConfigureElementsBuilder;
 import io.github.xiaomisum.ryze.protocol.websocket.builder.WebsocketPreprocessorsBuilder;
 import io.github.xiaomisum.ryze.support.testng.RyzeBasicTestcase4TestNG;
+import io.github.xiaomisum.ryze.websocket.example.mock.MockWebSocketServer;
+import org.testng.annotations.AfterSuite;
+import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
 
 import static io.github.xiaomisum.ryze.protocol.websocket.WebsocketMagicBox.ws;
 
 public class CodeExTestCase extends RyzeBasicTestcase4TestNG {
+
+    @BeforeSuite
+    public void setup() {
+        MockWebSocketServer.start();
+    }
+
+    @AfterSuite
+    public void teardown() {
+        MockWebSocketServer.stop();
+    }
 
     @Test
     public void test1() {
