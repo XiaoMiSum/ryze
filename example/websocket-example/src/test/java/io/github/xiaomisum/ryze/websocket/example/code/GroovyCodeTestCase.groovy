@@ -5,9 +5,22 @@ import io.github.xiaomisum.ryze.protocol.websocket.builder.WebsocketConfigureEle
 import io.github.xiaomisum.ryze.protocol.websocket.builder.WebsocketPreprocessorsBuilder
 import io.github.xiaomisum.ryze.protocol.websocket.builder.WebsocketSamplersBuilder
 import io.github.xiaomisum.ryze.support.testng.annotation.RyzeTest
+import io.github.xiaomisum.ryze.websocket.example.mock.MockWebSocketServer
+import org.testng.annotations.AfterSuite
+import org.testng.annotations.BeforeSuite
 import org.testng.annotations.Test
 
 class GroovyCodeTestCase {
+
+    @BeforeSuite
+    void setup() {
+        MockWebSocketServer.start()
+    }
+
+    @AfterSuite
+    void teardown() {
+        MockWebSocketServer.stop()
+    }
 
     /**
      * 编码模式测试，必须以 RyzeTest 注解方式执行，否则需要自行创建 SessionRunner实例

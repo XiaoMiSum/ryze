@@ -58,7 +58,6 @@ import org.apache.commons.lang3.StringUtils;
  * @author xiaomi
  */
 @KW(value = {"jdbc_postprocessor", "jdbc_post_processor", "jdbc"})
-@SuppressWarnings({"unchecked", "rawtypes"})
 public class JDBCPostprocessor extends AbstractProcessor<JDBCPostprocessor, JDBCConfigureItem, DefaultSampleResult> implements Postprocessor, JDBCConstantsInterface {
 
     /**
@@ -132,7 +131,7 @@ public class JDBCPostprocessor extends AbstractProcessor<JDBCPostprocessor, JDBC
     @Override
     protected void handleRequest(ContextWrapper context, DefaultSampleResult result) {
         super.handleRequest(context, result);
-        datasource = (DruidDataSource) context.getLocalVariablesWrapper().get(runtime.getConfig().getDatasource());
+        datasource = (DruidDataSource) context.getLocalVariablesWrapper().get(runtime.getConfig().getDatasource(DEF_REF_NAME_KEY));
         result.setRequest(new RealJDBCRequest(datasource.getUrl(), datasource.getUsername(), datasource.getPassword(), runtime.getConfig().getSql(), runtime.getConfig().getArgs()));
     }
 

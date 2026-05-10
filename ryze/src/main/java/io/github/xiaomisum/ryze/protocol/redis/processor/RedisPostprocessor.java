@@ -44,7 +44,6 @@ import org.apache.commons.lang3.StringUtils;
  * @author xiaomi
  */
 @KW(value = {"redis_postprocessor", "redis_post_processor", "redis"})
-@SuppressWarnings({"unchecked", "rawtypes"})
 public class RedisPostprocessor extends AbstractProcessor<RedisPostprocessor, RedisConfigureItem, DefaultSampleResult> implements Postprocessor, JDBCConstantsInterface {
 
     @JSONField(serialize = false)
@@ -78,7 +77,7 @@ public class RedisPostprocessor extends AbstractProcessor<RedisPostprocessor, Re
     @Override
     protected void handleRequest(ContextWrapper context, DefaultSampleResult result) {
         super.handleRequest(context, result);
-        datasource = (RedisDatasource) context.getLocalVariablesWrapper().get(runtime.getConfig().getDatasource());
+        datasource = (RedisDatasource) context.getLocalVariablesWrapper().get(runtime.getConfig().getDatasource(DEF_REF_NAME_KEY));
         result.setRequest(new RealRedisRequest(datasource.getUrl(), runtime.getConfig().getCommand(), runtime.getConfig().getArgs()));
     }
 

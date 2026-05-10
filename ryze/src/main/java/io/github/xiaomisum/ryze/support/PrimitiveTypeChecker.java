@@ -110,6 +110,7 @@ public class PrimitiveTypeChecker {
      * 检查是否为基本类型或其包装类型
      *
      * <p>检查给定对象是否为Java基本数据类型或其包装类型实例。</p>
+     * <p>所有Number类的子类，如BigInteger、BigDecimal等，也认为是基础数据类型。</p>
      *
      * @param obj 待检查的对象，可以为null
      * @return 如果对象是基本类型或包装类型实例返回true，否则返回false
@@ -117,7 +118,7 @@ public class PrimitiveTypeChecker {
     public static boolean isPrimitiveOrWrapper(Object obj) {
         if (obj == null) return false;
         Class<?> clazz = obj.getClass();
-        return PRIMITIVE_TYPES.contains(clazz) || WRAPPER_TYPES.contains(clazz);
+        return PRIMITIVE_TYPES.contains(clazz) || WRAPPER_TYPES.contains(clazz) || obj instanceof Number;
     }
 
     /**
@@ -137,23 +138,26 @@ public class PrimitiveTypeChecker {
      *
      * <p>检查给定的类是否为Java基本数据类型的包装类，如Integer.class、Boolean.class等。</p>
      *
+     * <p>所有Number类的子类，如BigInteger、BigDecimal等，也认为是基础数据类型的包装类。</p>
+     *
      * @param clazz 待检查的类，可以为null
      * @return 如果类是包装类型返回true，否则返回false
      */
     public static boolean isWrapperClass(Class<?> clazz) {
-        return clazz != null && WRAPPER_TYPES.contains(clazz);
+        return clazz != null && (WRAPPER_TYPES.contains(clazz) || Number.class.isAssignableFrom(clazz));
     }
 
     /**
      * 检查类是否为基本类型或其包装类
      *
      * <p>检查给定的类是否为Java基本数据类型或其包装类。</p>
+     * <p>所有Number类的子类，如BigInteger、BigDecimal等，也认为是基础数据类型。</p>
      *
      * @param clazz 待检查的类，可以为null
      * @return 如果类是基本类型或包装类返回true，否则返回false
      */
     public static boolean isPrimitiveOrWrapperClass(Class<?> clazz) {
         return clazz != null &&
-                (PRIMITIVE_TYPES.contains(clazz) || WRAPPER_TYPES.contains(clazz));
+                (PRIMITIVE_TYPES.contains(clazz) || WRAPPER_TYPES.contains(clazz) || Number.class.isAssignableFrom(clazz));
     }
 }

@@ -1,0 +1,6 @@
+{
+  "name": "local_base_config",
+  "version": "2.0",
+  "timeout": 10000,
+  "retry": 5
+}

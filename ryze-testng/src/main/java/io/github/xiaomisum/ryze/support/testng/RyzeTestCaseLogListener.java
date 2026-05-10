@@ -29,7 +29,6 @@
 package io.github.xiaomisum.ryze.support.testng;
 
 import org.slf4j.MDC;
-import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
 
@@ -92,16 +91,6 @@ public class RyzeTestCaseLogListener implements ITestListener {
     @Override
     public void onTestFailedButWithinSuccessPercentage(ITestResult result) {
         removeTraceID();
-    }
-
-    @Override
-    public void onStart(ITestContext context) {
-
-    }
-
-    @Override
-    public void onFinish(ITestContext context) {
-
     }
 
     /**

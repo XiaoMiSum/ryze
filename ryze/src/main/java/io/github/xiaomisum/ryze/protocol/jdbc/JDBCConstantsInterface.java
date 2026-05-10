@@ -39,6 +39,12 @@ import io.github.xiaomisum.ryze.testelement.TestElementConstantsInterface;
 public interface JDBCConstantsInterface extends TestElementConstantsInterface {
 
     /**
+     * 默认引用名称键
+     * <p>用于在测试上下文中引用默认JDBC数据源配置</p>
+     */
+    String DEF_REF_NAME_KEY = "__jdbc_configure_element_default_ref_name__";
+
+    /**
      * 数据源引用名称键名
      * <p>用于在测试上下文中引用已配置的数据源</p>
      */

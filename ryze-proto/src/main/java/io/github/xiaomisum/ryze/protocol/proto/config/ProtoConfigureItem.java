@@ -133,7 +133,7 @@ public class ProtoConfigureItem implements ConfigureItem<ProtoConfigureItem>, Pr
      * <p>请求头键值对</p>
      */
     @JSONField(name = HEADERS, ordinal = 6)
-    protected Map<String, String> headers;
+    protected Map<String, Object> headers;
 
     /**
      * 查询参数映射
@@ -233,7 +233,7 @@ public class ProtoConfigureItem implements ConfigureItem<ProtoConfigureItem>, Pr
         port = (String) context.evaluate(port);
         path = (String) context.evaluate(path);
         method = (String) context.evaluate(method);
-        headers = (Map<String, String>) context.evaluate(headers);
+        headers = (Map<String, Object>) context.evaluate(headers);
         query = (Map<String, Object>) context.evaluate(query);
         body = context.evaluate(body);
         protoDesc = (Proto) context.evaluate(protoDesc);
@@ -247,8 +247,8 @@ public class ProtoConfigureItem implements ConfigureItem<ProtoConfigureItem>, Pr
      * @param self  当前映射表
      * @return 合并后的映射表
      */
-    private Map<String, String> handleMap(Map<String, String> other, Map<String, String> self) {
-        var resp = new HashMap<String, String>();
+    private Map<String, Object> handleMap(Map<String, Object> other, Map<String, Object> self) {
+        var resp = new HashMap<String, Object>();
         if (other != null) {
             resp.putAll(other);
         }
@@ -474,7 +474,7 @@ public class ProtoConfigureItem implements ConfigureItem<ProtoConfigureItem>, Pr
      *
      * @return 请求头映射
      */
-    public Map<String, String> getHeaders() {
+    public Map<String, Object> getHeaders() {
         return headers;
     }
 
@@ -483,7 +483,7 @@ public class ProtoConfigureItem implements ConfigureItem<ProtoConfigureItem>, Pr
      *
      * @param headers 请求头映射
      */
-    public void setHeaders(Map<String, String> headers) {
+    public void setHeaders(Map<String, Object> headers) {
         this.headers = headers;
     }
 
@@ -810,7 +810,7 @@ public class ProtoConfigureItem implements ConfigureItem<ProtoConfigureItem>, Pr
          * @param headers 请求头映射
          * @return 构建器实例
          */
-        public Builder headers(Map<String, String> headers) {
+        public Builder headers(Map<String, Object> headers) {
             configure.headers = Collections.putAllIfNonNull(configure.headers, headers);
             return self;
         }
@@ -821,8 +821,8 @@ public class ProtoConfigureItem implements ConfigureItem<ProtoConfigureItem>, Pr
          * @param customizer 请求头自定义器
          * @return 构建器实例
          */
-        public Builder headers(Customizer<Map<String, String>> customizer) {
-            Map<String, String> headers = new HashMap<>();
+        public Builder headers(Customizer<Map<String, Object>> customizer) {
+            Map<String, Object> headers = new HashMap<>();
             customizer.customize(headers);
             configure.headers = Collections.putAllIfNonNull(configure.headers, headers);
             return self;

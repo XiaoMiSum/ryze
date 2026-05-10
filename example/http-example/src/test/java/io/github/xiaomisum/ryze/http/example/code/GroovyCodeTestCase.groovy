@@ -1,11 +1,24 @@
 package io.github.xiaomisum.ryze.http.example.code
 
-
+import io.github.xiaomisum.ryze.http.example.mock.MockHttpServer
 import io.github.xiaomisum.ryze.support.Collections
 import io.github.xiaomisum.ryze.support.testng.annotation.RyzeTest
+import org.testng.annotations.AfterSuite
+import org.testng.annotations.BeforeSuite
 import org.testng.annotations.Test
 
 class GroovyCodeTestCase {
+
+    @BeforeSuite
+    void setup() {
+        MockHttpServer.start()
+    }
+
+    @AfterSuite
+    void teardown() {
+        MockHttpServer.stop()
+    }
+
 
     /**
      * 编码模式测试，必须以 RyzeTest 注解方式执行，否则需要自行创建 SessionRunner实例

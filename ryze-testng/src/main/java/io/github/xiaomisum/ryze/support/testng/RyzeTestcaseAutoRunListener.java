@@ -69,7 +69,7 @@ public class RyzeTestcaseAutoRunListener implements IHookable, TestNGConstantsIn
     @Override
     public void run(IHookCallBack iHookCallBack, ITestResult iTestResult) {
         logger.debug("IHookable run test: {}", iTestResult.getMethod().getMethodName());
-        if (Objects.nonNull(iTestResult.getAttribute(RYZE_TEST_METHOD)) && !(boolean) iTestResult.getAttribute(RYZE_TEST_METHOD)) {
+        if (!Objects.equals(iTestResult.getAttribute(RYZE_TEST_METHOD), true)) {
             logger.debug("Method 不是Ryze注解测试，执行原始测试");
             iHookCallBack.runTestMethod(iTestResult);
             return;
@@ -82,8 +82,7 @@ public class RyzeTestcaseAutoRunListener implements IHookable, TestNGConstantsIn
         }
         logger.debug("自动执行 Ryze TestElement");
         var result = SessionRunner.getSession().runTest((TestElement<?>) parameters[0]);
-        iTestResult.setStatus(result.getStatus().isFailed() ? ITestResult.FAILURE : result.getStatus().isSkipped() ? ITestResult.SKIP :
-                result.getStatus().isPassed() ? ITestResult.SUCCESS : ITestResult.CREATED
+        iTestResult.setStatus(result.getStatus().isFailed() ? ITestResult.FAILURE : result.getStatus().isSkipped() ? ITestResult.SKIP : result.getStatus().isPassed() ? ITestResult.SUCCESS : ITestResult.CREATED
         );
     }
 }

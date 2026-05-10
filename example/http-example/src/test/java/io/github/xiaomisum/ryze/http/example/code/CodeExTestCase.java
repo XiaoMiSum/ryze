@@ -1,11 +1,25 @@
 package io.github.xiaomisum.ryze.http.example.code;
 
 import io.github.xiaomisum.ryze.Ryze;
+import io.github.xiaomisum.ryze.http.example.mock.MockHttpServer;
 import io.github.xiaomisum.ryze.support.testng.RyzeBasicTestcase4TestNG;
 import io.github.xiaomisum.ryze.support.testng.annotation.RyzeTest;
+import org.testng.annotations.AfterSuite;
+import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
 
 public class CodeExTestCase extends RyzeBasicTestcase4TestNG {
+
+    @BeforeSuite
+    public void setup() {
+        MockHttpServer.start();
+    }
+
+    @AfterSuite
+    public void teardown() {
+        MockHttpServer.stop();
+    }
+
 
     @Test
     @RyzeTest

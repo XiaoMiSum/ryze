@@ -72,7 +72,7 @@ public class RealProtoRequest extends SampleResult.RealRequest {
      * HTTP响应头列表
      * <p>包含响应中的所有HTTP头信息</p>
      */
-    Map<String, String> headers;
+    Map<String, Object> headers;
 
 
     /**

@@ -4,12 +4,25 @@ import io.github.xiaomisum.ryze.protocol.websocket.builder.WebsocketConfigureEle
 import io.github.xiaomisum.ryze.protocol.websocket.builder.WebsocketPreprocessorsBuilder;
 import io.github.xiaomisum.ryze.protocol.websocket.builder.WebsocketSamplersBuilder;
 import io.github.xiaomisum.ryze.support.testng.annotation.RyzeTest;
+import io.github.xiaomisum.ryze.websocket.example.mock.MockWebSocketServer;
+import org.testng.annotations.AfterSuite;
+import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
 
 import static io.github.xiaomisum.ryze.Ryze.suite;
 import static io.github.xiaomisum.ryze.protocol.websocket.WebsocketMagicBox.ws;
 
 public class CodeTestCase {
+
+    @BeforeSuite
+    public void setup() {
+        MockWebSocketServer.start();
+    }
+
+    @AfterSuite
+    public void teardown() {
+        MockWebSocketServer.stop();
+    }
 
     @Test
     @RyzeTest

@@ -1,13 +1,26 @@
 package io.github.xiaomisum.ryze.http.example.code;
 
 import io.github.xiaomisum.ryze.Ryze;
+import io.github.xiaomisum.ryze.http.example.mock.MockHttpServer;
 import io.github.xiaomisum.ryze.support.Collections;
 import io.github.xiaomisum.ryze.support.testng.annotation.RyzeTest;
+import org.testng.annotations.AfterSuite;
+import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
 
 import java.util.Map;
 
 public class CodeTestCase {
+
+    @BeforeSuite
+    public void setup() {
+        MockHttpServer.start();
+    }
+
+    @AfterSuite
+    public void teardown() {
+        MockHttpServer.stop();
+    }
 
     @Test
     @RyzeTest

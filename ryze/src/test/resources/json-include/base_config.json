@@ -1,0 +1,6 @@
+{
+  "name": "base_config",
+  "version": "1.0",
+  "timeout": 5000,
+  "retry": 3
+}

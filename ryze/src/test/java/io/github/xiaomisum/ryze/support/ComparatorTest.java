@@ -28,6 +28,7 @@ package io.github.xiaomisum.ryze.support;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 public class ComparatorTest {
@@ -43,6 +44,10 @@ public class ComparatorTest {
         Assert.assertTrue(Comparator.areEqual(10, 10.0, false));
         Assert.assertTrue(Comparator.areEqual("10", 10, false));
         Assert.assertTrue(Comparator.areEqual(10.0, "10", false));
+        Assert.assertTrue(Comparator.areEqual(10.0, new BigDecimal("10"), false));
+        Assert.assertTrue(Comparator.areEqual(new BigDecimal("10"), 10.0, false));
+        Assert.assertTrue(Comparator.areEqual(new BigDecimal("10"), "10.0", false));
+        Assert.assertTrue(Comparator.areEqual(new BigDecimal("10"), 10, false));
 
         // 测试布尔值相等
         Assert.assertTrue(Comparator.areEqual(true, "true", false));

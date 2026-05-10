@@ -2,24 +2,22 @@
 
 ## 📋 简介
 
-本示例演示了如何使用 Ryze 框架进行 HTTP 协议测试。示例包含一个简单的 Spring Boot 应用程序和对应的 Ryze 测试用例。
+本示例演示了如何使用 Ryze 框架进行 HTTP 协议测试。示例使用 MockServer 提供 HTTP 服务，无需额外的 Spring Boot 应用程序。
 
 ## 🚀 环境准备
 
-### 启动 Spring Boot 应用
+### Mock HTTP 服务
 
-1. 在 IDE 中运行 `http-example` 模块中的 `Application` 类
-2. 或通过命令行启动：
-   ```bash
-   cd example/http-example
-   mvn spring-boot:run
-   ```
+本示例使用 MockServer 作为 HTTP 服务提供者，测试运行时会自动启动 Mock 服务，无需手动启动额外的应用程序。
 
-### 验证服务启动
+Mock 服务提供以下接口：
 
-访问以下 URL 验证服务是否正常运行：
+- **GET /user** - 获取所有用户列表
+- **GET /user/{id}** - 根据 ID 获取单个用户
+- **POST /user** - 添加新用户
+- **PUT /user** - 更新用户信息
 
-- 用户接口: http://localhost:58081/user
+服务默认运行在 `http://127.0.0.1:58081`
 
 ## 🧪 执行 Ryze HTTP 测试
 
@@ -59,21 +57,22 @@ http-example/
 ├── src/
 │   ├── main/
 │   │   └── java/
- 苏│   │       └── io/github/xiaomisum/ryze/http/example/
-│   │           └── springboot/
-│   │               ├── Application.java        # Spring Boot 应用主类
-│   │               ├── ErrorLogServiceImpl.java # 错误日志服务实现
-│   │               └── TestController.java    # 测试控制器
+│   │       └── io/github/xiaomisum/ryze/http/example/
 │   └── test/
 │       ├── java/
-│       │   └── io/github/xiaomisum/ryze/http/example/
-│       │       ├── ExampleInterceptor.java    # 示例拦截器
-│       │       ├── code/                      # Java代码测试用例
-│       │       │   ├── CodeExTestCase.java        # Java异常测试类
-│       │       │   ├── CodeTestCase.java          # Java代码测试类
-│       │       │   └── GroovyCodeTestCase.groovy  # Groovy代码测试类
-│       │       └── yaml/                      # YAML配置测试用例
-│       │           └── YamlTestCase.java           # YAML测试类
+│       │   └── io/github/xiaomisum/ryze/
+│       │       ├── http/example/
+│       │       │   ├── mock/
+│       │       │   │   └── MockHttpServer.java    # Mock HTTP 服务器
+│       │       │   ├── ExampleInterceptor.java    # 示例拦截器
+│       │       │   ├── code/                      # Java代码测试用例
+│       │       │   │   ├── CodeExTestCase.java        # Java异常测试类
+│       │       │   │   ├── CodeTestCase.java          # Java代码测试类
+│       │       │   │   └── GroovyCodeTestCase.groovy  # Groovy代码测试类
+│       │       │   └── yaml/                      # YAML配置测试用例
+│       │       │       └── YamlTestCase.java           # YAML测试类
+│       │       └── debug/
+│       │           └── DebugScenariosTest.java    # Debug场景测试
 │       └── resources/
 │           ├── 测试用例/                     # 测试用例配置
 │           ├── 取样器/                       # HTTP 取样器模板

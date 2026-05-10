@@ -3,9 +3,22 @@ package io.github.xiaomisum.ryze.websocket.example.yaml;
 import io.github.xiaomisum.ryze.Ryze;
 import io.github.xiaomisum.ryze.support.testng.annotation.RyzeTest;
 import io.github.xiaomisum.ryze.testelement.TestElement;
+import io.github.xiaomisum.ryze.websocket.example.mock.MockWebSocketServer;
+import org.testng.annotations.AfterSuite;
+import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
 
 public class YamlTestCase {
+
+    @BeforeSuite
+    public void setup() {
+        MockWebSocketServer.start();
+    }
+
+    @AfterSuite
+    public void teardown() {
+        MockWebSocketServer.stop();
+    }
 
 
     /**

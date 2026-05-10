@@ -1,21 +1,35 @@
 package io.github.xiaomisum.ryze.proto.example.code;
 
+import io.github.xiaomisum.ryze.Ryze;
 import io.github.xiaomisum.ryze.protocol.proto.ProtoMagicBox;
 import io.github.xiaomisum.ryze.protocol.proto.builder.ProtoConfigureElementsBuilder;
 import io.github.xiaomisum.ryze.protocol.proto.builder.ProtoPreprocessorsBuilder;
 import io.github.xiaomisum.ryze.protocol.proto.builder.ProtoSamplersBuilder;
+import io.github.xiaomisum.ryze.proto.example.mock.MockProtoHttpServer;
 import io.github.xiaomisum.ryze.support.Collections;
 import io.github.xiaomisum.ryze.support.testng.annotation.RyzeTest;
+import org.testng.annotations.AfterSuite;
+import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
 
 import java.util.Map;
 
 public class CodeTestCase {
 
+    @BeforeSuite
+    public void setup() {
+        MockProtoHttpServer.start();
+    }
+
+    @AfterSuite
+    public void teardown() {
+        MockProtoHttpServer.stop();
+    }
+
     @Test
     @RyzeTest
     public void test1() {
-        ProtoMagicBox.suite("测试用例-http-protobuf-test1", suite -> {
+        Ryze.suite("测试用例-http-protobuf-test1", suite -> {
             suite.variables("id", 1);
             suite.variables("t_body", Collections.of("id", 1, "name", "ryze_http_proto_preprocessor", "age", 0));
             suite.variables(Map.of("a", 1, "b", 2));
@@ -75,7 +89,7 @@ public class CodeTestCase {
     @Test
     @RyzeTest
     public void test3() {
-        ProtoMagicBox.suite("测试用例-websocket-protobuf-test3", suite -> {
+        Ryze.suite("测试用例-websocket-protobuf-test3", suite -> {
             suite.variables("id", 1);
             suite.variables("t_body", Collections.of("id", 1, "name", "ryze_websocket_proto_preprocessor", "age", 0));
             suite.variables(Map.of("a", 1, "b", 2));

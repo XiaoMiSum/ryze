@@ -1,27 +1,25 @@
-# 🌐 websocket 示例指南
+# 🌐 WebSocket 示例指南
 
 ## 📋 简介
 
-本示例演示了如何使用 Ryze 框架进行 websocket 协议测试。示例包含一个简单的 Spring Boot 应用程序和对应的 Ryze 测试用例。
+本示例演示了如何使用 Ryze 框架进行 WebSocket 协议测试。示例使用 Tyrus 提供 WebSocket 服务，无需额外的 Spring Boot 应用程序。
 
 ## 🚀 环境准备
 
-### 启动 Spring Boot 应用
+### Mock WebSocket 服务
 
-1. 在 IDE 中运行 `websocket-example` 模块中的 `Application` 类
-2. 或通过命令行启动：
-   ```bash
-   cd example/websocket-example
-   mvn spring-boot:run
-   ```
+本示例使用 Tyrus 作为 WebSocket 服务提供者，测试运行时会自动启动 Mock 服务，无需手动启动额外的应用程序。
 
-### 验证服务启动
+Mock 服务提供以下端点：
 
-访问以下 URL 验证服务是否正常运行：
+- **/ws/body/bytes** - 二进制消息回显端点
+- **/ws/body/string** - 文本消息回显端点
+- **/ws/path/{userId}** - 支持路径参数的端点
+- **/ws/query** - 支持查询参数的端点
 
-- 用户接口: ws://localhost:8080/ws/path/{userId}
+服务默认运行在 `ws://127.0.0.1:8080`
 
-## 🧪 执行 Ryze HTTP 测试
+## 🧪 执行 Ryze WebSocket 测试
 
 ### 运行测试
 
@@ -36,6 +34,11 @@
 
 测试用例包含以下场景：
 
+- WebSocket 连接测试
+- 二进制消息发送与接收
+- 文本消息发送与接收
+- 路径参数测试
+- 查询参数测试
 - 请求参数验证
 - 响应数据提取
 - 结果断言验证
@@ -58,15 +61,12 @@ websocket-example/
 │   ├── main/
 │   │   └── java/
 │   │       └── io/github/xiaomisum/ryze/websocket/example/
-│   │           ├── Application.java              # Spring Boot 应用主类
-│   │           ├── WebSocketBodyBytesServer.java # WebSocket 字节消息服务端
-│   │           ├── WebSocketBodyStringServer.java # WebSocket 字符串消息服务端
-│   │           ├── WebSocketConfig.java          # WebSocket 配置类
-│   │           ├── WebSocketPathServer.java      # WebSocket 路径参数服务端
-│   │           └── WebSocketQueryServer.java     # WebSocket 查询参数服务端
+│   │           └── (已移除 Spring Boot 相关文件)
 │   └── test/
 │       ├── java/
 │       │   └── io/github/xiaomisum/ryze/websocket/example/
+│       │       ├── mock/                      # Mock 服务
+│       │       │   └── MockWebSocketServer.java # WebSocket Mock 服务器
 │       │       ├── code/                      # Java代码测试用例
 │       │       │   ├── CodeExTestCase.java        # Java异常测试类
 │       │       │   ├── CodeTestCase.java          # Java代码测试类

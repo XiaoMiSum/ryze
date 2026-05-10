@@ -20,12 +20,12 @@
 
     <dependencies>
 
+        <!-- Tyrus WebSocket Server 依赖 -->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-websocket</artifactId>
-            <version>3.4.4</version>
+            <groupId>org.glassfish.tyrus</groupId>
+            <artifactId>tyrus-server</artifactId>
+            <version>2.1.5</version>
         </dependency>
-
 
         <dependency>
             <groupId>io.github.xiaomisum</groupId>

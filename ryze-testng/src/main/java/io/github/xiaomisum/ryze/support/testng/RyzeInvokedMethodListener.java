@@ -25,7 +25,6 @@
  *
  *
  */
-
 package io.github.xiaomisum.ryze.support.testng;
 
 import io.github.xiaomisum.ryze.Configure;
@@ -71,15 +70,14 @@ public class RyzeInvokedMethodListener implements IInvokedMethodListener, TestNG
         if (!method.isTestMethod()) {
             return;
         }
+        var isExtendRyzeBasicTestNGTestcase = RyzeBasicTestcase4TestNG.class.isAssignableFrom(method.getTestMethod().getTestClass().getRealClass());
+        var isRyzeTest = AnnotationUtils.isRyzeTest(result.getMethod().getConstructorOrMethod().getMethod());
+        if (!isExtendRyzeBasicTestNGTestcase && !isRyzeTest) {
+            // 如果 不是 RyzeBasicTestcase4TestNG 的子类 且 没有 RyzeTest 注解，则无需处理 Ryze框架中的业务
+            return;
+        }
         // 每个测试方法执行前重置 Allure testcase 名称标志，以便本方法内的首个 TestSuite / Sampler 能重新设置名称
         AllureTestCaseHelper.reset();
-        if (Objects.equals(result.getAttribute(RYZE_TEST_METHOD), true)) {
-            // 已存在 ryze test method 标识，则不在监听器中创建 session
-            return;
-        }
-        if (!AnnotationUtils.isRyzeTest(result.getMethod().getConstructorOrMethod().getMethod())) {
-            return;
-        }
         // 添加 ryze test method 标识
         result.setAttribute(RYZE_TEST_METHOD, true);
         // 创建一个 在测试框架中运行时使用的 session
@@ -99,12 +97,8 @@ public class RyzeInvokedMethodListener implements IInvokedMethodListener, TestNG
         if (!method.isTestMethod()) {
             return;
         }
-        if (Objects.equals(result.getAttribute(RYZE_TEST_CLASS), true)) {
-            // 如果是 RyzeBasicTestcase4TestNG 继承的类，则不在监听器中移除 session
-            return;
-        }
         if (!Objects.equals(result.getAttribute(RYZE_TEST_METHOD), true)) {
-            // 如果没有 ryze test method 标识，则不处理
+            //  RYZE_TEST_METHOD 标志不是 true，则不在监听器中移除 session
             return;
         }
         SessionRunner.removeSession();

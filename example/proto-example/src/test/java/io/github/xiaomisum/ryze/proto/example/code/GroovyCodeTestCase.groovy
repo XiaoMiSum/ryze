@@ -1,14 +1,28 @@
 package io.github.xiaomisum.ryze.proto.example.code
 
+import io.github.xiaomisum.ryze.Ryze
 import io.github.xiaomisum.ryze.protocol.proto.ProtoMagicBox
 import io.github.xiaomisum.ryze.protocol.proto.builder.ProtoConfigureElementsBuilder
 import io.github.xiaomisum.ryze.protocol.proto.builder.ProtoPreprocessorsBuilder
 import io.github.xiaomisum.ryze.protocol.proto.builder.ProtoSamplersBuilder
+import io.github.xiaomisum.ryze.proto.example.mock.MockProtoHttpServer
 import io.github.xiaomisum.ryze.support.Collections
 import io.github.xiaomisum.ryze.support.testng.annotation.RyzeTest
+import org.testng.annotations.AfterSuite
+import org.testng.annotations.BeforeSuite
 import org.testng.annotations.Test
 
 class GroovyCodeTestCase {
+
+    @BeforeSuite
+    void setup() {
+        MockProtoHttpServer.start()
+    }
+
+    @AfterSuite
+    void teardown() {
+        MockProtoHttpServer.stop()
+    }
 
     /**
      * 编码模式测试，必须以 RyzeTest 注解方式执行，否则需要自行创建 SessionRunner实例
@@ -20,7 +34,7 @@ class GroovyCodeTestCase {
         // 这样的好处：
         //      1、所有步骤共用suite中配置的变量和默认配置，可以减少重复代码
         //      2、前置步骤提取的变量，会自动添加到 suite 中，后续步骤可以直接使用
-        ProtoMagicBox.suite {
+        Ryze.suite {
             title '测试用例-http-protobuf-test1'
             variables('id', 1)
             variables('t_body', [id: '2', name: 'ryze_http_proto_preprocessor', age: 0])
@@ -169,7 +183,7 @@ class GroovyCodeTestCase {
     @Test
     @RyzeTest
     void test3() {
-        ProtoMagicBox.suite {
+        Ryze.suite {
             title '测试用例-websocket-protobuf-test3'
             variables('id', 1)
             variables('t_body', ['id': 1, 'name': 'ryze_websocket_proto_preprocessor', 'age': 0])

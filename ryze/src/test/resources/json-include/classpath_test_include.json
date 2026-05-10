@@ -1,0 +1,6 @@
+{
+  "title": "测试配置 - 使用 !include: 语法",
+  "base": "!include: classpath:json-include/base_config.json",
+  "database": {"!include": "classpath:json-include/database_config.json"},
+  "features": ["feature1", "feature2", "feature3"]
+}
