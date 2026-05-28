@@ -32,7 +32,7 @@ import com.alibaba.fastjson2.annotation.JSONField;
 import com.google.protobuf.Descriptors;
 import io.github.xiaomisum.ryze.builder.DefaultExtractorsBuilder;
 import io.github.xiaomisum.ryze.context.ContextWrapper;
-import io.github.xiaomisum.ryze.protocol.proto.Proto;
+import io.github.xiaomisum.ryze.protocol.proto.ProtoClient;
 import io.github.xiaomisum.ryze.protocol.proto.ProtoConstantsInterface;
 import io.github.xiaomisum.ryze.protocol.proto.RealProtoRequest;
 import io.github.xiaomisum.ryze.protocol.proto.RealProtoResponse;
@@ -99,7 +99,7 @@ public class ProtoPostprocessor extends AbstractProcessor<ProtoPostprocessor, Pr
      */
     @Override
     protected DefaultSampleResult getTestResult() {
-        return new DefaultSampleResult(runtime.getId(), StringUtils.isBlank(runtime.getTitle()) ? "Proto 后置处理器" : runtime.getTitle());
+        return new DefaultSampleResult(runtime.getId(), StringUtils.isBlank(runtime.getTitle()) ? "ProtoClient 后置处理器" : runtime.getTitle());
     }
 
     /**
@@ -110,7 +110,7 @@ public class ProtoPostprocessor extends AbstractProcessor<ProtoPostprocessor, Pr
      */
     @Override
     protected void sample(ContextWrapper context, DefaultSampleResult result) {
-        response = Proto.execute(runtime.getConfig(), descriptorMap, result, request);
+        response = ProtoClient.execute(runtime.getConfig(), descriptorMap, result, request);
     }
 
     /**
@@ -128,7 +128,7 @@ public class ProtoPostprocessor extends AbstractProcessor<ProtoPostprocessor, Pr
         runtime.setConfig(localConfig.merge(otherConfig));
         // 2. 创建http对象
         request = new RealProtoRequest();
-        descriptorMap = Proto.loadFileDescriptors(runtime.getConfig().getProtoDesc().getDescPath());
+        descriptorMap = ProtoClient.loadFileDescriptors(runtime.getConfig().getProtoDesc().getDescPath());
         result.setRequest(request);
     }
 
@@ -145,7 +145,7 @@ public class ProtoPostprocessor extends AbstractProcessor<ProtoPostprocessor, Pr
     }
 
     /**
-     * Proto 后置处理器构建器
+     * ProtoClient 后置处理器构建器
      */
     public static class Builder extends PostprocessorBuilder<ProtoPostprocessor, Builder, ProtoConfigureItem,
             ProtoConfigureItem.Builder, DefaultExtractorsBuilder, DefaultSampleResult> {

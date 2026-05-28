@@ -1,6 +1,7 @@
 package io.github.xiaomisum.ryze.mongo.example.code;
 
-import io.github.xiaomisum.ryze.protocol.mongo.MongoMagicBox;
+import io.github.xiaomisum.ryze.Ryze;
+import io.github.xiaomisum.ryze.protocol.mongo.Mongo;
 import io.github.xiaomisum.ryze.protocol.mongo.builder.MongoConfigureElementsBuilder;
 import io.github.xiaomisum.ryze.protocol.mongo.builder.MongoPostprocessorsBuilder;
 import io.github.xiaomisum.ryze.protocol.mongo.builder.MongoPreprocessorsBuilder;
@@ -11,13 +12,13 @@ import org.testng.annotations.Test;
 
 import java.util.Map;
 
-@SuppressWarnings({"unchecked", "rawtypes"})
+@SuppressWarnings({"unchecked"})
 public class CodeTestCase {
 
     @Test
     @RyzeTest
     public void test1() {
-        MongoMagicBox.suite("测试用例", suite -> {
+        Ryze.suite("测试用例", suite -> {
             suite.variables("id", 1);
             suite.variables(var -> var.put("tick", "mongo_preprocessor"));
             suite.variables(Map.of("a", 1, "b", 2));
@@ -49,7 +50,7 @@ public class CodeTestCase {
     @Test
     @RyzeTest
     public void test2() {
-        MongoMagicBox.mongo("测试用例- test2()", sampler -> {
+        Mongo.mongo("测试用例- test2()", sampler -> {
             sampler.variables("name", "${random_string(10)}");
             sampler.configureElements(MongoConfigureElementsBuilder.class, builder -> builder
                     .mongo(mongo -> mongo.config(config -> config
@@ -70,7 +71,7 @@ public class CodeTestCase {
     @Test
     @RyzeTest
     public void test3() {
-        MongoMagicBox.mongo("测试用例- test3()-1", sampler -> {
+        Mongo.mongo("测试用例- test3()-1", sampler -> {
             sampler.configureElements(MongoConfigureElementsBuilder.class, builder -> builder
                     .mongo(mongo -> mongo.config(config -> config
                             .url("mongodb://root:123456@127.0.0.1:27017/?authSource=admin")
@@ -85,7 +86,7 @@ public class CodeTestCase {
         });
 
 
-        MongoMagicBox.mongo("测试用例- test3()-2", sampler -> {
+        Mongo.mongo("测试用例- test3()-2", sampler -> {
             sampler.configureElements(MongoConfigureElementsBuilder.class, builder -> builder
                     .mongo(mongo -> mongo.config(config -> config
                             .url("mongodb://root:123456@127.0.0.1:27017/?authSource=admin")

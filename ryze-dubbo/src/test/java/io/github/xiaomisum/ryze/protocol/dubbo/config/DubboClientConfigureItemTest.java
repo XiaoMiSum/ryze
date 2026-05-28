@@ -37,7 +37,7 @@ import java.util.Map;
 
 import static io.github.xiaomisum.ryze.protocol.dubbo.DubboConstantsInterface.DEF_REF_NAME_KEY;
 
-public class DubboConfigureItemTest {
+public class DubboClientConfigureItemTest {
 
     @Test
     public void testBuilder() {

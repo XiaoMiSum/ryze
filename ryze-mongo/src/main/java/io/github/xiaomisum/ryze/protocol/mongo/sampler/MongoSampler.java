@@ -34,7 +34,7 @@ import com.mongodb.MongoClientSettings;
 import io.github.xiaomisum.ryze.builder.DefaultAssertionsBuilder;
 import io.github.xiaomisum.ryze.builder.DefaultExtractorsBuilder;
 import io.github.xiaomisum.ryze.context.ContextWrapper;
-import io.github.xiaomisum.ryze.protocol.mongo.Mongo;
+import io.github.xiaomisum.ryze.protocol.mongo.MongoClient;
 import io.github.xiaomisum.ryze.protocol.mongo.MongoConstantsInterface;
 import io.github.xiaomisum.ryze.protocol.mongo.MongoRealRequest;
 import io.github.xiaomisum.ryze.protocol.mongo.builder.MongoConfigureElementsBuilder;
@@ -134,7 +134,7 @@ public class MongoSampler extends AbstractSampler<MongoSampler, MongoConfigItem,
      */
     @Override
     protected void sample(ContextWrapper context, DefaultSampleResult result) {
-        response = Mongo.execute(settings, runtime.getConfig(), result);
+        response = MongoClient.execute(settings, runtime.getConfig(), result);
     }
 
     /**
@@ -173,7 +173,7 @@ public class MongoSampler extends AbstractSampler<MongoSampler, MongoConfigItem,
     }
 
     /**
-     * Mongo 采样器构建器类
+     * MongoClient 采样器构建器类
      * <p>
      * 该类用于通过 Builder 模式构建 MongoSampler 实例。
      * </p>

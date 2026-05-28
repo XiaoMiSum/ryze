@@ -253,7 +253,7 @@ public class websocketSuiteExample {
 ### 基础脚本
 
 ```groovy
-import io.github.xiaomisum.ryze.protocol.websocket.WebsocketMagicBox
+import io.github.xiaomisum.ryze.protocol.websocket.Websocket
 import io.github.xiaomisum.ryze.support.testng.annotation.RyzeTest
 import org.testng.annotations.Test
 
@@ -290,7 +290,7 @@ class GroovyWebsocketExample {
 ```groovy
 import io.github.xiaomisum.ryze.protocol.websocket.builder.WebsocketConfigureElementsBuilder
 import io.github.xiaomisum.ryze.protocol.websocket.builder.WebsocketPreprocessorsBuilder
-import io.github.xiaomisum.ryze.protocol.websocket.WebsocketMagicBox
+import io.github.xiaomisum.ryze.protocol.websocket.Websocket
 import io.github.xiaomisum.ryze.support.Collections
 import io.github.xiaomisum.ryze.support.testng.annotation.RyzeTest
 import org.testng.annotations.Test

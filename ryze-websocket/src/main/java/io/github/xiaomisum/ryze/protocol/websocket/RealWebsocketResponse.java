@@ -44,7 +44,7 @@ import java.util.Objects;
 public class RealWebsocketResponse extends SampleResult.RealResponse {
 
     /**
-     * Websocket 响应
+     * WebsocketClient 响应
      */
 
     private final String body;
@@ -56,7 +56,7 @@ public class RealWebsocketResponse extends SampleResult.RealResponse {
      */
     public RealWebsocketResponse(Response response, WebsocketConfigureItem config) {
         body = Objects.isNull(response) ? "" : response.text(config.getBytesToStringConverter() == null ?
-                String::new : config.getBytesToStringConverter());
+                                                             String::new : config.getBytesToStringConverter());
         status = response.status();
     }
 

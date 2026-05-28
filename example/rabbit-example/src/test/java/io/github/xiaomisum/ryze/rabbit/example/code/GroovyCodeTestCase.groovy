@@ -1,6 +1,7 @@
 package io.github.xiaomisum.ryze.rabbit.example.code
 
-import io.github.xiaomisum.ryze.protocol.rabbit.RabbitMagicBox
+import io.github.xiaomisum.ryze.Ryze
+import io.github.xiaomisum.ryze.protocol.rabbit.Rabbit
 import io.github.xiaomisum.ryze.protocol.rabbit.builder.RabbitConfigureElementsBuilder
 import io.github.xiaomisum.ryze.protocol.rabbit.builder.RabbitPostprocessorsBuilder
 import io.github.xiaomisum.ryze.protocol.rabbit.builder.RabbitPreprocessorsBuilder
@@ -15,7 +16,7 @@ class GroovyCodeTestCase {
     @Test
     @RyzeTest
     void test1() {
-        RabbitMagicBox.suite("测试用例", {
+        Ryze.suite("测试用例", {
             variables("id", 1)
             variables { put("tick", "ryze") }
             variables Map.of("a", 1, "b", 2)
@@ -78,7 +79,7 @@ class GroovyCodeTestCase {
     @Test
     @RyzeTest
     void test2() {
-        RabbitMagicBox.rabbit("测试用例- test2()", sampler -> {
+        Rabbit.rabbit("测试用例- test2()", sampler -> {
             configureElements(RabbitConfigureElementsBuilder.class, {
                 rabbit {
                     config {
@@ -111,7 +112,7 @@ class GroovyCodeTestCase {
     @Test
     @RyzeTest
     void test3() {
-        RabbitMagicBox.rabbit({
+        Rabbit.rabbit({
             title "步骤1——插入用户：tick = redis_preprocessor"
             configureElements(RabbitConfigureElementsBuilder.class, {
                 rabbit {
@@ -128,7 +129,7 @@ class GroovyCodeTestCase {
             }
         })
 
-        RabbitMagicBox.rabbit({
+        Rabbit.rabbit({
             title "步骤2——查找用户：tick = ryze_http_sampler"
             configureElements(RabbitConfigureElementsBuilder.class, {
                 rabbit {

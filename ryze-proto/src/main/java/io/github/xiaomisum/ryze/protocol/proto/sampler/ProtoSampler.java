@@ -32,7 +32,7 @@ import com.alibaba.fastjson2.annotation.JSONField;
 import com.google.protobuf.Descriptors;
 import io.github.xiaomisum.ryze.builder.*;
 import io.github.xiaomisum.ryze.context.ContextWrapper;
-import io.github.xiaomisum.ryze.protocol.proto.Proto;
+import io.github.xiaomisum.ryze.protocol.proto.ProtoClient;
 import io.github.xiaomisum.ryze.protocol.proto.ProtoConstantsInterface;
 import io.github.xiaomisum.ryze.protocol.proto.RealProtoRequest;
 import io.github.xiaomisum.ryze.protocol.proto.RealProtoResponse;
@@ -98,7 +98,7 @@ public class ProtoSampler extends AbstractSampler<ProtoSampler, ProtoConfigureIt
      */
     @Override
     protected DefaultSampleResult getTestResult() {
-        return new DefaultSampleResult(runtime.getId(), StringUtils.isBlank(runtime.getTitle()) ? "Proto 取样器" : runtime.getTitle());
+        return new DefaultSampleResult(runtime.getId(), StringUtils.isBlank(runtime.getTitle()) ? "ProtoClient 取样器" : runtime.getTitle());
     }
 
     /**
@@ -109,7 +109,7 @@ public class ProtoSampler extends AbstractSampler<ProtoSampler, ProtoConfigureIt
      */
     @Override
     protected void sample(ContextWrapper context, DefaultSampleResult result) {
-        response = Proto.execute(runtime.getConfig(), descriptorMap, result, request);
+        response = ProtoClient.execute(runtime.getConfig(), descriptorMap, result, request);
     }
 
     /**
@@ -127,7 +127,7 @@ public class ProtoSampler extends AbstractSampler<ProtoSampler, ProtoConfigureIt
         runtime.setConfig(localConfig.merge(otherConfig));
         // 2. 创建http对象
         request = new RealProtoRequest();
-        descriptorMap = Proto.loadFileDescriptors(runtime.getConfig().getProtoDesc().getDescPath());
+        descriptorMap = ProtoClient.loadFileDescriptors(runtime.getConfig().getProtoDesc().getDescPath());
         result.setRequest(request);
     }
 
@@ -144,7 +144,7 @@ public class ProtoSampler extends AbstractSampler<ProtoSampler, ProtoConfigureIt
     }
 
     /**
-     * Proto 后置处理器构建器
+     * ProtoClient 后置处理器构建器
      */
     public static class Builder extends AbstractSampler.Builder<ProtoSampler, ProtoSampler.Builder, ProtoConfigureItem,
             ProtoConfigureItem.Builder, DefaultConfigureElementsBuilder, DefaultPreprocessorsBuilder, DefaultPostprocessorsBuilder,

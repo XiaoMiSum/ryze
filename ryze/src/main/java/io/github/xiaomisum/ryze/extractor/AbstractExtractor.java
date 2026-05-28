@@ -151,8 +151,8 @@ public abstract class AbstractExtractor implements Extractor, ExtractorConstants
         }
         if (localContext.getTestResult() instanceof SampleResult result) {
             validate().valid();
-            defaultValue = localContext.evaluate(defaultValue);
-            var defaultValueIsBlank = defaultValue == null || StringUtils.isBlank(defaultValue.toString());
+            var scopeDefaultValue = localContext.evaluate(defaultValue);
+            var defaultValueIsBlank = scopeDefaultValue == null || StringUtils.isBlank(scopeDefaultValue.toString());
             if (StringUtils.isBlank(result.getResponse().bytesAsString()) && defaultValueIsBlank) {
                 throw new IllegalArgumentException("待提取的字符串为 null 或空白");
             }
@@ -168,7 +168,7 @@ public abstract class AbstractExtractor implements Extractor, ExtractorConstants
                 throw new IllegalArgumentException("目标字符串没有匹配的数据 %s，目标字符串：%s".formatted(field, result.getResponse().bytesAsString()));
             }
             // extractor 接口默认实现调用此方法 localContext 与 parentContext 为同一对象
-            parentContext.getLocalVariablesWrapper().put(refName, valueIsBlank ? defaultValue : value);
+            parentContext.getLocalVariablesWrapper().put(refName, valueIsBlank ? scopeDefaultValue : value);
             return;
         }
         throw new RuntimeException("不支持提取的测试组件: " + localContext.getTestElement().getClass());

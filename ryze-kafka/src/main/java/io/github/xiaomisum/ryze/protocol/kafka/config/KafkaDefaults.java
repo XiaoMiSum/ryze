@@ -113,7 +113,7 @@ public class KafkaDefaults extends AbstractConfigureElement<KafkaDefaults, Kafka
      */
     @Override
     protected TestSuiteResult getTestResult() {
-        return new TestSuiteResult("Kafka 默认配置" + (StringUtils.isBlank(refName) ? "" : "：" + runtime.getRefName()));
+        return new TestSuiteResult("KafkaClient 默认配置" + (StringUtils.isBlank(refName) ? "" : "：" + runtime.getRefName()));
     }
 
     /**

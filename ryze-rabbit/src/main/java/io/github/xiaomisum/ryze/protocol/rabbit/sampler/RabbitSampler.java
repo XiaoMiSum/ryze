@@ -30,7 +30,7 @@ import com.rabbitmq.client.ConnectionFactory;
 import io.github.xiaomisum.ryze.builder.DefaultAssertionsBuilder;
 import io.github.xiaomisum.ryze.builder.DefaultExtractorsBuilder;
 import io.github.xiaomisum.ryze.context.ContextWrapper;
-import io.github.xiaomisum.ryze.protocol.rabbit.Rabbit;
+import io.github.xiaomisum.ryze.protocol.rabbit.RabbitClient;
 import io.github.xiaomisum.ryze.protocol.rabbit.RabbitConstantsInterface;
 import io.github.xiaomisum.ryze.protocol.rabbit.RealRabbitRequest;
 import io.github.xiaomisum.ryze.protocol.rabbit.builder.RabbitConfigureElementsBuilder;
@@ -115,7 +115,7 @@ public class RabbitSampler extends AbstractSampler<RabbitSampler, RabbitConfigur
     /**
      * 执行采样操作
      * <p>
-     * 使用 Rabbit 工具类执行消息发送操作。
+     * 使用 RabbitClient 工具类执行消息发送操作。
      * </p>
      *
      * @param context 上下文包装器
@@ -123,7 +123,7 @@ public class RabbitSampler extends AbstractSampler<RabbitSampler, RabbitConfigur
      */
     @Override
     protected void sample(ContextWrapper context, DefaultSampleResult result) {
-        Rabbit.execute(factory, runtime.config, message, result);
+        RabbitClient.execute(factory, runtime.config, message, result);
     }
 
 
@@ -144,7 +144,7 @@ public class RabbitSampler extends AbstractSampler<RabbitSampler, RabbitConfigur
         var otherConfig = (RabbitConfigureItem) context.getLocalVariablesWrapper().get(localConfig.getRef());
         runtime.setConfig(localConfig.merge(otherConfig));
         // 2. 创建Rabbit 连接池对象
-        factory = Rabbit.handleRequest(runtime.getConfig());
+        factory = RabbitClient.handleRequest(runtime.getConfig());
         message = runtime.config.getFormatMessage();
         result.setRequest(RealRabbitRequest.build(runtime.getConfig(), message));
     }

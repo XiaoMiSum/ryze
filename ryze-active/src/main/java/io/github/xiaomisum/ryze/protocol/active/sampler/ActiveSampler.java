@@ -29,7 +29,7 @@ import com.alibaba.fastjson2.annotation.JSONField;
 import io.github.xiaomisum.ryze.builder.DefaultAssertionsBuilder;
 import io.github.xiaomisum.ryze.builder.DefaultExtractorsBuilder;
 import io.github.xiaomisum.ryze.context.ContextWrapper;
-import io.github.xiaomisum.ryze.protocol.active.Active;
+import io.github.xiaomisum.ryze.protocol.active.ActiveClient;
 import io.github.xiaomisum.ryze.protocol.active.ActiveConstantsInterface;
 import io.github.xiaomisum.ryze.protocol.active.RealActiveRequest;
 import io.github.xiaomisum.ryze.protocol.active.builder.ActiveConfigureElementsBuilder;
@@ -129,7 +129,7 @@ public class ActiveSampler extends AbstractSampler<ActiveSampler, ActiveConfigur
      */
     @Override
     protected void sample(ContextWrapper context, DefaultSampleResult result) {
-        Active.execute(runtime.config, factory, message, result);
+        ActiveClient.execute(runtime.config, factory, message, result);
     }
 
     /**

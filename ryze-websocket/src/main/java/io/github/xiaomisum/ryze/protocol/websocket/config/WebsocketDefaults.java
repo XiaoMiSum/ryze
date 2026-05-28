@@ -35,7 +35,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.Objects;
 
 /**
- * Websocket 默认配置元件
+ * WebsocketClient 默认配置元件
  * <p>
  * 该类实现了Websocket配置和管理功能
  * </p>
@@ -83,11 +83,11 @@ public class WebsocketDefaults extends AbstractConfigureElement<WebsocketDefault
 
     @Override
     protected TestSuiteResult getTestResult() {
-        return new TestSuiteResult("Websocket 默认配置" + (StringUtils.isBlank(refName) ? "" : "：" + runtime.getRefName()));
+        return new TestSuiteResult("WebsocketClient 默认配置" + (StringUtils.isBlank(refName) ? "" : "：" + runtime.getRefName()));
     }
 
     /**
-     * Websocket 默认配置 测试元件 构建类
+     * WebsocketClient 默认配置 测试元件 构建类
      */
     public static class Builder extends AbstractConfigureElement.Builder<WebsocketDefaults, Builder, WebsocketConfigureItem, WebsocketConfigureItem.Builder, TestSuiteResult> {
 

@@ -186,7 +186,7 @@ config: # 取样器配置
 ### 基础消息发送
 
 ```java
-import static io.github.xiaomisum.ryze.protocol.kafka.KafkaMagicBox.*;
+import static io.github.xiaomisum.ryze.protocol.kafka.Kafka.*;
 
 public class KafkaApiExample {
 
@@ -248,7 +248,7 @@ public class KafkaApiExample {
 ### 完整 Kafka 测试套件
 
 ```java
-import static io.github.xiaomisum.ryze.protocol.kafka.KafkaMagicBox.*;
+import static io.github.xiaomisum.ryze.protocol.kafka.Kafka.*;
 
 public class KafkaTestSuite {
 
@@ -358,7 +358,7 @@ public class KafkaTestSuite {
 ### 基础消息发送
 
 ```groovy
-import static io.github.xiaomisum.ryze.protocol.kafka.KafkaMagicBox.*
+import static io.github.xiaomisum.ryze.protocol.kafka.Kafka.*
 
 // 简单消息发送
 def sendUserEvent() {
@@ -419,7 +419,7 @@ def sendHighVolumeMessages() {
 ### 完整 Kafka 测试脚本
 
 ```groovy
-import static io.github.xiaomisum.ryze.protocol.kafka.KafkaMagicBox.*
+import static io.github.xiaomisum.ryze.protocol.kafka.Kafka.*
 
 // Kafka 事件流完整测试
 suite("Kafka事件流测试") { builder ->

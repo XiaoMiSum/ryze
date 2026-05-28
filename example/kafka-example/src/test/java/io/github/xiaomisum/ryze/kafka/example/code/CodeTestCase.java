@@ -1,6 +1,7 @@
 package io.github.xiaomisum.ryze.kafka.example.code;
 
-import io.github.xiaomisum.ryze.protocol.kafka.KafkaMagicBox;
+import io.github.xiaomisum.ryze.Ryze;
+import io.github.xiaomisum.ryze.protocol.kafka.Kafka;
 import io.github.xiaomisum.ryze.protocol.kafka.builder.KafkaConfigureElementsBuilder;
 import io.github.xiaomisum.ryze.protocol.kafka.builder.KafkaPostprocessorsBuilder;
 import io.github.xiaomisum.ryze.protocol.kafka.builder.KafkaPreprocessorsBuilder;
@@ -16,7 +17,7 @@ public class CodeTestCase {
     @Test
     @RyzeTest
     public void test1() {
-        KafkaMagicBox.suite("测试用例", suite -> {
+        Ryze.suite("测试用例", suite -> {
             suite.variables("id", 1);
             suite.variables(var -> var.put("tick", "kafka_preprocessor"));
             suite.variables(Map.of("a", 1, "b", 2));
@@ -45,7 +46,7 @@ public class CodeTestCase {
     @Test
     @RyzeTest
     public void test2() {
-        KafkaMagicBox.kafka("测试用例- test2()", sampler -> {
+        Kafka.kafka("测试用例- test2()", sampler -> {
             sampler.configureElements(KafkaConfigureElementsBuilder.class, builder -> builder
                     .kafka(kafka -> kafka.config(config -> config.bootstrapServers("127.0.0.1:9092").topic("ryze.topic").key("ryze")))
             );
@@ -62,7 +63,7 @@ public class CodeTestCase {
     @Test
     @RyzeTest
     public void test3() {
-        KafkaMagicBox.kafka("测试用例- test3()-1", sampler -> {
+        Kafka.kafka("测试用例- test3()-1", sampler -> {
             sampler.configureElements(KafkaConfigureElementsBuilder.class, builder -> builder
                     .kafka(kafka -> kafka.config(config -> config.bootstrapServers("127.0.0.1:9092").topic("ryze.topic").key("ryze")))
             );
@@ -70,7 +71,7 @@ public class CodeTestCase {
         });
 
 
-        KafkaMagicBox.kafka("测试用例- test3()-2", sampler -> {
+        Kafka.kafka("测试用例- test3()-2", sampler -> {
             sampler.configureElements(KafkaConfigureElementsBuilder.class, builder -> builder
                     .kafka(kafka -> kafka.config(config -> config.bootstrapServers("127.0.0.1:9092").topic("ryze.topic").key("ryze")))
             );

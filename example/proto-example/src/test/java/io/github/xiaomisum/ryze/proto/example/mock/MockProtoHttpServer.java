@@ -1,6 +1,5 @@
 package io.github.xiaomisum.ryze.proto.example.mock;
 
-import com.google.protobuf.InvalidProtocolBufferException;
 import io.github.xiaomisum.ryze.proto.example.springboot.UserOuterClass;
 import org.mockserver.integration.ClientAndServer;
 import org.mockserver.model.MediaType;
@@ -15,7 +14,7 @@ import static org.mockserver.model.JsonBody.json;
 /**
  * Mock HTTP 服务器工具类
  * <p>
- * 使用 MockServer 提供 HTTP 服务，用于测试 Proto 协议
+ * 使用 MockServer 提供 HTTP 服务，用于测试 ProtoClient 协议
  * 支持 JSON 和 Protobuf 格式的请求/响应
  * </p>
  *
@@ -24,8 +23,8 @@ import static org.mockserver.model.JsonBody.json;
 public class MockProtoHttpServer {
 
     private static final int PORT = 8080;
-    private static ClientAndServer mockServer;
     private static final Map<Integer, UserOuterClass.User> users = new ConcurrentHashMap<>();
+    private static ClientAndServer mockServer;
 
     /**
      * 启动 Mock HTTP 服务器
@@ -38,7 +37,7 @@ public class MockProtoHttpServer {
         mockServer = ClientAndServer.startClientAndServer(PORT);
         initUsers();
         setupExpectations();
-        System.out.println("Mock Proto HTTP Server started on port " + PORT);
+        System.out.println("Mock ProtoClient HTTP Server started on port " + PORT);
     }
 
     /**
@@ -47,7 +46,7 @@ public class MockProtoHttpServer {
     public static void stop() {
         if (mockServer != null) {
             mockServer.stop();
-            System.out.println("Mock Proto HTTP Server stopped");
+            System.out.println("Mock ProtoClient HTTP Server stopped");
         }
     }
 
@@ -145,7 +144,7 @@ public class MockProtoHttpServer {
                     try {
                         @SuppressWarnings("unchecked")
                         Map<String, Object> userData = com.alibaba.fastjson2.JSON.parseObject(body, Map.class);
-                        
+
                         Integer id = Integer.parseInt(userData.get("id").toString());
                         String name = userData.get("name").toString();
                         Integer age = Integer.parseInt(userData.get("age").toString());
@@ -155,7 +154,7 @@ public class MockProtoHttpServer {
                                 .setName(name)
                                 .setAge(age)
                                 .build();
-                        
+
                         users.put(id, user);
 
                         var result = Map.of(
@@ -194,7 +193,7 @@ public class MockProtoHttpServer {
                     try {
                         @SuppressWarnings("unchecked")
                         Map<String, Object> userData = com.alibaba.fastjson2.JSON.parseObject(body, Map.class);
-                        
+
                         Integer id = Integer.parseInt(userData.get("id").toString());
                         String name = userData.get("name").toString();
                         Integer age = Integer.parseInt(userData.get("age").toString());
@@ -204,7 +203,7 @@ public class MockProtoHttpServer {
                                 .setName(name)
                                 .setAge(age)
                                 .build();
-                        
+
                         users.put(id, user);
 
                         var result = Map.of(

@@ -36,7 +36,7 @@ import java.util.Map;
 import static io.github.xiaomisum.ryze.protocol.mongo.MongoConstantsInterface.DEF_REF_NAME_KEY;
 import static io.github.xiaomisum.ryze.protocol.mongo.MongoConstantsInterface.FIND;
 
-public class MongoConfigItemTest {
+public class MongoClientConfigItemTest {
 
     @Test
     public void testBuilder() {

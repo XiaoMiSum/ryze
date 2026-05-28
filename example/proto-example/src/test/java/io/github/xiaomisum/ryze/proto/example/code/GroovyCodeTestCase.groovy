@@ -1,11 +1,11 @@
 package io.github.xiaomisum.ryze.proto.example.code
 
 import io.github.xiaomisum.ryze.Ryze
-import io.github.xiaomisum.ryze.protocol.proto.ProtoMagicBox
+import io.github.xiaomisum.ryze.proto.example.mock.MockProtoHttpServer
+import io.github.xiaomisum.ryze.protocol.proto.Proto
 import io.github.xiaomisum.ryze.protocol.proto.builder.ProtoConfigureElementsBuilder
 import io.github.xiaomisum.ryze.protocol.proto.builder.ProtoPreprocessorsBuilder
 import io.github.xiaomisum.ryze.protocol.proto.builder.ProtoSamplersBuilder
-import io.github.xiaomisum.ryze.proto.example.mock.MockProtoHttpServer
 import io.github.xiaomisum.ryze.support.Collections
 import io.github.xiaomisum.ryze.support.testng.annotation.RyzeTest
 import org.testng.annotations.AfterSuite
@@ -131,7 +131,7 @@ class GroovyCodeTestCase {
         // 以 Sampler 作为主执行步骤，其他步骤以 preprocessors 、 postprocessors 执行
         // 执行顺序：preprocessors -> sampler -> postprocessors
         // 注意：preprocessors 、 postprocessors 无断言功能，需断言的步骤应当为 Sampler
-        ProtoMagicBox.proto {
+        Proto.proto {
             title '测试用例-http-protobuf-test2'
             configureElements ProtoConfigureElementsBuilder.class, {
                 proto {
@@ -237,7 +237,7 @@ class GroovyCodeTestCase {
     @Test
     @RyzeTest
     void test4() {
-        ProtoMagicBox.proto {
+        Proto.proto {
             title '测试用例-websocket-protobuf-test4'
             configureElements ProtoConfigureElementsBuilder.class, {
                 proto {

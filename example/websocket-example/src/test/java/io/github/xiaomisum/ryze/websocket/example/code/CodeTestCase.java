@@ -10,7 +10,7 @@ import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
 
 import static io.github.xiaomisum.ryze.Ryze.suite;
-import static io.github.xiaomisum.ryze.protocol.websocket.WebsocketMagicBox.ws;
+import static io.github.xiaomisum.ryze.protocol.websocket.Websocket.ws;
 
 public class CodeTestCase {
 

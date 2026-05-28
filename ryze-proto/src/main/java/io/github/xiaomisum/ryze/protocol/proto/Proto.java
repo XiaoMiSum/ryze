@@ -1,248 +1,113 @@
 /*
+ * The MIT License (MIT)
  *
- *  * The MIT License (MIT)
- *  *
- *  * Copyright (c) 2025.  Lorem XiaoMiSum (mi_xiao@qq.com)
- *  *
- *  * Permission is hereby granted, free of charge, to any person obtaining
- *  * a copy of this software and associated documentation files (the
- *  * 'Software'), to deal in the Software without restriction, including
- *  * without limitation the rights to use, copy, modify, merge, publish,
- *  * distribute, sublicense, and/or sell copies of the Software, and to
- *  * permit persons to whom the Software is furnished to do so, subject to
- *  * the following conditions:
- *  *
- *  * The above copyright notice and this permission notice shall be
- *  * included in all copies or substantial portions of the Software.
- *  *
- *  * THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
- *  * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- *  * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
- *  * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
- *  * CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
- *  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
- *  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * Copyright (c) 2022.  Lorem XiaoMiSum (mi_xiao@qq.com)
  *
+ * Permission is hereby granted, free of charge, to any person obtaining
+ * a copy of this software and associated documentation files (the
+ * 'Software'), to deal in the Software without restriction, including
+ * without limitation the rights to use, copy, modify, merge, publish,
+ * distribute, sublicense, and/or sell copies of the Software, and to
+ * permit persons to whom the Software is furnished to do so, subject to
+ * the following conditions:
  *
+ * The above copyright notice and this permission notice shall be
+ * included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+ * CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+ * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+ * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
 package io.github.xiaomisum.ryze.protocol.proto;
 
-import com.alibaba.fastjson2.JSON;
-import com.google.protobuf.DescriptorProtos;
-import com.google.protobuf.Descriptors;
-import com.google.protobuf.DynamicMessage;
-import com.google.protobuf.InvalidProtocolBufferException;
-import com.google.protobuf.util.JsonFormat;
-import io.github.xiaomisum.ryze.protocol.proto.config.ProtoConfigureItem;
-import io.github.xiaomisum.ryze.protocol.proto.util.FileDescriptorLoaderChain;
-import io.github.xiaomisum.ryze.testelement.sampler.DefaultSampleResult;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.Strings;
-import org.apache.hc.core5.http.message.BasicHeader;
-import xyz.migoo.simplehttp.Form;
-import xyz.migoo.simplehttp.Request;
-import xyz.migoo.simplehttp.RequestEntity;
-import xyz.migoo.simplehttp.Response;
-
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.regex.Pattern;
-
-import static io.github.xiaomisum.ryze.protocol.proto.ProtoConstantsInterface.*;
+import groovy.lang.Closure;
+import groovy.lang.DelegatesTo;
+import io.github.xiaomisum.ryze.Result;
+import io.github.xiaomisum.ryze.Ryze;
+import io.github.xiaomisum.ryze.protocol.proto.sampler.ProtoSampler;
+import io.github.xiaomisum.ryze.support.Customizer;
+import io.github.xiaomisum.ryze.support.groovy.Groovy;
 
 /**
- * Proto工具类，提供Protocol Buffer消息的序列化和反序列化功能，
- * 以及与HTTP请求相关的操作方法集合
+ * ProtoClient 魔法盒子工具类
+ * <p>
+ * 提供函数式编程风格的 ProtoClient 采样器执行入口，简化 ProtoClient 操作的调用方式。
+ * 支持使用 Groovy Closure 或 Java Customizer 来配置 ProtoClient 采样器。
+ * </p>
+ * <p>
+ * 主要功能：
+ * <ul>
+ *   <li>提供多种 proto 方法重载，支持不同配置方式</li>
+ *   <li>封装 ProtoClient 采样器的构建和执行过程</li>
+ *   <li>支持带标题和不带标题的 ProtoClient 操作执行</li>
+ * </ul>
+ * </p>
  *
  * @author xiaomi
  */
 public class Proto {
 
-
     /**
-     * 根据配置项构建HTTP请求对象
+     * 执行 ProtoClient 操作（无标题）
+     * <p>
+     * 使用 Groovy Closure 方式配置并执行 ProtoClient 采样器，不指定操作标题。
+     * </p>
      *
-     * @param config Proto协议配置项
-     * @return 构建好的HTTP请求对象
+     * @param closure Groovy Closure，用于配置 ProtoSampler.Builder
+     * @return 执行结果
      */
-    public static Request build(ProtoConfigureItem config) {
-        var url = StringUtils.isNotBlank(config.getBaseUrl()) ? config.getBaseUrl() + config.getFullPath() :
-                "%s://%s%s%s".formatted(config.getProtocol(DEFAULT_PROTOCOL), config.getHost(), config.getFullPort(), config.getFullPath());
-        var cli = Request.create(config.getMethod(POST), url);
-        if (config.getQuery() != null && !config.getQuery().isEmpty()) {
-            cli.query(Form.create((config.getQuery())));
-        }
-        if (config.getHeaders() != null && !config.getHeaders().isEmpty()) {
-            config.getHeaders().forEach((key, value) -> cli.addHeader(key, value.toString()));
-        }
-        return cli;
+    public static Result proto(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ProtoSampler.Builder.class) Closure<?> closure) {
+        return proto("", closure);
     }
 
     /**
-     * 执行HTTP请求并处理ProtoBuf消息
+     * 执行 ProtoClient 操作（指定标题）
+     * <p>
+     * 使用 Groovy Closure 方式配置并执行 ProtoClient 采样器，指定操作标题。
+     * </p>
      *
-     * @param config        proto 配置
-     * @param descriptorMap proto 消息描述符集合
-     * @param result        采样结果对象
-     * @param request       proto真实请求数据
-     * @return HTTP响应对象
+     * @param title   操作标题，用于标识此次 ProtoClient 操作
+     * @param closure Groovy Closure，用于配置 ProtoSampler.Builder
+     * @return 执行结果
      */
-    public static RealProtoResponse execute(ProtoConfigureItem config, Map<String, Descriptors.FileDescriptor> descriptorMap, DefaultSampleResult result, RealProtoRequest request) {
-        try {
-            request.headers = config.getHeaders();
-            var url = request.url = StringUtils.isNotBlank(config.getBaseUrl()) ? config.getBaseUrl() + config.getFullPath() :
-                    "%s://%s%s%s".formatted(config.getProtocol(DEFAULT_PROTOCOL), config.getHost(), config.getFullPort(), config.getFullPath());
-            var requestMessageName = Proto.getMessageDescriptor(descriptorMap, config.getProtoDesc().getRequestMessageName());
-            var responseMessageName = Proto.getMessageDescriptor(descriptorMap, config.getProtoDesc().getResponseMessageName());
-            var body = convert(request.body = config.getStringBody(), requestMessageName);
-            if (Strings.CI.startsWithAny(url, WS, WSS)) {
-                request.query = config.getQuery() == null ? "" : JSON.toJSONString(config.getQuery());
-                // 将 Map<String, Object> 转换为 Map<String, String> 以兼容 websocket 请求
-                Map<String, String> stringHeaders = new HashMap<>();
-                if (config.getHeaders() != null) {
-                    config.getHeaders().forEach((key, value) -> stringHeaders.put(key, value.toString()));
-                }
-                io.github.xiaomisum.simplewebsocket.Request ws = new io.github.xiaomisum.simplewebsocket.Request(url)
-                        .headers(stringHeaders)
-                        .timeout(config.getTimeout() == null ? 0 : config.getTimeout())
-                        .query(config.getQuery())
-                        .bytes(body);
-                Function<byte[], String> converter = bytes -> convert(bytes, responseMessageName);
-                Function<String, Boolean> closeConnectHandler = x -> Pattern.compile(config.getResponsePattern()).matcher(x).find();
-                io.github.xiaomisum.simplewebsocket.Response response = ws.execute(closeConnectHandler, converter);
-                return new RealProtoResponse(response, responseMessageName);
-            }
-            var http = Request.create(config.getMethod(POST), url);
-            if (config.getQuery() != null && !config.getQuery().isEmpty()) {
-                http.query(Form.create((config.getQuery())));
-            }
-            if (config.getHeaders() != null && !config.getHeaders().isEmpty()) {
-                config.getHeaders().forEach((key, value) -> http.addHeader(key, value.toString()));
-            }
-            request.query = http.query();
-            request.version = http.version();
-            request.method = config.getMethod(POST);
-            return new RealProtoResponse(execute(http, body, result), responseMessageName);
-        } catch (Exception e) {
-            if (e instanceof RuntimeException) {
-                throw (RuntimeException) e;
-            }
-            throw new RuntimeException(e);
-        }
+    public static Result proto(String title,
+                               @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ProtoSampler.Builder.class) Closure<?> closure) {
+        var builder = ProtoSampler.builder();
+        Groovy.call(closure, builder);
+        return Ryze.runTest(title, builder.build());
     }
 
     /**
-     * 执行HTTP请求
+     * 执行 ProtoClient 操作（无标题）
+     * <p>
+     * 使用 Java Customizer 方式配置并执行 ProtoClient 采样器，不指定操作标题。
+     * </p>
      *
-     * @param cli    HTTP请求对象
-     * @param json   请求体字节数组
-     * @param result 采样结果对象
-     * @return HTTP响应对象
+     * @param customizer Java Customizer，用于配置 ProtoSampler.Builder
+     * @return 执行结果
      */
-    private static Response execute(Request cli, byte[] json, DefaultSampleResult result) {
-        result.sampleStart();
-        try {
-            if (json != null) {
-                var contentType = cli.headers() == null || cli.headers().length == 0 ? APPLICATION_X_PROTOBUF :
-                        Arrays.stream(cli.headers()).filter(x -> x.getName().equals(HEADER_CONTENT_TYPE)).findFirst().orElseGet(() -> new BasicHeader(HEADER_CONTENT_TYPE, APPLICATION_X_PROTOBUF)).getValue();
-                cli.body(RequestEntity.bytes(json, contentType));
-            }
-            return cli.execute();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        } finally {
-            result.sampleEnd();
-        }
+    public static Result proto(Customizer<ProtoSampler.Builder> customizer) {
+        return proto("", customizer);
     }
 
     /**
-     * 读取 .desc 文件，返回所有文件的 Descriptor
+     * 执行 ProtoClient 操作（指定标题）
+     * <p>
+     * 使用 Java Customizer 方式配置并执行 ProtoClient 采样器，指定操作标题。
+     * </p>
      *
-     * @param descPath 描述文件路径
-     * @return 文件描述符映射
+     * @param title      操作标题，用于标识此次 ProtoClient 操作
+     * @param customizer Java Customizer，用于配置 ProtoSampler.Builder
+     * @return 执行结果
      */
-    public static Map<String, Descriptors.FileDescriptor> loadFileDescriptors(String descPath) {
-        try {
-            byte[] bytes = FileDescriptorLoaderChain.loadTestData(descPath);
-            var set = DescriptorProtos.FileDescriptorSet.parseFrom(bytes);
-            var fileDescMap = new HashMap<String, Descriptors.FileDescriptor>();
-            for (var fdProto : set.getFileList()) {
-                Descriptors.FileDescriptor[] deps = new Descriptors.FileDescriptor[fdProto.getDependencyCount()];
-                for (int i = 0; i < fdProto.getDependencyCount(); i++) {
-                    deps[i] = fileDescMap.get(fdProto.getDependency(i));
-                }
-                Descriptors.FileDescriptor fd = Descriptors.FileDescriptor.buildFrom(fdProto, deps);
-                fileDescMap.put(fd.getName(), fd);
-            }
-            return fileDescMap;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    /**
-     * 根据完整的消息类型名（如 "demo.User"）获取 Descriptor
-     *
-     * @param fileMap         文件描述符映射
-     * @param fullMessageName 完整的消息类型名称
-     * @return 消息描述符
-     */
-    public static Descriptors.Descriptor getMessageDescriptor(Map<String, Descriptors.FileDescriptor> fileMap, String fullMessageName) {
-        for (var fd : fileMap.values()) {
-            if (fd.findMessageTypeByName(fullMessageName.substring(fullMessageName.lastIndexOf('.') + 1)) != null) {
-                return fd.findMessageTypeByName(fullMessageName.substring(fullMessageName.lastIndexOf('.') + 1));
-            }
-        }
-        throw new IllegalArgumentException("Message type not found: " + fullMessageName);
-    }
-
-    /**
-     * 将JSON字符串转换为Protocol Buffer二进制数据
-     *
-     * @param json 前端传来的 JSON 字符串
-     * @param desc 目标消息的 Descriptor
-     * @return protobuf 二进制（byte[]）
-     * @throws InvalidProtocolBufferException 当Protocol Buffer解析失败时抛出
-     */
-    public static byte[] convert(String json, Descriptors.Descriptor desc) throws InvalidProtocolBufferException {
-        if (json == null || json.isEmpty()) {
-            return null;
-        }
-        // 1. 创建 DynamicMessage.Builder
-        var builder = DynamicMessage.newBuilder(desc);
-        // 2. 使用 JsonFormat 解析 JSON → Builder
-        //   ignoringUnknownFields() 可以容忍前端多余字段
-        JsonFormat.parser().ignoringUnknownFields().merge(json, builder);
-        // 3. 构造 Message 并序列化为二进制
-        return builder.build().toByteArray();
-
-
-    }
-
-    /**
-     * 将Protocol Buffer二进制数据转换为JSON字符串
-     *
-     * @param binary 服务端返回的 protobuf 二进制
-     * @param desc   目标消息的 Descriptor（必须与服务端使用的消息类型一致）
-     * @return JSON 字符串
-     */
-    public static String convert(byte[] binary, Descriptors.Descriptor desc) {
-        try {
-            // 1. 检查输入数据
-            if (binary == null || binary.length == 0) {
-                return "{}";
-            }
-            // 2. 解析二进制为 DynamicMessage
-            var msg = DynamicMessage.parseFrom(desc, binary);
-            // 3. 使用 JsonFormat 打印为 JSON
-            var printer = JsonFormat.printer().alwaysPrintFieldsWithNoPresence().preservingProtoFieldNames();
-            return printer.print(msg);
-        } catch (Exception e) {
-            // 兜底解析，以防止接口返回的消息不是 protobuf 二进制数据
-            return new String(binary);
-        }
+    public static Result proto(String title, Customizer<ProtoSampler.Builder> customizer) {
+        var builder = ProtoSampler.builder();
+        customizer.customize(builder);
+        return Ryze.runTest(title, builder.build());
     }
 }

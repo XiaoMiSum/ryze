@@ -1,6 +1,7 @@
 package io.github.xiaomisum.ryze.rabbit.example.code;
 
-import io.github.xiaomisum.ryze.protocol.rabbit.RabbitMagicBox;
+import io.github.xiaomisum.ryze.Ryze;
+import io.github.xiaomisum.ryze.protocol.rabbit.Rabbit;
 import io.github.xiaomisum.ryze.protocol.rabbit.builder.RabbitConfigureElementsBuilder;
 import io.github.xiaomisum.ryze.protocol.rabbit.builder.RabbitPostprocessorsBuilder;
 import io.github.xiaomisum.ryze.protocol.rabbit.builder.RabbitPreprocessorsBuilder;
@@ -16,7 +17,7 @@ public class CodeTestCase {
     @Test
     @RyzeTest
     public void test1() {
-        RabbitMagicBox.suite("测试用例", suite -> {
+        Ryze.suite("测试用例", suite -> {
             suite.variables("id", 1);
             suite.variables(var -> var.put("tick", "rabbit_preprocessor"));
             suite.variables(Map.of("a", 1, "b", 2));
@@ -51,7 +52,7 @@ public class CodeTestCase {
     @Test
     @RyzeTest
     public void test2() {
-        RabbitMagicBox.rabbit("测试用例- test2()", sampler -> {
+        Rabbit.rabbit("测试用例- test2()", sampler -> {
             sampler.configureElements(RabbitConfigureElementsBuilder.class, builder -> builder
                     .rabbit(rabbit -> rabbit.config(config -> config.url("amqp://guest:guest@127.0.0.1:5672/")))
             );
@@ -68,7 +69,7 @@ public class CodeTestCase {
     @Test
     @RyzeTest
     public void test3() {
-        RabbitMagicBox.rabbit("测试用例- test3()-1", sampler -> {
+        Rabbit.rabbit("测试用例- test3()-1", sampler -> {
             sampler.configureElements(RabbitConfigureElementsBuilder.class, builder -> builder
                     .rabbit(rabbit -> rabbit.config(config -> config.url("amqp://guest:guest@127.0.0.1:5672/")))
 
@@ -77,7 +78,7 @@ public class CodeTestCase {
         });
 
 
-        RabbitMagicBox.rabbit("测试用例- test3()-2", sampler -> {
+        Rabbit.rabbit("测试用例- test3()-2", sampler -> {
             sampler.configureElements(RabbitConfigureElementsBuilder.class, builder -> builder
                     .rabbit(rabbit -> rabbit.config(config -> config.url("amqp://guest:guest@127.0.0.1:5672/")))
             );

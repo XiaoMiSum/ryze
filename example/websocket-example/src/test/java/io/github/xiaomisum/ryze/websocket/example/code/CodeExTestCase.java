@@ -8,7 +8,7 @@ import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
 
-import static io.github.xiaomisum.ryze.protocol.websocket.WebsocketMagicBox.ws;
+import static io.github.xiaomisum.ryze.protocol.websocket.Websocket.ws;
 
 public class CodeExTestCase extends RyzeBasicTestcase4TestNG {
 

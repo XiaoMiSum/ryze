@@ -9,19 +9,19 @@ MongoDB 协议支持为 Ryze 测试框架提供了与 MongoDB 数据库进行交
 
 ### MongoDB 连接配置
 
-| 配置项 | 类型 | 默认值 | 必需 | 描述 |
-|-------|------|--------|------|------|
-| url | String | - | ✅ | MongoDB 连接 URI (mongodb://user:pass@host:port/?authSource=db) |
-| database | String | - | ✅ | 数据库名称 |
-| collection | String | - | ❌ | 集合名称 |
+| 配置项        | 类型     | 默认值 | 必需 | 描述                                                            |
+|------------|--------|-----|----|---------------------------------------------------------------|
+| url        | String | -   | ✅  | MongoDB 连接 URI (mongodb://user:pass@host:port/?authSource=db) |
+| database   | String | -   | ✅  | 数据库名称                                                         |
+| collection | String | -   | ❌  | 集合名称                                                          |
 
 ### 文档操作配置
 
-| 配置项 | 类型 | 默认值 | 必需 | 描述 |
-|-------|------|--------|------|------|
-| action | String | - | ✅ | 操作类型 (find/insert/update/delete/aggregate) |
-| condition | Object | - | ✅ | 查询条件 (JSON 对象) |
-| document | Object | - | ❌ | 文档内容 (insert/update 时使用) |
+| 配置项       | 类型     | 默认值 | 必需 | 描述                                         |
+|-----------|--------|-----|----|--------------------------------------------|
+| action    | String | -   | ✅  | 操作类型 (find/insert/update/delete/aggregate) |
+| condition | Object | -   | ✅  | 查询条件 (JSON 对象)                             |
+| document  | Object | -   | ❌  | 文档内容 (insert/update 时使用)                   |
 
 > **配置优先级**: 取样器配置 > MongoDB 默认配置
 
@@ -109,7 +109,7 @@ config: # 取样器配置
 ## Java API 示例
 
 ```java
-import static io.github.xiaomisum.ryze.protocol.mongo.MongoMagicBox.*;
+import static io.github.xiaomisum.ryze.protocol.mongo.Mongo.*;
 
 public class MongoApiExample {
 
@@ -174,7 +174,7 @@ public class MongoApiExample {
 ## Groovy API 示例
 
 ```groovy
-import static io.github.xiaomisum.ryze.protocol.mongo.MongoMagicBox.*
+import static io.github.xiaomisum.ryze.protocol.mongo.Mongo.*
 
 // 基本文档操作
 def createUser() {

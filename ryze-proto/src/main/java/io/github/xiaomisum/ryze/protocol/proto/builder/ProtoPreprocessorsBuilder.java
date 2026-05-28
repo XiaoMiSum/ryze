@@ -35,9 +35,9 @@ import io.github.xiaomisum.ryze.support.Customizer;
 import static io.github.xiaomisum.ryze.support.groovy.Groovy.call;
 
 /**
- * Proto 前置处理器列表构建器
+ * ProtoClient 前置处理器列表构建器
  * <p>
- * 该类用于构建 Proto 前置处理器列表，提供多种方式添加 Proto 前置处理器。
+ * 该类用于构建 ProtoClient 前置处理器列表，提供多种方式添加 ProtoClient 前置处理器。
  * 它继承自 ExtensiblePreprocessorsBuilder，支持链式调用和多种配置方式。
  * </p>
  * <p>
@@ -68,7 +68,7 @@ public class ProtoPreprocessorsBuilder extends ExtensiblePreprocessorsBuilder<Pr
     }
 
     /**
-     * 添加 Proto 前置处理器
+     * 添加 ProtoClient 前置处理器
      * <p>
      * 直接添加 ProtoPreprocessor 实例到前置处理器列表中。
      * </p>
@@ -82,7 +82,7 @@ public class ProtoPreprocessorsBuilder extends ExtensiblePreprocessorsBuilder<Pr
     }
 
     /**
-     * 添加 Proto 前置处理器
+     * 添加 ProtoClient 前置处理器
      * <p>
      * 使用 Customizer 配置 ProtoPreprocessor.Builder，然后构建并添加到前置处理器列表中。
      * </p>
@@ -98,7 +98,7 @@ public class ProtoPreprocessorsBuilder extends ExtensiblePreprocessorsBuilder<Pr
     }
 
     /**
-     * 添加 Proto 前置处理器
+     * 添加 ProtoClient 前置处理器
      * <p>
      * 使用 ProtoPreprocessor.Builder 构建 ProtoPreprocessor 实例，然后添加到前置处理器列表中。
      * </p>
@@ -113,7 +113,7 @@ public class ProtoPreprocessorsBuilder extends ExtensiblePreprocessorsBuilder<Pr
 
     /**
      * /**
-     * 添加 Proto 前置处理器
+     * 添加 ProtoClient 前置处理器
      * <p>
      * 使用 Groovy Closure 配置 ProtoPreprocessor.Builder，然后构建并添加到前置处理器列表中。
      * </p>

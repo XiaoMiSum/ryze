@@ -28,7 +28,7 @@ package io.github.xiaomisum.ryze.protocol.active.processor;
 import com.alibaba.fastjson2.annotation.JSONField;
 import io.github.xiaomisum.ryze.builder.DefaultExtractorsBuilder;
 import io.github.xiaomisum.ryze.context.ContextWrapper;
-import io.github.xiaomisum.ryze.protocol.active.Active;
+import io.github.xiaomisum.ryze.protocol.active.ActiveClient;
 import io.github.xiaomisum.ryze.protocol.active.ActiveConstantsInterface;
 import io.github.xiaomisum.ryze.protocol.active.RealActiveRequest;
 import io.github.xiaomisum.ryze.protocol.active.config.ActiveConfigureItem;
@@ -115,7 +115,7 @@ public class ActivePostprocessor extends AbstractProcessor<ActivePostprocessor, 
      */
     @Override
     protected DefaultSampleResult getTestResult() {
-        return new DefaultSampleResult(runtime.getId(), StringUtils.isBlank(runtime.getTitle()) ? "Active 后置处理器" : runtime.getTitle());
+        return new DefaultSampleResult(runtime.getId(), StringUtils.isBlank(runtime.getTitle()) ? "ActiveClient 后置处理器" : runtime.getTitle());
     }
 
     /**
@@ -126,7 +126,7 @@ public class ActivePostprocessor extends AbstractProcessor<ActivePostprocessor, 
      */
     @Override
     protected void sample(ContextWrapper context, DefaultSampleResult result) {
-        Active.execute(runtime.getConfig(), factory, message, result);
+        ActiveClient.execute(runtime.getConfig(), factory, message, result);
     }
 
 

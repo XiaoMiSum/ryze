@@ -57,7 +57,7 @@ import java.util.function.Supplier;
  * @see Assertion 断言接口
  * @see Matcher 验证规则接口
  */
-@SuppressWarnings({"rawtypes", "unchecked"})
+@SuppressWarnings({"unchecked"})
 public abstract class AbstractAssertion implements Assertion, AssertionConstantsInterface {
 
     /**
@@ -135,13 +135,13 @@ public abstract class AbstractAssertion implements Assertion, AssertionConstants
     public void assertThat(ContextWrapper context) {
         if (context.getTestResult() instanceof SampleResult result) {
             validate().valid();
-            expected = context.evaluate(expected);
+            var expectedValue = context.evaluate(expected);
             actualValue = extractActualValue(result);
             if (matcher != null && (matcher instanceof ProxyMatcher proxy)) {
                 proxy.strict = strict;
-                proxy.expectedValue = expected;
+                proxy.expectedValue = expectedValue;
             }
-            matcher = matcher == null ? Matchers.createMatcher(rule, expected, strict) : matcher;
+            matcher = matcher == null ? Matchers.createMatcher(rule, expectedValue, strict) : matcher;
             MatcherAssert.assertThat("verify field: " + field + ", ", actualValue, matcher);
         }
     }

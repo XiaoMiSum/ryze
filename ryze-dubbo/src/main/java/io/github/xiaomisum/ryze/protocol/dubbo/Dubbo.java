@@ -25,107 +25,105 @@
 
 package io.github.xiaomisum.ryze.protocol.dubbo;
 
-import io.github.xiaomisum.ryze.protocol.dubbo.config.DubboConfigureItem;
-import io.github.xiaomisum.ryze.testelement.sampler.DefaultSampleResult;
-import org.apache.dubbo.config.ApplicationConfig;
-import org.apache.dubbo.config.ReferenceConfig;
-import org.apache.dubbo.config.RegistryConfig;
-import org.apache.dubbo.rpc.RpcContext;
-import org.apache.dubbo.rpc.service.GenericService;
-
-import java.util.Objects;
+import groovy.lang.Closure;
+import groovy.lang.DelegatesTo;
+import io.github.xiaomisum.ryze.Ryze;
+import io.github.xiaomisum.ryze.Result;
+import io.github.xiaomisum.ryze.protocol.dubbo.sampler.DubboSampler;
+import io.github.xiaomisum.ryze.support.Customizer;
+import io.github.xiaomisum.ryze.support.groovy.Groovy;
 
 /**
- * Dubbo协议执行核心类
+ * Dubbo魔法盒子类
  * <p>
- * 该类负责处理Dubbo服务调用的核心逻辑，包括创建服务引用配置、执行服务调用等。<br>
- * 作为Dubbo协议测试的核心组件，它将配置信息转换为Dubbo框架所需的配置对象，<br>
- * 并执行实际的服务调用，收集调用结果和性能数据。<br>
+ * 该类是Dubbo协议测试的入口类，提供函数式编程接口来执行Dubbo测试。<br>
+ * 继承自MagicBox基类，封装了测试执行的核心逻辑。<br>
+ * 支持Groovy闭包和Java函数式接口两种配置方式，提供灵活的测试执行入口。<br>
  * </p>
  * <p>
  * 业务处理逻辑：
  * <ol>
- *   <li>根据测试配置创建Dubbo服务引用配置</li>
- *   <li>设置注册中心、应用、服务引用等相关配置</li>
- *   <li>执行服务调用，处理附加参数和调用参数</li>
- *   <li>收集调用结果和性能数据</li>
+ *   <li>提供静态方法作为测试执行入口</li>
+ *   <li>支持通过Groovy闭包配置测试参数</li>
+ *   <li>支持通过Java函数式接口配置测试参数</li>
+ *   <li>创建Dubbo取样器并执行测试</li>
+ *   <li>返回测试执行结果</li>
  * </ol>
  * </p>
  *
- * @author mi.xiao
+ * @author xiaomi
  * @since 1.0.0
  */
 public class Dubbo {
 
     /**
-     * 处理Dubbo请求配置
+     * 执行Dubbo测试（通过Groovy闭包配置，无标题）
      * <p>
-     * 根据提供的Dubbo配置项创建Dubbo服务引用配置。<br>
-     * 该方法将测试框架的配置对象转换为Dubbo框架所需的配置对象，<br>
-     * 包括设置注册中心、应用、服务引用等相关配置。<br>
-     * 这是执行Dubbo服务调用的第一步，为后续的服务调用做好准备。
+     * 通过Groovy闭包配置并执行Dubbo测试，不指定测试标题。<br>
+     * 该方法提供了一种Groovy DSL的方式来执行测试，适用于支持Groovy的环境。<br>
+     * 例如：dubbo { interfaceName "com.example.service.DemoService" }<br>
+     * 内部会创建默认标题为空字符串的测试并执行。
      * </p>
      *
-     * @param config Dubbo配置项，包含服务调用所需的所有配置信息
-     * @return Dubbo服务引用配置，用于执行实际的服务调用
+     * @param closure Groovy闭包，用于配置Dubbo取样器
+     * @return 测试执行结果
      */
-    public static ReferenceConfig<GenericService> handleRequest(DubboConfigureItem config) {
-        var registryConfig = config.getRegistry();
-        var referenceConfig = config.getReference();
-        var request = new ReferenceConfig<GenericService>();
-        // 设置泛化调用
-        request.setGeneric("true");
-        // 设置应用配置
-        request.getApplicationModel().getApplicationConfigManager().setApplication(new ApplicationConfig("ryze-dubbo-consumer"));
-        // 设置服务引用配置
-        request.setVersion(referenceConfig.getVersion());
-        request.setGroup(referenceConfig.getGroup());
-        request.setRetries(referenceConfig.getRetries());
-        request.setTimeout(referenceConfig.getTimeout());
-        request.setAsync(referenceConfig.getAsync());
-        request.setLoadbalance(referenceConfig.getLoadBalance());
-        request.setInterface(config.getInterfaceName());
-        // 设置注册中心配置
-        var registry = new RegistryConfig();
-        registry.setAddress(registryConfig.getAddress());
-        registry.setGroup(registryConfig.getGroup());
-        registry.setUsername(registryConfig.getUsername());
-        registry.setPassword(registryConfig.getPassword());
-        registry.setVersion(registryConfig.getVersion());
-        registry.setTimeout(registry.getTimeout());
-        request.setRegistry(registry);
-        return request;
+    public static Result dubbo(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = DubboSampler.Builder.class) Closure<?> closure) {
+        return dubbo("", closure);
     }
 
     /**
-     * 执行Dubbo服务调用
+     * 执行Dubbo测试（通过Groovy闭包配置，指定标题）
      * <p>
-     * 执行实际的Dubbo服务调用，处理附加参数和调用参数。<br>
-     * 在调用过程中收集性能数据，包括调用开始时间和结束时间。<br>
-     * 这是Dubbo服务调用的核心方法，返回服务调用的结果。<br>
+     * 通过Groovy闭包配置并执行Dubbo测试，指定测试标题。<br>
+     * 该方法提供了一种Groovy DSL的方式来执行测试，适用于支持Groovy的环境。<br>
+     * 例如：dubbo("测试用户查询") { interfaceName "com.example.service.DemoService" }<br>
+     * 内部会创建指定标题的测试并执行，标题将显示在测试报告中。
      * </p>
      *
-     * @param request Dubbo服务引用配置，用于执行服务调用
-     * @param config  Dubbo配置项，包含服务调用所需的所有配置信息
-     * @param result  测试结果对象，用于收集性能数据
-     * @return 服务调用结果，可能为null
+     * @param title   测试标题，显示在测试报告中
+     * @param closure Groovy闭包，用于配置Dubbo取样器
+     * @return 测试执行结果
      */
-    public static Object execute(ReferenceConfig<GenericService> request, DubboConfigureItem config, DefaultSampleResult result) {
-        try {
-            // 如果配置了附加参数，则设置到RpcContext中
-            if (Objects.nonNull(config.getAttachmentArgs()) && !config.getAttachmentArgs().isEmpty()) {
-                RpcContext.getClientAttachment().setAttachments(config.getAttachmentArgs());
-            }
-            // 准备参数类型数组和参数值数组
-            var parameterTypes = Objects.isNull(config.getParameterTypes()) ? new String[0] : config.getParameterTypes().toArray(String[]::new);
-            var parameters = Objects.isNull(config.getParameters()) ? new Object[0] : config.getParameters().toArray();
-            // 标记调用开始时间
-            result.sampleStart();
-            // 执行服务调用并返回结果
-            return request.get().$invoke(config.getMethod(), parameterTypes, parameters);
-        } finally {
-            // 标记调用结束时间，确保即使出现异常也能正确记录结束时间
-            result.sampleEnd();
-        }
+    public static Result dubbo(String title,
+                               @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = DubboSampler.Builder.class) Closure<?> closure) {
+        var builder = DubboSampler.builder();
+        Groovy.call(closure, builder);
+        return Ryze.runTest(title, builder.build());
+    }
+
+    /**
+     * 执行Dubbo测试（通过Java函数式接口配置，无标题）
+     * <p>
+     * 通过Java函数式接口配置并执行Dubbo测试，不指定测试标题。<br>
+     * 该方法提供了一种函数式编程的方式来执行测试，适用于Java 8及以上版本。<br>
+     * 例如：dubbo(builder -> builder.interfaceName("com.example.service.DemoService"))<br>
+     * 内部会创建默认标题为空字符串的测试并执行。
+     * </p>
+     *
+     * @param customizer Dubbo取样器构建器的自定义器函数式接口
+     * @return 测试执行结果
+     */
+    public static Result dubbo(Customizer<DubboSampler.Builder> customizer) {
+        return dubbo("", customizer);
+    }
+
+    /**
+     * 执行Dubbo测试（通过Java函数式接口配置，指定标题）
+     * <p>
+     * 通过Java函数式接口配置并执行Dubbo测试，指定测试标题。<br>
+     * 该方法提供了一种函数式编程的方式来执行测试，适用于Java 8及以上版本。<br>
+     * 例如：dubbo("测试用户查询", builder -> builder.interfaceName("com.example.service.DemoService"))<br>
+     * 内部会创建指定标题的测试并执行，标题将显示在测试报告中。
+     * </p>
+     *
+     * @param title      测试标题，显示在测试报告中
+     * @param customizer Dubbo取样器构建器的自定义器函数式接口
+     * @return 测试执行结果
+     */
+    public static Result dubbo(String title, Customizer<DubboSampler.Builder> customizer) {
+        var builder = DubboSampler.builder();
+        customizer.customize(builder);
+        return Ryze.runTest(title, builder.build());
     }
 }

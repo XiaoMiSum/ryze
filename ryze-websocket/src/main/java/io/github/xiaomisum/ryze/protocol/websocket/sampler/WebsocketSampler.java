@@ -33,7 +33,7 @@ import io.github.xiaomisum.ryze.builder.*;
 import io.github.xiaomisum.ryze.context.ContextWrapper;
 import io.github.xiaomisum.ryze.protocol.websocket.RealWebsocketRequest;
 import io.github.xiaomisum.ryze.protocol.websocket.RealWebsocketResponse;
-import io.github.xiaomisum.ryze.protocol.websocket.Websocket;
+import io.github.xiaomisum.ryze.protocol.websocket.WebsocketClient;
 import io.github.xiaomisum.ryze.protocol.websocket.WebsocketConstantsInterface;
 import io.github.xiaomisum.ryze.protocol.websocket.config.WebsocketConfigureItem;
 import io.github.xiaomisum.ryze.testelement.KW;
@@ -72,7 +72,7 @@ public class WebsocketSampler extends AbstractSampler<WebsocketSampler, Websocke
 
     @Override
     protected void sample(ContextWrapper context, DefaultSampleResult result) {
-        response = Websocket.execute(request, runtime.getConfig(), result);
+        response = WebsocketClient.execute(request, runtime.getConfig(), result);
     }
 
     @Override
@@ -83,7 +83,7 @@ public class WebsocketSampler extends AbstractSampler<WebsocketSampler, Websocke
         var otherConfig = (WebsocketConfigureItem) context.getLocalVariablesWrapper().get(localConfig.getRef());
         runtime.setConfig(localConfig.merge(otherConfig));
         // 2. 创建websocket request对象
-        request = Websocket.build(runtime.getConfig());
+        request = WebsocketClient.build(runtime.getConfig());
         result.setRequest(new RealWebsocketRequest(request));
     }
 
@@ -94,7 +94,7 @@ public class WebsocketSampler extends AbstractSampler<WebsocketSampler, Websocke
     }
 
     /**
-     * Websocket 取样器构建器
+     * WebsocketClient 取样器构建器
      */
     public static class Builder extends AbstractSampler.Builder<WebsocketSampler, Builder, WebsocketConfigureItem,
             WebsocketConfigureItem.Builder, DefaultConfigureElementsBuilder, DefaultPreprocessorsBuilder, DefaultPostprocessorsBuilder,

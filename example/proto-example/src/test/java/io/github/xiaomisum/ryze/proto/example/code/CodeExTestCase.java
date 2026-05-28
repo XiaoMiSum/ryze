@@ -1,9 +1,9 @@
 package io.github.xiaomisum.ryze.proto.example.code;
 
-import io.github.xiaomisum.ryze.protocol.proto.ProtoMagicBox;
+import io.github.xiaomisum.ryze.proto.example.mock.MockProtoHttpServer;
+import io.github.xiaomisum.ryze.protocol.proto.Proto;
 import io.github.xiaomisum.ryze.protocol.proto.builder.ProtoConfigureElementsBuilder;
 import io.github.xiaomisum.ryze.protocol.proto.builder.ProtoPreprocessorsBuilder;
-import io.github.xiaomisum.ryze.proto.example.mock.MockProtoHttpServer;
 import io.github.xiaomisum.ryze.support.testng.RyzeBasicTestcase4TestNG;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeSuite;
@@ -24,7 +24,7 @@ public class CodeExTestCase extends RyzeBasicTestcase4TestNG {
     @Test
     public void test1() {
         // 基于 http 协议的 protobuf
-        ProtoMagicBox.proto("测试用例-http-protobuf", sampler -> {
+        Proto.proto("测试用例-http-protobuf", sampler -> {
             sampler.configureElements(ProtoConfigureElementsBuilder.class, ele -> ele.proto(
                     proto -> proto.config(config -> config.baseUrl("http://127.0.0.1:8080")
                             .protoDesc(b -> b.descPath("D:\\Github\\ryze\\example\\proto-example\\user.desc")
@@ -46,7 +46,7 @@ public class CodeExTestCase extends RyzeBasicTestcase4TestNG {
     @Test
     public void test2() {
         // 基于 websocket 协议的 protobuf
-        ProtoMagicBox.proto("测试用例-websocket-protobuf", sampler -> {
+        Proto.proto("测试用例-websocket-protobuf", sampler -> {
             sampler.configureElements(ProtoConfigureElementsBuilder.class, ele -> ele.proto(
                     proto -> proto.config(config -> config.baseUrl("ws://127.0.0.1:8080")
                             .protoDesc(b -> b.descPath("D:\\Github\\ryze\\example\\proto-example\\user.desc")

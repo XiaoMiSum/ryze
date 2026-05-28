@@ -1,7 +1,7 @@
 package io.github.xiaomisum.ryze.dubbo.example.code
 
-
-import io.github.xiaomisum.ryze.protocol.dubbo.DubboMagicBox
+import io.github.xiaomisum.ryze.Ryze
+import io.github.xiaomisum.ryze.protocol.dubbo.Dubbo
 import io.github.xiaomisum.ryze.protocol.dubbo.builder.DubboConfigureElementsBuilder
 import io.github.xiaomisum.ryze.protocol.dubbo.builder.DubboPreprocessorsBuilder
 import io.github.xiaomisum.ryze.protocol.dubbo.builder.DubboSamplersBuilder
@@ -14,7 +14,7 @@ class GroovyCodeTestCase {
     @Test
     @RyzeTest
     void test1() {
-        DubboMagicBox.suite("测试用例", {
+        Ryze.suite("测试用例", {
             variables("id", 1)
             variables { put("tick", "ryze") }
             variables Map.of("a", 1, "b", 2)
@@ -68,7 +68,7 @@ class GroovyCodeTestCase {
     @Test
     @RyzeTest
     void test2() {
-        DubboMagicBox.dubbo("测试用例- test2()", sampler -> {
+        Dubbo.dubbo("测试用例- test2()", sampler -> {
             configureElements(DubboConfigureElementsBuilder.class, {
                 dubbo {
                     config {
@@ -105,7 +105,7 @@ class GroovyCodeTestCase {
     @Test
     @RyzeTest
     void test3() {
-        DubboMagicBox.dubbo({
+        Dubbo.dubbo({
             title "步骤1——插入用户：tick = redis_preprocessor"
             configureElements(DubboConfigureElementsBuilder.class, {
                 dubbo {
@@ -129,7 +129,7 @@ class GroovyCodeTestCase {
             }
         })
 
-        DubboMagicBox.dubbo({
+        Dubbo.dubbo({
             title "步骤2——查找用户：tick = ryze_http_sampler"
             configureElements(DubboConfigureElementsBuilder.class, {
                 dubbo {

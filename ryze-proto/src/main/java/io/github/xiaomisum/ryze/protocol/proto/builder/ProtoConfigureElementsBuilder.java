@@ -34,9 +34,9 @@ import io.github.xiaomisum.ryze.support.Customizer;
 import static io.github.xiaomisum.ryze.support.groovy.Groovy.call;
 
 /**
- * Proto 配置元件列表构建器
+ * ProtoClient 配置元件列表构建器
  * <p>
- * 该类用于构建 Proto 配置元件列表，提供多种方式添加 Proto 配置元件。
+ * 该类用于构建 ProtoClient 配置元件列表，提供多种方式添加 ProtoClient 配置元件。
  * 它继承自 ExtensibleConfigureElementsBuilder，支持链式调用和多种配置方式。
  * </p>
  * <p>
@@ -67,7 +67,7 @@ public class ProtoConfigureElementsBuilder extends ExtensibleConfigureElementsBu
     }
 
     /**
-     * 添加 Proto 配置元件
+     * 添加 ProtoClient 配置元件
      * <p>
      * 直接添加 ProtoDefaults 实例到配置元件列表中。
      * </p>
@@ -81,7 +81,7 @@ public class ProtoConfigureElementsBuilder extends ExtensibleConfigureElementsBu
     }
 
     /**
-     * 添加 Proto 配置元件
+     * 添加 ProtoClient 配置元件
      * <p>
      * 使用 Customizer 配置 ProtoDefaults.Builder，然后构建并添加到配置元件列表中。
      * </p>
@@ -97,7 +97,7 @@ public class ProtoConfigureElementsBuilder extends ExtensibleConfigureElementsBu
     }
 
     /**
-     * 添加 Proto 配置元件
+     * 添加 ProtoClient 配置元件
      * <p>
      * 使用 ProtoDefaults.Builder 构建 ProtoDefaults 实例，然后添加到配置元件列表中。
      * </p>
@@ -111,7 +111,7 @@ public class ProtoConfigureElementsBuilder extends ExtensibleConfigureElementsBu
     }
 
     /**
-     * 添加 Proto 配置元件
+     * 添加 ProtoClient 配置元件
      * <p>
      * 使用 Groovy Closure 配置 ProtoDefaults.Builder，然后构建并添加到配置元件列表中。
      * </p>

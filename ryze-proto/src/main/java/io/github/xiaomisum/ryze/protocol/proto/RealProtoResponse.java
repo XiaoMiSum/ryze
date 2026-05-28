@@ -74,7 +74,7 @@ public class RealProtoResponse extends SampleResult.RealResponse {
      * @param response HTTP响应对象
      */
     public RealProtoResponse(io.github.xiaomisum.simplewebsocket.Response response, Descriptors.Descriptor descriptor) {
-        body = Objects.isNull(response) ? "" : response.text(bytes -> Proto.convert(response.bytes(), descriptor));
+        body = Objects.isNull(response) ? "" : response.text(bytes -> ProtoClient.convert(response.bytes(), descriptor));
         status = response.status();
     }
 
@@ -84,7 +84,7 @@ public class RealProtoResponse extends SampleResult.RealResponse {
      * @param response HTTP响应对象
      */
     public RealProtoResponse(Response response, Descriptors.Descriptor descriptor) {
-        body = Objects.isNull(response) ? "" : response.text(bytes -> Proto.convert(response.bytes(), descriptor));
+        body = Objects.isNull(response) ? "" : response.text(bytes -> ProtoClient.convert(response.bytes(), descriptor));
         status = response.statusCode();
         version = response.version();
         message = response.message();

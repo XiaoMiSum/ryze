@@ -1,6 +1,7 @@
 package io.github.xiaomisum.ryze.websocket.example.code
 
-import io.github.xiaomisum.ryze.protocol.websocket.WebsocketMagicBox
+import io.github.xiaomisum.ryze.Ryze
+import io.github.xiaomisum.ryze.protocol.websocket.Websocket
 import io.github.xiaomisum.ryze.protocol.websocket.builder.WebsocketConfigureElementsBuilder
 import io.github.xiaomisum.ryze.protocol.websocket.builder.WebsocketPreprocessorsBuilder
 import io.github.xiaomisum.ryze.protocol.websocket.builder.WebsocketSamplersBuilder
@@ -32,7 +33,7 @@ class GroovyCodeTestCase {
         // 这样的好处：
         //      1、所有步骤共用suite中配置的变量和默认配置，可以减少重复代码
         //      2、前置步骤提取的变量，会自动添加到 suite 中，后续步骤可以直接使用
-        WebsocketMagicBox.suite {
+        Ryze.suite {
             title "测试用例"
             configureElements(WebsocketConfigureElementsBuilder.class, {
                 ws {
@@ -76,7 +77,7 @@ class GroovyCodeTestCase {
         // 以 Sampler 作为主执行步骤，其他步骤以 preprocessors 、 postprocessors 执行
         // 执行顺序：preprocessors -> sampler -> postprocessors
         // 注意：preprocessors 、 postprocessors 无断言功能，需断言的步骤应当为 Sampler
-        WebsocketMagicBox.ws {
+        Websocket.ws {
             title "测试用例- test2()"
             configureElements(WebsocketConfigureElementsBuilder.class, {
                 ws {

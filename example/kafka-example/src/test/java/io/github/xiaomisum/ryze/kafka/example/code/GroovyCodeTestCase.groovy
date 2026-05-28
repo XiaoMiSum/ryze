@@ -1,7 +1,8 @@
 package io.github.xiaomisum.ryze.kafka.example.code
 
+import io.github.xiaomisum.ryze.Ryze
 import io.github.xiaomisum.ryze.kafka.example.TestObj
-import io.github.xiaomisum.ryze.protocol.kafka.KafkaMagicBox
+import io.github.xiaomisum.ryze.protocol.kafka.Kafka
 import io.github.xiaomisum.ryze.protocol.kafka.builder.KafkaConfigureElementsBuilder
 import io.github.xiaomisum.ryze.protocol.kafka.builder.KafkaPostprocessorsBuilder
 import io.github.xiaomisum.ryze.protocol.kafka.builder.KafkaPreprocessorsBuilder
@@ -15,7 +16,7 @@ class GroovyCodeTestCase {
     @Test
     @RyzeTest
     void test1() {
-        KafkaMagicBox.suite("测试用例", {
+        Ryze.suite("测试用例", {
             variables("id", 1)
             variables { put("tick", "ryze") }
             variables Map.of("a", 1, "b", 2)
@@ -67,7 +68,7 @@ class GroovyCodeTestCase {
     @Test
     @RyzeTest
     void test2() {
-        KafkaMagicBox.kafka("测试用例- test2()", sampler -> {
+        Kafka.kafka("测试用例- test2()", sampler -> {
             configureElements(KafkaConfigureElementsBuilder.class, {
                 kafka {
                     config {
@@ -96,7 +97,7 @@ class GroovyCodeTestCase {
     @Test
     @RyzeTest
     void test3() {
-        KafkaMagicBox.kafka({
+        Kafka.kafka({
             title "步骤1——插入用户：tick = redis_preprocessor"
             configureElements(KafkaConfigureElementsBuilder.class, {
                 kafka {
@@ -112,7 +113,7 @@ class GroovyCodeTestCase {
             }
         })
 
-        KafkaMagicBox.kafka({
+        Kafka.kafka({
             title "步骤2——查找用户：tick = ryze_http_sampler"
             configureElements(KafkaConfigureElementsBuilder.class, {
                 kafka {

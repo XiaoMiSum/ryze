@@ -29,7 +29,7 @@ import com.alibaba.fastjson2.annotation.JSONField;
 import io.github.xiaomisum.ryze.builder.DefaultAssertionsBuilder;
 import io.github.xiaomisum.ryze.builder.DefaultExtractorsBuilder;
 import io.github.xiaomisum.ryze.context.ContextWrapper;
-import io.github.xiaomisum.ryze.protocol.kafka.Kafka;
+import io.github.xiaomisum.ryze.protocol.kafka.KafkaClient;
 import io.github.xiaomisum.ryze.protocol.kafka.KafkaConstantsInterface;
 import io.github.xiaomisum.ryze.protocol.kafka.RealKafkaRequest;
 import io.github.xiaomisum.ryze.protocol.kafka.builder.KafkaConfigureElementsBuilder;
@@ -135,7 +135,7 @@ public class KafkaSampler extends AbstractSampler<KafkaSampler, KafkaConfigureIt
      */
     @Override
     protected void sample(ContextWrapper context, DefaultSampleResult result) {
-        response = Kafka.execute(runtime.config, message, result);
+        response = KafkaClient.execute(runtime.config, message, result);
     }
 
 

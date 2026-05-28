@@ -36,7 +36,7 @@ import java.util.Map;
 import static io.github.xiaomisum.ryze.protocol.kafka.KafkaConstantsInterface.DEF_REF_NAME_KEY;
 import static io.github.xiaomisum.ryze.protocol.kafka.KafkaConstantsInterface.SERIALIZER_CLASS;
 
-public class KafkaConfigureItemTest {
+public class KafkaClientConfigureItemTest {
 
     @Test
     public void testBuilder() {

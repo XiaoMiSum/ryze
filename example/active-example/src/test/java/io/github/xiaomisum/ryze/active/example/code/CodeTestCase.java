@@ -1,6 +1,7 @@
 package io.github.xiaomisum.ryze.active.example.code;
 
-import io.github.xiaomisum.ryze.protocol.active.ActiveMagicBox;
+import io.github.xiaomisum.ryze.Ryze;
+import io.github.xiaomisum.ryze.protocol.active.Active;
 import io.github.xiaomisum.ryze.protocol.active.builder.ActiveConfigureElementsBuilder;
 import io.github.xiaomisum.ryze.protocol.active.builder.ActivePostprocessorsBuilder;
 import io.github.xiaomisum.ryze.protocol.active.builder.ActivePreprocessorsBuilder;
@@ -16,7 +17,7 @@ public class CodeTestCase {
     @Test
     @RyzeTest
     public void test1() {
-        ActiveMagicBox.suite("测试用例", suite -> {
+        Ryze.suite("测试用例", suite -> {
             suite.variables("id", 1);
             suite.variables(var -> var.put("tick", "active_preprocessor"));
             suite.variables(Map.of("a", 1, "b", 2));
@@ -45,7 +46,7 @@ public class CodeTestCase {
     @Test
     @RyzeTest
     public void test2() {
-        ActiveMagicBox.active("测试用例- test2()", sampler -> {
+        Active.active("测试用例- test2()", sampler -> {
             sampler.configureElements(ActiveConfigureElementsBuilder.class, builder -> builder
                     .active(active -> active.config(config -> config.username("artemis").password("artemis").topic("ryze.topic").brokerUrl("tcp://127.0.0.1:61616")))
             );
@@ -62,7 +63,7 @@ public class CodeTestCase {
     @Test
     @RyzeTest
     public void test3() {
-        ActiveMagicBox.active("测试用例- test3()-1", sampler -> {
+        Active.active("测试用例- test3()-1", sampler -> {
             sampler.configureElements(ActiveConfigureElementsBuilder.class, builder -> builder
                     .active(active -> active.config(config -> config.username("artemis").password("artemis").topic("ryze.topic").brokerUrl("tcp://127.0.0.1:61616")))
             );
@@ -70,7 +71,7 @@ public class CodeTestCase {
         });
 
 
-        ActiveMagicBox.active("测试用例- test3()-2", sampler -> {
+        Active.active("测试用例- test3()-2", sampler -> {
             sampler.configureElements(ActiveConfigureElementsBuilder.class, builder -> builder
                     .active(active -> active.config(config -> config.username("artemis").password("artemis").topic("ryze.topic").brokerUrl("tcp://127.0.0.1:61616")))
             );

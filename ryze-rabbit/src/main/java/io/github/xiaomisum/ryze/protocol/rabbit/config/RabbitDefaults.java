@@ -105,7 +105,7 @@ public class RabbitDefaults extends AbstractConfigureElement<RabbitDefaults, Rab
      */
     @Override
     protected TestSuiteResult getTestResult() {
-        return new TestSuiteResult("Rabbit MQ 默认配置" + (StringUtils.isBlank(refName) ? "" : "：" + runtime.getRefName()));
+        return new TestSuiteResult("RabbitClient MQ 默认配置" + (StringUtils.isBlank(refName) ? "" : "：" + runtime.getRefName()));
     }
 
     /**

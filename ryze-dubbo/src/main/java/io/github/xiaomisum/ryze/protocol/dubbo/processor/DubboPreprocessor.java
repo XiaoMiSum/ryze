@@ -29,7 +29,7 @@ import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.annotation.JSONField;
 import io.github.xiaomisum.ryze.builder.DefaultExtractorsBuilder;
 import io.github.xiaomisum.ryze.context.ContextWrapper;
-import io.github.xiaomisum.ryze.protocol.dubbo.Dubbo;
+import io.github.xiaomisum.ryze.protocol.dubbo.DubboClient;
 import io.github.xiaomisum.ryze.protocol.dubbo.DubboConstantsInterface;
 import io.github.xiaomisum.ryze.protocol.dubbo.RealDubboRequest;
 import io.github.xiaomisum.ryze.protocol.dubbo.config.DubboConfigureItem;
@@ -115,7 +115,7 @@ public class DubboPreprocessor extends AbstractProcessor<DubboPreprocessor, Dubb
      */
     @Override
     protected DefaultSampleResult getTestResult() {
-        return new DefaultSampleResult(runtime.getId(), StringUtils.isBlank(runtime.getTitle()) ? "Dubbo 前置处理器" : runtime.getTitle());
+        return new DefaultSampleResult(runtime.getId(), StringUtils.isBlank(runtime.getTitle()) ? "DubboClient 前置处理器" : runtime.getTitle());
     }
 
     /**
@@ -130,7 +130,7 @@ public class DubboPreprocessor extends AbstractProcessor<DubboPreprocessor, Dubb
      */
     @Override
     protected void sample(ContextWrapper context, DefaultSampleResult result) {
-        response = Dubbo.execute(request, runtime.getConfig(), result);
+        response = DubboClient.execute(request, runtime.getConfig(), result);
     }
 
     /**
@@ -154,7 +154,7 @@ public class DubboPreprocessor extends AbstractProcessor<DubboPreprocessor, Dubb
         var otherConfig = (DubboConfigureItem) context.getLocalVariablesWrapper().get(ref);
         runtime.setConfig(localConfig.merge(otherConfig));
         // 2. 创建Dubbo对象
-        request = Dubbo.handleRequest(runtime.getConfig());
+        request = DubboClient.handleRequest(runtime.getConfig());
         result.setRequest(RealDubboRequest.build(runtime.getConfig(), request.getRegistry().getAddress()));
     }
 

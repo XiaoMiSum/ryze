@@ -35,9 +35,9 @@ import io.github.xiaomisum.ryze.support.Customizer;
 import static io.github.xiaomisum.ryze.support.groovy.Groovy.call;
 
 /**
- * Proto 后置处理器列表构建器
+ * ProtoClient 后置处理器列表构建器
  * <p>
- * 该类用于构建 Proto 后置处理器列表，提供多种方式添加 Proto 后置处理器。
+ * 该类用于构建 ProtoClient 后置处理器列表，提供多种方式添加 ProtoClient 后置处理器。
  * 它继承自 ExtensiblePostprocessorsBuilder，支持链式调用和多种配置方式。
  * </p>
  * <p>
@@ -68,7 +68,7 @@ public class ProtoPostprocessorsBuilder extends ExtensiblePostprocessorsBuilder<
     }
 
     /**
-     * 添加 Proto 后置处理器
+     * 添加 ProtoClient 后置处理器
      * <p>
      * 直接添加 ProtoPostprocessor 实例到后置处理器列表中。
      * </p>
@@ -82,7 +82,7 @@ public class ProtoPostprocessorsBuilder extends ExtensiblePostprocessorsBuilder<
     }
 
     /**
-     * 添加 Proto 后置处理器
+     * 添加 ProtoClient 后置处理器
      * <p>
      * 使用 Customizer 配置 ProtoPostprocessor.Builder，然后构建并添加到后置处理器列表中。
      * </p>
@@ -98,7 +98,7 @@ public class ProtoPostprocessorsBuilder extends ExtensiblePostprocessorsBuilder<
     }
 
     /**
-     * 添加 Proto 后置处理器
+     * 添加 ProtoClient 后置处理器
      * <p>
      * 使用 ProtoPostprocessor.Builder 构建 ProtoPostprocessor 实例，然后添加到后置处理器列表中。
      * </p>
@@ -112,7 +112,7 @@ public class ProtoPostprocessorsBuilder extends ExtensiblePostprocessorsBuilder<
     }
 
     /**
-     * 添加 Proto 后置处理器
+     * 添加 ProtoClient 后置处理器
      * <p>
      * 使用 Groovy Closure 配置 ProtoPostprocessor.Builder，然后构建并添加到后置处理器列表中。
      * </p>

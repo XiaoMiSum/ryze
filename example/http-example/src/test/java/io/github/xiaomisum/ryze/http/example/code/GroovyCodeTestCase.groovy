@@ -1,5 +1,6 @@
 package io.github.xiaomisum.ryze.http.example.code
 
+import io.github.xiaomisum.ryze.Ryze
 import io.github.xiaomisum.ryze.http.example.mock.MockHttpServer
 import io.github.xiaomisum.ryze.support.Collections
 import io.github.xiaomisum.ryze.support.testng.annotation.RyzeTest

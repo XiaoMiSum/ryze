@@ -35,7 +35,7 @@ import java.util.Map;
 
 import static io.github.xiaomisum.ryze.protocol.rabbit.RabbitConstantsInterface.DEF_REF_NAME_KEY;
 
-public class RabbitConfigureItemTest {
+public class RabbitClientConfigureItemTest {
 
     @Test
     public void testBuilder() {

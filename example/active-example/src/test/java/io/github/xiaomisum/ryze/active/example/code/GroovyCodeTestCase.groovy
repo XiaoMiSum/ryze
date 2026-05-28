@@ -1,7 +1,8 @@
 package io.github.xiaomisum.ryze.active.example.code
 
+import io.github.xiaomisum.ryze.Ryze
 import io.github.xiaomisum.ryze.active.example.TestObj
-import io.github.xiaomisum.ryze.protocol.active.ActiveMagicBox
+import io.github.xiaomisum.ryze.protocol.active.Active
 import io.github.xiaomisum.ryze.protocol.active.builder.ActiveConfigureElementsBuilder
 import io.github.xiaomisum.ryze.protocol.active.builder.ActivePostprocessorsBuilder
 import io.github.xiaomisum.ryze.protocol.active.builder.ActivePreprocessorsBuilder
@@ -15,7 +16,7 @@ class GroovyCodeTestCase {
     @Test
     @RyzeTest
     void test1() {
-        ActiveMagicBox.suite("测试用例", {
+        Ryze.suite("测试用例", {
             variables("id", 1)
             variables { put("tick", "ryze") }
             variables Map.of("a", 1, "b", 2)
@@ -68,7 +69,7 @@ class GroovyCodeTestCase {
     @Test
     @RyzeTest
     void test2() {
-        ActiveMagicBox.active("测试用例- test2()", sampler -> {
+        Active.active("测试用例- test2()", sampler -> {
             configureElements(ActiveConfigureElementsBuilder.class, {
                 active {
                     config {
@@ -98,7 +99,7 @@ class GroovyCodeTestCase {
     @Test
     @RyzeTest
     void test3() {
-        ActiveMagicBox.active({
+        Active.active({
             title "步骤1——插入用户：tick = redis_preprocessor"
             configureElements(ActiveConfigureElementsBuilder.class, {
                 active {
@@ -115,7 +116,7 @@ class GroovyCodeTestCase {
             }
         })
 
-        ActiveMagicBox.active({
+        Active.active({
             title "步骤2——查找用户：tick = ryze_http_sampler"
             configureElements(ActiveConfigureElementsBuilder.class, {
                 active {

@@ -33,7 +33,7 @@ import io.github.xiaomisum.ryze.builder.DefaultExtractorsBuilder;
 import io.github.xiaomisum.ryze.context.ContextWrapper;
 import io.github.xiaomisum.ryze.protocol.websocket.RealWebsocketRequest;
 import io.github.xiaomisum.ryze.protocol.websocket.RealWebsocketResponse;
-import io.github.xiaomisum.ryze.protocol.websocket.Websocket;
+import io.github.xiaomisum.ryze.protocol.websocket.WebsocketClient;
 import io.github.xiaomisum.ryze.protocol.websocket.WebsocketConstantsInterface;
 import io.github.xiaomisum.ryze.protocol.websocket.config.WebsocketConfigureItem;
 import io.github.xiaomisum.ryze.testelement.KW;
@@ -72,12 +72,12 @@ public class WebsocketPostprocessor extends AbstractProcessor<WebsocketPostproce
 
     @Override
     protected DefaultSampleResult getTestResult() {
-        return new DefaultSampleResult(runtime.getId(), StringUtils.isBlank(runtime.getTitle()) ? "Websocket 后置处理器" : runtime.getTitle());
+        return new DefaultSampleResult(runtime.getId(), StringUtils.isBlank(runtime.getTitle()) ? "WebsocketClient 后置处理器" : runtime.getTitle());
     }
 
     @Override
     protected void sample(ContextWrapper context, DefaultSampleResult result) {
-        response = Websocket.execute(request, runtime.getConfig(), result);
+        response = WebsocketClient.execute(request, runtime.getConfig(), result);
     }
 
     @Override
@@ -88,7 +88,7 @@ public class WebsocketPostprocessor extends AbstractProcessor<WebsocketPostproce
         var otherConfig = (WebsocketConfigureItem) context.getLocalVariablesWrapper().get(localConfig.getRef());
         runtime.setConfig(localConfig.merge(otherConfig));
         // 2. 创建websocket request对象
-        request = Websocket.build(runtime.getConfig());
+        request = WebsocketClient.build(runtime.getConfig());
         result.setRequest(new RealWebsocketRequest(request));
     }
 
@@ -99,7 +99,7 @@ public class WebsocketPostprocessor extends AbstractProcessor<WebsocketPostproce
     }
 
     /**
-     * Websocket 后置处理器构建器
+     * WebsocketClient 后置处理器构建器
      */
     public static class Builder extends PostprocessorBuilder<WebsocketPostprocessor, Builder, WebsocketConfigureItem,
             WebsocketConfigureItem.Builder, DefaultExtractorsBuilder, DefaultSampleResult> {

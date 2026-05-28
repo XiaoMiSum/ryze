@@ -111,7 +111,7 @@ public class DubboDefaults extends AbstractConfigureElement<DubboDefaults, Dubbo
      */
     @Override
     protected TestSuiteResult getTestResult() {
-        return new TestSuiteResult("Dubbo 默认配置" + (StringUtils.isBlank(refName) ? "" : "：" + runtime.getRefName()));
+        return new TestSuiteResult("DubboClient 默认配置" + (StringUtils.isBlank(refName) ? "" : "：" + runtime.getRefName()));
     }
 
     /**

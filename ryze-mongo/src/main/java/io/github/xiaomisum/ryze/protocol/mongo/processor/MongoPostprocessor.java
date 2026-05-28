@@ -33,7 +33,7 @@ import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
 import io.github.xiaomisum.ryze.builder.DefaultExtractorsBuilder;
 import io.github.xiaomisum.ryze.context.ContextWrapper;
-import io.github.xiaomisum.ryze.protocol.mongo.Mongo;
+import io.github.xiaomisum.ryze.protocol.mongo.MongoClient;
 import io.github.xiaomisum.ryze.protocol.mongo.MongoConstantsInterface;
 import io.github.xiaomisum.ryze.protocol.mongo.MongoRealRequest;
 import io.github.xiaomisum.ryze.protocol.mongo.config.MongoConfigItem;
@@ -132,7 +132,7 @@ public class MongoPostprocessor extends AbstractProcessor<MongoPostprocessor, Mo
      */
     @Override
     protected void sample(ContextWrapper context, DefaultSampleResult result) {
-        response = Mongo.execute(settings, runtime.getConfig(), result);
+        response = MongoClient.execute(settings, runtime.getConfig(), result);
     }
 
     /**

@@ -29,7 +29,7 @@ import com.alibaba.fastjson2.annotation.JSONField;
 import com.rabbitmq.client.ConnectionFactory;
 import io.github.xiaomisum.ryze.builder.DefaultExtractorsBuilder;
 import io.github.xiaomisum.ryze.context.ContextWrapper;
-import io.github.xiaomisum.ryze.protocol.rabbit.Rabbit;
+import io.github.xiaomisum.ryze.protocol.rabbit.RabbitClient;
 import io.github.xiaomisum.ryze.protocol.rabbit.RabbitConstantsInterface;
 import io.github.xiaomisum.ryze.protocol.rabbit.RealRabbitRequest;
 import io.github.xiaomisum.ryze.protocol.rabbit.config.RabbitConfigureItem;
@@ -106,14 +106,14 @@ public class RabbitPostprocessor extends AbstractProcessor<RabbitPostprocessor, 
      */
     @Override
     protected DefaultSampleResult getTestResult() {
-        return new DefaultSampleResult(runtime.getId(), StringUtils.isBlank(runtime.getTitle()) ? "Rabbit 后置处理器" : runtime.getTitle());
+        return new DefaultSampleResult(runtime.getId(), StringUtils.isBlank(runtime.getTitle()) ? "RabbitClient 后置处理器" : runtime.getTitle());
 
     }
 
     /**
      * 执行采样操作
      * <p>
-     * 使用 Rabbit 工具类执行消息发送操作。
+     * 使用 RabbitClient 工具类执行消息发送操作。
      * </p>
      *
      * @param context 上下文包装器
@@ -121,7 +121,7 @@ public class RabbitPostprocessor extends AbstractProcessor<RabbitPostprocessor, 
      */
     @Override
     protected void sample(ContextWrapper context, DefaultSampleResult result) {
-        Rabbit.execute(factory, runtime.getConfig(), message, result);
+        RabbitClient.execute(factory, runtime.getConfig(), message, result);
     }
 
     /**
@@ -141,7 +141,7 @@ public class RabbitPostprocessor extends AbstractProcessor<RabbitPostprocessor, 
         var otherConfig = (RabbitConfigureItem) context.getLocalVariablesWrapper().get(localConfig.getRef());
         runtime.setConfig(localConfig.merge(otherConfig));
         // 2. 创建Rabbit 连接池对象
-        factory = Rabbit.handleRequest(runtime.getConfig());
+        factory = RabbitClient.handleRequest(runtime.getConfig());
         message = runtime.getConfig().getFormatMessage();
         result.setRequest(RealRabbitRequest.build(runtime.getConfig(), message));
     }

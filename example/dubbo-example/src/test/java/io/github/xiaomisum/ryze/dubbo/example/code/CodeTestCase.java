@@ -1,7 +1,7 @@
 package io.github.xiaomisum.ryze.dubbo.example.code;
 
 import io.github.xiaomisum.ryze.Ryze;
-import io.github.xiaomisum.ryze.protocol.dubbo.DubboMagicBox;
+import io.github.xiaomisum.ryze.protocol.dubbo.Dubbo;
 import io.github.xiaomisum.ryze.protocol.dubbo.builder.DubboConfigureElementsBuilder;
 import io.github.xiaomisum.ryze.protocol.dubbo.builder.DubboPostprocessorsBuilder;
 import io.github.xiaomisum.ryze.protocol.dubbo.builder.DubboPreprocessorsBuilder;
@@ -51,7 +51,7 @@ public class CodeTestCase {
     @Test
     @RyzeTest
     public void test2() {
-        DubboMagicBox.dubbo("测试用例- test2()", sampler -> {
+        Dubbo.dubbo("测试用例- test2()", sampler -> {
             sampler.configureElements(DubboConfigureElementsBuilder.builder()
                     .dubbo(dubbo -> dubbo.config(config -> config
                             .registry(registry -> registry.address("zookeeper://localhost:42181"))
@@ -71,7 +71,7 @@ public class CodeTestCase {
     @Test
     @RyzeTest
     public void test3() {
-        DubboMagicBox.dubbo("测试用例- test3()-1", sampler -> {
+        Dubbo.dubbo("测试用例- test3()-1", sampler -> {
             sampler.configureElements(DubboConfigureElementsBuilder.builder()
                     .dubbo(dubbo -> dubbo.config(config -> config
                             .registry(registry -> registry.address("zookeeper://localhost:42181"))
@@ -81,7 +81,7 @@ public class CodeTestCase {
                     .method("sayHello").parameters("步骤1: dubbo_sampler")).build();
         });
 
-        DubboMagicBox.dubbo("测试用例- test3()-2", sampler -> {
+        Dubbo.dubbo("测试用例- test3()-2", sampler -> {
             sampler.configureElements(DubboConfigureElementsBuilder.builder()
                     .dubbo(dubbo -> dubbo.config(config -> config
                             .registry(registry -> registry.address("zookeeper://localhost:42181"))

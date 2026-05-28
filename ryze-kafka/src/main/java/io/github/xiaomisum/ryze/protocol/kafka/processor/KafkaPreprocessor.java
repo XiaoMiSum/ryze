@@ -28,7 +28,7 @@ package io.github.xiaomisum.ryze.protocol.kafka.processor;
 import com.alibaba.fastjson2.annotation.JSONField;
 import io.github.xiaomisum.ryze.builder.DefaultExtractorsBuilder;
 import io.github.xiaomisum.ryze.context.ContextWrapper;
-import io.github.xiaomisum.ryze.protocol.kafka.Kafka;
+import io.github.xiaomisum.ryze.protocol.kafka.KafkaClient;
 import io.github.xiaomisum.ryze.protocol.kafka.KafkaConstantsInterface;
 import io.github.xiaomisum.ryze.protocol.kafka.RealKafkaRequest;
 import io.github.xiaomisum.ryze.protocol.kafka.config.KafkaConfigureItem;
@@ -119,7 +119,7 @@ public class KafkaPreprocessor extends AbstractProcessor<KafkaPreprocessor, Kafk
      */
     @Override
     protected DefaultSampleResult getTestResult() {
-        return new DefaultSampleResult(runtime.getId(), StringUtils.isBlank(runtime.getTitle()) ? "Kafka 前置处理器" : runtime.getTitle());
+        return new DefaultSampleResult(runtime.getId(), StringUtils.isBlank(runtime.getTitle()) ? "KafkaClient 前置处理器" : runtime.getTitle());
 
     }
 
@@ -131,7 +131,7 @@ public class KafkaPreprocessor extends AbstractProcessor<KafkaPreprocessor, Kafk
      */
     @Override
     protected void sample(ContextWrapper context, DefaultSampleResult result) {
-        response = Kafka.execute(runtime.getConfig(), message, result);
+        response = KafkaClient.execute(runtime.getConfig(), message, result);
     }
 
 

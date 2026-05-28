@@ -35,7 +35,7 @@ import java.util.Map;
 
 import static io.github.xiaomisum.ryze.protocol.active.ActiveConstantsInterface.*;
 
-public class ActiveConfigureItemTest {
+public class ActiveClientConfigureItemTest {
 
     @Test
     public void testBuilder() {

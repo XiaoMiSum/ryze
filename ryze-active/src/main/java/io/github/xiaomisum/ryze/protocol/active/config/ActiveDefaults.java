@@ -123,7 +123,7 @@ public class ActiveDefaults extends AbstractConfigureElement<ActiveDefaults, Act
      */
     @Override
     protected TestSuiteResult getTestResult() {
-        return new TestSuiteResult("Active MQ 默认配置" + (StringUtils.isBlank(refName) ? "" : "：" + runtime.getRefName()));
+        return new TestSuiteResult("ActiveClient MQ 默认配置" + (StringUtils.isBlank(refName) ? "" : "：" + runtime.getRefName()));
     }
 
     /**

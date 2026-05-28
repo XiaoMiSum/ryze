@@ -34,7 +34,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ProtoTest {
+public class ProtoClientTest {
 
     public static final String DESC_FILE_LOCAL_PATH = System.getProperty("user.dir") +
             File.separator + "src" + File.separator + "test" + File.separator + "resources" + File.separator + "user.desc";
@@ -46,9 +46,9 @@ public class ProtoTest {
     @BeforeClass
     public void setUp() {
         try {
-            Map<String, Descriptors.FileDescriptor> fileDescriptorMap = Proto.loadFileDescriptors(DESC_FILE_LOCAL_PATH);
+            Map<String, Descriptors.FileDescriptor> fileDescriptorMap = ProtoClient.loadFileDescriptors(DESC_FILE_LOCAL_PATH);
             fileDescriptor = fileDescriptorMap.values().iterator().next();
-            userDescriptor = Proto.getMessageDescriptor(fileDescriptorMap, MESSAGE_TYPE);
+            userDescriptor = ProtoClient.getMessageDescriptor(fileDescriptorMap, MESSAGE_TYPE);
         } catch (Exception e) {
             // 忽略异常，某些测试环境中可能没有测试文件
             System.out.println("Warning: Could not load test descriptor file: " + e.getMessage());
@@ -57,14 +57,14 @@ public class ProtoTest {
 
     @Test
     public void testLoadLocalPathFileDescriptors() {
-        Map<String, Descriptors.FileDescriptor> fileDescriptorMap = Proto.loadFileDescriptors(DESC_FILE_LOCAL_PATH);
+        Map<String, Descriptors.FileDescriptor> fileDescriptorMap = ProtoClient.loadFileDescriptors(DESC_FILE_LOCAL_PATH);
         Assert.assertNotNull(fileDescriptorMap);
         Assert.assertFalse(fileDescriptorMap.isEmpty());
     }
 
     @Test
     public void testLoadClassPathFileDescriptors() {
-        Map<String, Descriptors.FileDescriptor> fileDescriptorMap = Proto.loadFileDescriptors(DESC_FILE_CLASS_PATH);
+        Map<String, Descriptors.FileDescriptor> fileDescriptorMap = ProtoClient.loadFileDescriptors(DESC_FILE_CLASS_PATH);
         Assert.assertNotNull(fileDescriptorMap);
         Assert.assertFalse(fileDescriptorMap.isEmpty());
     }
@@ -72,8 +72,8 @@ public class ProtoTest {
     @Test
     public void testGetMessageDescriptor() {
 
-        Map<String, Descriptors.FileDescriptor> fileDescriptorMap = Proto.loadFileDescriptors(DESC_FILE_LOCAL_PATH);
-        Descriptors.Descriptor descriptor = Proto.getMessageDescriptor(fileDescriptorMap, MESSAGE_TYPE);
+        Map<String, Descriptors.FileDescriptor> fileDescriptorMap = ProtoClient.loadFileDescriptors(DESC_FILE_LOCAL_PATH);
+        Descriptors.Descriptor descriptor = ProtoClient.getMessageDescriptor(fileDescriptorMap, MESSAGE_TYPE);
         Assert.assertNotNull(descriptor);
         Assert.assertEquals(descriptor.getFullName(), MESSAGE_TYPE);
     }
@@ -84,7 +84,7 @@ public class ProtoTest {
             Map<String, Descriptors.FileDescriptor> fileDescriptorMap = new HashMap<>();
             if (fileDescriptor != null) {
                 fileDescriptorMap.put(fileDescriptor.getName(), fileDescriptor);
-                Proto.getMessageDescriptor(fileDescriptorMap, "NonExistentMessage");
+                ProtoClient.getMessageDescriptor(fileDescriptorMap, "NonExistentMessage");
                 Assert.fail("Expected IllegalArgumentException to be thrown");
             }
         } catch (Exception e) {
@@ -98,7 +98,7 @@ public class ProtoTest {
         try {
             if (userDescriptor != null) {
                 String jsonInput = "{\"name\":\"Alice\",\"id\":1,\"age\":25}";
-                byte[] protoData = Proto.convert(jsonInput, userDescriptor);
+                byte[] protoData = ProtoClient.convert(jsonInput, userDescriptor);
                 Assert.assertNotNull(protoData);
                 Assert.assertTrue(protoData.length > 0);
             }
@@ -110,13 +110,13 @@ public class ProtoTest {
 
     @Test
     public void testConvertJsonToProtoWithNullInput() throws Exception {
-        byte[] result = Proto.convert((String) null, userDescriptor);
+        byte[] result = ProtoClient.convert((String) null, userDescriptor);
         Assert.assertNull(result);
     }
 
     @Test
     public void testConvertJsonToProtoWithEmptyInput() throws Exception {
-        byte[] result = Proto.convert("", userDescriptor);
+        byte[] result = ProtoClient.convert("", userDescriptor);
         Assert.assertNull(result);
     }
 
@@ -126,10 +126,10 @@ public class ProtoTest {
             if (userDescriptor != null) {
                 // 先创建一些protobuf数据
                 String jsonInput = "{\"name\":\"Bob\",\"id\":2,\"age\":30}";
-                byte[] protoData = Proto.convert(jsonInput, userDescriptor);
+                byte[] protoData = ProtoClient.convert(jsonInput, userDescriptor);
 
                 // 再转换回JSON
-                String jsonOutput = Proto.convert(protoData, userDescriptor);
+                String jsonOutput = ProtoClient.convert(protoData, userDescriptor);
                 Assert.assertNotNull(jsonOutput);
                 Assert.assertFalse(jsonOutput.isEmpty());
                 Assert.assertNotEquals(jsonOutput, "{}");
@@ -143,7 +143,7 @@ public class ProtoTest {
     @Test
     public void testConvertProtoToJsonWithNullInput() {
         try {
-            String result = Proto.convert((byte[]) null, userDescriptor);
+            String result = ProtoClient.convert((byte[]) null, userDescriptor);
             Assert.assertEquals(result, "{}");
         } catch (Exception e) {
             // 在某些测试环境中可能没有测试descriptor，这种情况可以接受
@@ -154,7 +154,7 @@ public class ProtoTest {
     @Test
     public void testConvertProtoToJsonWithEmptyInput() {
         try {
-            String result = Proto.convert(new byte[0], userDescriptor);
+            String result = ProtoClient.convert(new byte[0], userDescriptor);
             Assert.assertEquals(result, "{}");
         } catch (Exception e) {
             // 在某些测试环境中可能没有测试descriptor，这种情况可以接受

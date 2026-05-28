@@ -387,7 +387,7 @@ public class KafkaConfigureItem implements ConfigureItem<KafkaConfigureItem>, Ka
     }
 
     /**
-     * Kafka 配置属性 构建器
+     * KafkaClient 配置属性 构建器
      * <p>
      * 用于构建KafkaConfigureItem实例的构建器类，提供了链式调用的API。
      * </p>

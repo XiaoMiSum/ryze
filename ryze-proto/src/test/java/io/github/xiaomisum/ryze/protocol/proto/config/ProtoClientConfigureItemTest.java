@@ -27,7 +27,7 @@ package io.github.xiaomisum.ryze.protocol.proto.config;
 
 import io.github.xiaomisum.ryze.SessionRunner;
 import io.github.xiaomisum.ryze.context.ContextWrapper;
-import io.github.xiaomisum.ryze.protocol.proto.ProtoTest;
+import io.github.xiaomisum.ryze.protocol.proto.ProtoClientTest;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -37,7 +37,7 @@ import java.util.Map;
 import static io.github.xiaomisum.ryze.protocol.proto.ProtoConstantsInterface.*;
 
 
-public class ProtoConfigureItemTest {
+public class ProtoClientConfigureItemTest {
 
     @Test
     public void testBuilder() {
@@ -287,7 +287,7 @@ public class ProtoConfigureItemTest {
         context.getLocalVariablesWrapper().put("port", "testPort");
         context.getLocalVariablesWrapper().put("path", "testPath");
         context.getLocalVariablesWrapper().put("method", "testMethod");
-        context.getLocalVariablesWrapper().put("descPath", ProtoTest.DESC_FILE_LOCAL_PATH);
+        context.getLocalVariablesWrapper().put("descPath", ProtoClientTest.DESC_FILE_LOCAL_PATH);
         context.getLocalVariablesWrapper().put("requestMessage", "TestRequest");
         context.getLocalVariablesWrapper().put("responseMessage", "TestResponse");
 
@@ -314,7 +314,7 @@ public class ProtoConfigureItemTest {
         Assert.assertEquals(evaluatedItem.getMethod(), "testMethod");
 
         Assert.assertNotNull(evaluatedItem.getProtoDesc());
-        Assert.assertEquals(evaluatedItem.getProtoDesc().getDescPath(), ProtoTest.DESC_FILE_LOCAL_PATH);
+        Assert.assertEquals(evaluatedItem.getProtoDesc().getDescPath(), ProtoClientTest.DESC_FILE_LOCAL_PATH);
         Assert.assertEquals(evaluatedItem.getProtoDesc().getRequestMessageName(), "TestRequest");
         Assert.assertEquals(evaluatedItem.getProtoDesc().getResponseMessageName(), "TestResponse");
     }

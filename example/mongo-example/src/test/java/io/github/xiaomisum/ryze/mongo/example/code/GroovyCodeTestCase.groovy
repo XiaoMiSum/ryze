@@ -1,6 +1,7 @@
 package io.github.xiaomisum.ryze.mongo.example.code
 
-import io.github.xiaomisum.ryze.protocol.mongo.MongoMagicBox
+import io.github.xiaomisum.ryze.Ryze
+import io.github.xiaomisum.ryze.protocol.mongo.Mongo
 import io.github.xiaomisum.ryze.protocol.mongo.builder.MongoConfigureElementsBuilder
 import io.github.xiaomisum.ryze.protocol.mongo.builder.MongoPostprocessorsBuilder
 import io.github.xiaomisum.ryze.protocol.mongo.builder.MongoPreprocessorsBuilder
@@ -15,7 +16,7 @@ class GroovyCodeTestCase {
     @Test
     @RyzeTest
     void test1() {
-        MongoMagicBox.suite("测试用例", {
+        Ryze.suite("测试用例", {
             variables("author", "\${faker('book.author')}")
             variables { put("title", "\${faker('book.title')}") }
             variables Map.of("a", 1, "b", 2)
@@ -83,7 +84,7 @@ class GroovyCodeTestCase {
     @Test
     @RyzeTest
     void test2() {
-        MongoMagicBox.mongo("测试用例- test2()", sampler -> {
+        Mongo.mongo("测试用例- test2()", sampler -> {
             configureElements(MongoConfigureElementsBuilder.class, {
                 mongo {
                     config {
@@ -111,7 +112,7 @@ class GroovyCodeTestCase {
     @RyzeTest
     void test3() {
         var variable = ["name": "ryze", "author": "test"]
-        MongoMagicBox.mongo({
+        Mongo.mongo({
             title "步骤1——插入用户：tick = redis_preprocessor"
             variables(variable)
             configureElements(MongoConfigureElementsBuilder.class, {
@@ -128,7 +129,7 @@ class GroovyCodeTestCase {
             }
         })
 
-        MongoMagicBox.mongo({
+        Mongo.mongo({
             title "步骤2——查找用户：tick = ryze_http_sampler"
             variables(variable)
             configureElements(MongoConfigureElementsBuilder.class, {

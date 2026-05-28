@@ -232,7 +232,7 @@ config: # 取样器配置
 ### 基础 Dubbo 服务调用
 
 ```java
-import static io.github.xiaomisum.ryze.protocol.dubbo.DubboMagicBox.*;
+import static io.github.xiaomisum.ryze.protocol.dubbo.Dubbo.*;
 
 public class DubboApiExample {
 
@@ -281,7 +281,7 @@ public class DubboApiExample {
 ### 完整 Dubbo 测试套件
 
 ```java
-import static io.github.xiaomisum.ryze.protocol.dubbo.DubboMagicBox.*;
+import static io.github.xiaomisum.ryze.protocol.dubbo.Dubbo.*;
 
 public class DubboTestSuite {
 
@@ -365,7 +365,7 @@ public class DubboTestSuite {
 ### 基础 Dubbo 服务调用
 
 ```groovy
-import static io.github.xiaomisum.ryze.protocol.dubbo.DubboMagicBox.*
+import static io.github.xiaomisum.ryze.protocol.dubbo.Dubbo.*
 
 // 配置 Dubbo 注册中心
 def setupDubbo() {
@@ -441,7 +441,7 @@ def asyncServiceCall() {
 ### 完整 Dubbo 测试脚本
 
 ```groovy
-import static io.github.xiaomisum.ryze.protocol.dubbo.DubboMagicBox.*
+import static io.github.xiaomisum.ryze.protocol.dubbo.Dubbo.*
 
 // 用户服务完整测试流程
 suite("用户服务Dubbo测试套件") { builder ->

@@ -602,7 +602,7 @@ public class DubboConfigureItem implements ConfigureItem<DubboConfigureItem>, Du
         }
 
         /**
-         * Dubbo 注册中心配置属性构建器
+         * DubboClient 注册中心配置属性构建器
          * <p>
          * 用于通过链式调用的方式构建注册中心配置。<br>
          * 继承自AbstractTestElement.ConfigureBuilder，提供标准的构建器功能。<br>
@@ -988,7 +988,7 @@ public class DubboConfigureItem implements ConfigureItem<DubboConfigureItem>, Du
         }
 
         /**
-         * Dubbo 服务引用配置属性构建器
+         * DubboClient 服务引用配置属性构建器
          * <p>
          * 用于通过链式调用的方式构建服务引用配置。<br>
          * 继承自AbstractTestElement.ConfigureBuilder，提供标准的构建器功能。<br>
@@ -1128,7 +1128,7 @@ public class DubboConfigureItem implements ConfigureItem<DubboConfigureItem>, Du
     }
 
     /**
-     * Dubbo 配置属性构建器
+     * DubboClient 配置属性构建器
      * <p>
      * 用于通过链式调用的方式构建Dubbo配置项。<br>
      * 继承自AbstractTestElement.ConfigureBuilder，提供标准的构建器功能。<br>

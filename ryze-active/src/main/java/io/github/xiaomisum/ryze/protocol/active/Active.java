@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2021.  Lorem XiaoMiSum (mi_xiao@qq.com)
+ * Copyright (c) 2022.  Lorem XiaoMiSum (mi_xiao@qq.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -25,77 +25,90 @@
 
 package io.github.xiaomisum.ryze.protocol.active;
 
-import io.github.xiaomisum.ryze.testelement.sampler.DefaultSampleResult;
-import io.github.xiaomisum.ryze.protocol.active.config.ActiveConfigureItem;
-import jakarta.jms.ConnectionFactory;
-import jakarta.jms.MessageProducer;
-import jakarta.jms.Session;
-import org.apache.commons.lang3.StringUtils;
+import groovy.lang.Closure;
+import groovy.lang.DelegatesTo;
+import io.github.xiaomisum.ryze.Ryze;
+import io.github.xiaomisum.ryze.Result;
+import io.github.xiaomisum.ryze.protocol.active.sampler.ActiveSampler;
+import io.github.xiaomisum.ryze.support.Customizer;
+import io.github.xiaomisum.ryze.support.groovy.Groovy;
 
 /**
- * ActiveMQ消息发送核心类，封装了ActiveMQ消息发送的具体实现
+ * ActiveMQ协议魔法盒子类
  * <p>
- * 该类提供了ActiveMQ消息发送的核心功能，封装了连接创建、会话管理、消息发送和资源释放等操作。
- * 作为工具类，提供了静态方法供其他组件调用。
- * </p>
- * <p>
- * 主要功能：
- * <ul>
- *   <li>创建ActiveMQ连接和会话</li>
- *   <li>根据配置确定消息目标（Topic或Queue）</li>
- *   <li>发送文本消息</li>
- *   <li>自动管理资源（连接、会话、生产者）</li>
- *   <li>处理异常情况</li>
- * </ul>
- * </p>
- * <p>
- * 执行流程：
- * <ol>
- *   <li>创建连接和会话</li>
- *   <li>根据配置确定消息目标（优先使用Queue，否则使用Topic）</li>
- *   <li>创建消息生产者</li>
- *   <li>创建文本消息</li>
- *   <li>发送消息</li>
- *   <li>关闭生产者</li>
- * </ol>
+ * 提供函数式编程方式执行ActiveMQ取样器的便捷入口，支持多种配置方式：
+ * 1. 通过Groovy闭包方式配置取样器
+ * 2. 通过Customizer函数式接口配置取样器
  * </p>
  *
- * @author mi.xiao
- * @since 2021/4/13 20:08
+ * @author xiaomi
  */
 public class Active {
 
     /**
-     * 执行ActiveMQ消息发送操作
+     * 通过Groovy闭包执行ActiveMQ取样器测试（无标题）
      * <p>
-     * 该方法完成完整的消息发送流程，包括连接管理、消息发送和资源释放。
-     * 使用try-with-resources确保连接和会话能被正确关闭。
+     * 执行流程：
+     * 1. 调用带标题的重载方法，标题传空字符串
      * </p>
      *
-     * @param config   ActiveMQ配置项，包含连接参数和消息目标信息
-     * @param factory  连接工厂，用于创建ActiveMQ连接
-     * @param message  要发送的消息内容
-     * @param result   测试结果，用于记录执行时间和结果状态
-     * @throws RuntimeException 当消息发送过程中发生异常时抛出
+     * @param closure Groovy闭包，用于配置ActiveSampler.Builder
+     * @return 测试执行结果
      */
-    public static void execute(ActiveConfigureItem config, ConnectionFactory factory, String message, DefaultSampleResult result) {
-        MessageProducer producer = null;
-        result.sampleStart();
-        try (var connection = factory.createConnection(); var session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE)) {
-            var destination = StringUtils.isNotBlank(config.getQueue()) ? session.createQueue(config.getQueue()) : session.createTopic(config.getTopic());
-            producer = session.createProducer(destination);
-            var textMessage = session.createTextMessage(message);
-            producer.send(textMessage);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        } finally {
-            result.sampleEnd();
-            if (producer != null) {
-                try {
-                    producer.close();
-                } catch (Exception ignored) {
-                }
-            }
-        }
+    public static Result active(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ActiveSampler.Builder.class) Closure<?> closure) {
+        return active("", closure);
+    }
+
+    /**
+     * 通过Groovy闭包执行ActiveMQ取样器测试（带标题）
+     * <p>
+     * 执行流程：
+     * 1. 创建ActiveSampler.Builder实例
+     * 2. 使用Groovy闭包配置Builder
+     * 3. 构建ActiveSampler实例并执行测试
+     * </p>
+     *
+     * @param title   测试标题
+     * @param closure Groovy闭包，用于配置ActiveSampler.Builder
+     * @return 测试执行结果
+     */
+    public static Result active(String title,
+                                @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ActiveSampler.Builder.class) Closure<?> closure) {
+        var builder = ActiveSampler.builder();
+        Groovy.call(closure, builder);
+        return Ryze.runTest(title, builder.build());
+    }
+
+    /**
+     * 通过Customizer函数式接口执行ActiveMQ取样器测试（无标题）
+     * <p>
+     * 执行流程：
+     * 1. 调用带标题的重载方法，标题传空字符串
+     * </p>
+     *
+     * @param customizer Customizer函数式接口，用于配置ActiveSampler.Builder
+     * @return 测试执行结果
+     */
+    public static Result active(Customizer<ActiveSampler.Builder> customizer) {
+        return active("", customizer);
+    }
+
+    /**
+     * 通过Customizer函数式接口执行ActiveMQ取样器测试（带标题）
+     * <p>
+     * 执行流程：
+     * 1. 创建ActiveSampler.Builder实例
+     * 2. 使用Customizer配置Builder
+     * 3. 构建ActiveSampler实例并执行测试
+     * </p>
+     *
+     * @param title      测试标题
+     * @param customizer Customizer函数式接口，用于配置ActiveSampler.Builder
+     * @return 测试执行结果
+     */
+    public static Result active(String title, Customizer<ActiveSampler.Builder> customizer) {
+        var builder = ActiveSampler.builder();
+        customizer.customize(builder);
+        return Ryze.runTest(title, builder.build());
     }
 }

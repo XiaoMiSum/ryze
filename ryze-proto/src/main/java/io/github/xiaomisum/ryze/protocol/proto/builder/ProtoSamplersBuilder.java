@@ -34,9 +34,9 @@ import io.github.xiaomisum.ryze.support.Customizer;
 import static io.github.xiaomisum.ryze.support.groovy.Groovy.call;
 
 /**
- * Proto 采样器列表构建器
+ * ProtoClient 采样器列表构建器
  * <p>
- * 该类用于构建 Proto 采样器列表，提供多种方式添加 Proto 采样器。
+ * 该类用于构建 ProtoClient 采样器列表，提供多种方式添加 ProtoClient 采样器。
  * 它继承自 ExtensibleChildrenBuilder，支持链式调用和多种配置方式。
  * </p>
  * <p>
@@ -67,7 +67,7 @@ public class ProtoSamplersBuilder extends ExtensibleChildrenBuilder<ProtoSampler
     }
 
     /**
-     * 添加 Proto 采样器
+     * 添加 ProtoClient 采样器
      * <p>
      * 直接添加 ProtoSampler 实例到采样器列表中。
      * </p>
@@ -81,7 +81,7 @@ public class ProtoSamplersBuilder extends ExtensibleChildrenBuilder<ProtoSampler
     }
 
     /**
-     * 添加 Proto 采样器
+     * 添加 ProtoClient 采样器
      * <p>
      * 使用 ProtoSampler.Builder 构建 ProtoSampler 实例，然后添加到采样器列表中。
      * </p>
@@ -95,7 +95,7 @@ public class ProtoSamplersBuilder extends ExtensibleChildrenBuilder<ProtoSampler
     }
 
     /**
-     * 添加 Proto 采样器
+     * 添加 ProtoClient 采样器
      * <p>
      * 使用 Customizer 配置 ProtoSampler.Builder，然后构建并添加到采样器列表中。
      * </p>
@@ -111,7 +111,7 @@ public class ProtoSamplersBuilder extends ExtensibleChildrenBuilder<ProtoSampler
     }
 
     /**
-     * 添加 Proto 采样器
+     * 添加 ProtoClient 采样器
      * <p>
      * 使用 Groovy Closure 配置 ProtoSampler.Builder，然后构建并添加到采样器列表中。
      * </p>

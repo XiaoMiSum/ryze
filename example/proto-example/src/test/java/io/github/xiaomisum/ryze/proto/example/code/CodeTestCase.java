@@ -1,11 +1,11 @@
 package io.github.xiaomisum.ryze.proto.example.code;
 
 import io.github.xiaomisum.ryze.Ryze;
-import io.github.xiaomisum.ryze.protocol.proto.ProtoMagicBox;
+import io.github.xiaomisum.ryze.proto.example.mock.MockProtoHttpServer;
+import io.github.xiaomisum.ryze.protocol.proto.Proto;
 import io.github.xiaomisum.ryze.protocol.proto.builder.ProtoConfigureElementsBuilder;
 import io.github.xiaomisum.ryze.protocol.proto.builder.ProtoPreprocessorsBuilder;
 import io.github.xiaomisum.ryze.protocol.proto.builder.ProtoSamplersBuilder;
-import io.github.xiaomisum.ryze.proto.example.mock.MockProtoHttpServer;
 import io.github.xiaomisum.ryze.support.Collections;
 import io.github.xiaomisum.ryze.support.testng.annotation.RyzeTest;
 import org.testng.annotations.AfterSuite;
@@ -68,7 +68,7 @@ public class CodeTestCase {
     @Test
     @RyzeTest
     public void test2() {
-        ProtoMagicBox.proto("测试用例-http-protobuf-test2", sampler -> {
+        Proto.proto("测试用例-http-protobuf-test2", sampler -> {
             sampler.configureElements(ProtoConfigureElementsBuilder.class, ele ->
                     ele.proto(proto -> proto.config(config -> config.baseUrl("http://127.0.0.1:8080")
                             .protoDesc(b -> b.descPath("D:\\Github\\ryze\\example\\proto-example\\user.desc")
@@ -122,7 +122,7 @@ public class CodeTestCase {
     @Test
     @RyzeTest
     public void test4() {
-        ProtoMagicBox.proto("测试用例-websocket-protobuf-test4", sampler -> {
+        Proto.proto("测试用例-websocket-protobuf-test4", sampler -> {
             sampler.configureElements(ProtoConfigureElementsBuilder.class, ele -> ele.proto(proto ->
                     proto.config(config -> config.baseUrl("ws://127.0.0.1:8080")
                             .protoDesc(b -> b.descPath("D:\\Github\\ryze\\example\\proto-example\\user.desc")
