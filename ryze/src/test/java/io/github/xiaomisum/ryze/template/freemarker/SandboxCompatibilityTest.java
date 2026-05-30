@@ -24,34 +24,34 @@ public class SandboxCompatibilityTest {
         templateEngine = new FreeMarkerTemplateEngine();
         context = new ContextWrapper(SessionRunner.getSessionIfNoneCreateNew());
         var localVariablesWrapper = context.getLocalVariablesWrapper();
-        
+
         // 场景A: 简单变量
         localVariablesWrapper.put("varName", "testValue");
         localVariablesWrapper.put("username", "alice");
-        
+
         // 场景C: 集合/Map
         Map<String, String> mapVar = new HashMap<>();
         mapVar.put("key1", "value1");
         localVariablesWrapper.put("myMap", mapVar);
         localVariablesWrapper.put("myList", List.of("item1", "item2", "item3"));
-        
+
         // 场景D: 字符串操作
         localVariablesWrapper.put("name", "john doe");
         localVariablesWrapper.put("str", "hello world");
-        
+
         // 场景G: 数学运算
         localVariablesWrapper.put("a", 10);
         localVariablesWrapper.put("b", 20);
         localVariablesWrapper.put("price", 100.0);
-        
+
         // 误拦风险检查 - 包含"class"的变量名
         localVariablesWrapper.put("testclass", "classValue");
         localVariablesWrapper.put("className", "MyClass");
-        
+
         // 误拦风险检查 - 包含"new"的变量名
         localVariablesWrapper.put("newValue", "newData");
         localVariablesWrapper.put("renewal", "renewalData");
-        
+
         // 误拦风险检查 - 包含"exec"的变量名
         localVariablesWrapper.put("execute_result", "success");
         localVariablesWrapper.put("execution_time", 123L);
