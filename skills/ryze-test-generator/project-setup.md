@@ -16,7 +16,7 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
-        <ryze.version>6.0.18</ryze.version>
+        <ryze.version>6.1.0</ryze.version>
         <testng.version>7.11.0</testng.version>
         <allure.cmd.version>2.35.1</allure.cmd.version>
         <maven.allure.version>2.16.1</maven.allure.version>

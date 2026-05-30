@@ -67,7 +67,9 @@ public class SessionRunner {
 
     /**
      * Session 当前执行上下文链
-     * <p>维护测试执行过程中的上下文层次结构</p>
+     * <p>
+     * 维护测试执行过程中的上下文层次结构
+     * </p>
      */
     private List<Context> contextChain = new ArrayList<>();
 
@@ -106,7 +108,6 @@ public class SessionRunner {
         return sessionRunner;
     }
 
-
     /**
      * 获取当前线程的SessionRunner实例
      *
@@ -120,7 +121,6 @@ public class SessionRunner {
         }
         return sessionRunner;
     }
-
 
     /**
      * 设置当前线程的SessionRunner实例
@@ -220,7 +220,13 @@ public class SessionRunner {
         if (validate) {
             element.validate().valid();
         }
-        return element.run(this);
+        try {
+            return element.run(this);
+        } catch (RuntimeException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**

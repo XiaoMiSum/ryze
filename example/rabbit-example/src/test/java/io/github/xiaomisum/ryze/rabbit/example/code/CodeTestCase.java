@@ -6,12 +6,15 @@ import io.github.xiaomisum.ryze.protocol.rabbit.builder.RabbitConfigureElementsB
 import io.github.xiaomisum.ryze.protocol.rabbit.builder.RabbitPostprocessorsBuilder;
 import io.github.xiaomisum.ryze.protocol.rabbit.builder.RabbitPreprocessorsBuilder;
 import io.github.xiaomisum.ryze.protocol.rabbit.builder.RabbitSamplersBuilder;
+import io.github.xiaomisum.ryze.rabbit.example.RabbitTestListener;
 import io.github.xiaomisum.ryze.support.testng.annotation.RyzeTest;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 import java.util.List;
 import java.util.Map;
 
+@Listeners(RabbitTestListener.class)
 public class CodeTestCase {
 
     @Test

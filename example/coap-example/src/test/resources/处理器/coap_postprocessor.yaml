@@ -1,0 +1,6 @@
+testclass: coap # coap 后置处理器类型
+config: # 处理器配置
+  uri: coap://127.0.0.1:5683/test
+  method: DELETE
+  confirmable: true
+  timeout: 10000

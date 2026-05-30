@@ -1,0 +1,8 @@
+testclass: coap # coap 前置处理器类型
+config: # 处理器配置
+  uri: coap://127.0.0.1:5683/test
+  method: POST
+  content_format: application/json
+  payload: '{"setup": "preprocessor"}'
+  confirmable: true
+  timeout: 10000

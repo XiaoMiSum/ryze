@@ -75,7 +75,6 @@ Ryze 是一个基于 Java 21 开发的现代化测试框架，专为多协议测
 我们提供了基于 VitePress 的在线文档站点，您可以通过以下链接访问：
 
 - 在线文档：[GitHub Pages](https://xiaomisum.github.io/ryze)
-- 中国大陆：[帽子云](https://ryze-rr7xp0ri.maozi.io)
 
 在线文档包含了框架的所有功能介绍、使用指南和 API 参考，是学习和使用 Ryze 的最佳资源。
 
@@ -618,6 +617,9 @@ mvn test
 4. **文档站点开发**
 
 ```bash
+# 进入文档目录
+cd docs
+
 # 安装依赖
 npm install
 
@@ -627,6 +629,8 @@ npm run docs:dev
 # 构建文档站点
 npm run docs:build
 ```
+
+> 📝 **注意**: 所有文档相关的命令都需要在 `docs/` 目录下执行。详细说明请参考 [docs/README.md](docs/README.md)
 
 5. **导入 IDE**
 
@@ -731,7 +735,6 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 感谢以下开源项目和组织的支持：
 
 - **[JetBrains](https://www.jetbrains.com)** - 提供优秀的 IDE 工具
-- **[帽子云](https://www.maoziyun.com/)** - 提供免费的静态页面托管服务
 - **[FastJSON2](https://github.com/alibaba/fastjson2)** - JSON 序列化库
 - **[FreeMarker](https://freemarker.apache.org)** - 模板引擎
 - **[Apache Commons](https://commons.apache.org)** - 工具类库

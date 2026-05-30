@@ -25,7 +25,22 @@ public class KryoUtil {
      * @return 原对象的深拷贝
      */
     public static <T> T copy(T object) {
-        return kryoThreadLocal.get().copy(object);
+        try {
+            return kryoThreadLocal.get().copy(object);
+        } finally {
+            kryoThreadLocal.remove(); // 自动清理 ThreadLocal，防止内存泄漏
+        }
+    }
+
+    /**
+     * 清理当前线程的 Kryo 实例
+     * <p>
+     * 建议在测试方法执行完毕后显式调用，或在线程池环境中线程归还前调用，
+     * 以防止 ThreadLocal 导致的内存泄漏。
+     * </p>
+     */
+    public static void cleanup() {
+        kryoThreadLocal.remove();
     }
 
 }

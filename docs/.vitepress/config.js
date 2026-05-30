@@ -16,7 +16,7 @@ export default withMermaid({
             {text: '测试人员', link: '/tester/test-suite/test-suite-project'},
             {text: '开发者', link: '/developer/style'},
             {text: 'FAQ', link: '/faq/same'},
-            {text: '6.0.18', link: 'https://github.com/XiaoMiSum/ryze'}
+            {text: '6.1.0', link: 'https://github.com/XiaoMiSum/ryze'}
         ],
 
         sidebar: {
@@ -61,7 +61,9 @@ export default withMermaid({
                         {text: 'RabbitMQ', link: '/guide/protocols/rabbitmq'},
                         {text: 'ActiveMQ', link: '/guide/protocols/activemq'},
                         {text: 'MongoDB', link: '/guide/protocols/mongodb'},
-                        {text: 'Protobuf', link: '/guide/protocols/proto'}
+                        {text: 'Protobuf', link: '/guide/protocols/proto'},
+                        {text: 'MQTT', link: '/guide/protocols/mqtt'},
+                        {text: 'CoAP', link: '/guide/protocols/coap'}
                     ]
                 },
                 {
@@ -121,7 +123,9 @@ export default withMermaid({
                                 {text: 'RabbitMQ 指南', link: '/tester/protocols/rabbitmq'},
                                 {text: 'ActiveMQ 指南', link: '/tester/protocols/activemq'},
                                 {text: 'MongoDB 指南', link: '/tester/protocols/mongodb'},
-                                {text: 'Proto 指南', link: '/tester/protocols/proto'}
+                                {text: 'Proto 指南', link: '/tester/protocols/proto'},
+                                {text: 'MQTT 指南', link: '/tester/protocols/mqtt'},
+                                {text: 'CoAP 指南', link: '/tester/protocols/coap'}
                             ]
                         },
                         {

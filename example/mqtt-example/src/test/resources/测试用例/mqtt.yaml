@@ -1,0 +1,15 @@
+title: 测试用例 # 包含配置原件、前置处理器、后置处理器、多个取样器（执行步骤）
+configelements:
+  - !include '配置元件/mqtt_defaults.yaml'
+preprocessors: # 前置处理器
+  - !include '处理器/mqtt_preprocessor.yaml'
+postprocessors: # 后置处理器
+  - !include '处理器/mqtt_postprocessor.yaml'
+children: # 执行步骤
+  - title: 步骤1——发布消息
+    testclass: mqtt_publish
+    config:
+      datasource: mqtt_source
+      topic: test/topic
+      qos: 1
+      payload: '{"message": "hello from ryze"}'

@@ -27,6 +27,9 @@ jobs:
   # 构建工作
   build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: docs
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -41,6 +44,7 @@ jobs:
         with:
           node-version: 22
           cache: npm # 或 pnpm / yarn
+          cache-dependency-path: docs/package-lock.json # 或 pnpm-lock.yaml / yarn.lock / bun.lockb
       - name: Setup Pages
         uses: actions/configure-pages@v4
       - name: Install dependencies

@@ -1,0 +1,24 @@
+title: 测试用例 # 包含配置原件、前置处理器、后置处理器、多个取样器（执行步骤）
+configelements:
+  - !include '配置元件/coap_defaults.yaml'
+preprocessors: # 前置处理器
+  - !include '处理器/coap_preprocessor.yaml'
+postprocessors: # 后置处理器
+  - !include '处理器/coap_postprocessor.yaml'
+children: # 执行步骤
+  - title: 步骤1——POST创建资源
+    testclass: coap
+    config:
+      uri: coap://127.0.0.1:5683/test
+      method: POST
+      content_format: application/json
+      payload: '{"key": "value"}'
+      confirmable: true
+      timeout: 10000
+  - title: 步骤2——GET获取资源
+    testclass: coap
+    config:
+      uri: coap://127.0.0.1:5683/test
+      method: GET
+      confirmable: true
+      timeout: 10000

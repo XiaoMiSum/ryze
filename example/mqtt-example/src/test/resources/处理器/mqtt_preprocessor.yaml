@@ -1,0 +1,6 @@
+testclass: mqtt_preprocessor # mqtt 前置处理器类型
+config: # 处理器配置
+  datasource: mqtt_source
+  topic: test/preprocessor
+  qos: 1
+  payload: 'mqtt preprocessor test'

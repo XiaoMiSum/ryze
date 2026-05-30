@@ -1,17 +1,20 @@
 package io.github.xiaomisum.ryze.active.example.code;
 
 import io.github.xiaomisum.ryze.Ryze;
+import io.github.xiaomisum.ryze.active.example.ActiveTestListener;
 import io.github.xiaomisum.ryze.protocol.active.Active;
 import io.github.xiaomisum.ryze.protocol.active.builder.ActiveConfigureElementsBuilder;
 import io.github.xiaomisum.ryze.protocol.active.builder.ActivePostprocessorsBuilder;
 import io.github.xiaomisum.ryze.protocol.active.builder.ActivePreprocessorsBuilder;
 import io.github.xiaomisum.ryze.protocol.active.builder.ActiveSamplersBuilder;
 import io.github.xiaomisum.ryze.support.testng.annotation.RyzeTest;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 import java.util.List;
 import java.util.Map;
 
+@Listeners(ActiveTestListener.class)
 public class CodeTestCase {
 
     @Test

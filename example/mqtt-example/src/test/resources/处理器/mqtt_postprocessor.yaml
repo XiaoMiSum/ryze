@@ -1,0 +1,6 @@
+testclass: mqtt_postprocessor # mqtt 后置处理器类型
+config: # 处理器配置
+  datasource: mqtt_source
+  topic: test/postprocessor
+  qos: 1
+  response_timeout: 5

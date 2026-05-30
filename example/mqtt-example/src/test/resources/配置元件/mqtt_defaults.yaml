@@ -1,0 +1,9 @@
+# MQTT 默认配置，各配置项的优先级为：取样器 > 默认配置
+testclass: mqtt_datasource # 配置元件类型
+ref_name: mqtt_source
+config:
+  broker: 127.0.0.1
+  port: 1883
+  client_id: ryze-test-client
+  clean_session: true
+  keep_alive: 60

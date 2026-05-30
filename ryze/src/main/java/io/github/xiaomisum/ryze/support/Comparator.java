@@ -32,15 +32,18 @@ import java.util.*;
 /**
  * 对象比较工具类
  *
- * <p>该类提供了丰富的对象比较功能，支持各种数据类型的深度比较、包含关系判断和空值检查。
- * 支持基本类型、字符串、集合、数组、Map、自定义对象等多种数据类型的比较。</p>
+ * <p>
+ * 该类提供了丰富的对象比较功能，支持各种数据类型的深度比较、包含关系判断和空值检查。
+ * 支持基本类型、字符串、集合、数组、Map、自定义对象等多种数据类型的比较。
+ * </p>
  *
- * <p>主要功能：
+ * <p>
+ * 主要功能：
  * <ul>
- *   <li>深度相等比较：支持对象及其属性的递归比较</li>
- *   <li>包含关系判断：检查一个对象是否包含另一个对象</li>
- *   <li>空值检查：判断对象是否为空</li>
- *   <li>类型兼容比较：支持不同类型间的比较，如String与Number</li>
+ * <li>深度相等比较：支持对象及其属性的递归比较</li>
+ * <li>包含关系判断：检查一个对象是否包含另一个对象</li>
+ * <li>空值检查：判断对象是否为空</li>
+ * <li>类型兼容比较：支持不同类型间的比较，如String与Number</li>
  * </ul>
  * </p>
  *
@@ -51,14 +54,18 @@ public class Comparator {
 
     /**
      * 存储已访问对象的标识防止循环引用
-     * <p>使用ThreadLocal确保线程安全，避免在比较包含循环引用的对象时出现无限递归</p>
+     * <p>
+     * 使用ThreadLocal确保线程安全，避免在比较包含循环引用的对象时出现无限递归
+     * </p>
      */
     private static final ThreadLocal<Set<String>> visitedObjects = ThreadLocal.withInitial(HashSet::new);
 
     /**
      * 主比较方法
      *
-     * <p>执行两个对象的相等比较，默认进行深度比较，区分大小写。</p>
+     * <p>
+     * 执行两个对象的相等比较，默认进行深度比较，区分大小写。
+     * </p>
      *
      * @param a          第一个对象
      * @param b          第二个对象
@@ -73,7 +80,9 @@ public class Comparator {
     /**
      * 带深度控制的重载方法
      *
-     * <p>执行两个对象的相等比较，可指定是否进行深度比较和是否忽略大小写。</p>
+     * <p>
+     * 执行两个对象的相等比较，可指定是否进行深度比较和是否忽略大小写。
+     * </p>
      *
      * @param a           第一个对象
      * @param b           第二个对象
@@ -83,25 +92,30 @@ public class Comparator {
      * @see #deepAreEqual(Object, Object, boolean, boolean, Set)
      */
     public static boolean areEqual(Object a, Object b, boolean deepCompare, boolean ignoreCase) {
-        visitedObjects.get().clear(); // 清除之前的访问记录
-        return deepAreEqual(a, b, deepCompare, ignoreCase, new HashSet<>());
+        try {
+            visitedObjects.get().clear(); // 清除之前的访问记录
+            return deepAreEqual(a, b, deepCompare, ignoreCase, new HashSet<>());
+        } finally {
+            visitedObjects.remove(); // 自动清理 ThreadLocal，防止内存泄漏
+        }
     }
 
     /**
      * 深度比较方法
      *
-     * <p>执行两个对象的深度相等比较，支持循环引用检测。比较过程如下：
+     * <p>
+     * 执行两个对象的深度相等比较，支持循环引用检测。比较过程如下：
      * <ol>
-     *   <li>基本处理：null检查、相同对象检查</li>
-     *   <li>防止循环引用：通过visited集合记录已比较的对象对</li>
-     *   <li>基本类型兼容比较：字符串、布尔值、数字等</li>
-     *   <li>数字类型兼容比较</li>
-     *   <li>集合类型处理</li>
-     *   <li>数组类型处理</li>
-     *   <li>Map类型处理</li>
-     *   <li>枚举类型处理</li>
-     *   <li>对象深度比较</li>
-     *   <li>默认比较：使用对象的equals方法</li>
+     * <li>基本处理：null检查、相同对象检查</li>
+     * <li>防止循环引用：通过visited集合记录已比较的对象对</li>
+     * <li>基本类型兼容比较：字符串、布尔值、数字等</li>
+     * <li>数字类型兼容比较</li>
+     * <li>集合类型处理</li>
+     * <li>数组类型处理</li>
+     * <li>Map类型处理</li>
+     * <li>枚举类型处理</li>
+     * <li>对象深度比较</li>
+     * <li>默认比较：使用对象的equals方法</li>
      * </ol>
      * </p>
      *
@@ -113,7 +127,8 @@ public class Comparator {
      * @return 如果两个对象相等返回true，否则返回false
      */
     // 深度比较方法
-    private static boolean deepAreEqual(Object a, Object b, boolean deepCompare, boolean ignoreCase, Set<String> visited) {
+    private static boolean deepAreEqual(Object a, Object b, boolean deepCompare, boolean ignoreCase,
+            Set<String> visited) {
         // 基本处理：null检查、相同对象检查
         if (a == b) {
             return true;
@@ -173,11 +188,12 @@ public class Comparator {
     /**
      * 处理基本类型兼容比较
      *
-     * <p>处理字符串、布尔值和数字类型的兼容比较：
+     * <p>
+     * 处理字符串、布尔值和数字类型的兼容比较：
      * <ul>
-     *   <li>字符串比较：支持忽略大小写</li>
-     *   <li>布尔值兼容比较：支持字符串与布尔值的比较</li>
-     *   <li>数字兼容比较：支持字符串与数字的比较</li>
+     * <li>字符串比较：支持忽略大小写</li>
+     * <li>布尔值兼容比较：支持字符串与布尔值的比较</li>
+     * <li>数字兼容比较：支持字符串与数字的比较</li>
      * </ul>
      * </p>
      *
@@ -207,10 +223,11 @@ public class Comparator {
     /**
      * 比较两个数字是否相等
      *
-     * <p>根据数字类型进行相应的比较：
+     * <p>
+     * 根据数字类型进行相应的比较：
      * <ul>
-     *   <li>整数类型：使用long值进行比较</li>
-     *   <li>浮点类型：使用double值进行比较，误差范围1e-10</li>
+     * <li>整数类型：使用long值进行比较</li>
+     * <li>浮点类型：使用double值进行比较，误差范围1e-10</li>
      * </ul>
      * </p>
      *
@@ -228,7 +245,9 @@ public class Comparator {
     /**
      * 判断数字是否为整数类型
      *
-     * <p>检查给定的数字是否为整数类型，包括Integer、Long、Short、Byte。</p>
+     * <p>
+     * 检查给定的数字是否为整数类型，包括Integer、Long、Short、Byte。
+     * </p>
      *
      * @param num 待检查的数字
      * @return 如果数字是整数类型返回true，否则返回false
@@ -240,7 +259,9 @@ public class Comparator {
     /**
      * 比较两个集合是否相等
      *
-     * <p>逐个比较集合中的元素，支持深度比较和忽略大小写选项。</p>
+     * <p>
+     * 逐个比较集合中的元素，支持深度比较和忽略大小写选项。
+     * </p>
      *
      * @param colA        第一个集合
      * @param colB        第二个集合
@@ -250,7 +271,7 @@ public class Comparator {
      * @return 如果两个集合相等返回true，否则返回false
      */
     private static boolean compareCollections(Collection<?> colA, Collection<?> colB, boolean deepCompare,
-                                              boolean ignoreCase, Set<String> visited) {
+            boolean ignoreCase, Set<String> visited) {
         if (colA.size() != colB.size()) {
             return false;
         }
@@ -267,7 +288,9 @@ public class Comparator {
     /**
      * 比较两个数组是否相等
      *
-     * <p>逐个比较数组中的元素，支持深度比较和忽略大小写选项。</p>
+     * <p>
+     * 逐个比较数组中的元素，支持深度比较和忽略大小写选项。
+     * </p>
      *
      * @param arrA        第一个数组
      * @param arrB        第二个数组
@@ -276,7 +299,8 @@ public class Comparator {
      * @param visited     已访问对象集合，用于防止循环引用
      * @return 如果两个数组相等返回true，否则返回false
      */
-    private static boolean compareArrays(Object arrA, Object arrB, boolean deepCompare, boolean ignoreCase, Set<String> visited) {
+    private static boolean compareArrays(Object arrA, Object arrB, boolean deepCompare, boolean ignoreCase,
+            Set<String> visited) {
         var lenA = Array.getLength(arrA);
         var lenB = Array.getLength(arrB);
         if (lenA != lenB) {
@@ -295,7 +319,9 @@ public class Comparator {
     /**
      * 比较两个Map是否相等
      *
-     * <p>逐个比较Map中的键值对，支持深度比较和忽略大小写选项。</p>
+     * <p>
+     * 逐个比较Map中的键值对，支持深度比较和忽略大小写选项。
+     * </p>
      *
      * @param mapA        第一个Map
      * @param mapB        第二个Map
@@ -304,7 +330,8 @@ public class Comparator {
      * @param visited     已访问对象集合，用于防止循环引用
      * @return 如果两个Map相等返回true，否则返回false
      */
-    private static boolean compareMaps(Map<?, ?> mapA, Map<?, ?> mapB, boolean deepCompare, boolean ignoreCase, Set<String> visited) {
+    private static boolean compareMaps(Map<?, ?> mapA, Map<?, ?> mapB, boolean deepCompare, boolean ignoreCase,
+            Set<String> visited) {
         if (mapA.size() != mapB.size()) {
             return false;
         }
@@ -327,7 +354,9 @@ public class Comparator {
     /**
      * 对象深度比较方法
      *
-     * <p>比较两个对象的所有字段，支持继承关系和访问权限控制。</p>
+     * <p>
+     * 比较两个对象的所有字段，支持继承关系和访问权限控制。
+     * </p>
      *
      * @param objA       第一个对象
      * @param objB       第二个对象
@@ -365,7 +394,9 @@ public class Comparator {
     /**
      * 获取类及其父类的所有字段
      *
-     * <p>通过反射获取指定类及其所有父类声明的字段。</p>
+     * <p>
+     * 通过反射获取指定类及其所有父类声明的字段。
+     * </p>
      *
      * @param clazz 类对象
      * @return 包含所有字段的列表
@@ -383,7 +414,9 @@ public class Comparator {
     /**
      * 检查两个字符串数字是否相等
      *
-     * <p>尝试将字符串解析为数字并比较它们是否相等，误差范围1e-10。</p>
+     * <p>
+     * 尝试将字符串解析为数字并比较它们是否相等，误差范围1e-10。
+     * </p>
      *
      * @param s1 第一个字符串
      * @param s2 第二个字符串
@@ -403,13 +436,14 @@ public class Comparator {
     /**
      * 检查实际值是否包含期望值
      *
-     * <p>根据不同的数据类型执行包含关系判断：
+     * <p>
+     * 根据不同的数据类型执行包含关系判断：
      * <ul>
-     *   <li>String：检查是否包含子串</li>
-     *   <li>Number：检查数字字符串是否包含子串</li>
-     *   <li>Boolean：检查布尔字符串是否包含子串</li>
-     *   <li>Collection：检查集合中是否有元素包含指定值</li>
-     *   <li>Map：检查键或值是否包含指定值</li>
+     * <li>String：检查是否包含子串</li>
+     * <li>Number：检查数字字符串是否包含子串</li>
+     * <li>Boolean：检查布尔字符串是否包含子串</li>
+     * <li>Collection：检查集合中是否有元素包含指定值</li>
+     * <li>Map：检查键或值是否包含指定值</li>
      * </ul>
      * </p>
      *
@@ -434,15 +468,16 @@ public class Comparator {
     /**
      * 检查对象是否为空
      *
-     * <p>根据不同的数据类型判断是否为空：
+     * <p>
+     * 根据不同的数据类型判断是否为空：
      * <ul>
-     *   <li>null：返回true</li>
-     *   <li>String：检查是否为null或空字符串（去除首尾空白后）</li>
-     *   <li>CharSequence：检查是否为空</li>
-     *   <li>Iterable：检查迭代器是否有下一个元素</li>
-     *   <li>Object[]：检查数组长度是否为0</li>
-     *   <li>Map：检查是否为空</li>
-     *   <li>其他：返回false</li>
+     * <li>null：返回true</li>
+     * <li>String：检查是否为null或空字符串（去除首尾空白后）</li>
+     * <li>CharSequence：检查是否为空</li>
+     * <li>Iterable：检查迭代器是否有下一个元素</li>
+     * <li>Object[]：检查数组长度是否为0</li>
+     * <li>Map：检查是否为空</li>
+     * <li>其他：返回false</li>
      * </ul>
      * </p>
      *

@@ -32,9 +32,12 @@ import io.github.xiaomisum.ryze.context.TestRunContext;
 import io.github.xiaomisum.ryze.testelement.TestElementConfigureGroup;
 import io.github.xiaomisum.ryze.testelement.TestElementConstantsInterface;
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -46,9 +49,9 @@ import java.util.concurrent.ConcurrentHashMap;
  * <p>
  * 变量管理遵循以下规则：
  * <ul>
- *   <li>变量存储在每个上下文的配置组中</li>
- *   <li>当获取变量时，优先从最后一个上下文中获取</li>
- *   <li>合并变量时，会按照上下文链的顺序合并，后加入的上下文变量会覆盖前面的同名变量</li>
+ * <li>变量存储在每个上下文的配置组中</li>
+ * <li>当获取变量时，优先从最后一个上下文中获取</li>
+ * <li>合并变量时，会按照上下文链的顺序合并，后加入的上下文变量会覆盖前面的同名变量</li>
  * </ul>
  * </p>
  *
@@ -72,6 +75,33 @@ public abstract class AbstractVariablesWrapper implements VariablesWrapper, Test
      * </p>
      */
     protected Context lastContext;
+
+    // -------- 扁平化缓存层 --------
+
+    /**
+     * 合并变量的快照缓存，避免每次调用 mergeVariables() 时重复遍历上下文链
+     */
+    private volatile Map<String, Object> flattenedCache;
+
+    /**
+     * 缓存版本号，与 modificationCount 比较判断缓存是否有效
+     */
+    private volatile long cacheVersion = 0;
+
+    /**
+     * 修改计数器，每次 put/remove 操作时递增，用于缓存失效判断
+     */
+    private volatile long modificationCount = 0;
+
+    /**
+     * 记录自上次缓存构建以来变更的 key 集合
+     */
+    private volatile Set<String> dirtyKeys = ConcurrentHashMap.newKeySet();
+
+    /**
+     * 增量更新阈值：变更 key 数量超过此值时执行全量重建
+     */
+    private static final int INCREMENTAL_THRESHOLD = 20;
 
     /**
      * 构造一个新的变量包装器实例
@@ -114,6 +144,8 @@ public abstract class AbstractVariablesWrapper implements VariablesWrapper, Test
      * @see #getLastVariables()
      */
     public Object put(String name, Object value) {
+        modificationCount++;
+        dirtyKeys.add(name);
         return getLastVariables().put(name, value);
     }
 
@@ -129,6 +161,8 @@ public abstract class AbstractVariablesWrapper implements VariablesWrapper, Test
      */
     public Object remove(String name) {
         if (hasLastVariables()) {
+            modificationCount++;
+            dirtyKeys.add(name);
             return getLastVariables().remove(name);
         }
         return null;
@@ -138,25 +172,88 @@ public abstract class AbstractVariablesWrapper implements VariablesWrapper, Test
      * 合并所有上下文的变量
      * <p>
      * 该方法会按照上下文链的顺序，依次合并所有上下文中的变量配置。后加入上下文的变量会覆盖前面上下文的同名变量，
-     * 实现了变量的继承和覆盖机制。合并后返回一个新的Map对象，对该对象的修改不会反映到上下文的原始变量中。
+     * 实现了变量的继承和覆盖机制。
+     * </p>
+     * <p>
+     * 内部使用缓存机制优化性能：当变量未发生修改时，直接返回缓存的快照。
      * </p>
      *
-     * @return 合并后的变量映射，键为变量名称，值为变量值
+     * @return 合并后的变量映射（不可变视图），键为变量名称，值为变量值
      */
     @Override
     public Map<String, Object> mergeVariables() {
-        var variables = new ConcurrentHashMap<String, Object>();
-        // 合并上下文链中的变量，后加入上下文的变量会覆盖前面上下文的变量
+        long currentMod = this.modificationCount;
+
+        // 缓存命中：版本号未变
+        if (flattenedCache != null && cacheVersion == currentMod) {
+            return Collections.unmodifiableMap(flattenedCache);
+        }
+
+        // 判断：增量更新还是全量重建
+        if (flattenedCache != null && !dirtyKeys.isEmpty() && dirtyKeys.size() <= INCREMENTAL_THRESHOLD) {
+            // 增量更新：基于现有缓存，只更新变化的 key
+            var snapshot = new HashMap<>(flattenedCache);
+            for (String dirtyKey : dirtyKeys) {
+                // 从上下文链中按优先级查找该 key 的最新值
+                Object latestValue = resolveKeyFromChain(dirtyKey);
+                if (latestValue != null) {
+                    snapshot.put(dirtyKey, latestValue);
+                } else {
+                    snapshot.remove(dirtyKey);
+                }
+            }
+            this.flattenedCache = snapshot;
+            this.cacheVersion = currentMod;
+            this.dirtyKeys = ConcurrentHashMap.newKeySet();
+            return Collections.unmodifiableMap(snapshot);
+        }
+
+        // 全量重建
+        var snapshot = new HashMap<String, Object>();
         for (var context : contextChain) {
             var configureGroup = context.getConfigGroup();
             if (configureGroup != null) {
                 var ctxVars = configureGroup.getVariables();
                 if (ctxVars != null) {
-                    variables.putAll(ctxVars);
+                    snapshot.putAll(ctxVars);
                 }
             }
         }
-        return variables;
+        this.flattenedCache = snapshot;
+        this.cacheVersion = currentMod;
+        this.dirtyKeys = ConcurrentHashMap.newKeySet();
+        return Collections.unmodifiableMap(snapshot);
+    }
+
+    /**
+     * 从上下文链按优先级解析指定 key 的值（后面覆盖前面）
+     *
+     * @param key 变量名称
+     * @return 变量的最新值，如果所有上下文中都不存在则返回 null
+     */
+    private Object resolveKeyFromChain(String key) {
+        Object result = null;
+        for (var context : contextChain) {
+            var configureGroup = context.getConfigGroup();
+            if (configureGroup != null) {
+                var ctxVars = configureGroup.getVariables();
+                if (ctxVars != null && ctxVars.containsKey(key)) {
+                    result = ctxVars.get(key);
+                }
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 主动失效缓存
+     * <p>
+     * 当上下文链发生变更（如添加/移除 Context）时调用此方法使缓存失效。
+     * </p>
+     */
+    protected void invalidateCache() {
+        this.modificationCount++;
+        this.dirtyKeys = ConcurrentHashMap.newKeySet();
     }
 
     /**

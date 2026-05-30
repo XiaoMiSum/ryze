@@ -1,0 +1,11 @@
+title: CoAP POST 请求
+testclass: coap # 取样器类型
+configelements:
+  - !include '配置元件/coap_defaults.yaml'
+config: # 取样器配置
+  uri: coap://127.0.0.1:5683/test
+  method: POST
+  content_format: application/json
+  payload: '{"key": "value"}'
+  confirmable: true
+  timeout: 10000

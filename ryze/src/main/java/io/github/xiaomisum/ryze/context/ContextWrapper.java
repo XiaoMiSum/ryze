@@ -25,7 +25,6 @@
 
 package io.github.xiaomisum.ryze.context;
 
-
 import io.github.xiaomisum.ryze.Result;
 import io.github.xiaomisum.ryze.SessionRunner;
 import io.github.xiaomisum.ryze.config.ConfigureGroup;
@@ -48,11 +47,11 @@ import java.util.UUID;
  * <p>
  * 主要功能包括：
  * <ul>
- *   <li>管理上下文链：将不同层级的Context对象组织成链式结构</li>
- *   <li>配置组合并：将上下文链中各层级的配置信息合并成统一视图</li>
- *   <li>变量管理：提供对全局变量、测试变量、会话变量和本地变量的访问</li>
- *   <li>表达式计算：提供基于模板引擎的表达式计算功能</li>
- *   <li>测试元件信息管理：维护当前正在执行的测试元件和结果信息</li>
+ * <li>管理上下文链：将不同层级的Context对象组织成链式结构</li>
+ * <li>配置组合并：将上下文链中各层级的配置信息合并成统一视图</li>
+ * <li>变量管理：提供对全局变量、测试变量、会话变量和本地变量的访问</li>
+ * <li>表达式计算：提供基于模板引擎的表达式计算功能</li>
+ * <li>测试元件信息管理：维护当前正在执行的测试元件和结果信息</li>
  * </ul>
  * </p>
  *
@@ -373,5 +372,17 @@ public class ContextWrapper {
      */
     public String getUuid() {
         return uuid;
+    }
+
+    /**
+     * 获取当前执行ID
+     * <p>
+     * 返回当前 ContextWrapper 关联的执行标识符，如果 uuid 未设置则返回 "unbound"。
+     * </p>
+     *
+     * @return 执行ID字符串
+     */
+    public String getExecutionId() {
+        return uuid != null ? uuid : "unbound";
     }
 }

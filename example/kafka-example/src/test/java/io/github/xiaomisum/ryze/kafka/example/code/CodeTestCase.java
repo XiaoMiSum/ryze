@@ -1,17 +1,20 @@
 package io.github.xiaomisum.ryze.kafka.example.code;
 
 import io.github.xiaomisum.ryze.Ryze;
+import io.github.xiaomisum.ryze.kafka.example.KafkaTestListener;
 import io.github.xiaomisum.ryze.protocol.kafka.Kafka;
 import io.github.xiaomisum.ryze.protocol.kafka.builder.KafkaConfigureElementsBuilder;
 import io.github.xiaomisum.ryze.protocol.kafka.builder.KafkaPostprocessorsBuilder;
 import io.github.xiaomisum.ryze.protocol.kafka.builder.KafkaPreprocessorsBuilder;
 import io.github.xiaomisum.ryze.protocol.kafka.builder.KafkaSamplersBuilder;
 import io.github.xiaomisum.ryze.support.testng.annotation.RyzeTest;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 import java.util.List;
 import java.util.Map;
 
+@Listeners(KafkaTestListener.class)
 public class CodeTestCase {
 
     @Test

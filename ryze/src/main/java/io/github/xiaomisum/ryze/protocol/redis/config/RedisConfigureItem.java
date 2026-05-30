@@ -39,6 +39,7 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.Protocol;
 import redis.clients.jedis.commands.ProtocolCommand;
 
+import java.time.Duration;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
@@ -57,64 +58,161 @@ import static redis.clients.jedis.Protocol.Command.*;
  * @author xiaomi
  */
 @JSONType(deserializer = RedisJSONInterceptor.class)
-@SuppressWarnings({"unchecked"})
+@SuppressWarnings({ "unchecked" })
 public class RedisConfigureItem implements ConfigureItem<RedisConfigureItem>, RedisConstantsInterface {
 
     /**
      * 数据源引用名称
-     * <p>用于引用已配置的Redis数据源</p>
+     * <p>
+     * 用于引用已配置的Redis数据源
+     * </p>
      */
     @JSONField(name = DATASOURCE)
     protected String datasource;
 
     /**
      * Redis连接URL
-     * <p>Redis连接字符串，格式为：redis://[username:password@]host[:port][/db]</p>
+     * <p>
+     * Redis连接字符串，格式为：redis://[username:password@]host[:port][/db]
+     * </p>
      */
     @JSONField(name = URL, ordinal = 1)
     protected String url;
 
     /**
      * Redis命令
-     * <p>要执行的Redis命令名称</p>
+     * <p>
+     * 要执行的Redis命令名称
+     * </p>
      */
     @JSONField(name = COMMAND, ordinal = 6)
     protected String command;
 
     /**
      * Redis命令参数
-     * <p>Redis命令的参数列表，以逗号分隔</p>
+     * <p>
+     * Redis命令的参数列表，以逗号分隔
+     * </p>
      */
     @JSONField(name = ARGS, ordinal = 7)
     protected List<String> args;
 
     /**
      * 连接超时时间
-     * <p>Redis连接超时时间(毫秒)，默认值为10000</p>
+     * <p>
+     * Redis连接超时时间(毫秒)，默认值为10000
+     * </p>
      */
     @JSONField(name = TIMEOUT, ordinal = 2)
     protected int timeout;
 
     /**
      * 最大总连接数
-     * <p>Jedis连接池的最大总连接数，默认值为10</p>
+     * <p>
+     * Jedis连接池的最大总连接数，默认值为10
+     * </p>
      */
     @JSONField(name = MAX_TOTAL, ordinal = 3)
     protected int maxTotal;
 
     /**
      * 最大空闲连接数
-     * <p>Jedis连接池的最大空闲连接数，默认值为5</p>
+     * <p>
+     * Jedis连接池的最大空闲连接数，默认值为5
+     * </p>
      */
     @JSONField(name = MAX_IDLE, ordinal = 4)
     protected int maxIdle;
 
     /**
      * 最小空闲连接数
-     * <p>Jedis连接池的最小空闲连接数，默认值为1</p>
+     * <p>
+     * Jedis连接池的最小空闲连接数，默认值为1
+     * </p>
      */
     @JSONField(name = MIN_IDLE, ordinal = 5)
     protected int minIdle;
+
+    /**
+     * Redis部署模式
+     * <p>
+     * 支持STANDALONE、CLUSTER、SENTINEL三种模式，默认为STANDALONE
+     * </p>
+     */
+    @JSONField(name = MODE, ordinal = 8)
+    protected RedisMode mode;
+
+    /**
+     * 集群/哨兵节点列表
+     * <p>
+     * 格式为 "host:port"，用于Cluster和Sentinel模式
+     * </p>
+     */
+    @JSONField(name = NODES, ordinal = 9)
+    protected List<String> nodes;
+
+    /**
+     * Sentinel主节点名称
+     * <p>
+     * Sentinel模式下的主节点名称
+     * </p>
+     */
+    @JSONField(name = MASTER_NAME, ordinal = 10)
+    protected String masterName;
+
+    /**
+     * Redis密码
+     * <p>
+     * Redis服务器认证密码
+     * </p>
+     */
+    @JSONField(name = PASSWORD, ordinal = 11)
+    protected String password;
+
+    /**
+     * Sentinel密码
+     * <p>
+     * Sentinel节点认证密码
+     * </p>
+     */
+    @JSONField(name = SENTINEL_PASSWORD, ordinal = 12)
+    protected String sentinelPassword;
+
+    /**
+     * 连接等待超时时间
+     * <p>
+     * 从连接池获取连接的最大等待时间(毫秒)，默认值为-1(无限等待)
+     * </p>
+     */
+    @JSONField(name = MAX_WAIT_MILLIS, ordinal = 13)
+    protected long maxWaitMillis;
+
+    /**
+     * 借用时检测
+     * <p>
+     * 从连接池获取连接时是否进行有效性检测
+     * </p>
+     */
+    @JSONField(name = TEST_ON_BORROW, ordinal = 14)
+    protected boolean testOnBorrow;
+
+    /**
+     * 归还时检测
+     * <p>
+     * 归还连接到连接池时是否进行有效性检测
+     * </p>
+     */
+    @JSONField(name = TEST_ON_RETURN, ordinal = 15)
+    protected boolean testOnReturn;
+
+    /**
+     * 空闲时检测
+     * <p>
+     * 空闲连接是否进行有效性检测
+     * </p>
+     */
+    @JSONField(name = TEST_WHILE_IDLE, ordinal = 16)
+    protected boolean testWhileIdle;
 
     /**
      * 默认构造函数
@@ -130,7 +228,6 @@ public class RedisConfigureItem implements ConfigureItem<RedisConfigureItem>, Re
     public static Builder builder() {
         return new Builder();
     }
-
 
     /**
      * 合并配置项
@@ -154,9 +251,20 @@ public class RedisConfigureItem implements ConfigureItem<RedisConfigureItem>, Re
         self.command = StringUtils.isBlank(self.command) ? localOther.command : self.command;
         self.args = self.getArgs() == null || self.args.isEmpty() ? localOther.args : self.args;
         self.timeout = (self.timeout = self.timeout > 0 ? self.timeout : localOther.timeout) > 0 ? self.timeout : 10000;
-        self.maxTotal = (self.maxTotal = self.maxTotal > 0 ? self.maxTotal : localOther.maxTotal) > 0 ? self.maxTotal : 10;
+        self.maxTotal = (self.maxTotal = self.maxTotal > 0 ? self.maxTotal : localOther.maxTotal) > 0 ? self.maxTotal
+                : 10;
         self.maxIdle = (self.maxIdle = self.maxIdle > 0 ? self.maxIdle : localOther.maxIdle) > 0 ? self.maxIdle : 5;
         self.minIdle = (self.minIdle = self.minIdle > 0 ? self.minIdle : localOther.minIdle) > 0 ? self.minIdle : 1;
+        self.mode = self.mode != null ? self.mode : localOther.mode;
+        self.nodes = self.nodes != null && !self.nodes.isEmpty() ? self.nodes : localOther.nodes;
+        self.masterName = StringUtils.isBlank(self.masterName) ? localOther.masterName : self.masterName;
+        self.password = StringUtils.isBlank(self.password) ? localOther.password : self.password;
+        self.sentinelPassword = StringUtils.isBlank(self.sentinelPassword) ? localOther.sentinelPassword
+                : self.sentinelPassword;
+        self.maxWaitMillis = self.maxWaitMillis > 0 ? self.maxWaitMillis : localOther.maxWaitMillis;
+        self.testOnBorrow = self.testOnBorrow || localOther.testOnBorrow;
+        self.testOnReturn = self.testOnReturn || localOther.testOnReturn;
+        self.testWhileIdle = self.testWhileIdle || localOther.testWhileIdle;
         return self;
     }
 
@@ -175,6 +283,10 @@ public class RedisConfigureItem implements ConfigureItem<RedisConfigureItem>, Re
         url = (String) context.evaluate(url);
         command = (String) context.evaluate(command);
         args = (List<String>) context.evaluate(args);
+        nodes = (List<String>) context.evaluate(nodes);
+        masterName = (String) context.evaluate(masterName);
+        password = (String) context.evaluate(password);
+        sentinelPassword = (String) context.evaluate(sentinelPassword);
         return this;
     }
 
@@ -327,6 +439,168 @@ public class RedisConfigureItem implements ConfigureItem<RedisConfigureItem>, Re
     }
 
     /**
+     * 获取Redis部署模式
+     *
+     * @return Redis部署模式，默认为STANDALONE
+     */
+    public RedisMode getMode() {
+        return mode != null ? mode : RedisMode.standalone;
+    }
+
+    /**
+     * 设置Redis部署模式
+     *
+     * @param mode Redis部署模式
+     */
+    public void setMode(RedisMode mode) {
+        this.mode = mode;
+    }
+
+    /**
+     * 获取集群/哨兵节点列表
+     *
+     * @return 节点列表
+     */
+    public List<String> getNodes() {
+        return nodes;
+    }
+
+    /**
+     * 设置集群/哨兵节点列表
+     *
+     * @param nodes 节点列表
+     */
+    public void setNodes(List<String> nodes) {
+        this.nodes = nodes;
+    }
+
+    /**
+     * 获取Sentinel主节点名称
+     *
+     * @return Sentinel主节点名称
+     */
+    public String getMasterName() {
+        return masterName;
+    }
+
+    /**
+     * 设置Sentinel主节点名称
+     *
+     * @param masterName Sentinel主节点名称
+     */
+    public void setMasterName(String masterName) {
+        this.masterName = masterName;
+    }
+
+    /**
+     * 获取Redis密码
+     *
+     * @return Redis密码
+     */
+    public String getPassword() {
+        return password;
+    }
+
+    /**
+     * 设置Redis密码
+     *
+     * @param password Redis密码
+     */
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    /**
+     * 获取Sentinel密码
+     *
+     * @return Sentinel密码
+     */
+    public String getSentinelPassword() {
+        return sentinelPassword;
+    }
+
+    /**
+     * 设置Sentinel密码
+     *
+     * @param sentinelPassword Sentinel密码
+     */
+    public void setSentinelPassword(String sentinelPassword) {
+        this.sentinelPassword = sentinelPassword;
+    }
+
+    /**
+     * 获取连接等待超时时间
+     *
+     * @return 连接等待超时时间(毫秒)
+     */
+    public long getMaxWaitMillis() {
+        return maxWaitMillis;
+    }
+
+    /**
+     * 设置连接等待超时时间
+     *
+     * @param maxWaitMillis 连接等待超时时间(毫秒)
+     */
+    public void setMaxWaitMillis(long maxWaitMillis) {
+        this.maxWaitMillis = maxWaitMillis;
+    }
+
+    /**
+     * 获取借用时是否检测
+     *
+     * @return 是否在借用时检测
+     */
+    public boolean isTestOnBorrow() {
+        return testOnBorrow;
+    }
+
+    /**
+     * 设置借用时是否检测
+     *
+     * @param testOnBorrow 是否在借用时检测
+     */
+    public void setTestOnBorrow(boolean testOnBorrow) {
+        this.testOnBorrow = testOnBorrow;
+    }
+
+    /**
+     * 获取归还时是否检测
+     *
+     * @return 是否在归还时检测
+     */
+    public boolean isTestOnReturn() {
+        return testOnReturn;
+    }
+
+    /**
+     * 设置归还时是否检测
+     *
+     * @param testOnReturn 是否在归还时检测
+     */
+    public void setTestOnReturn(boolean testOnReturn) {
+        this.testOnReturn = testOnReturn;
+    }
+
+    /**
+     * 获取空闲时是否检测
+     *
+     * @return 是否在空闲时检测
+     */
+    public boolean isTestWhileIdle() {
+        return testWhileIdle;
+    }
+
+    /**
+     * 设置空闲时是否检测
+     *
+     * @param testWhileIdle 是否在空闲时检测
+     */
+    public void setTestWhileIdle(boolean testWhileIdle) {
+        this.testWhileIdle = testWhileIdle;
+    }
+
+    /**
      * Redis 协议配置项构建类
      * <p>
      * 提供链式调用方式创建Redis配置项实例，支持设置所有Redis相关配置参数。
@@ -350,7 +624,6 @@ public class RedisConfigureItem implements ConfigureItem<RedisConfigureItem>, Re
             System.arraycopy(fields, 0, args, 1, fields.length);
             return args;
         }
-
 
         /**
          * 设置数据源引用名称
@@ -397,7 +670,6 @@ public class RedisConfigureItem implements ConfigureItem<RedisConfigureItem>, Re
             configure.args = Collections.addAllIfNonNull(configure.args, localArgs);
             return self;
         }
-
 
         /**
          * 删除指定的键
@@ -559,7 +831,7 @@ public class RedisConfigureItem implements ConfigureItem<RedisConfigureItem>, Re
          * @return 构建器实例
          */
         public Builder hmset(String key, String field, String value, String... keywords) {
-            var tmp = new String[]{key, field, value};
+            var tmp = new String[] { key, field, value };
             var args = new String[tmp.length + keywords.length];
             // 拷贝 key field value
             System.arraycopy(tmp, 0, args, 0, tmp.length);
@@ -816,7 +1088,8 @@ public class RedisConfigureItem implements ConfigureItem<RedisConfigureItem>, Re
          * 将信息发送到指定的频道。
          * 无法发送 json格式的字符串，因为key 和 message 会以逗号作为分隔符串连为一个新字符串。
          * <p>
-         * 以 {@link Jedis#sendCommand(ProtocolCommand, String...)}  发送 command 和 args(key,message) 时，会以逗号作为分隔符重新创建一个 String[]，
+         * 以 {@link Jedis#sendCommand(ProtocolCommand, String...)} 发送 command 和
+         * args(key,message) 时，会以逗号作为分隔符重新创建一个 String[]，
          * json格式的 message 会被分割成多个参数，从而导致错误。
          *
          * @param key     频道名
@@ -833,7 +1106,8 @@ public class RedisConfigureItem implements ConfigureItem<RedisConfigureItem>, Re
          * <p>
          * 在Redis预处理器、后置处理器和取样器中使用时需要注意此问题。
          * <p>
-         * 以 {@link Jedis#sendCommand(ProtocolCommand, String...)}  发送 command 和 args(key,message) 时，会以逗号作为分隔符重新创建一个 String[]，
+         * 以 {@link Jedis#sendCommand(ProtocolCommand, String...)} 发送 command 和
+         * args(key,message) 时，会以逗号作为分隔符重新创建一个 String[]，
          * json格式的 message 会被分割成多个参数，从而导致错误。
          *
          * @param key     频道名
@@ -853,7 +1127,7 @@ public class RedisConfigureItem implements ConfigureItem<RedisConfigureItem>, Re
          * @return 构建器实例
          */
         public Builder xadd(String key, String message, String... messages) {
-            var args = new String[]{key, "*", message};
+            var args = new String[] { key, "*", message };
             System.arraycopy(args, 0, args, args.length, messages.length);
             return command(XADD, args);
         }
@@ -911,6 +1185,105 @@ public class RedisConfigureItem implements ConfigureItem<RedisConfigureItem>, Re
         }
 
         /**
+         * 设置Redis部署模式
+         *
+         * @param mode Redis部署模式
+         * @return 构建器实例
+         */
+        public Builder mode(RedisMode mode) {
+            configure.mode = mode;
+            return self;
+        }
+
+        /**
+         * 设置集群/哨兵节点列表
+         *
+         * @param nodes 节点列表
+         * @return 构建器实例
+         */
+        public Builder nodes(List<String> nodes) {
+            configure.nodes = nodes;
+            return self;
+        }
+
+        /**
+         * 设置Sentinel主节点名称
+         *
+         * @param masterName Sentinel主节点名称
+         * @return 构建器实例
+         */
+        public Builder masterName(String masterName) {
+            configure.masterName = masterName;
+            return self;
+        }
+
+        /**
+         * 设置Redis密码
+         *
+         * @param password Redis密码
+         * @return 构建器实例
+         */
+        public Builder password(String password) {
+            configure.password = password;
+            return self;
+        }
+
+        /**
+         * 设置Sentinel密码
+         *
+         * @param sentinelPassword Sentinel密码
+         * @return 构建器实例
+         */
+        public Builder sentinelPassword(String sentinelPassword) {
+            configure.sentinelPassword = sentinelPassword;
+            return self;
+        }
+
+        /**
+         * 设置连接等待超时时间
+         *
+         * @param maxWaitMillis 连接等待超时时间(毫秒)
+         * @return 构建器实例
+         */
+        public Builder maxWaitMillis(long maxWaitMillis) {
+            configure.maxWaitMillis = maxWaitMillis;
+            return self;
+        }
+
+        /**
+         * 设置借用时是否检测
+         *
+         * @param testOnBorrow 是否在借用时检测
+         * @return 构建器实例
+         */
+        public Builder testOnBorrow(boolean testOnBorrow) {
+            configure.testOnBorrow = testOnBorrow;
+            return self;
+        }
+
+        /**
+         * 设置归还时是否检测
+         *
+         * @param testOnReturn 是否在归还时检测
+         * @return 构建器实例
+         */
+        public Builder testOnReturn(boolean testOnReturn) {
+            configure.testOnReturn = testOnReturn;
+            return self;
+        }
+
+        /**
+         * 设置空闲时是否检测
+         *
+         * @param testWhileIdle 是否在空闲时检测
+         * @return 构建器实例
+         */
+        public Builder testWhileIdle(boolean testWhileIdle) {
+            configure.testWhileIdle = testWhileIdle;
+            return self;
+        }
+
+        /**
          * 通过消费者函数配置
          *
          * @param consumer 配置消费者函数
@@ -929,7 +1302,8 @@ public class RedisConfigureItem implements ConfigureItem<RedisConfigureItem>, Re
          * @param closure 配置闭包
          * @return 构建器实例
          */
-        public Builder config(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = Builder.class) Closure<?> closure) {
+        public Builder config(
+                @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = Builder.class) Closure<?> closure) {
             var builder = RedisConfigureItem.builder();
             call(closure, builder);
             configure = configure.merge(builder.build());

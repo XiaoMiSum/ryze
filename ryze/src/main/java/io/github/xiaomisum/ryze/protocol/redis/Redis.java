@@ -38,11 +38,12 @@ import java.util.List;
  * 使用Jedis客户端库作为底层Redis客户端实现。
  * </p>
  *
- * <p>主要功能：
+ * <p>
+ * 主要功能：
  * <ul>
- *   <li>执行Redis命令</li>
- *   <li>记录命令执行时间</li>
- *   <li>处理命令执行结果</li>
+ * <li>执行Redis命令</li>
+ * <li>记录命令执行时间</li>
+ * <li>处理命令执行结果</li>
  * </ul>
  * </p>
  *
@@ -53,7 +54,8 @@ public class Redis {
     /**
      * 执行Redis命令并返回结果
      * <p>
-     * 该方法会从数据源获取Redis连接，执行指定的Redis命令，并在采样结果中记录执行时间。
+     * 该方法通过数据源的统一命令执行接口发送Redis命令，支持Standalone、Cluster、Sentinel三种模式。
+     * 并在采样结果中记录执行时间。
      * 支持处理多种类型的返回结果，包括字符串、列表、字节数组等。
      * </p>
      *
@@ -63,10 +65,11 @@ public class Redis {
      * @param result     采样结果对象，用于记录执行时间
      * @return Redis命令执行结果的字节数组形式
      */
-    public static byte[] execute(RedisDatasource datasource, String command, List<String> args, DefaultSampleResult result) {
+    public static byte[] execute(RedisDatasource datasource, String command, List<String> args,
+                                 DefaultSampleResult result) {
         result.sampleStart();
-        try (var jedis = datasource.getConnection()) {
-            var response = jedis.sendCommand(Protocol.Command.valueOf(command), args.toArray(new String[0]));
+        try {
+            var response = datasource.executeCommand(Protocol.Command.valueOf(command), args.toArray(new String[0]));
             return toBytes(response);
         } finally {
             result.sampleEnd();
@@ -78,10 +81,10 @@ public class Redis {
      * <p>
      * 根据返回结果的类型进行相应的转换：
      * <ul>
-     *   <li>null值：返回空字节数组</li>
-     *   <li>列表：转换为JSON数组格式的字符串</li>
-     *   <li>字节数组：直接返回</li>
-     *   <li>其他类型：转换为字符串后返回其字节数组</li>
+     * <li>null值：返回空字节数组</li>
+     * <li>列表：转换为JSON数组格式的字符串</li>
+     * <li>字节数组：直接返回</li>
+     * <li>其他类型：转换为字符串后返回其字节数组</li>
      * </ul>
      * </p>
      *
@@ -93,7 +96,8 @@ public class Redis {
             case null -> new byte[0];
             case List<?> results -> {
                 var sb = new StringBuilder("[");
-                results.forEach(item -> sb.append(sb.length() > 1 ? "," : "").append(item instanceof String ? "\"" + item + "\"" : item));
+                results.forEach(item -> sb.append(sb.length() > 1 ? "," : "")
+                        .append(item instanceof String ? "\"" + item + "\"" : item));
                 yield sb.append("]").toString().getBytes();
             }
             case byte[] bytes -> bytes;

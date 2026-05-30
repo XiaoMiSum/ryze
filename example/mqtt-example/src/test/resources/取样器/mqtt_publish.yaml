@@ -1,0 +1,9 @@
+title: 发布测试消息
+testclass: mqtt_publish # 取样器类型
+configelements:
+  - !include '配置元件/mqtt_defaults.yaml'
+config: # 取样器配置
+  datasource: mqtt_source
+  topic: test/topic
+  qos: 1
+  payload: '{"message": "hello from ryze"}'

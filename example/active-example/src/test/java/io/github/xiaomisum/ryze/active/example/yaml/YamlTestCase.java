@@ -1,12 +1,15 @@
 package io.github.xiaomisum.ryze.active.example.yaml;
 
 import io.github.xiaomisum.ryze.Ryze;
+import io.github.xiaomisum.ryze.active.example.ActiveTestListener;
 import io.github.xiaomisum.ryze.protocol.active.sampler.ActiveSampler;
 import io.github.xiaomisum.ryze.support.testng.annotation.RyzeTest;
 import io.github.xiaomisum.ryze.testelement.TestElement;
 import io.github.xiaomisum.ryze.testelement.TestSuite;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
+@Listeners(ActiveTestListener.class)
 public class YamlTestCase {
 
 
