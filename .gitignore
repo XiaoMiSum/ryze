@@ -18,6 +18,7 @@
 /*/allure-results
 /*/*/allure-results
 /node_modules
+/*/node_module
 docs/.vitepress/dist
 docs/.vitepress/cache
 /logs
