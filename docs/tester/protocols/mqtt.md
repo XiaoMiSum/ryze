@@ -8,34 +8,34 @@ MQTT 协议支持为 Ryze 测试框架提供了 MQTT 消息发布与订阅的测
 
 ### MQTT 数据源配置
 
-| 配置项           | 类型      | 默认值       | 必需 | 描述                    |
-|---------------|---------|-----------|----|-----------------------|
-| broker        | String  | localhost | ✅  | MQTT Broker 地址        |
-| port          | int     | 1883      | ❌  | 端口号 (TLS 默认: 8883)   |
-| client_id     | String  | -         | ❌  | 客户端标识                 |
-| username      | String  | -         | ❌  | 用户名                   |
-| password      | String  | -         | ❌  | 密码                    |
-| clean_session | boolean | true      | ❌  | 清除会话                  |
-| keep_alive    | int     | 60        | ❌  | 心跳间隔(秒)              |
-| tls_enabled   | boolean | false     | ❌  | 启用 TLS/SSL            |
-| mqtt_version  | String  | "5.0"     | ❌  | MQTT 协议版本             |
+| 配置项        | 类型    | 默认值    | 必需 | 描述                    |
+|---------------|---------|-----------|------|-------------------------|
+| broker        | String  | localhost | ✅   | MQTT Broker 地址        |
+| port          | int     | 1883      | ❌   | 端口号 (TLS 默认: 8883) |
+| client_id     | String  | -         | ❌   | 客户端标识              |
+| username      | String  | -         | ❌   | 用户名                  |
+| password      | String  | -         | ❌   | 密码                    |
+| clean_session | boolean | true      | ❌   | 清除会话                |
+| keep_alive    | int     | 60        | ❌   | 心跳间隔(秒)            |
+| tls_enabled   | boolean | false     | ❌   | 启用 TLS/SSL            |
+| mqtt_version  | String  | "5.0"     | ❌   | MQTT 协议版本           |
 
 ### MQTT Publish（发布）配置
 
-| 配置项        | 类型     | 默认值 | 必需 | 描述                 |
-|------------|--------|-----|----|---------------------|
-| datasource | String | -   | ✅  | 数据源引用名              |
-| topic      | String | -   | ✅  | 发布主题               |
-| qos        | int    | 1   | ❌  | QoS 等级 (0/1/2)     |
-| payload    | Object | -   | ✅  | 消息负载               |
+| 配置项     | 类型   | 默认值 | 必需 | 描述             |
+|------------|--------|--------|------|------------------|
+| datasource | String | -      | ✅   | 数据源引用名     |
+| topic      | String | -      | ✅   | 发布主题         |
+| qos        | int    | 1      | ❌   | QoS 等级 (0/1/2) |
+| payload    | Object | -      | ✅   | 消息负载         |
 
 ### Last Will（遗愿消息）配置
 
-| 配置项               | 类型     | 默认值 | 必需 | 描述       |
-|-------------------|--------|-----|----|----------|
-| last_will_topic   | String | -   | ❌  | 遗愿消息主题   |
-| last_will_payload | String | -   | ❌  | 遗愿消息内容   |
-| last_will_qos     | int    | 0   | ❌  | 遗愿消息 QoS |
+| 配置项            | 类型   | 默认值 | 必需 | 描述         |
+|-------------------|--------|--------|------|--------------|
+| last_will_topic   | String | -      | ❌   | 遗愿消息主题 |
+| last_will_payload | String | -      | ❌   | 遗愿消息内容 |
+| last_will_qos     | int    | 0      | ❌   | 遗愿消息 QoS |
 
 > **配置优先级**: 取样器配置 > MQTT 默认配置
 
@@ -109,11 +109,11 @@ config:
 
 ## 📘 QoS 等级对照
 
-| QoS | 名称             | 说明            | 推荐场景       |
-|-----|----------------|---------------|------------|
-| 0   | At most once   | 最多一次，可能丢失    | 环境数据上报    |
-| 1   | At least once  | 至少一次，可能重复    | 普通IoT通信   |
-| 2   | Exactly once   | 恰好一次，不丢不重    | 计费/控制指令   |
+| QoS | 名称          | 说明               | 推荐场景      |
+|-----|---------------|--------------------|---------------|
+| 0   | At most once  | 最多一次，可能丢失 | 环境数据上报  |
+| 1   | At least once | 至少一次，可能重复 | 普通IoT通信   |
+| 2   | Exactly once  | 恰好一次，不丢不重 | 计费/控制指令 |
 
 ## 📋 完整 YAML 配置示例
 
@@ -155,7 +155,7 @@ children:
       datasource: mqtt_source
       topic: 'sensor/temperature/sensor-001'
       qos: 0
-      payload: '{"value":25.6,"unit":"celsius","timestamp":"${__now()}"}'
+      payload: '{"value":25.6,"unit":"celsius","timestamp":"${timestamp()}"}'
 
   - title: 发布控制指令(QoS 2)
     testclass: mqtt_publish

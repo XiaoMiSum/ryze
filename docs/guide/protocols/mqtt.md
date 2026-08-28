@@ -2,9 +2,11 @@
 
 ## 📖 概述
 
-MQTT（Message Queuing Telemetry Transport）是一种轻量级的发布/订阅消息传输协议，专为资源受限的设备和低带宽、高延迟的网络环境设计。Ryze 测试框架的 MQTT 协议支持为物联网（IoT）场景提供了完整的消息发布与订阅测试能力。
+MQTT（Message Queuing Telemetry Transport）是一种轻量级的发布/订阅消息传输协议，专为资源受限的设备和低带宽、高延迟的网络环境设计。Ryze
+测试框架的 MQTT 协议支持为物联网（IoT）场景提供了完整的消息发布与订阅测试能力。
 
 **适用场景：**
+
 - IoT 物联网设备通信测试
 - 传感器数据上报测试
 - 设备远程控制指令测试
@@ -15,34 +17,34 @@ MQTT（Message Queuing Telemetry Transport）是一种轻量级的发布/订阅�
 
 ### MQTT 数据源配置
 
-| 配置项           | 类型      | 默认值       | 必需 | 描述                    |
-|---------------|---------|-----------|----|-----------------------|
-| broker        | String  | localhost | ✅  | MQTT Broker 地址        |
-| port          | int     | 1883      | ❌  | 端口号 (TLS 默认: 8883)   |
-| client_id     | String  | -         | ❌  | 客户端标识                 |
-| username      | String  | -         | ❌  | 用户名                   |
-| password      | String  | -         | ❌  | 密码                    |
-| clean_session | boolean | true      | ❌  | 清除会话                  |
-| keep_alive    | int     | 60        | ❌  | 心跳间隔(秒)              |
-| tls_enabled   | boolean | false     | ❌  | 启用 TLS/SSL            |
-| mqtt_version  | String  | "5.0"     | ❌  | MQTT 协议版本             |
+| 配置项        | 类型    | 默认值    | 必需 | 描述                    |
+|---------------|---------|-----------|------|-------------------------|
+| broker        | String  | localhost | ✅   | MQTT Broker 地址        |
+| port          | int     | 1883      | ❌   | 端口号 (TLS 默认: 8883) |
+| client_id     | String  | -         | ❌   | 客户端标识              |
+| username      | String  | -         | ❌   | 用户名                  |
+| password      | String  | -         | ❌   | 密码                    |
+| clean_session | boolean | true      | ❌   | 清除会话                |
+| keep_alive    | int     | 60        | ❌   | 心跳间隔(秒)            |
+| tls_enabled   | boolean | false     | ❌   | 启用 TLS/SSL            |
+| mqtt_version  | String  | "5.0"     | ❌   | MQTT 协议版本           |
 
 ### MQTT 消息配置
 
-| 配置项        | 类型     | 默认值 | 必需 | 描述              |
-|------------|--------|-----|----|------------------|
-| datasource | String | -   | ✅  | 数据源引用名          |
-| topic      | String | -   | ✅  | 发布主题            |
-| qos        | int    | 1   | ❌  | QoS 等级 (0/1/2)  |
-| payload    | Object | -   | ❌  | 消息负载            |
+| 配置项     | 类型   | 默认值 | 必需 | 描述             |
+|------------|--------|--------|------|------------------|
+| datasource | String | -      | ✅   | 数据源引用名     |
+| topic      | String | -      | ✅   | 发布主题         |
+| qos        | int    | 1      | ❌   | QoS 等级 (0/1/2) |
+| payload    | Object | -      | ❌   | 消息负载         |
 
 ### Last Will（遗愿消息）配置
 
-| 配置项              | 类型     | 默认值 | 必需 | 描述       |
-|------------------|--------|-----|----|----------|
-| last_will_topic  | String | -   | ❌  | 遗愿消息主题   |
-| last_will_payload| String | -   | ❌  | 遗愿消息内容   |
-| last_will_qos    | int    | 0   | ❌  | 遗愿消息 QoS |
+| 配置项            | 类型   | 默认值 | 必需 | 描述         |
+|-------------------|--------|--------|------|--------------|
+| last_will_topic   | String | -      | ❌   | 遗愿消息主题 |
+| last_will_payload | String | -      | ❌   | 遗愿消息内容 |
+| last_will_qos     | int    | 0      | ❌   | 遗愿消息 QoS |
 
 > **配置优先级**: 取样器配置 > MQTT 默认配置
 
@@ -135,11 +137,11 @@ config:
 
 ## 📘 QoS 等级说明
 
-| QoS 等级 | 名称         | 描述                     | 适用场景         |
-|---------|------------|------------------------|--------------|
-| 0       | At most once  | 最多一次，不保证消息到达         | 环境监测等允许丢失的场景 |
-| 1       | At least once | 至少一次，确保消息到达但可能重复     | 大多数IoT场景     |
-| 2       | Exactly once  | 恰好一次，确保消息不丢失且不重复     | 计费、指令控制等关键场景 |
+| QoS 等级 | 名称          | 描述                             | 适用场景                 |
+|----------|---------------|----------------------------------|--------------------------|
+| 0        | At most once  | 最多一次，不保证消息到达         | 环境监测等允许丢失的场景 |
+| 1        | At least once | 至少一次，确保消息到达但可能重复 | 大多数IoT场景            |
+| 2        | Exactly once  | 恰好一次，确保消息不丢失且不重复 | 计费、指令控制等关键场景 |
 
 ## 🔒 TLS/SSL 连接配置
 
@@ -170,7 +172,7 @@ config:
   client_id: 'device-001'
   clean_session: true
   last_will_topic: 'device/status/device-001'
-  last_will_payload: '{"status":"offline","timestamp":"${__now()}"}'
+  last_will_payload: '{"status":"offline","timestamp":"${timestamp()}"}'
   last_will_qos: 1
 ```
 
@@ -301,7 +303,7 @@ children:
       datasource: mqtt_source
       topic: 'sensor/temperature/sensor-001'
       qos: 0
-      payload: '{"temperature":25.6,"unit":"celsius","timestamp":"${__now()}"}'
+      payload: '{"temperature":25.6,"unit":"celsius","timestamp":"${timestamp()}"}'
 
   - title: 发布设备离线通知
     testclass: mqtt_publish
@@ -309,7 +311,7 @@ children:
       datasource: mqtt_source
       topic: 'device/status/sensor-001'
       qos: 1
-      payload: '{"status":"offline","timestamp":"${__now()}"}'
+      payload: '{"status":"offline","timestamp":"${timestamp()}"}'
 ```
 
 ## ❓ 常见问题
