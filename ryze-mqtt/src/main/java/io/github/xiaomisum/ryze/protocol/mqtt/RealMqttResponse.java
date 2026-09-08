@@ -48,6 +48,10 @@ public class RealMqttResponse extends SampleResult.RealResponse {
         this.status = body != null ? 0 : -1;
     }
 
+    public String getBody() {
+        return body;
+    }
+
     @Override
     public byte[] bytes() {
         return body.getBytes();

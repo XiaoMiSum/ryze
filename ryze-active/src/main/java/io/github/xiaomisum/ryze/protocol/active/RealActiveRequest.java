@@ -100,6 +100,30 @@ public class RealActiveRequest extends SampleResult.RealRequest {
         return result;
     }
 
+    public String getAddress() {
+        return address;
+    }
+
+    public String getTopic() {
+        return topic;
+    }
+
+    public String getQueue() {
+        return queue;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
     /**
      * 格式化输出请求信息
      * <p>

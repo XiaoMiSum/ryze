@@ -117,6 +117,34 @@ public class RealRabbitRequest extends SampleResult.RealRequest {
      *
      * @return 格式化后的请求信息字符串
      */
+    public String getAddress() {
+        return address;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public String getVirtualHost() {
+        return virtualHost;
+    }
+
+    public RabbitConfigureItem.Queue getQueue() {
+        return queue;
+    }
+
+    public RabbitConfigureItem.Exchange getExchange() {
+        return exchange;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
     @Override
     public String format() {
         var buf = new StringBuilder();

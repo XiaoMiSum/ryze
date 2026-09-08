@@ -89,6 +89,30 @@ public class RealHTTPRequest extends SampleResult.RealRequest {
         headers = Arrays.stream(request.headers()).toList();
     }
 
+    public String getUrl() {
+        return url;
+    }
+
+    public String getMethod() {
+        return method;
+    }
+
+    public String getQuery() {
+        return query;
+    }
+
+    public byte[] getBody() {
+        return body;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public List<Header> getHeaders() {
+        return headers;
+    }
+
 
     /**
      * 获取请求字节数组

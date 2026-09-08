@@ -31,6 +31,7 @@ package io.github.xiaomisum.ryze.testelement.sampler;
 import com.alibaba.fastjson2.annotation.JSONField;
 import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
+import io.github.xiaomisum.ryze.assertion.AbstractAssertion;
 import io.github.xiaomisum.ryze.assertion.Assertion;
 import io.github.xiaomisum.ryze.builder.*;
 import io.github.xiaomisum.ryze.config.ConfigureItem;
@@ -38,6 +39,7 @@ import io.github.xiaomisum.ryze.config.RyzeVariables;
 import io.github.xiaomisum.ryze.context.Context;
 import io.github.xiaomisum.ryze.context.ContextWrapper;
 import io.github.xiaomisum.ryze.context.TestRunContext;
+import io.github.xiaomisum.ryze.extractor.AbstractExtractor;
 import io.github.xiaomisum.ryze.extractor.Extractor;
 import io.github.xiaomisum.ryze.interceptor.RyzeInterceptor;
 import io.github.xiaomisum.ryze.support.Collections;
@@ -177,7 +179,7 @@ public abstract class AbstractSampler<SELF extends AbstractSampler<SELF, CONFIG,
                 handleResponse(context, result);
                 // 执行拦截器后置处理
                 runtime.handlerChain.applyPostHandle(context, runtime);
-                Optional.ofNullable(runtime.assertions).orElse(Collections.emptyList()).forEach(assertion -> assertion.assertThat(context));
+                assertAll(context, result);
                 Optional.ofNullable(runtime.extractors).orElse(Collections.emptyList()).forEach(extractor -> extractor.process(context));
             }
             // 执行 ReporterListener 后置处理
@@ -221,6 +223,36 @@ public abstract class AbstractSampler<SELF extends AbstractSampler<SELF, CONFIG,
         self.assertions = KryoUtil.copy(assertions);
         self.extractors = KryoUtil.copy(extractors);
         return self;
+    }
+
+    /**
+     * 本取样器执行中除自身定义外新出现的变量名（提取器 refName）
+     *
+     * @return 提取器引用名列表
+     */
+    @Override
+    protected List<String> extraVariableNames() {
+        return Optional.ofNullable(runtime.extractors).orElse(Collections.emptyList()).stream()
+                .filter(AbstractExtractor.class::isInstance)
+                .map(extractor -> ((AbstractExtractor) extractor).getRefName())
+                .toList();
+    }
+
+    /**
+     * 执行并记录全部验证器
+     * <p>先为每条验证器预建执行记录（默认 {@code skipped}）并按序挂载到宿主结果，
+     * 随后顺序执行；验证器自身在 {@code assertThat} 内原地填充记录（passed/failed）。
+     * 一旦某条失败即短路抛出，剩余未执行的验证器记录天然保持 {@code skipped}。</p>
+     *
+     * @param context 测试上下文
+     * @param result  取样结果
+     */
+    private void assertAll(ContextWrapper context, R result) {
+        var assertions = Optional.ofNullable(runtime.assertions).orElse(Collections.emptyList());
+        assertions.stream().filter(AbstractAssertion.class::isInstance)
+                .map(AbstractAssertion.class::cast)
+                .forEach(assertion -> result.addAssertion(assertion.prepareRecord()));
+        assertions.forEach(assertion -> assertion.assertThat(context));
     }
 
     /**

@@ -77,6 +77,18 @@ public class RealRedisRequest extends SampleResult.RealRequest implements RedisC
      * <p>
      * data
      */
+    public String getUrl() {
+        return url;
+    }
+
+    public String getCommand() {
+        return command;
+    }
+
+    public List<String> getArgs() {
+        return args;
+    }
+
     @Override
     public String format() {
         return url + "\n" + COMMAND + ": " + command + "\n" + ARGS + ": " + JSON.toJSONString(args) + "\n\n";
@@ -84,7 +96,12 @@ public class RealRedisRequest extends SampleResult.RealRequest implements RedisC
 
     @Override
     public byte[] bytes() {
-        return new byte[0];
+        var sb = new StringBuilder();
+        sb.append(command).append(' ');
+        if (args != null) {
+            sb.append(String.join(" ", args));
+        }
+        return sb.toString().trim().getBytes();
     }
 
 }

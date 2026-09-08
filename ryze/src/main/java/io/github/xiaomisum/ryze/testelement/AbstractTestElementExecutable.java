@@ -38,6 +38,7 @@ import io.github.xiaomisum.ryze.config.RyzeVariables;
 import io.github.xiaomisum.ryze.context.Context;
 import io.github.xiaomisum.ryze.context.ContextWrapper;
 import io.github.xiaomisum.ryze.context.TestSuiteContext;
+import io.github.xiaomisum.ryze.result.VariableRecord;
 import io.github.xiaomisum.ryze.support.Closeable;
 import io.github.xiaomisum.ryze.support.Collections;
 import io.github.xiaomisum.ryze.support.Customizer;
@@ -46,6 +47,7 @@ import io.github.xiaomisum.ryze.support.groovy.Groovy;
 import io.github.xiaomisum.ryze.testelement.configure.ConfigureElement;
 import io.github.xiaomisum.ryze.testelement.processor.Postprocessor;
 import io.github.xiaomisum.ryze.testelement.processor.Preprocessor;
+import io.github.xiaomisum.ryze.testelement.processor.Processor;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -165,6 +167,9 @@ public abstract class AbstractTestElementExecutable<SELF extends AbstractTestEle
         // 2. 幂等初始化：确保只初始化一次
         initialized();
 
+        // 2b. 变量快照：记录本元件自身定义的变量（合并/求值之前），供结果增量采集
+        var ownVariables = runtime.variables;
+
         // 3. 上下文管理：保存旧上下文，设置新上下文
         var context = updateCurrentContextInfo(session, snapshot);
 
@@ -182,6 +187,9 @@ public abstract class AbstractTestElementExecutable<SELF extends AbstractTestEle
             // 6. 测试结果初始化与生命周期管理
             snapshot.testResult = getTestResult();
             context.setTestResult(snapshot.testResult);
+            if (metadata != null) {
+                snapshot.testResult.setMetadata(new HashMap<>(metadata));
+            }
             snapshot.testResult.testStart();
 
             // 7. 拦截器处理与核心执行
@@ -194,6 +202,8 @@ public abstract class AbstractTestElementExecutable<SELF extends AbstractTestEle
             restoreCurrentContextInfo(session, snapshot);
             // 9. 测试结束标记：保证生命周期完整闭环
             if (snapshot.testResult != null) {
+                // 10. 变量增量采集：本元件定义的变量 + 运行期新增变量（如提取器 refName）
+                collectResultVariables(snapshot.testResult, ownVariables);
                 snapshot.testResult.testEnd();
             }
         }
@@ -272,6 +282,9 @@ public abstract class AbstractTestElementExecutable<SELF extends AbstractTestEle
     protected void internalRun(ContextWrapper context) {
         // 处理配置元件
         Optional.ofNullable(runtime.configureElements).ifPresent(elements -> elements.forEach(ele -> ele.process(context)));
+        // 清理宿主结果上历史归集的处理器结果（重跑幂等），本轮的归集由处理器执行时自行挂载
+        context.getTestResult().setPreprocessors(null);
+        context.getTestResult().setPostprocessors(null);
         // 执行前置动作
         Optional.ofNullable(runtime.preprocessors).ifPresent(preprocessors -> preprocessors.stream()
                 .filter(preprocessor -> !preprocessor.isDisabled())
@@ -282,6 +295,7 @@ public abstract class AbstractTestElementExecutable<SELF extends AbstractTestEle
         }
         // 执行请求
         execute(context, (R) context.getTestResult());
+        // 执行后置动作
         Optional.ofNullable(runtime.postprocessors).ifPresent(postprocessors -> postprocessors.stream()
                 .filter(postprocessor -> !postprocessor.isDisabled())
                 .forEach(postprocessor -> postprocessor.process(context)));
@@ -289,6 +303,29 @@ public abstract class AbstractTestElementExecutable<SELF extends AbstractTestEle
         Optional.ofNullable(runtime.configureElements).ifPresent(elements -> elements.stream()
                 .filter(ele -> ele instanceof Closeable)
                 .forEach(ele -> ((Closeable) ele).close()));
+    }
+
+    /**
+     * 本元件执行中除自身定义外新出现的变量名（如提取器的 refName）
+     * <p>
+     * 默认无额外变量，{@code AbstractSampler} 覆写为返回提取器引用名，
+     * 用于变量增量采集时补录提取器产出的新变量。
+     * </p>
+     *
+     * @return 额外变量名列表
+     */
+    protected List<String> extraVariableNames() {
+        return List.of();
+    }
+
+    /**
+     * 采集本元件执行结果中的变量增量
+     *
+     * @param result       宿主结果
+     * @param ownVariables 本元件自身定义的变量（合并/求值之前的快照）
+     */
+    protected void collectResultVariables(R result, RyzeVariables ownVariables) {
+        result.setVariables(VariableRecord.collect(ownVariables, runtime.configGroup.getVariables(), extraVariableNames()));
     }
 
     /**

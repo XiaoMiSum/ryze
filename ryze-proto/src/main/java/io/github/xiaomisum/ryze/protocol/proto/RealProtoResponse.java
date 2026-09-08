@@ -92,6 +92,22 @@ public class RealProtoResponse extends SampleResult.RealResponse {
     }
 
 
+    public String getMessage() {
+        return message;
+    }
+
+    public String getBody() {
+        return body;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public Map<String, String> getHeaders() {
+        return headers;
+    }
+
     @Override
     public byte[] bytes() {
         return new byte[0];

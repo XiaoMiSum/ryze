@@ -51,6 +51,18 @@ public class RealMqttRequest extends SampleResult.RealRequest {
         this.payload = payload;
     }
 
+    public String getTopic() {
+        return topic;
+    }
+
+    public int getQos() {
+        return qos;
+    }
+
+    public String getPayload() {
+        return payload;
+    }
+
     @Override
     public byte[] bytes() {
         return payload != null ? payload.getBytes() : new byte[0];

@@ -29,6 +29,7 @@ import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.annotation.JSONField;
 import io.github.xiaomisum.ryze.builder.IBuilder;
 import io.github.xiaomisum.ryze.context.ContextWrapper;
+import io.github.xiaomisum.ryze.result.ExtractorResult;
 import io.github.xiaomisum.ryze.support.ValidateResult;
 import io.github.xiaomisum.ryze.testelement.sampler.SampleResult;
 import org.apache.commons.lang3.StringUtils;
@@ -151,24 +152,37 @@ public abstract class AbstractExtractor implements Extractor, ExtractorConstants
         }
         if (localContext.getTestResult() instanceof SampleResult result) {
             validate().valid();
-            var scopeDefaultValue = localContext.evaluate(defaultValue);
-            var defaultValueIsBlank = scopeDefaultValue == null || StringUtils.isBlank(scopeDefaultValue.toString());
-            if (StringUtils.isBlank(result.getResponse().bytesAsString()) && defaultValueIsBlank) {
-                throw new IllegalArgumentException("待提取的字符串为 null 或空白");
-            }
-            Object value = null;
+            ExtractorResult record = new ExtractorResult();
+            record.setRefName(refName);
+            record.setField(field);
             try {
-                value = extract(result);
-            } catch (RuntimeException e) {
-                if (defaultValueIsBlank)
-                    throw e;
+                var scopeDefaultValue = localContext.evaluate(defaultValue);
+                var defaultValueIsBlank = scopeDefaultValue == null || StringUtils.isBlank(scopeDefaultValue.toString());
+                if (StringUtils.isBlank(result.getResponse().bytesAsString()) && defaultValueIsBlank) {
+                    throw new IllegalArgumentException("待提取的字符串为 null 或空白");
+                }
+                Object value = null;
+                try {
+                    value = extract(result);
+                } catch (RuntimeException e) {
+                    if (defaultValueIsBlank)
+                        throw e;
+                }
+                var valueIsBlank = value == null || StringUtils.isBlank(value.toString());
+                if (valueIsBlank && defaultValueIsBlank) {
+                    throw new IllegalArgumentException("目标字符串没有匹配的数据 %s，目标字符串：%s".formatted(field, result.getResponse().bytesAsString()));
+                }
+                var extracted = valueIsBlank ? scopeDefaultValue : value;
+                record.setValue(extracted);
+                record.setDefaultValue(valueIsBlank);
+                // extractor 接口默认实现调用此方法 localContext 与 parentContext 为同一对象
+                parentContext.getLocalVariablesWrapper().put(refName, extracted);
+                result.addExtractor(record);
+            } catch (Throwable throwable) {
+                record.setMessage(throwable.getMessage());
+                result.addExtractor(record);
+                throw throwable;
             }
-            var valueIsBlank = value == null || StringUtils.isBlank(value.toString());
-            if (valueIsBlank && defaultValueIsBlank) {
-                throw new IllegalArgumentException("目标字符串没有匹配的数据 %s，目标字符串：%s".formatted(field, result.getResponse().bytesAsString()));
-            }
-            // extractor 接口默认实现调用此方法 localContext 与 parentContext 为同一对象
-            parentContext.getLocalVariablesWrapper().put(refName, valueIsBlank ? scopeDefaultValue : value);
             return;
         }
         throw new RuntimeException("不支持提取的测试组件: " + localContext.getTestElement().getClass());

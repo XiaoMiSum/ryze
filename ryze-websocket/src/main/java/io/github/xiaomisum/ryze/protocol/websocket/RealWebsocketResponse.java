@@ -60,6 +60,10 @@ public class RealWebsocketResponse extends SampleResult.RealResponse {
         status = response.status();
     }
 
+    public String getBody() {
+        return body;
+    }
+
 
     @Override
     public byte[] bytes() {

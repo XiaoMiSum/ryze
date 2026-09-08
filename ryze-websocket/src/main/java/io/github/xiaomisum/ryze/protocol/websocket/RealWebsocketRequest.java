@@ -70,6 +70,22 @@ public class RealWebsocketRequest extends SampleResult.RealRequest {
         headers = request.headers();
     }
 
+    public String getUrl() {
+        return url;
+    }
+
+    public String getQuery() {
+        return query;
+    }
+
+    public String getBody() {
+        return body;
+    }
+
+    public Map<String, String> getHeaders() {
+        return headers;
+    }
+
 
     /**
      * 获取请求字节数组

@@ -75,6 +75,30 @@ public class RealProtoRequest extends SampleResult.RealRequest {
     Map<String, Object> headers;
 
 
+    public String getUrl() {
+        return url;
+    }
+
+    public String getMethod() {
+        return method;
+    }
+
+    public String getQuery() {
+        return query;
+    }
+
+    public String getBody() {
+        return body;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public Map<String, Object> getHeaders() {
+        return headers;
+    }
+
     /**
      * 获取请求字节数组
      * <p>优先返回请求体，如果没有请求体则返回查询参数</p>

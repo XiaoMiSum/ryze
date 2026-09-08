@@ -98,6 +98,30 @@ public class MongoRealRequest extends SampleResult.RealRequest {
         return result;
     }
 
+    public String getUrl() {
+        return url;
+    }
+
+    public String getDatabase() {
+        return database;
+    }
+
+    public String getCollection() {
+        return collection;
+    }
+
+    public String getAction() {
+        return action;
+    }
+
+    public Map<String, Object> getCondition() {
+        return condition;
+    }
+
+    public Object getData() {
+        return data;
+    }
+
     /**
      * 格式化请求信息
      * <p>

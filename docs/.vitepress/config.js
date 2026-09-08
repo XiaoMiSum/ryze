@@ -16,7 +16,7 @@ export default withMermaid({
             {text: '测试人员', link: '/tester/test-suite/test-suite-project'},
             {text: '开发者', link: '/developer/style'},
             {text: 'FAQ', link: '/faq/same'},
-            {text: '6.1.0', link: 'https://github.com/XiaoMiSum/ryze'}
+            {text: '6.1.1', link: 'https://github.com/XiaoMiSum/ryze'}
         ],
 
         sidebar: {
@@ -154,7 +154,8 @@ export default withMermaid({
                         {text: '拦截器', link: '/developer/interceptor'},
                         {text: '函数', link: '/developer/function'},
                         {text: '验证器', link: '/developer/validator'},
-                        {text: '提取器', link: '/developer/extractor'}
+                        {text: '提取器', link: '/developer/extractor'},
+                        {text: '执行结果', link: '/developer/result'}
                     ]
                 },
                 {

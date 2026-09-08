@@ -132,6 +132,30 @@ public class RealDubboRequest extends SampleResult.RealRequest {
         return result;
     }
 
+    public String getAddress() {
+        return address;
+    }
+
+    public String getInterfaceName() {
+        return interfaceName;
+    }
+
+    public String getMethod() {
+        return method;
+    }
+
+    public List<String> getParameterTypes() {
+        return parameterTypes;
+    }
+
+    public Map<String, String> getAttachmentArgs() {
+        return attachmentArgs;
+    }
+
+    public List<Object> getParameters() {
+        return parameters;
+    }
+
     /**
      * 格式化请求信息
      * <p>

@@ -64,6 +64,42 @@ public class RealEMailRequest extends SampleResult.RealRequest {
         this.content = config.getContent();
     }
 
+    public String getHost() {
+        return host;
+    }
+
+    public String getPort() {
+        return port;
+    }
+
+    public Boolean getUseSSL() {
+        return useSSL;
+    }
+
+    public Boolean getUseStarttls() {
+        return useStarttls;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public String getTo() {
+        return to;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
 
     /**
      * 获取请求字节数组

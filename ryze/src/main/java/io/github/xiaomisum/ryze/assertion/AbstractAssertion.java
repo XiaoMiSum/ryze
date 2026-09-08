@@ -26,8 +26,10 @@
 package io.github.xiaomisum.ryze.assertion;
 
 import com.alibaba.fastjson2.annotation.JSONField;
+import io.github.xiaomisum.ryze.TestStatus;
 import io.github.xiaomisum.ryze.builder.IBuilder;
 import io.github.xiaomisum.ryze.context.ContextWrapper;
+import io.github.xiaomisum.ryze.result.AssertionResult;
 import io.github.xiaomisum.ryze.support.ValidateResult;
 import io.github.xiaomisum.ryze.testelement.sampler.SampleResult;
 import org.apache.commons.lang3.StringUtils;
@@ -99,6 +101,14 @@ public abstract class AbstractAssertion implements Assertion, AssertionConstants
     @JSONField(serialize = false, deserialize = false)
     protected Matcher<Object> matcher;
 
+    /**
+     * 本轮执行记录
+     * <p>由宿主在断言执行前预建挂载（见 {@link #prepareRecord()}），断言执行时原地填充；
+     * 未预建（如直接调用 {@link #assertThat(ContextWrapper)}）时自建并挂载。</p>
+     */
+    @JSONField(serialize = false, deserialize = false)
+    private AssertionResult record;
+
 
     /**
      * 验证断言配置的有效性
@@ -129,21 +139,78 @@ public abstract class AbstractAssertion implements Assertion, AssertionConstants
      * </ol>
      * </p>
      *
+     * <p>执行记录原地填充 {@link #prepareRecord()} 预建的记录（默认 {@code skipped} 未执行），
+     * 通过（{@code passed}）与失败（{@code failed}）都会先入库再抛出；失败短路后未执行的
+     * 验证器记录天然保持 {@code skipped}。</p>
+     *
      * @param context 上下文对象，包含测试执行过程中的变量和状态信息
      */
     @Override
     public void assertThat(ContextWrapper context) {
         if (context.getTestResult() instanceof SampleResult result) {
-            validate().valid();
-            var expectedValue = context.evaluate(expected);
-            actualValue = extractActualValue(result);
-            if (matcher != null && (matcher instanceof ProxyMatcher proxy)) {
-                proxy.strict = strict;
-                proxy.expectedValue = expectedValue;
+            var record = takePreparedRecord();
+            var assertions = result.getAssertions();
+            boolean attached = assertions != null && assertions.contains(record);
+            try {
+                validate().valid();
+                var expectedValue = context.evaluate(expected);
+                record.setExpected(expectedValue);
+                actualValue = extractActualValue(result);
+                if (matcher != null && (matcher instanceof ProxyMatcher proxy)) {
+                    proxy.strict = strict;
+                    proxy.expectedValue = expectedValue;
+                }
+                matcher = matcher == null ? Matchers.createMatcher(rule, expectedValue, strict) : matcher;
+                MatcherAssert.assertThat("verify field: " + field + ", ", actualValue, matcher);
+                record.setStatus(TestStatus.passed);
+            } catch (AssertionError | RuntimeException throwable) {
+                record.setStatus(TestStatus.failed);
+                record.setMessage(throwable.getMessage());
+                if (!attached) {
+                    result.addAssertion(record);
+                }
+                throw throwable;
+            } finally {
+                record.setActual(actualValue);
             }
-            matcher = matcher == null ? Matchers.createMatcher(rule, expectedValue, strict) : matcher;
-            MatcherAssert.assertThat("verify field: " + field + ", ", actualValue, matcher);
+            if (!attached) {
+                result.addAssertion(record);
+            }
         }
+    }
+
+    /**
+     * 新建一条本次执行的记录（状态默认 {code skipped} 未执行）
+     *
+     * @return 验证器执行记录
+     */
+    private AssertionResult newAssertionRecord() {
+        AssertionResult record = new AssertionResult();
+        record.setField(field);
+        record.setRule(rule);
+        return record;
+    }
+
+    /**
+     * 预建本轮执行记录（默认 {@code skipped}）并返回
+     * <p>宿主在执行验证器前为每条验证器预建并按序挂载记录，随后 {@link #assertThat(ContextWrapper)}
+     * 原地填充状态与值；被失败短路的验证器记录天然保持 {@code skipped}，无需补偿。</p>
+     *
+     * @return 预建的执行记录
+     */
+    public AssertionResult prepareRecord() {
+        return record = newAssertionRecord();
+    }
+
+    /**
+     * 取走本轮预建记录（只消费一次，避免跨轮次复用污染旧记录）
+     *
+     * @return 预建记录；未预建时新建
+     */
+    private AssertionResult takePreparedRecord() {
+        var prepared = record;
+        record = null;
+        return prepared != null ? prepared : newAssertionRecord();
     }
 
     /**

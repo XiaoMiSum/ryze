@@ -25,9 +25,16 @@
 
 package io.github.xiaomisum.ryze;
 
+import com.alibaba.fastjson2.annotation.JSONField;
+import io.github.xiaomisum.ryze.result.VariableRecord;
+import io.github.xiaomisum.ryze.testelement.TestElementConstantsInterface;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 测试结果抽象基类
@@ -39,7 +46,7 @@ import java.time.ZoneId;
  * @author mi.xiao
  * @since 2021/6/15 20:44
  */
-public abstract class Result implements Serializable {
+public abstract class Result implements Serializable, TestElementConstantsInterface {
 
     /**
      * 测试元素ID
@@ -77,13 +84,41 @@ public abstract class Result implements Serializable {
      */
     private Throwable throwable;
 
-    /**
-     * 拦截器 preHandle 阶段投出反对票时的拦截者标识（通常为拦截器的 SimpleName）。
+/**
+     * 拦截者标识（通常为拦截器 SimpleName）。
      * <p>null 表示本次执行未被拦截；非 null 时说明业务被跳过，由哪一个拦截器阻止。
      * 该字段让报告层（Allure / 日志）可脱离拦截器链内部结构，仅依赖结果即可呈现
      * "被拦截"事实，避免 passed 的欺骗性展示。</p>
      */
     private String rejectBy;
+
+    /**
+     * 测试元件元数据
+     * <p>原样写入本元件的 {@link io.github.xiaomisum.ryze.testelement.AbstractTestElement#metadata}，
+     * 不做表达式求值、不参与变量替换，仅浅拷贝容器留档。</p>
+     */
+    @JSONField(name = METADATA)
+    private Map<String, Object> metadata;
+
+    /**
+     * 本次执行后本元件产生/变更的变量（增量）
+     * <p>只记录新增或覆盖的变量，一条 {@link VariableRecord} 同时包含定义形态与执行后值。</p>
+     */
+    @JSONField(name = VARIABLES)
+    private List<VariableRecord> variables;
+
+    /**
+     * 前置处理器结果
+     * <p>元素即处理器自己的 Result（sample 为 SampleResult），不进入 children。</p>
+     */
+    @JSONField(name = PREPROCESSORS)
+    private List<Result> preprocessors;
+
+    /**
+     * 后置处理器结果
+     */
+    @JSONField(name = POSTPROCESSORS)
+    private List<Result> postprocessors;
 
 
     /**
@@ -232,5 +267,55 @@ public abstract class Result implements Serializable {
      */
     public void setRejectBy(String rejectBy) {
         this.rejectBy = rejectBy;
+    }
+
+    public Map<String, Object> getMetadata() {
+        return metadata;
+    }
+
+    public void setMetadata(Map<String, Object> metadata) {
+        this.metadata = metadata;
+    }
+
+    public List<VariableRecord> getVariables() {
+        return variables;
+    }
+
+    public void setVariables(List<VariableRecord> variables) {
+        this.variables = variables;
+    }
+
+    public List<Result> getPreprocessors() {
+        return preprocessors;
+    }
+
+    public void setPreprocessors(List<Result> preprocessors) {
+        this.preprocessors = preprocessors;
+    }
+
+    public List<Result> getPostprocessors() {
+        return postprocessors;
+    }
+
+    public void setPostprocessors(List<Result> postprocessors) {
+        this.postprocessors = postprocessors;
+    }
+
+    public void addPreprocessor(Result preprocessor) {
+        if (preprocessor != null) {
+            if (preprocessors == null) {
+                preprocessors = new ArrayList<>();
+            }
+            preprocessors.add(preprocessor);
+        }
+    }
+
+    public void addPostprocessor(Result postprocessor) {
+        if (postprocessor != null) {
+            if (postprocessors == null) {
+                postprocessors = new ArrayList<>();
+            }
+            postprocessors.add(postprocessor);
+        }
     }
 }

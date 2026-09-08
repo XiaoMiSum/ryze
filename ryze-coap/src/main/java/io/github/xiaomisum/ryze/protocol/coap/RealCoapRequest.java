@@ -80,6 +80,26 @@ public class RealCoapRequest extends SampleResult.RealRequest {
         this.confirmable = config.isConfirmable();
     }
 
+    public String getMethod() {
+        return method;
+    }
+
+    public String getUri() {
+        return uri;
+    }
+
+    public String getPayload() {
+        return payload;
+    }
+
+    public String getContentFormat() {
+        return contentFormat;
+    }
+
+    public boolean isConfirmable() {
+        return confirmable;
+    }
+
     @Override
     public byte[] bytes() {
         return payload != null && !payload.isEmpty() ? payload.getBytes() : new byte[0];

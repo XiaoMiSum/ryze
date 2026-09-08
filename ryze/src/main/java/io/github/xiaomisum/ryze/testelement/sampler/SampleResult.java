@@ -29,12 +29,15 @@
 package io.github.xiaomisum.ryze.testelement.sampler;
 
 import io.github.xiaomisum.ryze.Result;
+import io.github.xiaomisum.ryze.result.AssertionResult;
+import io.github.xiaomisum.ryze.result.ExtractorResult;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.List;
 
 /**
  * 取样结果抽象类，用于存储和管理取样器执行的结果信息。
@@ -73,6 +76,16 @@ public abstract class SampleResult extends Result {
      * 响应数据
      */
     private RealResponse response;
+
+    /**
+     * 验证器执行记录
+     */
+    private List<AssertionResult> assertions;
+
+    /**
+     * 提取器执行记录
+     */
+    private List<ExtractorResult> extractors;
 
     /**
      * 基于标题的构造函数
@@ -157,12 +170,16 @@ public abstract class SampleResult extends Result {
      * @return 执行时长字符串，格式为 "X.XX s"
      */
     public String getDuration() {
+        if (sampleStartTime == null || sampleEndTime == null) {
+            return "";
+        }
         var duration = Duration.between(sampleStartTime, sampleEndTime).toMillis() / 1000.00;
         return new BigDecimal(duration).setScale(2, RoundingMode.HALF_UP).doubleValue() + " s";
     }
 
     /**
      * 获取请求数据
+     * <p>请求数据按 JavaBean getter 序列化为结构化快照（暴露面即 getter 集合）。</p>
      *
      * @return 请求数据
      */
@@ -181,6 +198,7 @@ public abstract class SampleResult extends Result {
 
     /**
      * 获取响应数据
+     * <p>响应数据按 JavaBean getter 序列化为结构化快照（暴露面即 getter 集合）。</p>
      *
      * @return 响应数据
      */
@@ -197,6 +215,46 @@ public abstract class SampleResult extends Result {
         this.response = response;
     }
 
+    public List<AssertionResult> getAssertions() {
+        return assertions;
+    }
+
+    public void setAssertions(List<AssertionResult> assertions) {
+        this.assertions = assertions;
+    }
+
+    public List<ExtractorResult> getExtractors() {
+        return extractors;
+    }
+
+    public void setExtractors(List<ExtractorResult> extractors) {
+        this.extractors = extractors;
+    }
+
+    /**
+     * 追加一条验证器执行记录
+     *
+     * @param assertion 验证器执行记录
+     */
+    public void addAssertion(AssertionResult assertion) {
+        if (assertions == null) {
+            assertions = new java.util.ArrayList<>();
+        }
+        assertions.add(assertion);
+    }
+
+    /**
+     * 追加一条提取器执行记录
+     *
+     * @param extractor 提取器执行记录
+     */
+    public void addExtractor(ExtractorResult extractor) {
+        if (extractors == null) {
+            extractors = new java.util.ArrayList<>();
+        }
+        extractors.add(extractor);
+    }
+
     /**
      * 请求数据抽象类
      *
@@ -207,6 +265,16 @@ public abstract class SampleResult extends Result {
         public abstract String format();
 
         public abstract byte[] bytes();
+
+        /**
+         * 契约字段输出
+         * <p>序列化时按 getter 出字段，{@code format} 契约字段通过该方法保留。</p>
+         *
+         * @return 格式化文本
+         */
+        public String getFormat() {
+            return format();
+        }
     }
 
     /**
@@ -222,12 +290,32 @@ public abstract class SampleResult extends Result {
             return status;
         }
 
+        /**
+         * 契约字段输出
+         * <p>序列化时按 getter 出字段，{@code status} 契约字段通过该方法保留。</p>
+         *
+         * @return 响应状态码
+         */
+        public int getStatus() {
+            return status();
+        }
+
         public abstract byte[] bytes();
 
         public abstract String format();
 
         public String bytesAsString() {
             return new String(bytes());
+        }
+
+        /**
+         * 契约字段输出
+         * <p>序列化时按 getter 出字段，{@code format} 契约字段通过该方法保留。</p>
+         *
+         * @return 格式化文本
+         */
+        public String getFormat() {
+            return format();
         }
     }
 

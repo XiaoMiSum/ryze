@@ -85,6 +85,26 @@ public class RealJDBCRequest extends SampleResult.RealRequest implements JDBCCon
         this.args = args;
     }
 
+    public String getUrl() {
+        return url;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public String getSql() {
+        return sql;
+    }
+
+    public List<Object> getArgs() {
+        return args;
+    }
+
     /**
      * 格式化JDBC请求信息
      * <p>

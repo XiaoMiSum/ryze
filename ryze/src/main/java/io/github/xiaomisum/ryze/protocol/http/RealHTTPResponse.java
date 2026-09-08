@@ -97,6 +97,22 @@ public class RealHTTPResponse extends SampleResult.RealResponse {
     }
 
 
+    public List<Header> getHeaders() {
+        return headers;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public byte[] getBody() {
+        return bytes;
+    }
+
     @Override
     public byte[] bytes() {
         return bytes;

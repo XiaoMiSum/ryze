@@ -71,6 +71,14 @@ public class RealCoapResponse extends SampleResult.RealResponse {
         }
     }
 
+    public String getBody() {
+        return body;
+    }
+
+    public String getResponseCode() {
+        return responseCode;
+    }
+
     @Override
     public byte[] bytes() {
         return body.getBytes(StandardCharsets.UTF_8);

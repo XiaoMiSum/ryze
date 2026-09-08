@@ -98,6 +98,22 @@ public class RealKafkaRequest extends SampleResult.RealRequest {
         return result;
     }
 
+    public String getAddress() {
+        return address;
+    }
+
+    public String getTopic() {
+        return topic;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
     /**
      * 格式化请求信息用于展示
      * <p>

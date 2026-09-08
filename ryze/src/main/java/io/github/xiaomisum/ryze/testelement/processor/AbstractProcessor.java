@@ -38,8 +38,10 @@ import io.github.xiaomisum.ryze.config.RyzeVariables;
 import io.github.xiaomisum.ryze.context.Context;
 import io.github.xiaomisum.ryze.context.ContextWrapper;
 import io.github.xiaomisum.ryze.context.TestSuiteContext;
+import io.github.xiaomisum.ryze.extractor.AbstractExtractor;
 import io.github.xiaomisum.ryze.extractor.Extractor;
 import io.github.xiaomisum.ryze.interceptor.RyzeInterceptor;
+import io.github.xiaomisum.ryze.result.VariableRecord;
 import io.github.xiaomisum.ryze.support.Collections;
 import io.github.xiaomisum.ryze.support.Customizer;
 import io.github.xiaomisum.ryze.support.KryoUtil;
@@ -54,6 +56,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Strings;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -105,6 +109,16 @@ public abstract class AbstractProcessor<SELF extends AbstractProcessor<SELF, CON
     protected String condition;
     @JSONField(name = VARIABLES, ordinal = 13)
     protected RyzeVariables variables;
+
+    /**
+     * 本次执行对应的结果对象（{@link #process(ContextWrapper)} 时初始化并赋值）
+     */
+    private R processorResult;
+
+    /**
+     * 本处理器自身定义的变量（合并/求值之前的快照），用于结果变量增量采集
+     */
+    private RyzeVariables ownVariables;
 
     /**
      * 默认构造函数
@@ -256,6 +270,14 @@ public abstract class AbstractProcessor<SELF extends AbstractProcessor<SELF, CON
     @Override
     public void process(ContextWrapper context) {
         var localContext = initialized(context.getSessionRunner());
+        processorResult = (R) localContext.getTestResult();
+        if (metadata != null) {
+            processorResult.setMetadata(new HashMap<>(metadata));
+        }
+        ownVariables = runtime.variables;
+        // 通过父级上下文把本次结果直接归集到宿主 result 的 preprocessors/postprocessors，
+        // 无需在 Processor 接口上暴露 getResult 供宿主查询。
+        attachToHostResult(context);
         // 条件判断
         if (!isConditionPassed(localContext)) {
             return;
@@ -266,6 +288,25 @@ public abstract class AbstractProcessor<SELF extends AbstractProcessor<SELF, CON
             CompletableFuture.runAsync(task, asyncExecutor);
         } else {
             task.run();
+        }
+    }
+
+    /**
+     * 把本次处理器结果挂到宿主 result 上
+     * <p>
+     * 处理器在执行过程中持有了宿主上下文（parentContext），据此把自身结果直接挂到
+     * 宿主结果的 {@code preprocessors}/{@code postprocessors} 对应列表。归属列表由
+     * 处理器自身类别决定（{@code instanceof Preprocessor}/{@code instanceof Postprocessor}），
+     * 宿主在调用 {@code process} 后无需再查询结果。
+     * </p>
+     *
+     * @param parentContext 宿主上下文
+     */
+    private void attachToHostResult(ContextWrapper parentContext) {
+        if (this instanceof Preprocessor) {
+            parentContext.getTestResult().addPreprocessor(processorResult);
+        } else if (this instanceof Postprocessor) {
+            parentContext.getTestResult().addPostprocessor(processorResult);
         }
     }
 
@@ -331,7 +372,9 @@ public abstract class AbstractProcessor<SELF extends AbstractProcessor<SELF, CON
             localResult.sampleEnd();
             handleResponse(localContext, localResult);
             runtime.handlerChain.applyPostHandle(localContext, runtime);
-            Optional.ofNullable(extractors).ifPresent(extractors -> extractors.forEach(extractor -> extractor.process(localContext, parentContext)));
+            for (Extractor extractor : Optional.ofNullable(extractors).orElse(Collections.emptyList())) {
+                extractor.process(localContext, parentContext);
+            }
             // 执行 ReporterListener 后置处理
             runtime.reporterChain.applyPostHandle(localContext, runtime);
         } catch (Throwable throwable) {
@@ -341,12 +384,46 @@ public abstract class AbstractProcessor<SELF extends AbstractProcessor<SELF, CON
             parentContext.getTestResult().setStatus(broken);
         } finally {
             localResult.sampleEnd();
+            collectProcessorVariables(localResult, localContext, parentContext);
             // 最终处理 - 拦截器
             runtime.handlerChain.triggerAfterCompletion(localContext);
             // 最终处理 - ReporterListener
             runtime.reporterChain.triggerAfterCompletion(localContext);
 
         }
+    }
+
+    /**
+     * 采集处理器结果的变量增量
+     * <p>
+     * 覆盖范围为处理器自身定义的变量（ownVariables）+ 提取器在本地/父级上下文新写入的变量。
+     * 提取器通过 {@code process(localContext, parentContext)} 将结果保存到父级上下文，因此
+     * 执行后视图需合并本地与父级两级配置。
+     * </p>
+     */
+    private void collectProcessorVariables(R localResult, ContextWrapper localContext, ContextWrapper parentContext) {
+        Map<String, Object> postView = new LinkedHashMap<>();
+        var local = localContext.getConfigGroup().getVariables();
+        var parent = parentContext.getConfigGroup().getVariables();
+        if (local != null) {
+            postView.putAll(local);
+        }
+        if (parent != null) {
+            postView.putAll(parent);
+        }
+        localResult.setVariables(VariableRecord.collect(ownVariables, postView, extractorRefNames()));
+    }
+
+    /**
+     * 处理器提取器产出的变量名列表
+     *
+     * @return 提取器 refName 列表
+     */
+    private List<String> extractorRefNames() {
+        return Optional.ofNullable(extractors).orElse(Collections.emptyList()).stream()
+                .filter(AbstractExtractor.class::isInstance)
+                .map(extractor -> ((AbstractExtractor) extractor).getRefName())
+                .toList();
     }
 
     /**
