@@ -76,7 +76,7 @@
     </developers>
 
     <properties>
-        <ryze.version>6.1.0</ryze.version>
+        <ryze.version>6.1.1</ryze.version>
         <testng.version>7.9.0</testng.version>
         <spring.boot.version>3.3.3</spring.boot.version>
 
