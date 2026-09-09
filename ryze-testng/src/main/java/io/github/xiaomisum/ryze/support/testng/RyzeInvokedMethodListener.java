@@ -81,7 +81,7 @@ public class RyzeInvokedMethodListener implements IInvokedMethodListener, TestNG
         // 添加 ryze test method 标识
         result.setAttribute(RYZE_TEST_METHOD, true);
         // 创建一个 在测试框架中运行时使用的 session
-        SessionRunner.newTestFrameworkSessionIfNone(Configure.defaultConfigure());
+        SessionRunner.newTestFrameworkSessionIfNone(Configure.defaultConfigure(true));
     }
 
     /**

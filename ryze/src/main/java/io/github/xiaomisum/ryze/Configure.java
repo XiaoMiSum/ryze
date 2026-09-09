@@ -109,7 +109,7 @@ public class Configure {
      * @return 默认配置对象
      */
     public static Configure defaultConfigure(boolean... enableAllureReport) {
-        var configure = new Configure(Objects.isNull(enableAllureReport) || enableAllureReport.length == 0 || enableAllureReport[0]);
+        var configure = new Configure(Objects.nonNull(enableAllureReport) && enableAllureReport.length != 0 && enableAllureReport[0]);
         configure.setTemplateEngine(new FreeMarkerTemplateEngine());
         // ReporterListener 独立管理
         var reporters = new ReporterConfigureItem<>();
