@@ -109,7 +109,9 @@ public class IncludeConstructor extends Constructor {
         public Object construct(Node node) {
             if (node instanceof ScalarNode scalarNode) {
                 String filename = constructScalar(scalarNode);
-                String path = Paths.get(filename).isAbsolute() ? filename : basePath == null ? filename : new File(basePath, filename).getAbsolutePath();
+                String path = filename.startsWith("classpath:") || filename.startsWith("file:")
+                        ? filename
+                        : Paths.get(filename).isAbsolute() ? filename : basePath == null ? filename : new File(basePath, filename).getAbsolutePath();
                 try {
                     return TestDataLoaderChain.loadTestData(path, Object.class);
                 } catch (Exception e) {

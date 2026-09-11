@@ -229,6 +229,10 @@ public class JsonParser {
      * @return 绝对路径
      */
     private static String resolveFilePath(String filename, File basePath) {
+        // 协议前缀路径（classpath:/file:）非文件系统路径，不能走 Paths.get()，交由加载链按协议解析
+        if (filename.startsWith("classpath:") || filename.startsWith("file:")) {
+            return filename;
+        }
         if (Paths.get(filename).isAbsolute()) {
             return filename;
         }
