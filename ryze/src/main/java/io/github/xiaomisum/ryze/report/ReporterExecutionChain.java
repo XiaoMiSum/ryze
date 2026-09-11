@@ -93,6 +93,7 @@ public class ReporterExecutionChain<T extends TestElement<?>> {
      * @param runtime TestElement运行时数据
      */
     public void applyPreHandle(ContextWrapper context, T runtime) {
+        Throwable firstException = null;
         for (int i = 0; i < reporters.size(); i++) {
             ReporterListener reporter = reporters.get(i);
             try {
@@ -102,7 +103,15 @@ public class ReporterExecutionChain<T extends TestElement<?>> {
                 executedIndex = i;
             } catch (Exception e) {
                 log.error("报告监听器 {} 执行异常", reporter.getClass().getSimpleName(), e);
+                if (firstException == null) {
+                    firstException = e;
+                } else {
+                    firstException.addSuppressed(e);
+                }
             }
+        }
+        if (firstException != null) {
+            throw new RuntimeException("报告监听器链执行异常", firstException);
         }
     }
 
@@ -118,12 +127,21 @@ public class ReporterExecutionChain<T extends TestElement<?>> {
      * @param runtime TestElement运行时数据
      */
     public void applyPostHandle(ContextWrapper context, T runtime) {
+        Throwable firstException = null;
         for (int i = reporters.size() - 1; i >= 0; i--) {
             try {
                 reporters.get(i).postHandle(context, runtime);
             } catch (Exception e) {
                 log.error("报告监听器 {} 后置处理异常", reporters.get(i).getClass().getSimpleName(), e);
+                if (firstException == null) {
+                    firstException = e;
+                } else {
+                    firstException.addSuppressed(e);
+                }
             }
+        }
+        if (firstException != null) {
+            throw new RuntimeException("报告监听器后置处理异常", firstException);
         }
     }
 
@@ -138,12 +156,21 @@ public class ReporterExecutionChain<T extends TestElement<?>> {
      * @param context 测试上下文，包含执行环境信息
      */
     public void triggerAfterCompletion(ContextWrapper context) {
+        Throwable firstException = null;
         for (int i = executedIndex; i >= 0; i--) {
             try {
                 reporters.get(i).afterCompletion(context);
             } catch (Exception e) {
                 log.error("报告监听器 {} 最终处理异常", reporters.get(i).getClass().getSimpleName(), e);
+                if (firstException == null) {
+                    firstException = e;
+                } else {
+                    firstException.addSuppressed(e);
+                }
             }
+        }
+        if (firstException != null) {
+            throw new RuntimeException("报告监听器最终处理异常", firstException);
         }
     }
 }

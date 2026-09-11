@@ -46,6 +46,7 @@ import io.github.xiaomisum.ryze.support.Collections;
 import io.github.xiaomisum.ryze.support.Customizer;
 import io.github.xiaomisum.ryze.support.KryoUtil;
 import io.github.xiaomisum.ryze.support.ValidateResult;
+import io.github.xiaomisum.ryze.support.ExceptionGroup;
 import io.github.xiaomisum.ryze.support.groovy.Groovy;
 import io.github.xiaomisum.ryze.testelement.AbstractTestElementExecutable;
 import io.github.xiaomisum.ryze.testelement.TestElement;
@@ -182,13 +183,17 @@ public abstract class AbstractSampler<SELF extends AbstractSampler<SELF, CONFIG,
                 // 执行拦截器后置处理
                 runtime.handlerChain.applyPostHandle(context, runtime);
                 assertAll(context, result);
+                List<Throwable> extractorErrors = null;
                 for (var extractor : Optional.ofNullable(runtime.extractors).orElse(Collections.emptyList())) {
                     try {
                         extractor.process(context);
                     } catch (Throwable t) {
-                        result.setThrowable(t);
-                        result.setStatus(broken);
+                        if (extractorErrors == null) extractorErrors = new ArrayList<>();
+                        extractorErrors.add(t);
                     }
+                }
+                if (extractorErrors != null) {
+                    throw new ExceptionGroup("提取器执行失败", extractorErrors);
                 }
             }
             // 执行 ReporterListener 后置处理

@@ -69,6 +69,7 @@ public class HandlerExecutionChain<T extends TestElement<?>> {
      * @return 如果所有拦截器都允许继续执行则返回true，否则返回false
      */
     public boolean applyPreHandle(ContextWrapper context, T runtime) {
+        Throwable firstException = null;
         for (int i = 0; i < interceptors.size(); i++) {
             RyzeInterceptor interceptor = interceptors.get(i);
             try {
@@ -82,7 +83,15 @@ public class HandlerExecutionChain<T extends TestElement<?>> {
                 executedIndex = i;
             } catch (Exception e) {
                 log.error("拦截器 {} 执行异常", interceptor.getClass().getSimpleName(), e);
+                if (firstException == null) {
+                    firstException = e;
+                } else {
+                    firstException.addSuppressed(e);
+                }
             }
+        }
+        if (firstException != null) {
+            throw new RuntimeException("拦截器链执行异常", firstException);
         }
         return true;
     }
@@ -123,12 +132,21 @@ public class HandlerExecutionChain<T extends TestElement<?>> {
      * @param runtime TestElement运行时数据
      */
     public void applyPostHandle(ContextWrapper context, T runtime) {
+        Throwable firstException = null;
         for (int i = interceptors.size() - 1; i >= 0; i--) {
             try {
                 interceptors.get(i).postHandle(context, runtime);
             } catch (Exception e) {
                 log.error("拦截器 {} 后置处理异常", interceptors.get(i).getClass().getSimpleName(), e);
+                if (firstException == null) {
+                    firstException = e;
+                } else {
+                    firstException.addSuppressed(e);
+                }
             }
+        }
+        if (firstException != null) {
+            throw new RuntimeException("拦截器后置处理异常", firstException);
         }
     }
 
@@ -143,12 +161,21 @@ public class HandlerExecutionChain<T extends TestElement<?>> {
      * @param context 测试上下文，包含执行环境信息
      */
     public void triggerAfterCompletion(ContextWrapper context) {
+        Throwable firstException = null;
         for (int i = executedIndex; i >= 0; i--) {
             try {
                 interceptors.get(i).afterCompletion(context);
             } catch (Exception e) {
                 log.error("拦截器 {} 最终处理异常", interceptors.get(i).getClass().getSimpleName(), e);
+                if (firstException == null) {
+                    firstException = e;
+                } else {
+                    firstException.addSuppressed(e);
+                }
             }
+        }
+        if (firstException != null) {
+            throw new RuntimeException("拦截器最终处理异常", firstException);
         }
     }
 
@@ -163,12 +190,21 @@ public class HandlerExecutionChain<T extends TestElement<?>> {
      * @param untilIndex 需要执行最终处理的最后一个拦截器索引
      */
     private void triggerAfterCompletion(ContextWrapper context, int untilIndex) {
+        Throwable firstException = null;
         for (int i = untilIndex; i >= 0; i--) {
             try {
                 interceptors.get(i).afterCompletion(context);
             } catch (Exception e) {
                 log.error("拦截器 {} 最终处理异常", interceptors.get(i).getClass().getSimpleName(), e);
+                if (firstException == null) {
+                    firstException = e;
+                } else {
+                    firstException.addSuppressed(e);
+                }
             }
+        }
+        if (firstException != null) {
+            throw new RuntimeException("拦截器最终处理异常", firstException);
         }
     }
 }
