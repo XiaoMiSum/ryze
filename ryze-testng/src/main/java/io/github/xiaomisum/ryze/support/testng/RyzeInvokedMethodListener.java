@@ -27,14 +27,23 @@
  */
 package io.github.xiaomisum.ryze.support.testng;
 
+import com.alibaba.fastjson2.JSON;
 import io.github.xiaomisum.ryze.Configure;
+import io.github.xiaomisum.ryze.Result;
 import io.github.xiaomisum.ryze.SessionRunner;
 import io.github.xiaomisum.ryze.report.AllureTestCaseHelper;
 import io.github.xiaomisum.ryze.support.testng.annotation.AnnotationUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.IInvokedMethod;
 import org.testng.IInvokedMethodListener;
 import org.testng.ITestResult;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Objects;
 
 /**
@@ -54,6 +63,8 @@ import java.util.Objects;
  * Created at 2025/8/2 12:58
  */
 public class RyzeInvokedMethodListener implements IInvokedMethodListener, TestNGConstantsInterface {
+
+    private static final Logger log = LoggerFactory.getLogger(RyzeInvokedMethodListener.class);
 
     /**
      * 在测试方法执行前调用
@@ -87,7 +98,12 @@ public class RyzeInvokedMethodListener implements IInvokedMethodListener, TestNG
     /**
      * 在测试方法执行后调用
      * <p>
-     * 该方法会判断当前执行的方法是否为Ryze测试方法，如果是则移除测试会话
+     * 该方法会判断当前执行的方法是否为Ryze测试方法，如果是则：
+     * <ul>
+     *   <li>将带有 {@code __Ryze_Native_Result__} 属性的原生测试结果序列化为 JSON，
+     *       保存到工作目录下的 {@code __Ryze_Native_Result__} 目录，文件名为结果的 id 或 title；</li>
+     *   <li>移除测试会话</li>
+     * </ul>
      * </p>
      *
      * @param method 被调用的方法
@@ -101,6 +117,33 @@ public class RyzeInvokedMethodListener implements IInvokedMethodListener, TestNG
             //  RYZE_TEST_METHOD 标志不是 true，则不在监听器中移除 session
             return;
         }
+        exportNativeResult(result.getAttribute(RYZE_NATIVE_RESULT));
         SessionRunner.removeSession();
+    }
+
+    /**
+     * 将 ryze 引擎执行后的原生测试结果序列化为 JSON 并落盘
+     * <p>
+     * 输出目录为当前工作目录下的 {@code ./__Ryze_Native_Result__}，文件名为结果的 id（缺省时退化为 title），
+     * 扩展名为 {@code .json}。属性不存在（例如测试方法由用户手动调用）时静默跳过。
+     * </p>
+     *
+     * @param nativeResult 由 {@link RyzeTestcaseAutoRunListener} 写入的 ryze 原生结果对象
+     */
+    private void exportNativeResult(Object nativeResult) {
+        if (!(nativeResult instanceof Result ryzeResult)) {
+            return;
+        }
+        var fileName = ryzeResult.getId() != null ? ryzeResult.getId() : ryzeResult.getTitle();
+        if (fileName == null || fileName.trim().isBlank()) {
+            return;
+        }
+        try {
+            Path dir = Paths.get("./__Ryze_Native_Result__");
+            Files.createDirectories(dir);
+            Files.writeString(dir.resolve(String.format("%s.json", fileName)), JSON.toJSONString(ryzeResult), StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            log.warn("导出 ryze 原生测试结果失败: {}", fileName);
+        }
     }
 }

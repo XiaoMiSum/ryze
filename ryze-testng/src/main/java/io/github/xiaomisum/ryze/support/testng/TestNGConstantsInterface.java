@@ -42,4 +42,12 @@ public interface TestNGConstantsInterface {
      * </p>
      */
     String RYZE_TEST_CLASS = "__ryze_test_class_in_testng__";
+
+    /**
+     * Ryze原始测试结果属性名
+     * <p>
+     * 用于在TestNG测试结果中存放 ryze 引擎执行后返回的原生 {@link io.github.xiaomisum.ryze.Result} 对象。
+     * </p>
+     */
+    String RYZE_NATIVE_RESULT = "__Ryze_Native_Result__";
 }

@@ -82,6 +82,7 @@ public class RyzeTestcaseAutoRunListener implements IHookable, TestNGConstantsIn
         }
         logger.debug("自动执行 Ryze TestElement");
         var result = SessionRunner.getSession().runTest((TestElement<?>) parameters[0]);
+        iTestResult.setAttribute(RYZE_NATIVE_RESULT, result);
         iTestResult.setStatus(result.getStatus().isFailed() ? ITestResult.FAILURE : result.getStatus().isSkipped() ? ITestResult.SKIP : result.getStatus().isPassed() ? ITestResult.SUCCESS : ITestResult.CREATED
         );
     }
