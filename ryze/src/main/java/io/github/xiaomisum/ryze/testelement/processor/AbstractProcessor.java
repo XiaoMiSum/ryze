@@ -67,6 +67,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import static io.github.xiaomisum.ryze.TestStatus.broken;
+import static io.github.xiaomisum.ryze.TestStatus.failed;
 import static io.github.xiaomisum.ryze.TestStatus.skipped;
 
 /**
@@ -393,10 +394,11 @@ public abstract class AbstractProcessor<SELF extends AbstractProcessor<SELF, CON
             // 执行 ReporterListener 后置处理
             runtime.reporterChain.applyPostHandle(localContext, runtime);
         } catch (Throwable throwable) {
+            var status = throwable instanceof AssertionError ? failed : broken;
             localResult.setThrowable(throwable);
-            localResult.setStatus(broken);
+            localResult.setStatus(status);
             parentContext.getTestResult().setThrowable(throwable);
-            parentContext.getTestResult().setStatus(broken);
+            parentContext.getTestResult().setStatus(status);
         } finally {
             localResult.sampleEnd();
             localResult.testEnd();

@@ -53,6 +53,7 @@ import io.github.xiaomisum.ryze.testelement.TestElement;
 import org.apache.commons.lang3.StringUtils;
 
 import static io.github.xiaomisum.ryze.TestStatus.broken;
+import static io.github.xiaomisum.ryze.TestStatus.failed;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -200,7 +201,7 @@ public abstract class AbstractSampler<SELF extends AbstractSampler<SELF, CONFIG,
             runtime.reporterChain.applyPostHandle(context, runtime);
         } catch (Throwable throwable) {
             result.setThrowable(throwable);
-            result.setStatus(broken);
+            result.setStatus(throwable instanceof AssertionError ? failed : broken);
         } finally {
             // 最终处理 - 拦截器
             runtime.handlerChain.triggerAfterCompletion(context);
