@@ -30,6 +30,8 @@ package io.github.xiaomisum.ryze.report;
 
 import io.github.xiaomisum.ryze.context.ContextWrapper;
 import io.github.xiaomisum.ryze.testelement.TestElement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -58,6 +60,8 @@ import java.util.List;
  */
 @SuppressWarnings({"unchecked", "rawtypes"})
 public class ReporterExecutionChain<T extends TestElement<?>> {
+    private static final Logger log = LoggerFactory.getLogger(ReporterExecutionChain.class);
+
     /**
      * 报告监听器列表，按顺序存储所有注册的监听器
      */
@@ -91,10 +95,14 @@ public class ReporterExecutionChain<T extends TestElement<?>> {
     public void applyPreHandle(ContextWrapper context, T runtime) {
         for (int i = 0; i < reporters.size(); i++) {
             ReporterListener reporter = reporters.get(i);
-            if (!reporter.preHandle(context, runtime)) {
-                break;
+            try {
+                if (!reporter.preHandle(context, runtime)) {
+                    break;
+                }
+                executedIndex = i;
+            } catch (Exception e) {
+                log.error("报告监听器 {} 执行异常", reporter.getClass().getSimpleName(), e);
             }
-            executedIndex = i;
         }
     }
 
@@ -111,7 +119,11 @@ public class ReporterExecutionChain<T extends TestElement<?>> {
      */
     public void applyPostHandle(ContextWrapper context, T runtime) {
         for (int i = reporters.size() - 1; i >= 0; i--) {
-            reporters.get(i).postHandle(context, runtime);
+            try {
+                reporters.get(i).postHandle(context, runtime);
+            } catch (Exception e) {
+                log.error("报告监听器 {} 后置处理异常", reporters.get(i).getClass().getSimpleName(), e);
+            }
         }
     }
 
@@ -127,7 +139,11 @@ public class ReporterExecutionChain<T extends TestElement<?>> {
      */
     public void triggerAfterCompletion(ContextWrapper context) {
         for (int i = executedIndex; i >= 0; i--) {
-            reporters.get(i).afterCompletion(context);
+            try {
+                reporters.get(i).afterCompletion(context);
+            } catch (Exception e) {
+                log.error("报告监听器 {} 最终处理异常", reporters.get(i).getClass().getSimpleName(), e);
+            }
         }
     }
 }

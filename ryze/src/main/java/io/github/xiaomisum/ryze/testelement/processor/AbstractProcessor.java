@@ -66,6 +66,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import static io.github.xiaomisum.ryze.TestStatus.broken;
+import static io.github.xiaomisum.ryze.TestStatus.skipped;
 
 /**
  * 处理器抽象基类，实现了处理器的核心处理逻辑
@@ -280,6 +281,9 @@ public abstract class AbstractProcessor<SELF extends AbstractProcessor<SELF, CON
         attachToHostResult(context);
         // 条件判断
         if (!isConditionPassed(localContext)) {
+            processorResult.setStatus(skipped);
+            processorResult.testStart();
+            processorResult.testEnd();
             return;
         }
         // 执行任务
@@ -360,6 +364,7 @@ public abstract class AbstractProcessor<SELF extends AbstractProcessor<SELF, CON
      */
     private void execute(ContextWrapper localContext, ContextWrapper parentContext) {
         var localResult = (R) localContext.getTestResult();
+        localResult.testStart();
         try {
             // 执行 ReporterListener 前置处理
             runtime.reporterChain.applyPreHandle(localContext, runtime);
@@ -373,7 +378,12 @@ public abstract class AbstractProcessor<SELF extends AbstractProcessor<SELF, CON
             handleResponse(localContext, localResult);
             runtime.handlerChain.applyPostHandle(localContext, runtime);
             for (Extractor extractor : Optional.ofNullable(extractors).orElse(Collections.emptyList())) {
-                extractor.process(localContext, parentContext);
+                try {
+                    extractor.process(localContext, parentContext);
+                } catch (Throwable t) {
+                    localResult.setThrowable(t);
+                    localResult.setStatus(broken);
+                }
             }
             // 执行 ReporterListener 后置处理
             runtime.reporterChain.applyPostHandle(localContext, runtime);
@@ -384,6 +394,7 @@ public abstract class AbstractProcessor<SELF extends AbstractProcessor<SELF, CON
             parentContext.getTestResult().setStatus(broken);
         } finally {
             localResult.sampleEnd();
+            localResult.testEnd();
             collectProcessorVariables(localResult, localContext, parentContext);
             // 最终处理 - 拦截器
             runtime.handlerChain.triggerAfterCompletion(localContext);

@@ -51,6 +51,8 @@ import io.github.xiaomisum.ryze.testelement.AbstractTestElementExecutable;
 import io.github.xiaomisum.ryze.testelement.TestElement;
 import org.apache.commons.lang3.StringUtils;
 
+import static io.github.xiaomisum.ryze.TestStatus.broken;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -180,13 +182,20 @@ public abstract class AbstractSampler<SELF extends AbstractSampler<SELF, CONFIG,
                 // 执行拦截器后置处理
                 runtime.handlerChain.applyPostHandle(context, runtime);
                 assertAll(context, result);
-                Optional.ofNullable(runtime.extractors).orElse(Collections.emptyList()).forEach(extractor -> extractor.process(context));
+                for (var extractor : Optional.ofNullable(runtime.extractors).orElse(Collections.emptyList())) {
+                    try {
+                        extractor.process(context);
+                    } catch (Throwable t) {
+                        result.setThrowable(t);
+                        result.setStatus(broken);
+                    }
+                }
             }
             // 执行 ReporterListener 后置处理
             runtime.reporterChain.applyPostHandle(context, runtime);
         } catch (Throwable throwable) {
-            // 1、sampler 执行异常 2、assertion 断言异常 3、extractor 提取异常
             result.setThrowable(throwable);
+            result.setStatus(broken);
         } finally {
             // 最终处理 - 拦截器
             runtime.handlerChain.triggerAfterCompletion(context);

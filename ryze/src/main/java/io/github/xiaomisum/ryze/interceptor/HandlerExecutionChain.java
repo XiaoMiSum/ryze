@@ -3,6 +3,8 @@ package io.github.xiaomisum.ryze.interceptor;
 import io.github.xiaomisum.ryze.TestStatus;
 import io.github.xiaomisum.ryze.context.ContextWrapper;
 import io.github.xiaomisum.ryze.testelement.TestElement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -31,6 +33,8 @@ import java.util.List;
  */
 @SuppressWarnings({"unchecked", "rawtypes"})
 public class HandlerExecutionChain<T extends TestElement<?>> {
+    private static final Logger log = LoggerFactory.getLogger(HandlerExecutionChain.class);
+
     /**
      * 拦截器列表，按顺序存储所有注册的拦截器
      */
@@ -67,14 +71,18 @@ public class HandlerExecutionChain<T extends TestElement<?>> {
     public boolean applyPreHandle(ContextWrapper context, T runtime) {
         for (int i = 0; i < interceptors.size(); i++) {
             RyzeInterceptor interceptor = interceptors.get(i);
-            if (!interceptor.preHandle(context, runtime)) {
-                // 写入结果供报告层读取 —— 链自身不持有拦截状态，保持无状态线程友好
-                markRejectionOnResult(context, interceptor);
-                // 触发已成功执行拦截器的 afterCompletion
-                triggerAfterCompletion(context, i - 1);
-                return false;
+            try {
+                if (!interceptor.preHandle(context, runtime)) {
+                    // 写入结果供报告层读取 —— 链自身不持有拦截状态，保持无状态线程友好
+                    markRejectionOnResult(context, interceptor);
+                    // 触发已成功执行拦截器的 afterCompletion
+                    triggerAfterCompletion(context, i - 1);
+                    return false;
+                }
+                executedIndex = i;
+            } catch (Exception e) {
+                log.error("拦截器 {} 执行异常", interceptor.getClass().getSimpleName(), e);
             }
-            executedIndex = i;
         }
         return true;
     }
@@ -116,7 +124,11 @@ public class HandlerExecutionChain<T extends TestElement<?>> {
      */
     public void applyPostHandle(ContextWrapper context, T runtime) {
         for (int i = interceptors.size() - 1; i >= 0; i--) {
-            interceptors.get(i).postHandle(context, runtime);
+            try {
+                interceptors.get(i).postHandle(context, runtime);
+            } catch (Exception e) {
+                log.error("拦截器 {} 后置处理异常", interceptors.get(i).getClass().getSimpleName(), e);
+            }
         }
     }
 
@@ -132,7 +144,11 @@ public class HandlerExecutionChain<T extends TestElement<?>> {
      */
     public void triggerAfterCompletion(ContextWrapper context) {
         for (int i = executedIndex; i >= 0; i--) {
-            interceptors.get(i).afterCompletion(context);
+            try {
+                interceptors.get(i).afterCompletion(context);
+            } catch (Exception e) {
+                log.error("拦截器 {} 最终处理异常", interceptors.get(i).getClass().getSimpleName(), e);
+            }
         }
     }
 
@@ -148,7 +164,11 @@ public class HandlerExecutionChain<T extends TestElement<?>> {
      */
     private void triggerAfterCompletion(ContextWrapper context, int untilIndex) {
         for (int i = untilIndex; i >= 0; i--) {
-            interceptors.get(i).afterCompletion(context);
+            try {
+                interceptors.get(i).afterCompletion(context);
+            } catch (Exception e) {
+                log.error("拦截器 {} 最终处理异常", interceptors.get(i).getClass().getSimpleName(), e);
+            }
         }
     }
 }

@@ -220,9 +220,9 @@ public class RegexExtractorTest {
         extractor.process(context);
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test
     public void testProcessWithoutDefaultValueAndEmptyResponse2() {
-        // 准备测试数据 - 空响应
+        // 准备测试数据 - 响应体有数据但正则不匹配
         String response = "认证令牌3：token_abc123xyz_结束";
 
         SampleResult result = new DefaultSampleResult("test");
@@ -237,7 +237,17 @@ public class RegexExtractorTest {
                 .refName("authToken")
                 .build();
 
-        // 执行提取过程 - 应该抛出异常
+        // 执行提取过程 - 不再抛异常，记录失败信息并置空
         extractor.process(context);
+
+        // 验证变量被置空
+        Object tokenValue = context.getLocalVariablesWrapper().get("authToken");
+        Assert.assertNull(tokenValue);
+
+        // 验证提取结果记录了失败信息
+        Assert.assertFalse(result.getExtractors().isEmpty());
+        var record = result.getExtractors().get(0);
+        Assert.assertNotNull(record.getMessage());
+        Assert.assertTrue(record.getMessage().contains("未提取到数据且无默认值"));
     }
 }

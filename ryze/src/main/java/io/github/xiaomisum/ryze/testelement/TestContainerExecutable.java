@@ -146,7 +146,9 @@ public abstract class TestContainerExecutable<SELF extends TestContainerExecutab
                 runtime.reporterChain.triggerAfterCompletion(context);
             }
             // 最终处理 - 拦截器
-            runtime.handlerChain.triggerAfterCompletion(context);
+            if (runtime.handlerChain != null) {
+                runtime.handlerChain.triggerAfterCompletion(context);
+            }
         }
 
     }
