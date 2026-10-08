@@ -71,7 +71,12 @@ public class HTTPSampler extends AbstractSampler<HTTPSampler, HTTPConfigureItem,
 
     @Override
     protected void sample(ContextWrapper context, DefaultSampleResult result) {
-        response = request.execute(result);
+        try {
+            response = request.execute(result);
+        } finally {
+            // simplehttp 2.3.0 起请求信息只能在执行完成后从 exchange 快照读取，失败时也需记录已发送的请求
+            result.setRequest(new RealHTTPRequest(request));
+        }
     }
 
     @Override
@@ -83,7 +88,6 @@ public class HTTPSampler extends AbstractSampler<HTTPSampler, HTTPConfigureItem,
         runtime.setConfig(localConfig.merge(otherConfig));
         // 2. 创建http对象
         request = HTTPClient.build(runtime.getConfig());
-        result.setRequest(new RealHTTPRequest(request));
     }
 
     @Override

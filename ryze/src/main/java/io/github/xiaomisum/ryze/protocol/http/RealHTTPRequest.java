@@ -77,16 +77,24 @@ public class RealHTTPRequest extends SampleResult.RealRequest {
 
     /**
      * 构造HTTP实际请求结果对象
+     * <p>
+     * simplehttp 2.3.0 起，{@link Request} 不再提供 uri/method/query/body/version/headers 等读取方法，
+     * 请求信息统一由执行后产生的交换记录（{@code request.exchange().request()}）提供，
+     * 因此本构造器必须在请求执行完成（成功或失败）后调用；未经执行时各字段取空值。
+     * </p>
      *
      * @param request HTTP请求对象
      */
     public RealHTTPRequest(Request request) {
-        url = request.uri();
-        method = request.method();
-        query = request.query();
-        body = request.body();
-        version = request.version();
-        headers = Arrays.stream(request.headers()).toList();
+        var exchange = request.exchange();
+        var snapshot = exchange == null ? null : exchange.request();
+        url = snapshot == null || snapshot.uri() == null ? "" : snapshot.uri().toString();
+        method = snapshot == null || snapshot.method() == null ? "" : snapshot.method();
+        query = snapshot == null || snapshot.query() == null ? "" : snapshot.query();
+        body = snapshot == null || snapshot.body() == null ? new byte[0] : snapshot.body();
+        version = snapshot == null ? null : snapshot.version();
+        headers = snapshot == null || snapshot.headers() == null ? List.of()
+                : Arrays.stream(snapshot.headers()).toList();
     }
 
     public String getUrl() {
@@ -146,7 +154,10 @@ public class RealHTTPRequest extends SampleResult.RealRequest {
     @Override
     public String format() {
         var buf = new StringBuilder();
-        buf.append(method).append(" ").append(url).append(" ").append(version);
+        buf.append(method).append(" ").append(url);
+        if (StringUtils.isNotBlank(version)) {
+            buf.append(" ").append(version);
+        }
         if (headers != null && !headers.isEmpty()) {
             buf.append("\n");
             headers.forEach(header -> buf.append(header.getName()).append(": ").append(header.getValue()).append("\n"));

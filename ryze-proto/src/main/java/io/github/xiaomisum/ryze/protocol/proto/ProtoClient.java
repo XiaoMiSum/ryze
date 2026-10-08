@@ -39,13 +39,11 @@ import io.github.xiaomisum.ryze.protocol.proto.util.FileDescriptorLoaderChain;
 import io.github.xiaomisum.ryze.testelement.sampler.DefaultSampleResult;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Strings;
-import org.apache.hc.core5.http.message.BasicHeader;
 import xyz.migoo.simplehttp.Form;
 import xyz.migoo.simplehttp.Request;
 import xyz.migoo.simplehttp.RequestEntity;
 import xyz.migoo.simplehttp.Response;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
@@ -122,10 +120,13 @@ public class ProtoClient {
             if (config.getHeaders() != null && !config.getHeaders().isEmpty()) {
                 config.getHeaders().forEach((key, value) -> http.addHeader(key, value.toString()));
             }
-            request.query = http.query();
-            request.version = http.version();
             request.method = config.getMethod(POST);
-            return new RealProtoResponse(execute(http, body, result), responseMessageName);
+            try {
+                return new RealProtoResponse(execute(http, body, result, config.getHeaders()), responseMessageName);
+            } finally {
+                // simplehttp 2.3.0 起 Request 不再提供 query()/version() 读取方法，改从执行后的交换记录读取
+                fillRequestInfo(request, http, config);
+            }
         } catch (Exception e) {
             if (e instanceof RuntimeException) {
                 throw (RuntimeException) e;
@@ -137,24 +138,61 @@ public class ProtoClient {
     /**
      * 执行HTTP请求
      *
-     * @param cli    HTTP请求对象
-     * @param json   请求体字节数组
-     * @param result 采样结果对象
+     * @param cli     HTTP请求对象
+     * @param json    请求体字节数组
+     * @param result  采样结果对象
+     * @param headers 请求头，用于确定 Content-Type
      * @return HTTP响应对象
      */
-    private static Response execute(Request cli, byte[] json, DefaultSampleResult result) {
+    private static Response execute(Request cli, byte[] json, DefaultSampleResult result, Map<String, Object> headers) {
         result.sampleStart();
         try {
             if (json != null) {
-                var contentType = cli.headers() == null || cli.headers().length == 0 ? APPLICATION_X_PROTOBUF :
-                        Arrays.stream(cli.headers()).filter(x -> x.getName().equals(HEADER_CONTENT_TYPE)).findFirst().orElseGet(() -> new BasicHeader(HEADER_CONTENT_TYPE, APPLICATION_X_PROTOBUF)).getValue();
-                cli.body(RequestEntity.bytes(json, contentType));
+                cli.body(RequestEntity.bytes(json, contentTypeOf(headers)));
             }
             return cli.execute();
         } catch (Exception e) {
             throw new RuntimeException(e);
         } finally {
             result.sampleEnd();
+        }
+    }
+
+    /**
+     * 获取请求头中的 Content-Type，未设置时使用 protobuf 默认类型
+     *
+     * @param headers 请求头
+     * @return Content-Type 值
+     */
+    private static String contentTypeOf(Map<String, Object> headers) {
+        if (headers == null || headers.isEmpty()) {
+            return APPLICATION_X_PROTOBUF;
+        }
+        return headers.entrySet().stream()
+                .filter(entry -> HEADER_CONTENT_TYPE.equals(entry.getKey()) && entry.getValue() != null)
+                .map(entry -> String.valueOf(entry.getValue()))
+                .findFirst().orElse(APPLICATION_X_PROTOBUF);
+    }
+
+    /**
+     * 从执行后的交换记录中回填请求信息
+     * <p>
+     * simplehttp 2.3.0 起 {@link Request} 不再提供 query()/version() 读取方法，
+     * 请求信息统一由执行产生的 exchange 快照提供；未经执行时回落为配置中的查询参数。
+     * </p>
+     *
+     * @param request 真实请求记录
+     * @param cli     HTTP请求对象
+     * @param config  proto 配置
+     */
+    private static void fillRequestInfo(RealProtoRequest request, Request cli, ProtoConfigureItem config) {
+        var exchange = cli.exchange();
+        var snapshot = exchange == null ? null : exchange.request();
+        if (snapshot != null) {
+            request.query = snapshot.query();
+            request.version = snapshot.version();
+        } else {
+            request.query = config.getQuery() == null ? "" : JSON.toJSONString(config.getQuery());
         }
     }
 
