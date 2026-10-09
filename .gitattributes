@@ -1,0 +1,3 @@
+# Maven Wrapper：mvnw 是 shell 脚本，必须保持 LF（否则 Windows 上 CRLF 会让 bash 报 $'\r': command not found）
+mvnw text eol=lf
+mvnw.cmd text eol=crlf

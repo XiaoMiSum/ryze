@@ -39,23 +39,23 @@ jobs:
 
       - name: Display Version
         run: |
-          echo "Current version: $(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)"
+          echo "Current version: $(./mvnw help:evaluate -Dexpression=project.version -q -DforceStdout)"
           if [ -n "${{ inputs.version }}" ]; then
             echo "Will update to version: ${{ inputs.version }}"
           fi
 
       - name: Update Version (if provided)
         if: inputs.version != ''
-        run: mvn versions:set -DnewVersion=${{ inputs.version }} -DgenerateBackupPoms=false
+        run: ./mvnw versions:set -DnewVersion=${{ inputs.version }} -DgenerateBackupPoms=false
 
       - name: Build with Tests
-        run: mvn clean verify
+        run: ./mvnw clean verify
         env:
           MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
 
       - name: Publish to Maven Central
-        run: mvn deploy -P release --settings .github/settings.xml -DskipTests
+        run: ./mvnw deploy -P release --settings .github/settings.xml -DskipTests
         env:
           MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
@@ -64,7 +64,7 @@ jobs:
       - name: Publication Summary
         if: success()
         run: |
-          VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+          VERSION=$(./mvnw help:evaluate -Dexpression=project.version -q -DforceStdout)
           echo "✅ Package published successfully!"
           echo "📦 Version: $VERSION"
           echo "🔗 Check Maven Central: https://repo.maven.apache.org/maven2/io/github/xiaomisum/"
