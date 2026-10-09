@@ -486,10 +486,6 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-gpg-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
             </plugin>
             <plugin>
@@ -515,6 +511,23 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <!-- 仅发布时启用（CI: mvn deploy -P release）。
+             若放在主 build 里，gpg:sign 会被所有继承方（子模块、以本项目为 parent 的下游）继承，
+             没有 GPG 私钥的环境跑 mvn verify/install 会直接失败 -->
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
     <repositories>
         <repository>
