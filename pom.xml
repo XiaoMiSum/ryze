@@ -75,7 +75,7 @@
         <mongo.version>5.5.1</mongo.version>
         <rabbitmq.version>5.37.0</rabbitmq.version>
         <simplehttp.version>2.3.0</simplehttp.version>
-        <simple-websocket.version>1.0.1</simple-websocket.version>
+        <simple-websocket.version>1.0.2</simple-websocket.version>
         <protobuf.version>4.33.0</protobuf.version>
         <mail.version>2.0.5</mail.version>
         <hivemq-mqtt.version>1.3.3</hivemq-mqtt.version>
