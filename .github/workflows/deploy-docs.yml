@@ -1,12 +1,14 @@
-# 构建 VitePress 站点并将其部署到 GitHub Pages 的示例工作流程
+# 构建 VitePress 文档站点并将其部署到 GitHub Pages
 #
-name: Deploy VitePress site to Pages
+# 仅在 "Publish to Maven Central" 工作流程成功后触发；
+# 日常文档改动需手动运行本工作流程才会发布
+name: Deploy Docs to GitHub Pages
 
 on:
-  # 在针对 `main` 分支的推送上运行。如果你
-  # 使用 `master` 分支作为默认分支，请将其更改为 `master`
-  push:
-    branches: [ master ]
+  # 监听 Maven Central 发布工作流程的完成事件
+  workflow_run:
+    workflows: ["Publish to Maven Central"]
+    types: [completed]
 
   # 允许你从 Actions 选项卡手动运行此工作流程
   workflow_dispatch:
@@ -24,8 +26,9 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  # 构建工作
+  # 构建工作（仅在 Maven Central 发布成功后执行）
   build:
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -35,6 +38,8 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0 # 如果未启用 lastUpdated，则不需要
+          # 发布触发时检出被发布的那个提交；手动触发时检出默认分支最新提交
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
       # - uses: pnpm/action-setup@v3 # 如果使用 pnpm，请取消此区域注释
       #   with:
       #     version: 9
