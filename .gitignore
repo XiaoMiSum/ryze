@@ -18,10 +18,11 @@
 /*/allure-results
 /*/*/allure-results
 /node_modules
-/*/node_module
+/*/node_modules
 docs/.vitepress/dist
 docs/.vitepress/cache
 /logs
 /*/logs
 /*/*/logs
-*/package-lock.json
+# package-lock.json 必须提交：GitHub Actions 的 npm ci 和缓存依赖它
+!/docs/package-lock.json
