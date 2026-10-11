@@ -44,6 +44,8 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -117,31 +119,51 @@ public class RyzeInvokedMethodListener implements IInvokedMethodListener, TestNG
             //  RYZE_TEST_METHOD 标志不是 true，则不在监听器中移除 session
             return;
         }
-        exportNativeResult(result.getAttribute(RYZE_NATIVE_RESULT));
+        exportNativeResult(result, result.getAttribute(RYZE_NATIVE_RESULT));
         SessionRunner.removeSession();
     }
 
     /**
      * 将 ryze 引擎执行后的原生测试结果序列化为 JSON 并落盘
      * <p>
-     * 输出目录为当前工作目录下的 {@code ./__Ryze_Native_Result__}，文件名为结果的 id（缺省时退化为 title），
-     * 扩展名为 {@code .json}。属性不存在（例如测试方法由用户手动调用）时静默跳过。
+     * 输出目录为当前工作目录下的 {@code ./__Ryze_Native_Result__}，文件名为
+     * {@code testClass#testMethod}，扩展名为 {@code .json}。属性不存在（例如测试方法由用户手动调用）时静默跳过。
+     * </p>
+     * <p>
+     * 文件名为何取 testClass#testMethod：原结果的 id 取自 YAML 的 id 属性、缺省时退化为 title，
+     * 而 id 多数情况下未声明、title 允许重复，二者都不足以唯一标识一个测试方法，
+     * 以之为名会导致不同用例的结果文件互相覆盖。类全限定名 + 方法名由测试框架保证稳定且唯一。
+     * </p>
+     * <p>
+     * 导出内容为信封结构 {@code {testClass, testMethod, result}}：原生 {@link Result} 树原样置于
+     * {@code result} 字段、自身不作任何改动；testClass / testMethod 取自 TestNG 的 {@link ITestResult}，
+     * 供脱离测试框架上下文的消费方（如外部程序按导出文件反查用例）标识该结果所属的测试方法。
      * </p>
      *
+     * @param testResult   TestNG 测试结果，承载 testClass / testMethod
      * @param nativeResult 由 {@link RyzeTestcaseAutoRunListener} 写入的 ryze 原生结果对象
      */
-    private void exportNativeResult(Object nativeResult) {
+    private void exportNativeResult(ITestResult testResult, Object nativeResult) {
         if (!(nativeResult instanceof Result ryzeResult)) {
             return;
         }
-        var fileName = ryzeResult.getId() != null ? ryzeResult.getId() : ryzeResult.getTitle();
-        if (fileName == null || fileName.trim().isBlank()) {
+        Class<?> realClass = testResult.getTestClass() == null ? null : testResult.getTestClass().getRealClass();
+        var testClassName = realClass == null ? "" : realClass.getName();
+        var testMethodName = testResult.getMethod() == null ? "" : testResult.getMethod().getMethodName();
+        if (testClassName.isBlank() || testMethodName.isBlank()) {
+            log.warn("导出 ryze 原生测试结果缺少测试类或方法标识，已跳过");
             return;
         }
+        var fileName = String.format("%s#%s", testClassName, testMethodName);
+        // 用 Map 而非实体类：仅此一处消费，引入实体只为给 testClass 字段加注解不划算
+        Map<String, Object> envelope = new LinkedHashMap<>();
+        envelope.put("testClass", testClassName);
+        envelope.put("testMethod", testMethodName);
+        envelope.put("result", ryzeResult);
         try {
             Path dir = Paths.get("./__Ryze_Native_Result__");
             Files.createDirectories(dir);
-            Files.writeString(dir.resolve(String.format("%s.json", fileName)), JSON.toJSONString(ryzeResult), StandardCharsets.UTF_8);
+            Files.writeString(dir.resolve(String.format("%s.json", fileName)), JSON.toJSONString(envelope), StandardCharsets.UTF_8);
         } catch (IOException e) {
             log.warn("导出 ryze 原生测试结果失败: {}", fileName);
         }
