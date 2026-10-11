@@ -73,7 +73,7 @@
         <druid.version>1.2.24</druid.version>
         <dubbo.version>3.3.6</dubbo.version>
         <mongo.version>5.5.1</mongo.version>
-        <rabbitmq.version>5.24.0</rabbitmq.version>
+        <rabbitmq.version>5.37.0</rabbitmq.version>
         <simplehttp.version>2.3.0</simplehttp.version>
         <simple-websocket.version>1.0.1</simple-websocket.version>
         <protobuf.version>4.33.0</protobuf.version>
@@ -95,7 +95,7 @@
         <slf4j-api.version>2.0.17</slf4j-api.version>
         <logback.version>1.5.32</logback.version>
         <kryo.version>5.6.2</kryo.version>
-        <freemarker.version>2.3.34</freemarker.version>
+        <freemarker.version>2.3.35</freemarker.version>
         <caffeine.version>3.1.8</caffeine.version>
 
         <clean.version>3.4.0</clean.version>
@@ -329,7 +329,7 @@
 
             <dependency>
                 <groupId>org.freemarker</groupId>
-                <artifactId>freemarker-gae</artifactId>
+                <artifactId>freemarker</artifactId>
                 <version>${freemarker.version}</version>
             </dependency>
 
