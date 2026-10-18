@@ -109,8 +109,14 @@ public class RealHTTPResponse extends SampleResult.RealResponse {
         return message;
     }
 
-    public byte[] getBody() {
-        return bytes;
+    /**
+     * 响应体字符串表示
+     * <p>序列化时输出字符串，而非字节数组，与其他协议的响应快照保持一致。</p>
+     *
+     * @return 响应体字符串
+     */
+    public String getBody() {
+        return bytes == null || bytes.length == 0 ? "" : new String(bytes);
     }
 
     @Override

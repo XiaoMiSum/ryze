@@ -109,8 +109,14 @@ public class RealHTTPRequest extends SampleResult.RealRequest {
         return query;
     }
 
-    public byte[] getBody() {
-        return body;
+    /**
+     * 请求体字符串表示
+     * <p>序列化时输出字符串，而非字节数组，与其他协议的请求快照保持一致。</p>
+     *
+     * @return 请求体字符串
+     */
+    public String getBody() {
+        return body == null || body.length == 0 ? "" : new String(body);
     }
 
     public String getVersion() {

@@ -67,14 +67,6 @@ public class ResultSerializationTest {
         return records.stream().filter(record -> name.equals(record.getName())).findFirst().orElseThrow();
     }
 
-    private static String bodyTextOf(com.alibaba.fastjson2.JSONArray array) {
-        byte[] bytes = new byte[array.size()];
-        for (int i = 0; i < array.size(); i++) {
-            bytes[i] = ((Number) array.get(i)).byteValue();
-        }
-        return new String(bytes);
-    }
-
     @Test
     public void testSampleResultSerialization() {
         var result = new DefaultSampleResult("sample-result-title");
@@ -120,7 +112,7 @@ public class ResultSerializationTest {
         Assert.assertEquals(response.getIntValue("status"), 200);
         Assert.assertEquals(response.getString("message"), "OK");
         Assert.assertEquals(response.getString("version"), "HTTP/1.1");
-        Assert.assertEquals(bodyTextOf(response.getJSONArray("body")), "{\"token\":\"abc\"}");
+        Assert.assertEquals(response.getString("body"), "{\"token\":\"abc\"}");
 
         // 断言/提取器/变量记录
         Assert.assertEquals(json.getJSONArray("assertions").getJSONObject(0).getString("status"), "passed");
