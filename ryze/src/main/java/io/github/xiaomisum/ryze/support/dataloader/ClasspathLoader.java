@@ -105,7 +105,7 @@ public class ClasspathLoader extends AbstractDataLoaderHandler {
         var content = new String(stream.readAllBytes(), StandardCharsets.UTF_8);
         if (fileName.endsWith(".yaml") || fileName.endsWith(".yml")) {
             return YamlParser.parse(content, type, null);
-        } else if (fileName.endsWith(".json")) {
+        } else if (fileName.endsWith(".json") || fileName.endsWith(".jsonc")) {
             return JsonParser.parse(content, type);
         }
         throw new UnsupportedOperationException("Unsupported file format: " + resourcePath);

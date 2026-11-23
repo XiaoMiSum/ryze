@@ -106,7 +106,7 @@ public class LocalFileLoader extends AbstractDataLoaderHandler {
         var content = new String(stream.readAllBytes(), StandardCharsets.UTF_8);
         if (fileName.endsWith(".yaml") || fileName.endsWith(".yml")) {
             return YamlParser.parse(content, type, file);
-        } else if (fileName.endsWith(".json")) {
+        } else if (fileName.endsWith(".json") || fileName.endsWith(".jsonc")) {
             return JsonParser.parse(content, type, file);
         }
         throw new UnsupportedOperationException("Unsupported file format: " + file.getPath());
